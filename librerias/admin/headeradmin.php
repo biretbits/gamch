@@ -58,7 +58,12 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
 
             </ul>
             <ul class='navbar-nav ms-auto'>";
-            
+            if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == ""){
+              echo "
+                  <li class='nav-item'>
+                      <a class='nav-link btn btn-outline-secondary' href='controlador/logeo.controlador.php?accion=is'>Iniciar sesión</a>
+                  </li>";
+            }else{
               if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
                 echo "<li class='nav-item dropdown' title='Nombre Usuario'>
                   <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
@@ -74,13 +79,8 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
                       </li>
                   </ul>
                   </li>";
-              }else{
-                echo "
-                    <li class='nav-item'>
-                        <a class='nav-link btn btn-outline-secondary' href='controlador/logeo.controlador.php?accion=is'>Iniciar sesión</a>
-                    </li>";
               }
-
+            }
       echo "</ul>
         </div>
     </div>
