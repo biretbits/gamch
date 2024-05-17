@@ -4,16 +4,8 @@ require "controlador/sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
 
-  if(isset($_SESSION["usuario"]) && $_SESSION["usuario"] =="admin"){
     require_once("librerias/admin/headeradmin.php");
-  }else if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]=="medico"){
-    require_once("librerias/cabezeraMedico/headermedico.php");
 
-  }else if(isset($_SESSION["usuario"]) && $_SESSION["usuario"]=="encargado"){
-    require_once("librerias/cabezeraMedico/headermedico.php");
-  }else{
-    require_once "header.php";
-  }
 
 
 		//("location: ../index.php");
@@ -26,7 +18,7 @@ $ins->StarSession();
 
 
 <?php
-    require_once "footer.php";
+    require_once "librerias/footeruni.php";
 ?>
 <style type="text/css">
 

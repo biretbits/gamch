@@ -57,8 +57,15 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
                 </li>
 
             </ul>
-            <ul class='navbar-nav ms-auto'>
-                <li class='nav-item dropdown' title='Nombre Usuario'>
+            <ul class='navbar-nav ms-auto'>";
+            if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == ""){
+              echo "
+                  <li class='nav-item'>
+                      <a class='nav-link btn btn-outline-secondary' href='../controlador/logeo.controlador.php?accion=is'>Iniciar sesión</a>
+                  </li>";
+            }else{
+              if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
+                echo "<li class='nav-item dropdown' title='Nombre Usuario'>
                   <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
                       hola ".$name."
                   </a>
@@ -71,8 +78,10 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
                         <a class='nav-link text-primary btn btn-outline-danger' href='../controlador/logeo.controlador.php?accion=salir'><i class='fas fa-power-off'></i></a>
                       </li>
                   </ul>
-              </li>
-            </ul>
+                  </li>";
+              }
+            }
+  echo  "  </ul>
         </div>
     </div>
 </nav>
