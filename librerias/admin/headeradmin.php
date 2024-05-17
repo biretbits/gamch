@@ -48,38 +48,38 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
         </button>
         <div class='collapse navbar-collapse' id='navbarNav'>
             <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
-
                 <li class='nav-item' title='Inicio'>
-                    <a class='nav-link btn btn-outline-secondary' href='controlador/logeo.controlador.php?accion=ix'><i class='fas fa-home'></i></a>
-                </li>
+                  <a class='nav-link btn btn-outline-secondary' href='controlador/logeo.controlador.php?accion=ix'><i class='fas fa-home'></i></a>
+                </li>";
+              if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
+              echo "
                 <li class='nav-item ms-2' title='Usuarios'>
                     <a class='nav-link btn btn-outline-warning' href='controlador/usuario.controlador.php?accion=vut'> <i class='fas fa-user'></i></a>
-                </li>
+                </li>";
+              }
+     echo "</ul>
 
-            </ul>
             <ul class='navbar-nav ms-auto'>";
-            if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == ""){
+          if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
+            echo "<li class='nav-item dropdown' title='Nombre Usuario'>
+              <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                  hola ".$name."
+              </a>
+              <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                  <li class='nav-item' title='Cerrar sesión' style='color:green'>
+                    <a class='nav-link text-info btn btn-outline-warning' href='#'>Editar</a>
+                  </li>
+                  <li><hr class='dropdown-divider'></li>
+                  <li class='nav-item' title='Cerrar sesión' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-danger' href='controlador/logeo.controlador.php?accion=salir'><i class='fas fa-power-off'></i></a>
+                  </li>
+              </ul>
+              </li>";
+            }else{
               echo "
                   <li class='nav-item'>
                       <a class='nav-link btn btn-outline-secondary' href='controlador/logeo.controlador.php?accion=is'>Iniciar sesión</a>
                   </li>";
-            }else{
-              if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
-                echo "<li class='nav-item dropdown' title='Nombre Usuario'>
-                  <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                      hola ".$name."
-                  </a>
-                  <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
-                      <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                        <a class='nav-link text-info btn btn-outline-warning' href='#'>Editar</a>
-                      </li>
-                      <li><hr class='dropdown-divider'></li>
-                      <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                        <a class='nav-link text-primary btn btn-outline-danger' href='controlador/logeo.controlador.php?accion=salir'><i class='fas fa-power-off'></i></a>
-                      </li>
-                  </ul>
-                  </li>";
-              }
             }
       echo "</ul>
         </div>
