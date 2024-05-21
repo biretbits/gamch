@@ -195,8 +195,11 @@ function BuscarUsuarios(page){
         }
       });
   }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 74d5763ab70433955d0e73a66248e7758ba02a09
   function verificarList(valor){
     if(valor != "" && valor != "--"){
       return valor;
@@ -204,10 +207,16 @@ function BuscarUsuarios(page){
       return 5;
     }
   }
+<<<<<<< HEAD
 
   function visforUsuario(){
      location.href="../controlador/usuario.controlador.php?accion=vfu" ;
    }
 
+=======
+  function visforUsuario(){
+     location.href="../controlador/usuario.controlador.php?accion=vfu" ;
+   }
+>>>>>>> 74d5763ab70433955d0e73a66248e7758ba02a09
 </script>
 <?php require("../librerias/footeruni.php"); ?>
