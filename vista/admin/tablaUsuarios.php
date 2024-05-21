@@ -195,8 +195,6 @@ function BuscarUsuarios(page){
         }
       });
   }
-<<<<<<< HEAD
-
   function verificarList(valor){
     if(valor != "" && valor != "--"){
       return valor;
@@ -204,10 +202,8 @@ function BuscarUsuarios(page){
       return 5;
     }
   }
-=======
   function visforUsuario(){
      location.href="../controlador/usuario.controlador.php?accion=vfu" ;
    }
->>>>>>> ccf84c59a93478bc13575e3ce9a28b7acdac9a6a
 </script>
 <?php require("../librerias/footeruni.php"); ?>
