@@ -48,7 +48,7 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
         <div class='collapse navbar-collapse' id='navbarNav'>
             <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
                 <li class='nav-item' title='Inicio'>
-                  <a class='nav-link btn btn-outline-warning' href='../controlador/logeo.controlador.php?accion=ix'><img src='../imagenes/iconos/casa.png'style='height: 25px;width: 25px;'></a>
+                  <a class='nav-link btn btn-outline-warning' href='../controlador/logeo.controlador.php?accion=ix'><img src='../imagenes/iconos/house.png'style='height: 25px;width: 25px;'></a>
                 </li>";
               if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
               echo "

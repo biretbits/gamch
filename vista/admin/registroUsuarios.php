@@ -4,38 +4,38 @@
 	<div class="panel-body col-xl-10 col-lg-10 col-md-9">
     <div class="modal-content" style='padding:20px 10px'>
     	<center>
-        <h5 Style='color:gold;text-shadow: 2px 2px 2px black;'>Registrarse</h5>
+        <h2 Style='color:blue;text-shadow: 2px 2px 2px black;'>Registro de Usuario</h2>
 			</center>
           <div class="card-body">
         		<div class='input-group'>
-            <input class="form-control" type="text"  id="usuario" name ="usuario" placeholder="usuario">
+            <input class="form-control" type="text"  id="usuario" name ="usuario" placeholder="Usuario">
             </div> <br>
             <div class='input-group'>
-              <input class="form-control" type="text"  id="nombre_usuario" name ="nombre_usuario" placeholder="nombre_usuario">
+              <input class="form-control" type="text"  id="nombre_usuario" name ="nombre_usuario" placeholder="Nombre">
             </div> <br>
             <div class='input-group'>
-              <input class="form-control" type="text"  id="ap_usuario" name ="ap_usuario" placeholder="ap_usuario">
+              <input class="form-control" type="text"  id="ap_usuario" name ="ap_usuario" placeholder="Apellido paterno">
             </div> <br>
             <div class='input-group'>
-              <input class="form-control" type="text"  id="am_usuario" name ="am_usuario" placeholder="am_usuario">
+              <input class="form-control" type="text"  id="am_usuario" name ="am_usuario" placeholder="Apellido materno">
             </div> <br>
 						<div class='input-group'>
-              <input class="form-control" type="number"  id="ci" name ="am_usuario" placeholder="ci">
+              <input class="form-control" type="number"  id="ci" name ="am_usuario" placeholder="C.I.">
             </div> <br>
             <div class='input-group'>
-              <input class="form-control" type="number"  id="telefono_usuario" name ="telefono_usuario" placeholder="telefono_usuario">
+              <input class="form-control" type="number"  id="telefono_usuario" name ="telefono_usuario" placeholder="Telefono">
             </div> <br>
             <div class='input-group'>
-              <input class="form-control" type="text"  id="direccion_usuario" name ="direccion_usuario" placeholder="direccion_usuario">
+              <input class="form-control" type="text"  id="direccion_usuario" name ="direccion_usuario" placeholder="Dirección">
             </div> <br>
             <div class='input-group'>
-              <input class="form-control" type="text"  id="profesion_usuario" name ="profesion_usuario" placeholder="profesion_usuario">
+              <input class="form-control" type="text"  id="profesion_usuario" name ="profesion_usuario" placeholder="Profesion">
             </div> <br>
             <div class='input-group'>
-              <input class="form-control" type="text"  id="especialidad_usuario" name ="especialidad_usuario" placeholder="especialidad_usuario">
+              <input class="form-control" type="text"  id="especialidad_usuario" name ="especialidad_usuario" placeholder="Especialidad">
             </div> <br>
             <div class='input-group'>
-							<select class="form-select" id="tipo_usuario" name="tipo_usuario">
+							<select class="form-select" id="tipo_usuario" >
 								<option>seleccione</option>
 			          <option>medico</option>
 			          <option>encargado</option>
@@ -69,15 +69,24 @@ function insertardatosus(){
 				var contrasena_usuario = document.getElementById("contraseña_usuario").value;
 				var confirmar_contrasena_usuario = document.getElementById("confirmar_contraseña_usuario").value;
          //alert(contrasena_usuario+" "+ confirmar_contrasena_usuario);
+
+				 if(tipo_usuario == "seleccione"){
+ 					selectUsuario();
+ 					return;
+ 				}
+
+				 if(tipo_usuario == "medico" || tipo_usuario == "encargado"){
+					 if(profesion_usuario == "" || especialidad_usuario ==""){
+						 ingresedatosPro();
+						 return;
+					 }
+				 }
 				 if(usuario==""||nombre_usuario==""||ap_usuario==""||am_usuario==""||ci==""
- 				&&telefono_usuario==""||direccion_usuario==""||profesion_usuario==""||especialidad_usuario==""||contrasena_usuario==""||confirmarcontrasena==""){
+ 				&&telefono_usuario==""||direccion_usuario==""||contrasena_usuario==""||confirmarcontrasena==""){
            ingresedatos();
  					return;
  				}
-				 if(tipo_usuario == "seleccione"){
-					 selectUsuario();
-					 return;
-				 }
+
 
 
         if(contrasena_usuario == confirmar_contrasena_usuario){
@@ -123,6 +132,15 @@ function insertardatosus(){
 					}
 
 
+}
+function ingresedatosPro(){
+	Swal.fire({
+	 icon: 'info',
+	 title: '¡Información!',
+	 text: '¡Es necesario la Profesión y la Especialidad!',
+	 showConfirmButton: false,
+	 timer: 2000
+ });
 }
 function ingresedatos(){
 	Swal.fire({
