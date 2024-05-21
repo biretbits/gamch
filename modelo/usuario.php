@@ -45,8 +45,17 @@ class Usuario
       return $resul;
       mysqli_close($this->con);
   }
-
-
+  public function insertarUsuarios($usuario,$nombre_usuario,$ap_usuario,$am_usuario,$telefono_usuario,$direccion_usuario,$profesion_usuario,
+  $especialidad_usuario,$tipo_usuario,$contraseña_usuario,$ci){
+    $insert = "insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,telefono_usuario,direccion_usuario,profesion_usuario,
+    especialidad_usuario,tipo_usuario,contrasena_usuario,cod_cds,estado)values($ci,'$usuario','$nombre_usuario','$ap_usuario'
+    ,'$am_usuario',$telefono_usuario,'$direccion_usuario','$profesion_usuario',
+    '$especialidad_usuario','$tipo_usuario','$contraseña_usuario',1,'activo')";
+    $resul = $this->con->query($insert);
+    // Retornar el resultado
+    return $resul;
+    mysqli_close($this->con);
+  }
 
 }
 
