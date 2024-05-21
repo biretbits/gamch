@@ -18,7 +18,7 @@
         </select>
       </div>
       <div class="col-2" title="Registro de nuevo usuario">
-        <button type="button" class="form-control btn btn-primary"><img src='../imagenes/iconos/nuevo_student.png'style='height: 25px;width: 25px;'></button>
+        <button type="button" class="form-control btn btn-primary" onclick="visforUsuario()"><img src='../imagenes/iconos/nuevo_student.png'style='height: 25px;width: 25px;'></button>
       </div>
       <div class="col-3">
 
@@ -195,6 +195,7 @@ function BuscarUsuarios(page){
         }
       });
   }
+<<<<<<< HEAD
 
   function verificarList(valor){
     if(valor != "" && valor != "--"){
@@ -203,5 +204,10 @@ function BuscarUsuarios(page){
       return 5;
     }
   }
+=======
+  function visforUsuario(){
+     location.href="../controlador/usuario.controlador.php?accion=vfu" ;
+   }
+>>>>>>> ccf84c59a93478bc13575e3ce9a28b7acdac9a6a
 </script>
 <?php require("../librerias/footeruni.php"); ?>

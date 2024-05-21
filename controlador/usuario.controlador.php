@@ -208,7 +208,22 @@ class UsuarioControlador{
 	public function v_index(){
 			header("location: ../index.php");
 	}
+  public function visualizarinterfazUsuario(){
+    require("../vista/admin/registroUsuarios.php");
+  }
+  public function insertarUsuario($usuario,$nombre_usuario,$ap_usuario,$am_usuario,$ci,$telefono_usuario,$direccion_usuario,$profesion_usuario,
+  $especialidad_usuario,$tipo_usuario,$contraseña_usuario){
+    $usu = new Usuario();
+    $resp = $usu->insertarUsuarios($usuario,$nombre_usuario,$ap_usuario,$am_usuario,$telefono_usuario,$direccion_usuario,$profesion_usuario,
+    $especialidad_usuario,$tipo_usuario,$contraseña_usuario,$ci);
+    if($resp != ""){
+         echo "correcto";
+    }else{
+         echo "error";
+    }
+  }
 }
+
 
 	$uc=new  UsuarioControlador();
 	if(isset($_GET["accion"]) && $_GET["accion"]=="vr"){
@@ -232,5 +247,23 @@ class UsuarioControlador{
     //echo "buscar   ".$_POST["buscar"];buscar
 		$uc->BuscarUsuarios($_POST["buscar"],$_POST["page"],$_POST["listarDeCuanto"]);
 	}
+  if(isset($_GET["accion"]) && $_GET["accion"]=="vfu"){
+  		$uc->visualizarinterfazUsuario();
+  	}
 
+  if(isset($_GET["accion"]) && $_GET["accion"]=="insUsu"){
+    		$uc->insertarUsuario(
+          $_POST["usuario"],
+          $_POST["nombre_usuario"],
+          $_POST["ap_usuario"],
+          $_POST["am_usuario"],
+          $_POST["ci"],
+          $_POST["telefono_usuario"],
+          $_POST["direccion_usuario"],
+          $_POST["profesion_usuario"],
+          $_POST["especialidad_usuario"],
+          $_POST["tipo_usuario"],
+          $_POST["contraseña_usuario"]
+          );
+  }
 ?>
