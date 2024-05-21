@@ -21,26 +21,23 @@ class Usuario
     return $resul;
     mysqli_close($this->con);
   }
-  public function SelectUsuarios() {
-    $lis = "select *from usuario where estado='activo'";
-    $resul = $this->con->query($lis);
-    return $resul;
-    mysqli_close($this->con);
-  }
 
-  public function SelectPorBusqueda($buscar) {
+
+  public function SelectPorBusqueda($buscar="",$inicioList=false,$listarDeCuanto=false) {
       // Verificar si $buscar tiene contenido
-
+      $sql = "SELECT * FROM usuario where estado = 'activo' ";
       if ($buscar != "" && $buscar != null) {
           // Convertir $buscar a minúsculas
           $buscar = strtolower($buscar);
-          // Consulta SQL
-          $lis = "SELECT * FROM usuario WHERE LOWER(usuario) LIKE '%".$buscar."%' OR LOWER(nombre_usuario) LIKE '%".$buscar."%'
-          OR LOWER(ap_usuario) LIKE '%".$buscar."%' OR LOWER(am_usuario) LIKE '%".$buscar."%'";
-      }else{
-          $lis = "select *from usuario";
+          $sql.=" and LOWER(usuario) LIKE '%".$buscar."%' OR LOWER(nombre_usuario) LIKE '%".$buscar."%'
+          OR LOWER(ap_usuario) LIKE '%".$buscar."%' OR LOWER(am_usuario) LIKE '%".$buscar."%' ";
       }
-      $resul = $this->con->query($lis);
+
+    	if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
+    		$sql.=" ORDER BY cod_usuario DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
+    	}
+
+      $resul = $this->con->query($sql);
       // Retornar el resultado
       return $resul;
       mysqli_close($this->con);
