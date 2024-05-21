@@ -1,5 +1,5 @@
 
-<?php require("../librerias/admin/headeradmin1.php"); ?>
+<?php require("../librerias/headeradmin1.php"); ?>
 <br><br><br><br>
 <div class="container">
     <div class="row" >

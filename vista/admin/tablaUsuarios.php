@@ -1,4 +1,4 @@
-<?php require("../librerias/admin/headeradmin1.php"); ?>
+<?php require("../librerias/headeradmin1.php"); ?>
 
 <div class="container mt-5">
   <h2>Usuarios</h2>
@@ -16,7 +16,7 @@
         </select>
       </div>
       <div class="col-2" title="Registro de nuevo usuario">
-        <button type="button" class="form-control btn btn-primary"><i class="fas fa-user-plus"></i></button>
+        <button type="button" class="form-control btn btn-primary"><img src='../imagenes/iconos/nuevo_student.png'style='height: 25px;width: 25px;'></button>
       </div>
       <div class="col-3">
 

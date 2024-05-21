@@ -34,7 +34,7 @@ class UsuarioControlador{
   public function visualizarUsuariosTabla(){
 		$u = new Usuario();
 		$resultodoUsuarios = $u->SelectUsuarios();
-    require("../vista/admin/usuario/tablaUsuarios.php");
+    require("../vista/admin/tablaUsuarios.php");
 	}
 
   public function BuscarUsuarios($buscar){
