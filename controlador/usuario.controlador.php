@@ -96,8 +96,8 @@ class UsuarioControlador{
           echo "<td>".$fi['tipo_usuario']."</td>";
           echo "<td>";
             echo "<div class='btn-group'>";
-              echo "<button type='button' class='btn btn-success mb-1'><img src='../imagenes/iconos/edit.png' height='30' width='30' class='rounded-circle'></button>";
-              echo "<button type='button' class='btn btn-danger'><img src='../imagenes/iconos/eli.png' height='30' width='30' class='rounded-circle'></button>";
+              echo "<button type='button' class='btn btn-success mb-1'><img src='../imagenes/sedit.png' height='30' width='30' class='rounded-circle'></button>";
+              echo "<button type='button' class='btn btn-danger'><img src='../imagenes/seli.png' height='30' width='30' class='rounded-circle'></button>";
             echo "</div>";
           echo "</td>";
         echo "</tr>";

@@ -18,7 +18,7 @@
         </select>
       </div>
       <div class="col-2" title="Registro de nuevo usuario">
-        <button type="button" class="form-control btn btn-primary" onclick="visforUsuario()"><img src='../imagenes/iconos/nuevo_student.png'style='height: 25px;width: 25px;'></button>
+        <button type="button" class="form-control btn btn-primary" onclick="visforUsuario()"><img src='../imagenes/nuevo_student.png'style='height: 25px;width: 25px;'></button>
       </div>
       <div class="col-3">
 
@@ -68,8 +68,8 @@
               echo "<td>".$fi['tipo_usuario']."</td>";
               echo "<td>";
                 echo "<div class='btn-group'>";
-                  echo "<button type='button' class='btn btn-success mb-1'><img src='../imagenes/iconos/edit.png' height='30' width='30' class='rounded-circle'></button>";
-                  echo "<button type='button' class='btn btn-danger'><img src='../imagenes/iconos/eli.png' height='30' width='30' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-success mb-1'><img src='../imagenes/edit.png' height='30' width='30' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-danger'><img src='../imagenes/eli.png' height='30' width='30' class='rounded-circle'></button>";
                 echo "</div>";
               echo "</td>";
 

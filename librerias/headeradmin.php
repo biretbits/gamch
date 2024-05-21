@@ -41,7 +41,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
 
 echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm'>
     <div class='container'>
-        <a href='#' class='navbar-brand'><img src='imagenes/icono/cds.png' height='30' width='30' class='rounded-circle'></a>
+        <a href='#' class='navbar-brand'><img src='imagenes/cds.png' height='30' width='30' class='rounded-circle'></a>
 
         <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>
@@ -49,12 +49,12 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
         <div class='collapse navbar-collapse' id='navbarNav'>
             <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
                 <li class='nav-item' title='Inicio'>
-                  <a class='nav-link btn btn-outline-warning' href='controlador/logeo.controlador.php?accion=ix'><img src='imagenes/iconos/house.png'style='height: 25px;width: 25px;'></a>
+                  <a class='nav-link btn btn-outline-warning' href='controlador/logeo.controlador.php?accion=ix'><img src='imagenes/house.png'style='height: 25px;width: 25px;'></a>
                 </li>";
               if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
               echo "
                 <li class='nav-item ms-2' title='Usuarios'>
-                    <a class='nav-link btn btn-outline-warning' href='controlador/usuario.controlador.php?accion=vut'><img src='imagenes/iconos/admin.png'style='height: 25px;width: 25px;'></a>
+                    <a class='nav-link btn btn-outline-warning' href='controlador/usuario.controlador.php?accion=vut'><img src='imagenes/admin.png'style='height: 25px;width: 25px;'></a>
                 </li>";
               }
      echo "</ul>
@@ -71,7 +71,7 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
                   </li>
                   <li><hr class='dropdown-divider'></li>
                   <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                    <a class='nav-link text-primary btn btn-outline-danger' href='controlador/logeo.controlador.php?accion=salir'><img src='imagenes/iconos/apagar.png'style='height: 25px;width: 25px;'></a>
+                    <a class='nav-link text-primary btn btn-outline-danger' href='controlador/logeo.controlador.php?accion=salir'><img src='imagenes/apagar.png'style='height: 25px;width: 25px;'></a>
                   </li>
               </ul>
               </li>";

@@ -3,7 +3,7 @@
 <div class="container-fluid fondo">
   <div class="row">
    <div class="col">
-     <img src="imagenes/principal/medico.jpg" alt="Imagen Salud" class="img-fluid rounded-circle colorsh"  style="max-height: 400px;">
+     <img src="imagenes/medico.jpg" alt="Imagen Salud" class="img-fluid rounded-circle colorsh"  style="max-height: 400px;">
    </div>
    <div class="col d-flex align-items-center">
      <div>
