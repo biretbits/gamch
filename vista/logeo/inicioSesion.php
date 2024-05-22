@@ -9,7 +9,7 @@
 					<center>
 					<h3 Style='color:blue;text-shadow: 2px 2px 2px black;'>Acceso</h3></center>
                     <center>
-                    <img src="../imagenes/logeo/acceso.png"class="img-circle"  height='100' width='110'/>
+                    <img src="../imagenes/acceso.png"class="img-circle"  height='100' width='110'/>
 					</center>
 						<form method="POST">
 
@@ -126,7 +126,7 @@
 
 <style>
 	body{
-    background: url(../imagenes/fondo/bosque.jpg) no-repeat center center fixed;
+    background: url(../imagenes/bosque.jpg) no-repeat center center fixed;
     background-size: cover;
   }
 
