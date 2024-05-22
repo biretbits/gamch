@@ -67,9 +67,13 @@
               echo "<td>".$fi['especialidad_usuario']."</td>";
               echo "<td>".$fi['tipo_usuario']."</td>";
               echo "<td>";
-                echo "<div class='btn-group'>";
-                  echo "<button type='button' class='btn btn-success mb-1'><img src='../imagenes/edit.ico' height='30' width='30' class='rounded-circle'></button>";
-                  echo "<button type='button' class='btn btn-danger'><img src='../imagenes/eliminar.ico' height='30' width='30' class='rounded-circle'></button>";
+                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                  if($fi["estado"] == "activo" && $fi["tipo_usuario"] != "admin"){
+                    echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                  }else if($fi["tipo_usuario"] != "admin"){
+                    echo "<button type='button' class='btn btn-danger' title='Activar Usuario' onclick='accionBtnActivar(\"desactivo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
+                  }
                 echo "</div>";
               echo "</td>";
 
@@ -210,6 +214,92 @@ function BuscarUsuarios(page){
 
   function visforUsuario(){
      location.href="../controlador/usuario.controlador.php?accion=vfu" ;
+   }
+   //$pagina,$listarDeCuanto
+   //funcion para activar o desactivar el usuario o dar de baja
+   function accionBtnActivar(accion,pagina,listarDeCuanto,cod_usuario){
+     var buscar = document.getElementById("buscaru").value;
+     var datos = new FormData(); // Crear un objeto FormData vacío
+     datos.append('accion', accion);
+     datos.append("pagina",pagina);
+     datos.append("listarDeCuanto",listarDeCuanto);
+     datos.append("buscar",buscar);
+     datos.append("cod_usuario",cod_usuario);
+     $.ajax({
+       url: "../controlador/usuario.controlador.php?accion=del",
+       type: "POST",
+       data: datos,
+       contentType: false, // Deshabilitar la codificación de tipo MIME
+       processData: false, // Deshabilitar la codificación de datos
+       success: function(data) {
+     //  alert(data+"dasdas");
+     	   data=$.trim(data);
+         if(data == "error"){
+           error();
+         }else{
+           $("#verDatos").html(data);
+         }
+       }
+     });
+   }
+
+   //funcion para verificar si el usuario existe o no y despues poder editar sus datos
+   function accionBtnEditar(pagina,listarDeCuanto,cod_usuario){
+     var buscar = document.getElementById("buscaru").value;
+     var datos = new FormData(); // Crear un objeto FormData vacío
+     datos.append("cod_usuario",cod_usuario);
+     $.ajax({
+       url: "../controlador/usuario.controlador.php?accion=ed",
+       type: "POST",
+       data: datos,
+       contentType: false, // Deshabilitar la codificación de tipo MIME
+       processData: false, // Deshabilitar la codificación de datos
+       success: function(data) {
+     //  alert(data+"dasdas");
+     	   data=$.trim(data);
+         if(data == "error"){
+           error();//no debe existir el codigo de usuario
+         }else{
+           //creamos un formulario para enviar los datos y abrimos el fomulario
+           formularioSubmit(pagina,listarDeCuanto,cod_usuario,buscar);
+         }
+       }
+     });
+   }
+
+   function formularioSubmit(pagina,listarDeCuanto,cod_usuario,buscar){
+     var form = document.createElement('form');
+      form.method = 'post';
+      form.action = '../controlador/usuario.controlador.php?accion=fm'; // Coloca la URL de destino correcta
+      // Agregar campos ocultos para cada dato
+      var datos = {
+          pagina: pagina,
+          listarDeCuanto: listarDeCuanto,
+          cod_usuario: cod_usuario,
+          buscar: buscar
+      };
+      for (var key in datos) {
+          if (datos.hasOwnProperty(key)) {
+              var input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = key;
+              input.value = datos[key];
+              form.appendChild(input);
+          }
+      }
+    // Agregar el formulario al cuerpo del documento y enviarlo
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+   function error(){
+  	 Swal.fire({
+  		icon: 'error',
+  		title: '¡Error!',
+  		text: '¡No se pudo realizar la acción !',
+  		showConfirmButton: false,
+  		timer: 1500
+  	});
    }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

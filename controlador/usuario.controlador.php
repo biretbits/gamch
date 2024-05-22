@@ -4,17 +4,10 @@ require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
 //si esto esta vacio no puede ingresar nadies directamente no s llevara index
-if(isset($_SESSION["usuario"])==""){
+if(isset($_SESSION["tipo_usuario"])==""){
     $ins->Redireccionar_inicio();
 }
 class UsuarioControlador{
-
-	/*public function visualizarRegistro(){
-		  //header("location: ../index.php");
-			$contra=password_hash($contrasena, PASSWORD_DEFAULT);
-
-      require("../vista/logeo/registro.php");
-	}*/
 
 	public function visualizarprueba($contrasena){
 			//header("location: ../index.php");
@@ -95,9 +88,13 @@ class UsuarioControlador{
           echo "<td>".$fi['especialidad_usuario']."</td>";
           echo "<td>".$fi['tipo_usuario']."</td>";
           echo "<td>";
-            echo "<div class='btn-group'>";
-              echo "<button type='button' class='btn btn-success mb-1'><img src='../imagenes/edit.ico' height='30' width='30' class='rounded-circle'></button>";
-              echo "<button type='button' class='btn btn-danger'><img src='../imagenes/eliminar.ico' height='30' width='30' class='rounded-circle'></button>";
+            echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+              echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+              if($fi["estado"] == "activo" && $fi["tipo_usuario"] != "admin"){
+                echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+              }else if($fi["tipo_usuario"] != "admin"){
+                echo "<button type='button' class='btn btn-danger' title='Activar Usuario' onclick='accionBtnActivar(\"desactivo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
+              }
             echo "</div>";
           echo "</td>";
         echo "</tr>";
@@ -199,11 +196,21 @@ class UsuarioControlador{
         echo "</ul>";
         echo "</div>";
 
-  echo "</div>
-      </div>";
+        echo "</div>
+          </div>";
 
+      }
     }
-}
+
+    public function activarUsuario($accion,$pagina,$listarDeCuanto,$buscar,$cod_usuario){
+        $usu = new Usuario();
+        $re = $usu->desactivarUsuario($cod_usuario,$accion);
+        if($re != ""){//si se actualizo el estado entonces mostramos la tabla
+          $this->BuscarUsuarios($buscar,$pagina,$listarDeCuanto);
+        }else{//solo mostramo un alert con error
+          echo "error";
+        }
+    }
 
 	public function v_index(){
 			header("location: ../index.php");
@@ -212,14 +219,64 @@ class UsuarioControlador{
     require("../vista/admin/registroUsuarios.php");
   }
   public function insertarUsuario($usuario,$nombre_usuario,$ap_usuario,$am_usuario,$ci,$telefono_usuario,$direccion_usuario,$profesion_usuario,
-  $especialidad_usuario,$tipo_usuario,$contraseña_usuario){
+  $especialidad_usuario,$tipo_usuario,$contraseña_usuario,$cod_usuario,$accion){
     $usu = new Usuario();
-    $resp = $usu->insertarUsuarios($usuario,$nombre_usuario,$ap_usuario,$am_usuario,$telefono_usuario,$direccion_usuario,$profesion_usuario,
-    $especialidad_usuario,$tipo_usuario,$contraseña_usuario,$ci);
+    $resp = $usu->insertarUpdateUsuarios($usuario,$nombre_usuario,$ap_usuario,$am_usuario,$telefono_usuario,$direccion_usuario,$profesion_usuario,
+    $especialidad_usuario,$tipo_usuario,$contraseña_usuario,$ci,$cod_usuario,$accion);
     if($resp != ""){
-         echo "correcto";
+        if($accion == 1){
+          echo "correcto";
+        }else{
+           echo "correcto";
+        }
     }else{
          echo "error";
+    }
+  }
+  //despues de actualizar los datos llamamos esta funcion
+  public function visualizarTablaUsuarios($pagina,$listarDeCuanto,$buscar){
+    if(!is_numeric($pagina) && !is_numeric($listarDeCuanto)){
+        $this->v_index();
+    }
+    $u = new Usuario();
+    $resultodoUsuarios = $u->SelectPorBusqueda("",false,false);
+    $num_filas_total = mysqli_num_rows($resultodoUsuarios);
+    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+            //calculamos el registro inicial
+    $inicioList = ($pagina - 1) * $listarDeCuanto;
+    // Verificar si la consulta devuelve resultados
+    $resul = $u->SelectPorBusqueda("",$inicioList,$listarDeCuanto);
+    require("../vista/admin/tablaUsuarios.php");
+  }
+
+  //funcion pra modificar los datos del usuario
+  public function modificarUsuario($cod_usuario){
+    $usu = new Usuario();
+    $re = $usu->selectDatosUsuario($cod_usuario);
+    if ($re && $re->num_rows > 0) {//se encontro el usuario buscado ahora lo mostramos en el formulario de registro
+      echo "correcto";
+    }else{
+      echo "error";
+    }
+  }
+  //visulizar formulario de acturalizar registros con los datos del cod_usuario buscado
+  public function FormularioModificar($pagina,$listarDeCuanto,$buscar,$cod_usuario){
+    if(!is_numeric($pagina) && !is_numeric($listarDeCuanto)){
+      	$this->v_index();
+    }
+    $usu = new Usuario();
+    $re = $usu->selectDatosUsuario($cod_usuario);
+    require("../vista/admin/registroUsuarios.php");
+  }
+
+  public function ConfirmarPass($pass,$usuario){
+    $us1 = new Usuario();
+    $resultado = $us1->validarBD($usuario);
+    $filas = mysqli_fetch_array($resultado);
+    if(password_verify($pass,$filas['contrasena_usuario'])){
+      echo $filas['contrasena_usuario'];
+    }else{
+      echo "error";
     }
   }
 }
@@ -263,7 +320,30 @@ class UsuarioControlador{
           $_POST["profesion_usuario"],
           $_POST["especialidad_usuario"],
           $_POST["tipo_usuario"],
-          $_POST["contraseña_usuario"]
+          $_POST["contraseña_usuario"],
+          $_POST["cod_usuario"],
+          $_POST["accion"]
           );
   }
+  //no se puede eliminar poreso solo lo desactivaremos al usuario
+  if(isset($_GET["accion"]) && $_GET["accion"] == "del"){
+    $uc->activarUsuario($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_usuario"]);
+  }
+  //para editar los datos del usuario
+  if(isset($_GET["accion"]) && $_GET["accion"] == "ed"){
+    $uc->modificarUsuario($_POST["cod_usuario"]);
+  }
+  //para editar los datos del usuario
+  if(isset($_GET["accion"]) && $_GET["accion"] == "fm"){
+    $uc->FormularioModificar($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_usuario"]);
+  }
+  //para verificar copntrasena
+  if(isset($_GET["accion"]) && $_GET["accion"] == "vy"){
+    $uc->ConfirmarPass($_POST["confirmarcontrasena"],$_POST["usuario"]);
+  }
+  //despues de ya haber registradp ahora tenemos que llamar a la tabla con estos parametros
+  if(isset($_GET["accion"]) && $_GET["accion"] == "fm2"){
+    $uc->visualizarTablaUsuarios($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
+  }
+
 ?>

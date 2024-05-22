@@ -17,7 +17,7 @@ class LogeoControlador{
 
 	public function verificar($usuario,$contrasena){
 		$us=new Usuario();
-		$resul = $us->validarBD($usuario,$contrasena);
+		$resul = $us->validarBD($usuario);
 		if ($resul === false) {
         echo "error";
     } elseif ($resul->num_rows == 0) {
