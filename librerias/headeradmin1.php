@@ -7,14 +7,12 @@
     	<meta charset="utf-8">
 
      		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-          <link rel="stylesheet" type="text/css" href="../activos/bootstrap/css/bootstrap.min.css">
-          <script src="../activos/js/jquery-3.7.1.js"></script>
-             <script src="../activos/bootstrap/js/bootstrap.min.js"></script>
-         <script src="../activos/js/Chart.min.js"></script>
-          <script src="../activos/js/sweetAlert2/sweetalert2.min.js"></script>
-          <link href="../activos/js/sweetAlert2/sweetalert2.min.css" rel="stylesheet" >
-          <link href="../activos/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <script src="../activos/jquery-3.5.1.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../activos/bootstrap/bootstrap.min.css">
+        <script src="../activos/bootstrap/bootstrap.min.js"></script>
+        <script src="../activos/sweetAlert2/sweetalert2.min.js"></script>
+        <link href="../activos/sweetAlert2/sweetalert2.min.css" rel="stylesheet" >
+        <link href="../activos/bootstrap/bootstrap.min.css" rel="stylesheet">
 <style>.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
 <style type="text/css">
 
@@ -48,12 +46,12 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
         <div class='collapse navbar-collapse' id='navbarNav'>
             <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
                 <li class='nav-item' title='Inicio'>
-                  <a class='nav-link btn btn-outline-warning' href='../controlador/logeo.controlador.php?accion=ix'><img src='../imagenes/house.png'style='height: 25px;width: 25px;'></a>
+                  <a class='nav-link btn btn-outline-warning' href='../controlador/logeo.controlador.php?accion=ix'><img src='../imagenes/house.ico'style='height: 25px;width: 25px;'></a>
                 </li>";
               if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
               echo "
                 <li class='nav-item ms-2' title='Usuarios'>
-                    <a class='nav-link btn btn-outline-warning' href='../controlador/usuario.controlador.php?accion=vut'><img src='../imagenes/admin.png'style='height: 25px;width: 25px;'></a>
+                    <a class='nav-link btn btn-outline-warning' href='../controlador/usuario.controlador.php?accion=vut'><img src='../imagenes/admin.ico'style='height: 25px;width: 25px;'></a>
                 </li>";
               }
      echo "</ul>
@@ -70,7 +68,7 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
                     </li>
                     <li><hr class='dropdown-divider'></li>
                     <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                      <a class='nav-link text-primary btn btn-outline-danger' href='../controlador/logeo.controlador.php?accion=salir'><img src='../imagenes/apagar.png'style='height: 25px;width: 25px;'></a>
+                      <a class='nav-link text-primary btn btn-outline-danger' href='../controlador/logeo.controlador.php?accion=salir'><img src='../imagenes/apagar.ico'style='height: 25px;width: 25px;'></a>
                     </li>
                 </ul>
                 </li>";

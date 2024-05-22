@@ -23,7 +23,7 @@
 							<div class='input-group'>
 								<input class="form-control" style="color:black" type='password' id="contrasena" name ="contrasena" placeholder="Contraseña"><br>
                 <button class="btn btn-outline-secondary che" type="button" id="che" onclick="mostrar()">
-                  <i class="fas fa-eye" ></i>
+                  <img src='../imagenes/ojo.ico'style='height: 25px;width: 25px;'>
                 </button>
 							</div>
 							<br>
