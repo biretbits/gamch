@@ -38,9 +38,11 @@ include("require/ama/456.php");
    </body>
  </html>
 
+<<<<<<< HEAD
 
  <script type="text/javascript">
    function uno(){
      alert(4564213213213);
    }
- </script>
+   alert("de limbert");
+</script>
