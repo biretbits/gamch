@@ -16,8 +16,8 @@
           <option>1000</option>
         </select>
       </div>
-      <div class="col-2" title="Registro de nuevo usuario">
-        <button type="button" class="form-control btn btn-primary" onclick="visforUsuario()"><img src='../imagenes/nuevo_student.ico'style='height: 25px;width: 25px;'></button>
+      <div class="col-2" title="Registro Diario">
+        <button type="button" class="form-control btn btn-primary" onclick="visforUsuario()"><img src='../imagenes/paciente.ico'style='height: 25px;width: 25px;'></button>
       </div>
       <div class="col-3">
 
@@ -32,11 +32,12 @@
       <div class="col">
         <div class="table-responsive">
         <table class="table">
-          <thead>
+          <thead style="font-size:12px">
             <tr>
+              <th>N°</th>
               <th>Fecha</th>
               <th>Hora</th>
-              <th>Nombre y Apellido</th>
+              <th>Nombre y Apellidos</th>
               <th>Fecha de Nacimiento</th>
               <th>Edad</th>
               <th>Dirección</th>
@@ -46,33 +47,46 @@
               <th>Hist. clinica</th>
               <th>Resp. Admision</th>
               <th>Fecha de retorno de la Historia</th>
+              <th>Acción</th>
             </tr>
           </thead>
           <tbody>
       <?php
-    /*  if ($resul && $resul->num_rows > 0) {
+      if ($resul && count($resul) > 0) {
           $i = 0;
-          while($fi=mysqli_fetch_array($resul)){
+        foreach ($resul as $fi){
             echo "<tr>";
               echo "<td>".($i+1)."</td>";
-              echo "<td>".$fi['ci_usuario']."</td>";
-              echo "<td>".$fi['usuario']."</td>";
-              echo "<td>".$fi['nombre_usuario']."</td>";
-              echo "<td>".$fi['ap_usuario']."</td>";
-              echo "<td>".$fi['am_usuario']."</td>";
-              echo "<td>".$fi['telefono_usuario']."</td>";
+              echo "<td>".$fi['fecha_rd']."</td>";
+              echo "<td>".$fi['hora_rd']."</td>";
+              echo "<td>".$fi['nombre_usuario']." ".$fi['ap_usuario']." ".$fi['am_usuario']."</td>";
+              echo "<td>".$fi['fecha_nac_usuario']."</td>";
+              echo "<td>".$fi['edad_usuario']."</td>";
               echo "<td>".$fi['direccion_usuario']."</td>";
-              echo "<td>".$fi['profesion_usuario']."</td>";
-              echo "<td>".$fi['especialidad_usuario']."</td>";
-              echo "<td>".$fi['tipo_usuario']."</td>";
+              echo "<td>".$fi['servicio_rd']."</td>";
+              echo "<td>".$fi['signo_sintomas_rd']."</td>";
+              echo "<td>".$fi['medico_nombre']."</td>";
+              echo "<td>";
+              if(isset($fi['historial_clinico_rd']) && $fi['historial_clinico_rd'] == "no"){
+
+                    echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                      echo "<button type='button' class='btn btn-dark' title='Sin historial' style='font-size:10px'>Sin historial</button>";
+                    echo "</div>";
+
+              }else{
+                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                  echo "<button type='button' class='btn btn-success' title='Sin historial' style='font-size:10px'>Sin historial</button>";
+                echo "</div>";
+              }
+              echo "</td>";
+
+              echo "<td>".$fi['admision_nombre']."</td>";
+              echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                  if($fi["estado"] == "activo" && $fi["tipo_usuario"] != "admin"){
                     echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-                  }else if($fi["tipo_usuario"] != "admin"){
-                    echo "<button type='button' class='btn btn-danger' title='Activar Usuario' onclick='accionBtnActivar(\"desactivo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
-                  }
+
                 echo "</div>";
               echo "</td>";
 
@@ -82,14 +96,14 @@
           }
         }else{
           $resul = 'No se encontro resultados';
-        }*/
+        }
          ?>
         </tbody>
       </table>
       </div>
     </div>
   </div>
-  <?php/*
+  <?php
   if($TotalPaginas!=0){
     $adjacents=1;
     $anterior = "&lsaquo; Anterior";
@@ -172,7 +186,7 @@ echo "<div class='row'>
 echo "</div>
     </div>";
 
-  }*/
+  }
    ?>
  </div>
 
@@ -187,7 +201,7 @@ function BuscarUsuarios(page){
     datos.append('page', page);
     datos.append('listarDeCuanto',listarDeCuanto);
       $.ajax({
-        url: "../controlador/usuario.controlador.php?accion=bus",
+        url: "../controlador/registroDiario.controlador.php?accion=brd",
         type: "POST",
         data: datos,
         contentType: false, // Deshabilitar la codificación de tipo MIME

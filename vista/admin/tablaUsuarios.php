@@ -302,4 +302,5 @@ function BuscarUsuarios(page){
   	});
    }
 </script>
+
 <?php require("../librerias/footeruni.php"); ?>
