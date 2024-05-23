@@ -56,7 +56,7 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
               }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admision"){
                 echo "
                   <li class='nav-item ms-2' title='Registro diario'>
-                      <a class='nav-link btn btn-outline-warning' href='../controlador/registroDiario.controlador.php?accion=vtd'><img src='imagenes/registro.ico'style='height: 25px;width: 25px;'></a>
+                      <a class='nav-link btn btn-outline-warning' href='../controlador/registroDiario.controlador.php?accion=vtd'><img src='../imagenes/registro.ico'style='height: 25px;width: 25px;'></a>
                   </li>";
               }
      echo "</ul>

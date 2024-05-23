@@ -10,8 +10,9 @@ class RegistroDiarioControlador{
 
 	public function visualizarTablaRegistroDiario(){
 		$rdi =new RegistroDiario();
-    $rdi->
+    require ("../vista/registroDiario/tablaRegistroDiario.php");
   }
+
 
 
 	public function v_index(){

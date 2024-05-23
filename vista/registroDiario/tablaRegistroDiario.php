@@ -1,7 +1,6 @@
 <?php require("../librerias/headeradmin1.php"); ?>
-
 <div class="container mt-5">
-  <h2>Usuarios</h2>
+  <h2>Registro Diario de Pacientes</h2>
   <div class="row">
       <label for="selectPage" class="form-label">Page</label>
       <div class="col-2">
@@ -35,18 +34,18 @@
         <table class="table">
           <thead>
             <tr>
-              <th>N°</th>
-              <th>C.I.</th>
-              <th>Usuario</th>
-              <th>Nombre</th>
-              <th>Apellido P.</th>
-              <th>Apellido M.</th>
-              <th>Telefono</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Nombre y Apellido</th>
+              <th>Fecha de Nacimiento</th>
+              <th>Edad</th>
               <th>Dirección</th>
-              <th>Profesión</th>
-              <th>Especialidad</th>
-              <th>Tipo</th>
-              <th>Acción</th>
+              <th>Servicio</th>
+              <th>Signos y Sintomas</th>
+              <th>Personal que Brinda la atencion</th>
+              <th>Hist. clinica</th>
+              <th>Resp. Admision</th>
+              <th>Fecha de retorno de la Historia</th>
             </tr>
           </thead>
           <tbody>
