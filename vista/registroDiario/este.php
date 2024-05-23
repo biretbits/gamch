@@ -15,6 +15,9 @@ include("require/ama/456.php");
      <input type="text" name="" value="nombre">
      <input type="fdgf" name="" value="niaa">
      <input type="text" name="" value="mama">
+
+     <input type="password" name="" value="">
+     <input type="number" name="" value="">
      <button type="button" name="button" onclick="aumentar"></button>
      <button type="seguir" name="button"></button>
    </body>
