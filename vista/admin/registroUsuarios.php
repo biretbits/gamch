@@ -90,7 +90,7 @@
 					</div>
 					<?php  $dato = "";$dato = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? 1 : 0;?>
         		<input class="btn btn-primary"  type="button" id="submit" value="<?php $smg = "";$msg = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? "Actualizar" : "Registrar"; echo $msg;?>" onclick= "insertardatosus('<?php echo $dato; ?>')">
-        			<h6><a href="usuario.controler.php?accion=ingresar">¿ya tienes una cuenta?</a></h6>
+        		
       </div>
 		</div>
 </div>
@@ -114,13 +114,13 @@ function insertardatosus(accion){
 		return;
 	}
 	if(tipo_usuario == "medico" || tipo_usuario == "encargado"){
-	 if(profesion_usuario == "" || especialidad_usuario ==""){
+	 if(profesion_usuario == "" || especialidad_usuario =="" ||telefono_usuario==""||ci==""){
 		 ingresedatosPro();
 		 return;
 		}
 	}
-	if(usuario==""||nombre_usuario==""||ap_usuario==""||am_usuario==""||ci==""
-		 	&&telefono_usuario==""||direccion_usuario==""){
+	if(usuario==""||nombre_usuario==""||ap_usuario==""||am_usuario==""
+		 	||direccion_usuario==""){
 		ingresedatos();
 		return;
 	}
