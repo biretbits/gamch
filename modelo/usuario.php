@@ -56,9 +56,9 @@ class Usuario
       $sql.= " where cod_usuario = $cod_usuario";
     }else{
       $contraseña_usuario=password_hash($contraseña_usuario, PASSWORD_DEFAULT);
-      $sql = "insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,telefono_usuario,direccion_usuario,profesion_usuario,
+      $sql = "insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,profesion_usuario,
       especialidad_usuario,tipo_usuario,contrasena_usuario,cod_cds,estado)values($ci,'$usuario','$nombre_usuario','$ap_usuario'
-      ,'$am_usuario',$telefono_usuario,'$direccion_usuario','$profesion_usuario',
+      ,'$am_usuario','',0,$telefono_usuario,'$direccion_usuario','$profesion_usuario',
       '$especialidad_usuario','$tipo_usuario','$contraseña_usuario',1,'activo')";
     }
     $resul = $this->con->query($sql);
