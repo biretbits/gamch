@@ -19,3 +19,7 @@ include("require/ama/456.php");
      <button type="seguir" name="button"></button>
    </body>
  </html>
+
+ <script type="text/javascript">
+   alert("de limbert");
+ </script>
