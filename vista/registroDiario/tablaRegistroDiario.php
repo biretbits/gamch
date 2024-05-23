@@ -17,7 +17,7 @@
         </select>
       </div>
       <div class="col-2" title="Registro de nuevo usuario">
-        <button type="button" class="form-control btn btn-primary" onclick="visforUsuario()"><img src='../imagenes/nuevo_student.ico'style='height: 25px;width: 25px;'></button>
+        <button type="button" class="form-control btn btn-primary" onclick="visualizarRegistrodiario()"><img src='../imagenes/nuevo_student.ico'style='height: 25px;width: 25px;'></button>
       </div>
       <div class="col-3">
 
@@ -53,7 +53,7 @@
     /*  if ($resul && $resul->num_rows > 0) {
           $i = 0;
           while($fi=mysqli_fetch_array($resul)){
-            echo "<tr>";
+          echo "<tr>";
               echo "<td>".($i+1)."</td>";
               echo "<td>".$fi['ci_usuario']."</td>";
               echo "<td>".$fi['usuario']."</td>";
@@ -207,13 +207,10 @@ function BuscarUsuarios(page){
     }
   }
 
-  function visforUsuario(){
-     location.href="../controlador/usuario.controlador.php?accion=vfu" ;
+  function visualizarRegistrodiario(){
+     location.href="../controlador/registroDiario.controlador.php?accion=vrd";
    }
 
-  function visforUsuario(){
-     location.href="../controlador/usuario.controlador.php?accion=vfu" ;
-   }
    //$pagina,$listarDeCuanto
    //funcion para activar o desactivar el usuario o dar de baja
    function accionBtnActivar(accion,pagina,listarDeCuanto,cod_usuario){
