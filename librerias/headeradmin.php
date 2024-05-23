@@ -55,6 +55,11 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
                 <li class='nav-item ms-2' title='Usuarios'>
                     <a class='nav-link btn btn-outline-warning' href='controlador/usuario.controlador.php?accion=vut'><img src='imagenes/admin.ico'style='height: 25px;width: 25px;'></a>
                 </li>";
+              }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admision"){
+                echo "
+                  <li class='nav-item ms-2' title='Registro diario'>
+                      <a class='nav-link btn btn-outline-warning' href='controlador/registroDiario.controlador.php?accion=vtd'><img src='imagenes/registro.ico'style='height: 25px;width: 25px;'></a>
+                  </li>";
               }
      echo "</ul>
 
@@ -74,6 +79,21 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
                   </li>
               </ul>
               </li>";
+            }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
+              echo "<li class='nav-item dropdown' title='Nombre Usuario'>
+                <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                    hola ".$name."
+                </a>
+                <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                    <li class='nav-item' title='Cerrar sesión' style='color:green'>
+                      <a class='nav-link text-info btn btn-outline-warning' href='#'>Editar</a>
+                    </li>
+                    <li><hr class='dropdown-divider'></li>
+                    <li class='nav-item' title='Cerrar sesión' style='color:green'>
+                      <a class='nav-link text-primary btn btn-outline-danger' href='controlador/logeo.controlador.php?accion=salir'><img src='imagenes/apagar.ico'style='height: 25px;width: 25px;'></a>
+                    </li>
+                </ul>
+                </li>";
             }else{
               echo "
                   <li class='nav-item'>

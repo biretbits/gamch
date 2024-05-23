@@ -47,7 +47,7 @@
             <div class='input-group'>
 							<select class="form-select" id="tipo_usuario" >
 								<?php
-								$ara = ['medico','encargado','paciente'];
+								$ara = ['medico','encargado','paciente','admision'];
 									if(isset($fe["tipo_usuario"]) && is_string($fe["tipo_usuario"])){
 										for($i = 0;$i<count($ara);$i++){
 											if($ara[$i] == $fe["tipo_usuario"]){
@@ -60,6 +60,7 @@
 								echo "<option>seleccione</option>
 				          		<option>medico</option>
 				          		<option>encargado</option>
+											<option>admision</option>
 				          		<option>paciente</option>";
 									}
 								 ?>
@@ -90,7 +91,7 @@
 					</div>
 					<?php  $dato = "";$dato = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? 1 : 0;?>
         		<input class="btn btn-primary"  type="button" id="submit" value="<?php $smg = "";$msg = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? "Actualizar" : "Registrar"; echo $msg;?>" onclick= "insertardatosus('<?php echo $dato; ?>')">
-        		
+
       </div>
 		</div>
 </div>

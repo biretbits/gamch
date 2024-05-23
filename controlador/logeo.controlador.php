@@ -15,7 +15,7 @@ class LogeoControlador{
 		}
   }
 
-	public function verificar($usuario,$contrasena){
+	public function verificarLogin($usuario,$contrasena){
 		$us=new Usuario();
 		$resul = $us->validarBD($usuario);
 		if ($resul === false) {
@@ -58,8 +58,8 @@ class LogeoControlador{
 		$lc->visualizarInicioSession();
 	}
 
-	if(isset($_GET["accion"]) && $_GET["accion"]=="very"){
-		$lc->verificar($_POST["usuario"],$_POST["contrasena"]);
+	if(isset($_GET["accion"]) && $_GET["accion"]=="vcu"){
+		$lc->verificarLogin($_POST["usuario"],$_POST["contrasena"]);
 	}
 	if(isset($_GET["accion"])&&$_GET["accion"]=="salir"){
 		$lc->Drop_usuario();

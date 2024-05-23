@@ -72,16 +72,19 @@
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "../controlador/logeo.controlador.php?accion=very", //destination
+        url: "../controlador/logeo.controlador.php?accion=vcu", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
         processData:false,
         success: function(r){
+          //alert(r);
           r=$.trim(r);
           if(r == "admin"){
             alertCorrecto();
           }else if(r == "medico"){
+            alertCorrecto();
+          }else if(r == "admision"){
             alertCorrecto();
           }else{
             Swal.fire({

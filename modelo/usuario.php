@@ -32,7 +32,6 @@ class Usuario
           $sql.=" where LOWER(usuario) LIKE '%".$buscar."%' OR LOWER(nombre_usuario) LIKE '%".$buscar."%'
           OR LOWER(ap_usuario) LIKE '%".$buscar."%' OR LOWER(am_usuario) LIKE '%".$buscar."%' ";
       }
-
     	if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
     		$sql.=" ORDER BY cod_usuario DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
     	}
