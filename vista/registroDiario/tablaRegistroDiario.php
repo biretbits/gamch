@@ -221,13 +221,10 @@ function BuscarUsuarios(page){
     }
   }
 
-  function visforUsuario(){
-     location.href="../controlador/usuario.controlador.php?accion=vfu" ;
+  function visualizarRegistrodiario(){
+     location.href="../controlador/registroDiario.controlador.php?accion=vrd";
    }
 
-  function visforUsuario(){
-     location.href="../controlador/usuario.controlador.php?accion=vfu" ;
-   }
    //$pagina,$listarDeCuanto
    //funcion para activar o desactivar el usuario o dar de baja
    function accionBtnActivar(accion,pagina,listarDeCuanto,cod_usuario){

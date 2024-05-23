@@ -51,6 +51,13 @@ class RegistroDiario
   }
 
 
+  public function buscarPacientesql($nombre){
+    $nombre = strtolower($nombre);
+    $lis = "select *from usuario where LOWER(nombre_usuario) like '%$nombre%'";
+    $resul = $this->con->query($lis);
+    return $resul;
+    mysqli_close($this->con);
+  }
 }
 
 
