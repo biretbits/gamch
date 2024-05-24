@@ -22,7 +22,7 @@ class RegistroDiario
     mysqli_close($this->con);
   }
 
-  public function SelectPorBusquedaRegistroDiario($buscar,$inicioList,$listarDeCuanto){
+  public function SelectPorBusquedaRegistroDiario($buscar,$inicioList,$listarDeCuanto,$fecha,$fechai=false,$fechaf=false){
     // Verificar si $buscar tiene contenido
     $sql = "SELECT * FROM usuario as u inner join registro_diario as rd on u.cod_usuario = rd.paciente_rd where u.tipo_usuario = 'paciente' and rd.estado = 'activo'";
     if ($buscar != "" && $buscar != null) {
@@ -30,8 +30,21 @@ class RegistroDiario
         $buscar = strtolower($buscar);
         $sql.=" and LOWER(u.nombre_usuario) LIKE '%".$buscar."%' OR LOWER(u.ap_usuario) LIKE '%".$buscar."%' OR LOWER(u.am_usuario) LIKE '%".$buscar."%' ";
     }
+    if($fecha != false){
+  		//$di=strtotime($fecha);
+  		//$df=strtotime($fecha) + 86399;
+  	//	echo $di."       ".$df;
+  		$sql.=" and (rd.fecha_rd >= '$fecha' and  rd.fecha_rd <= '$fecha')";
+	 }
+   //fecha solo para
+   if($fechai != false && $fechaf != false){
+    //$di=strtotime($fecha);
+    //$df=strtotime($fecha) + 86399;
+  //	echo $di."       ".$df;
+    $sql.=" and (rd.fecha_rd >= '$fechai' and  rd.fecha_rd <= '$fechaf') ";
+    }
     if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
-      $sql.=" ORDER BY rd.cod_rd DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
+      $sql.="ORDER BY rd.cod_rd DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
     }
 
     $resul = $this->con->query($sql);

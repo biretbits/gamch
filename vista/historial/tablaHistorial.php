@@ -1,6 +1,6 @@
 <?php require("../librerias/headeradmin1.php"); ?>
 <div class="container mt-5">
-  <h2>Registro Diario de Pacientes</h2>
+  <h2>Historial Clinico</h2>
 
   <div class="row align-items-center">
     <label for="selectPage" class="form-label col-auto mb-2">Page</label>
@@ -17,9 +17,9 @@
         <option>1000</option>
       </select>
     </div>
-    <div class="col-auto mb-2" title="Registro Diario">
+    <div class="col-auto mb-2" title="Registro de nuevo hisorial">
       <button type="button" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="visualizarRegistrodiario()">
-        <img src='../imagenes/paciente.ico' style='height: 25px;width: 25px;'>
+        <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
       </button>
     </div>
     <div class="col-auto mb-2">
@@ -34,8 +34,7 @@
       <!-- espacio vacío para mantener el diseño intacto -->
     </div>
     <div class="col mb-2">
-      <input type="text" class="form-control" placeholder="Buscar..." id='buscaru' onkeyup="BuscarRegistrosDiarios(1)">
-    </div>
+      </div>
   </div>
   </div>
   <!-- modal para generar fechas desde seleccionar fechas -->
@@ -91,17 +90,10 @@
             <tr>
               <th>N°</th>
               <th>Fecha</th>
-              <th>Hora</th>
-              <th>Nombre y Apellidos</th>
+              <th>Zona</th>
+              <th>Responsable Familiar</th>
+              <th>Paciente</th>
               <th>Fecha de Nacimiento</th>
-              <th>Edad</th>
-              <th>Dirección</th>
-              <th>Servicio</th>
-              <th>Signos y Sintomas</th>
-              <th>Personal que Brinda la atencion</th>
-              <th>Hist. clinica</th>
-              <th>Resp. Admision</th>
-              <th>Fecha de retorno de la Historia</th>
               <th>Acción</th>
             </tr>
           </thead>
@@ -113,31 +105,16 @@
             echo "<tr>";
               echo "<td>".($i+1)."</td>";
               echo "<td>".$fi['fecha_rd']."</td>";
-              echo "<td>".$fi['hora_rd']."</td>";
-              echo "<td>".$fi['nombre_usuario']." ".$fi['ap_usuario']." ".$fi['am_usuario']."</td>";
-              echo "<td>".$fi['fecha_nac_usuario']."</td>";
-              echo "<td>".$fi['edad_usuario']."</td>";
-              echo "<td>".$fi['direccion_usuario']."</td>";
-              echo "<td>".$fi['servicio_rd']."</td>";
-              echo "<td>".$fi['signo_sintomas_rd']."</td>";
-              echo "<td>".$fi['medico_nombre']."</td>";
+              echo "<td>".$fi['zona_his']."</td>";
+              $datosResponsable = $fi['datos_responsable_familia'];
               echo "<td>";
-              if(isset($fi['historial_clinico_rd']) && $fi['historial_clinico_rd'] == "no"){
-
-                    echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                      echo "<button type='button' class='btn btn-dark' title='Sin historial' style='font-size:10px'>Sin historial</button>";
-                    echo "</div>";
-
-              }else{
-                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
-                  onclick='accionHitorialVer(".$fi["paciente_rd"].")'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
-                echo "</div>";
+              foreach ($datosResponsable as $resFamiliar) {
+                echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
               }
               echo "</td>";
+              echo "<td>".$fi['nombre_usuario']." ".$fi['ap_usuario']." ".$fi['am_usuario']."</td>";
+              echo "<td>".$fi['fecha_nac_usuario']."</td>";
 
-              echo "<td>".$fi['admision_nombre']."</td>";
-              echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
@@ -412,28 +389,6 @@ function BuscarRegistrosDiarios(page){
     // Agregar el formulario al cuerpo del documento y enviarlo
     document.body.appendChild(form);
     form.submit();
-   }
-   //funcion para ver el historial del paciente
-   function accionHitorialVer(paciente_rd){
-       var form = document.createElement('form');
-        form.method = 'post';
-        form.action = '../controlador/historial.controlador.php?accion=vht'; // Coloca la URL de destino correcta
-        // Agregar campos ocultos para cada dato
-        var datos = {
-            paciente_rd:paciente_rd
-        };
-        for (var key in datos) {
-            if (datos.hasOwnProperty(key)) {
-                var input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = datos[key];
-                form.appendChild(input);
-            }
-        }
-      // Agregar el formulario al cuerpo del documento y enviarlo
-      document.body.appendChild(form);
-      form.submit();
    }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

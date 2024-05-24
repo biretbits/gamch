@@ -10,14 +10,14 @@ class RegistroDiarioControlador{
 
 	public function visualizarTablaRegistroDiario(){
 		$rdi =new RegistroDiario();
-    $listarDeCuanto = 5;$pagina = 1;
-    $resultodoUsuarios = $rdi->SelectPorBusquedaRegistroDiario("",false,false);
+    $listarDeCuanto = 5;$pagina = 1;$buscar = "";$fecha = date('Y-m-d');
+    $resultodoUsuarios = $rdi->SelectPorBusquedaRegistroDiario("",false,false,false);
     $num_filas_total = mysqli_num_rows($resultodoUsuarios);
     $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
             //calculamos el registro inicial
     $inicioList = ($pagina - 1) * $listarDeCuanto;
     // Verificar si la consulta devuelve resultados
-    $res = $rdi->SelectPorBusquedaRegistroDiario("",$inicioList,$listarDeCuanto);
+    $res = $rdi->SelectPorBusquedaRegistroDiario("",$inicioList,$listarDeCuanto,false);
     $resul = $this->Uniendo($res,$rdi);
     require ("../vista/registroDiario/tablaRegistroDiario.php");
   }
@@ -63,15 +63,15 @@ class RegistroDiarioControlador{
     return $ar; // Devolver el array completo fuera del bucle
 }
 
-public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto){
-  	$rdi =new RegistroDiario();
-  $resultodoUsuarios = $rdi->SelectPorBusquedaRegistroDiario($buscar,false,false);
+public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fecha){
+  $rdi =new RegistroDiario();
+  $resultodoUsuarios = $rdi->SelectPorBusquedaRegistroDiario($buscar,false,false,false);
   $num_filas_total = mysqli_num_rows($resultodoUsuarios);
   $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
           //calculamos el registro inicial
   $inicioList = ($pagina - 1) * $listarDeCuanto;
-  // Verificar si la consulta devuelve resultados
-  $res = $rdi->SelectPorBusquedaRegistroDiario($buscar,$inicioList,$listarDeCuanto);
+  // Verificar si la consulta devuelve resultad
+  $res = $rdi->SelectPorBusquedaRegistroDiario($buscar,$inicioList,$listarDeCuanto,$fecha);
   $resul = $this->Uniendo($res,$rdi);
 
   echo "
@@ -123,7 +123,8 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto){
 
               }else{
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-success' title='Sin historial' style='font-size:10px'>Sin historial</button>";
+                  echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
+                  onclick='accionHitorialVer()'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
                 echo "</div>";
               }
               echo "</td>";
@@ -133,7 +134,7 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto){
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                    echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                  //  echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
 
                 echo "</div>";
               echo "</td>";
@@ -177,19 +178,19 @@ echo "<div class='row'>
 
       // previous label
       if ($pagina != 1) {
-        echo "<li class='page-item'><a class='page-link'  onclick=\"BuscarUsuarios(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
+        echo "<li class='page-item'><a class='page-link'  onclick=\"BuscarRegistrosDiarios(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
       }
       if($pagina==1) {
         echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
       } else if($pagina==2) {
-        echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarUsuarios(1)\" class='page-link'>$anterior</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosDiarios(1)\" class='page-link'>$anterior</a></li>";
       }else {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarUsuarios($pagina-1)\">$anterior</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosDiarios($pagina-1)\">$anterior</a></li>";
 
       }
       // first label
       if($pagina>($adjacents+1)) {
-        echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"BuscarUsuarios(1)\">1</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"BuscarRegistrosDiarios(1)\">1</a></li>";
       }
       // interval
       if($pagina>($adjacents+2)) {
@@ -204,9 +205,9 @@ echo "<div class='row'>
         if($i==$pagina) {
           echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
         }else if($i==1) {
-          echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"BuscarUsuarios(1)\">$i</a></li>";
+          echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"BuscarRegistrosDiarios(1)\">$i</a></li>";
         }else {
-          echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarUsuarios(".$i.")\" class='page-link'>$i</a></li>";
+          echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosDiarios(".$i.")\" class='page-link'>$i</a></li>";
         }
       }
 
@@ -218,17 +219,17 @@ echo "<div class='row'>
       // last
 
       if($pagina<($TotalPaginas-$adjacents)) {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarUsuarios($TotalPaginas)\">$TotalPaginas</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarRegistrosDiarios($TotalPaginas)\">$TotalPaginas</a></li>";
       }
       // next
 
       if($pagina<$TotalPaginas) {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarUsuarios($pagina+1)\">$siguiente</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosDiarios($pagina+1)\">$siguiente</a></li>";
       }else {
         echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
       }
       if ($pagina != $TotalPaginas) {
-        echo "<li class='page-item'><a class='page-link' onclick=\"BuscarUsuarios($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
+        echo "<li class='page-item'><a class='page-link' onclick=\"BuscarRegistrosDiarios($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
       }
 
       echo "</ul>";
@@ -239,7 +240,6 @@ echo "<div class='row'>
 
     }
   }
-
 
   public function visualizarFormularioRegistroDiario(){
     require ("../vista/registroDiario/registroDiario.php");
@@ -258,6 +258,18 @@ echo "<div class='row'>
         echo json_encode([]);
     }
   }
+  public function GenerarReportes($fechai,$fechaf,$buscar,$pagina,$listarDeCuanto){
+
+    $rdi =new RegistroDiario();
+          //calculamos el registro inicial
+    $inicioList = ($pagina - 1) * $listarDeCuanto;
+    // Verificar si la consulta devuelve resultados
+    $res = $rdi->SelectPorBusquedaRegistroDiario($buscar,$inicioList,$listarDeCuanto,false,$fechai,$fechaf);
+    $num_filas_total = mysqli_num_rows($res);
+    //echo "numero de fillas".$num_filas_total;
+    $resul = $this->Uniendo($res,$rdi);
+    require("../vista/registroDiario/reporteRegistroDiario.php");
+  }
 
 	public function v_index(){
 	    header("location: ../index.php");
@@ -270,7 +282,7 @@ echo "<div class='row'>
 		$rd->visualizarTablaRegistroDiario();
 	}
   if(isset($_GET["accion"]) && $_GET["accion"]=="brd"){
-		$rd->BuscarRegistrosDiarioTabla($_POST["buscar"],$_POST["page"],$_POST["listarDeCuanto"]);
+		$rd->BuscarRegistrosDiarioTabla($_POST["buscar"],$_POST["page"],$_POST["listarDeCuanto"],$_POST["fecha"]);
 	}
   if(isset($_GET["accion"]) && $_GET["accion"]=="vrd"){
 		$rd->visualizarFormularioRegistroDiario();
@@ -278,5 +290,9 @@ echo "<div class='row'>
   if(isset($_GET["accion"]) && $_GET["accion"]=="bp"){
 		$rd->buscarBDpaciente($_POST['nombre']);
 	}
+  if(isset($_GET["accion"]) && $_GET["accion"]=="gr"){
+		$rd->GenerarReportes($_POST["fechai"],$_POST["fechaf"],$_POST["buscar"],$_POST["paginas"],$_POST["listarDeCuantos"]);
+	}
+
 
 ?>
