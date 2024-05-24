@@ -88,7 +88,6 @@ transform: translateY(-5px);
 <script type="text/javascript">
 //funcion para buscar si existe el Paciente
   function buscarExitepaciente(){
-
     var nombre = document.getElementById("nombre").value;
     if(nombre != ""){
     $.ajax({

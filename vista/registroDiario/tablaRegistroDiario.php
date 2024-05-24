@@ -1,10 +1,11 @@
 <?php require("../librerias/headeradmin1.php"); ?>
 <div class="container mt-5">
   <h2>Registro Diario de Pacientes</h2>
+
   <div class="row">
       <label for="selectPage" class="form-label">Page</label>
       <div class="col-2">
-        <select class="form-select" id="selectList" onchange="BuscarUsuarios(1)" name="selectList">
+        <select class="form-select" id="selectList" onchange=" BuscarRegistrosDiarios(1)" name="selectList">
           <option>--</option>
           <option>5</option>
           <option>10</option>
@@ -17,13 +18,13 @@
         </select>
       </div>
       <div class="col-2" title="Registro Diario">
-        <button type="button" class="form-control btn btn-primary" onclick="visforUsuario()"><img src='../imagenes/paciente.ico'style='height: 25px;width: 25px;'></button>
+        <button type="button" class="form-control btn btn-primary" onclick="visualizarRegistrodiario()"><img src='../imagenes/paciente.ico'style='height: 25px;width: 25px;'></button>
       </div>
       <div class="col-3">
 
       </div>
       <div class="col-5">
-        <input type="text" class="form-control mb-3" placeholder="Buscar..." id='buscaru' onkeyup="BuscarUsuarios(1)">
+        <input type="text" class="form-control mb-3" placeholder="Buscar..." id='buscaru' onkeyup="BuscarRegistrosDiarios(1)">
       </div>
     </div>
   </div>
@@ -96,6 +97,7 @@
           }
         }else{
           $resul = 'No se encontro resultados';
+          echo $resul;
         }
          ?>
         </tbody>
@@ -192,7 +194,7 @@ echo "</div>
 
 
 <script type="text/javascript">
-function BuscarUsuarios(page){
+function BuscarRegistrosDiarios(page){
     var obt_lis = document.getElementById("selectList").value;
     var listarDeCuanto = verificarList(obt_lis);
     var buscar = document.getElementById("buscaru").value;
@@ -207,7 +209,7 @@ function BuscarUsuarios(page){
         contentType: false, // Deshabilitar la codificación de tipo MIME
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-      //  alert(data+"dasdas");
+      //alert(data+"dasdas");
           $("#verDatos").html(data);
         }
       });
@@ -242,7 +244,7 @@ function BuscarUsuarios(page){
        contentType: false, // Deshabilitar la codificación de tipo MIME
        processData: false, // Deshabilitar la codificación de datos
        success: function(data) {
-     //  alert(data+"dasdas");
+     alert(data+"dasdas");
      	   data=$.trim(data);
          if(data == "error"){
            error();

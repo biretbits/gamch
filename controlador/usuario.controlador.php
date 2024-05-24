@@ -102,10 +102,7 @@ class UsuarioControlador{
       }
     } else {
       echo "<tr>";
-        // No hay resultados
-        echo "<td></td>";
-        echo "<td>No se encontro resultados</td>";
-        echo "<td></td>";
+      echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
       echo "</tr>";
     }
     echo "</tbody>

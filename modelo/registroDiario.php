@@ -28,8 +28,7 @@ class RegistroDiario
     if ($buscar != "" && $buscar != null) {
         // Convertir $buscar a minúsculas
         $buscar = strtolower($buscar);
-        $sql.=" and LOWER(u.nombre_usuario) LIKE '%".$buscar."%'
-        OR LOWER(u.ap_usuario) LIKE '%".$buscar."%' OR LOWER(u.am_usuario) LIKE '%".$buscar."%' ";
+        $sql.=" and LOWER(u.nombre_usuario) LIKE '%".$buscar."%' OR LOWER(u.ap_usuario) LIKE '%".$buscar."%' OR LOWER(u.am_usuario) LIKE '%".$buscar."%' ";
     }
     if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
       $sql.=" ORDER BY rd.cod_rd DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
@@ -40,7 +39,6 @@ class RegistroDiario
     return $resul;
     mysqli_close($this->con);
   }
-
   public function selectNombreUsuario($id){
     $sql = "select nombre_usuario,ap_usuario,am_usuario from usuario where cod_usuario = $id";
     $resul = $this->con->query($sql);
@@ -53,7 +51,7 @@ class RegistroDiario
 
   public function buscarPacientesql($nombre){
     $nombre = strtolower($nombre);
-    $lis = "select *from usuario where LOWER(nombre_usuario) like '%$nombre%'";
+    $lis = "select *from usuario where LOWER(nombre_usuario) like '%$nombre%' and tipo_usuario = 'paciente'";
     $resul = $this->con->query($lis);
     return $resul;
     mysqli_close($this->con);
