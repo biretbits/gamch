@@ -133,7 +133,7 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fech
               echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-info' title='Editar'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                   //  echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
 
                 echo "</div>";

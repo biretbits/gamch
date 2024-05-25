@@ -5,7 +5,7 @@
   <div class="row align-items-center">
     <label for="selectPage" class="form-label col-auto mb-2">Page</label>
     <div class="col-auto mb-2">
-      <select class="form-select" id="selectList" onchange="BuscarRegistrosDiarios(1)" name="selectList">
+      <select class="form-select" id="selectList" name="selectList">
         <option>--</option>
         <option>5</option>
         <option>10</option>
@@ -18,12 +18,12 @@
       </select>
     </div>
     <div class="col-auto mb-2" title="Registro de nuevo hisorial">
-      <button type="button" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="visualizarRegistrodiario()">
+      <button type="button" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
       </button>
     </div>
     <div class="col-auto mb-2">
-      <input type="date" name="fecha" id="fecha" value="" onchange="BuscarRegistrosDiarios(1)" class="form-control">
+      <input type="date" name="fecha" id="fecha" value="" class="form-control">
     </div>
     <div class="col-auto mb-2" title="Reporte">
       <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
@@ -117,7 +117,7 @@
 
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-info' title='Editar'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
 
                 echo "</div>";
@@ -225,170 +225,4 @@ echo "</div>
  </div>
  <!-- modal de seleccion de fechas-->
 
-
-<script type="text/javascript">
-function BuscarRegistrosDiarios(page){
-    var obt_lis = document.getElementById("selectList").value;
-    var listarDeCuanto = verificarList(obt_lis);
-    var buscar = document.getElementById("buscaru").value;
-    var fecha = document.getElementById("fecha").value;
-    ponerFechactualAlModalDeReporte(listarDeCuanto,buscar,page,fecha);
-    var datos = new FormData(); // Crear un objeto FormData vacío
-    datos.append('buscar', buscar);
-    datos.append('page', page);
-    datos.append('listarDeCuanto',listarDeCuanto);
-    datos.append('fecha',fecha);
-      $.ajax({
-        url: "../controlador/registroDiario.controlador.php?accion=brd",
-        type: "POST",
-        data: datos,
-        contentType: false, // Deshabilitar la codificación de tipo MIME
-        processData: false, // Deshabilitar la codificación de datos
-        success: function(data) {
-      //alert(data+"dasdas");
-          $("#verDatos").html(data);
-        }
-      });
-  }
-
-  function verificarList(valor){
-    if(valor != "" && valor != "--"){
-      return valor;
-    }else{
-      return 5;
-    }
-  }
-
-  function visualizarRegistrodiario(){
-     location.href="../controlador/registroDiario.controlador.php?accion=vrd";
-   }
-
-   //$pagina,$listarDeCuanto
-   //funcion para activar o desactivar el usuario o dar de baja
-   function accionBtnActivar(accion,pagina,listarDeCuanto,cod_usuario){
-     var buscar = document.getElementById("buscaru").value;
-     var datos = new FormData(); // Crear un objeto FormData vacío
-     datos.append('accion', accion);
-     datos.append("pagina",pagina);
-     datos.append("listarDeCuanto",listarDeCuanto);
-     datos.append("buscar",buscar);
-     datos.append("cod_usuario",cod_usuario);
-     $.ajax({
-       url: "../controlador/usuario.controlador.php?accion=del",
-       type: "POST",
-       data: datos,
-       contentType: false, // Deshabilitar la codificación de tipo MIME
-       processData: false, // Deshabilitar la codificación de datos
-       success: function(data) {
-     //alert(data+"dasdas");
-     	   data=$.trim(data);
-         if(data == "error"){
-           error();
-         }else{
-           $("#verDatos").html(data);
-         }
-       }
-     });
-   }
-
-   //funcion para verificar si el usuario existe o no y despues poder editar sus datos
-   function accionBtnEditar(pagina,listarDeCuanto,cod_usuario){
-     var buscar = document.getElementById("buscaru").value;
-     var datos = new FormData(); // Crear un objeto FormData vacío
-     datos.append("cod_usuario",cod_usuario);
-     $.ajax({
-       url: "../controlador/usuario.controlador.php?accion=ed",
-       type: "POST",
-       data: datos,
-       contentType: false, // Deshabilitar la codificación de tipo MIME
-       processData: false, // Deshabilitar la codificación de datos
-       success: function(data) {
-     //  alert(data+"dasdas");
-     	   data=$.trim(data);
-         if(data == "error"){
-           error();//no debe existir el codigo de usuario
-         }else{
-           //creamos un formulario para enviar los datos y abrimos el fomulario
-           formularioSubmit(pagina,listarDeCuanto,cod_usuario,buscar);
-         }
-       }
-     });
-   }
-
-   function formularioSubmit(pagina,listarDeCuanto,cod_usuario,buscar){
-     var form = document.createElement('form');
-      form.method = 'post';
-      form.action = '../controlador/usuario.controlador.php?accion=fm'; // Coloca la URL de destino correcta
-      // Agregar campos ocultos para cada dato
-      var datos = {
-          pagina: pagina,
-          listarDeCuanto: listarDeCuanto,
-          cod_usuario: cod_usuario,
-          buscar: buscar
-      };
-      for (var key in datos) {
-          if (datos.hasOwnProperty(key)) {
-              var input = document.createElement('input');
-              input.type = 'hidden';
-              input.name = key;
-              input.value = datos[key];
-              form.appendChild(input);
-          }
-      }
-    // Agregar el formulario al cuerpo del documento y enviarlo
-    document.body.appendChild(form);
-    form.submit();
-  }
-
-   function error(){
-  	 Swal.fire({
-  		icon: 'error',
-  		title: '¡Error!',
-  		text: '¡No se pudo realizar la acción !',
-  		showConfirmButton: false,
-  		timer: 1500
-  	});
-   }
-   //funcion para ingresar los datos al formulario modal para poder realizar luego el submit
-   function   ponerFechactualAlModalDeReporte(listarDeCuanto,buscar,page,fecha){
-      if(fecha != ""){
-        document.getElementById("fecha1").value=fecha;
-        document.getElementById("fecha2").value=fecha;
-      }
-      document.getElementById("pagina1").value=page;
-
-   }
-   function GenerarReporte(){
-     var fecha1 = document.getElementById("fecha1").value;
-     var fecha2 = document.getElementById("fecha2").value;
-     var buscar = document.getElementById("buscaru").value;
-     var pagina = document.getElementById("pagina1").value
-     if(pagina == ""){pagina = 1;}
-     var obt_lis = document.getElementById("selectList").value;
-     var listarDeCuanto = verificarList(obt_lis);
-     var form = document.createElement('form');
-      form.method = 'post';
-      form.action = '../controlador/registroDiario.controlador.php?accion=gr'; // Coloca la URL de destino correcta
-      // Agregar campos ocultos para cada dato
-      var datos = {
-        fechai:fecha1,
-        fechaf:fecha2,
-        buscar:buscar,
-        paginas:pagina,
-        listarDeCuantos:listarDeCuanto
-      };
-      for (var key in datos) {
-          if (datos.hasOwnProperty(key)) {
-              var input = document.createElement('input');
-              input.type = 'hidden';
-              input.name = key;
-              input.value = datos[key];
-              form.appendChild(input);
-          }
-      }
-    // Agregar el formulario al cuerpo del documento y enviarlo
-    document.body.appendChild(form);
-    form.submit();
-   }
-</script>
 <?php require("../librerias/footeruni.php"); ?>
