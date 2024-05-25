@@ -1,4 +1,5 @@
 <?php
+ob_end_clean();
 // Iniciar el almacenamiento en búfer de salida
 ob_start();
 

@@ -21,7 +21,6 @@ class RegistroDiario
     return $resul;
     mysqli_close($this->con);
   }
-
   public function SelectPorBusquedaRegistroDiario($buscar,$inicioList,$listarDeCuanto,$fecha,$fechai=false,$fechaf=false){
     // Verificar si $buscar tiene contenido
     $sql = "SELECT * FROM usuario as u inner join registro_diario as rd on u.cod_usuario = rd.paciente_rd where u.tipo_usuario = 'paciente' and rd.estado = 'activo'";

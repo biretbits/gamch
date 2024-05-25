@@ -259,7 +259,7 @@ echo "<div class='row'>
     }
   }
   public function GenerarReportes($fechai,$fechaf,$buscar,$pagina,$listarDeCuanto){
-
+    //echo $buscar." ".$listarDeCuanto." ".$fechai." ".$fechaf;
     $rdi =new RegistroDiario();
           //calculamos el registro inicial
     $inicioList = ($pagina - 1) * $listarDeCuanto;
