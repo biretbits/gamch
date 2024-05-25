@@ -1,0 +1,263 @@
+create table centro_de_salud(
+cod_cds int not null auto_increment primary key,
+nombre_cds char(200),
+direccion_cds char(200),
+estado char(15)
+);
+
+
+create table usuario(
+ cod_usuario       int not null auto_increment primary key,
+ci_usuario            int,
+usuario               char(60) ,
+nombre_usuario        char(60) ,
+ap_usuario            char(60) ,
+am_usuario            char(60) ,
+fecha_nac_usuario     date,
+edad_usuario	      int,
+telefono_usuario      int,
+direccion_usuario     char(200) ,
+profesion_usuario     char(60) ,
+especialidad_usuario  char(60) ,
+ocupacion_usuario     char(60),
+comunidad_usuario     char(100),
+estado_civil_usuario  char(60),
+escolaridad_usuario  char(100),
+autoidentificacion_usuario char(45),
+nro_seguro_usuario   char(150),
+nro_car_form_usuario char(200),
+sexo_usuario   char(20),
+tipo_usuario          char(60) ,
+contrasena_usuario    char(250) ,
+cod_cds               int,
+estado char(15),
+foreign key(cod_cds)references centro_de_salud(cod_cds)on delete restrict on update restrict
+);
+
+CREATE TABLE registro_diario (
+   cod_rd INT(11) NOT NULL AUTO_INCREMENT,
+   fecha_rd DATE DEFAULT NULL,
+   hora_rd TIME DEFAULT NULL,
+   servicio_rd CHAR(100) DEFAULT NULL,
+   signo_sintomas_rd CHAR(100) DEFAULT NULL,
+   historial_clinico_rd CHAR(10) DEFAULT NULL,
+   fecha_retorno_historia_rd date,
+   pe_brinda_atencion_rd INT(11) DEFAULT NULL,
+   resp_admision_rd INT(11) DEFAULT NULL,
+   paciente_rd int,
+   cod_cds INT(11) NOT NULL,
+   estado CHAR(15) DEFAULT NULL,
+   PRIMARY KEY (cod_rd, paciente_rd,cod_cds),
+   FOREIGN KEY (pe_brinda_atencion_rd) REFERENCES usuario(cod_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
+   FOREIGN KEY (resp_admision_rd) REFERENCES usuario(cod_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
+   FOREIGN KEY (paciente_rd) REFERENCES usuario(cod_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
+   FOREIGN KEY (cod_cds) REFERENCES centro_de_salud(cod_cds) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+
+create table historial(
+cod_his int auto_increment,
+zona_his char(70),
+cod_rd int,
+paciente_rd int,
+cod_cds int,
+cod_responsable_familia_his int,
+estado char(20),
+primary key(cod_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his),
+foreign key(cod_rd,paciente_rd,cod_cds)references registro_diario(cod_rd,paciente_rd,cod_cds)on delete restrict on update restrict,
+foreign key(cod_responsable_familia_his)references usuario(cod_usuario)on delete restrict on update restrict
+);
+
+
+
+    --------------------------------------------------------------+---------+
+    |           1 | admin   | juan           | huanca     | nina       |         67457812 | Calle la paz      | Ingeniero informatico  | computacion          | admin        | $2y$10$HcDmz5/npUWmiwxbW0QK8.fp2fvu0xcbAU8McwvvJDRBf29TvuroS |       1 |
+    |           2 | Medico  | Roman          | Condori    | Villca     |         67255623 | Calle la oruro    | Licenciado en medicina | Pediatra             | Medico       | $2y$10$Uo.szMVEPkBINp.2FrLnk.M0NjZRqCQRZw6PohOy9RRp2YvQc8rfS |
+
+insert into centro_de_salud(nombre_cds,direccion_cds,estado)values('Centro de salud Cala cala','Cala cala','activo');
+
+insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+profesion_usuario,especialidad_usuario,
+ocupacion_usuario,
+comunidad_usuario,
+estado_civil_usuario,
+escolaridad_usuario,
+autoidentificacion_usuario,
+nro_seguro_usuario,
+nro_car_form_usuario,
+sexo_usuario,
+tipo_usuario,contrasena_usuario,cod_cds,estado)values(7308752,
+'encargado','Noelia','Mamani','Nina','0000-00-00',0,78451256,'calle La paz entre linares','Licenciada en enfermeria','enfermera',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'encargado','$2y$10$UiDpH8cKEP8Fo6ogkfqnlOuk2c1tvqm8s0MKLQ1pmCCFWbdqBfn6W',1,'activo');
+
+insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+profesion_usuario,especialidad_usuario,
+ocupacion_usuario,
+comunidad_usuario,
+estado_civil_usuario,
+escolaridad_usuario,
+autoidentificacion_usuario,
+nro_seguro_usuario,
+nro_car_form_usuario,
+sexo_usuario,
+tipo_usuario,contrasena_usuario,cod_cds,estado)values(75451256,
+'admision','Sandra','Huanca','Nina','0000-00-00',0,63258974,'calle brasil','medico','Pediatra',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'admision','$2y$10$wEhNpR35jTOKFqK7sLRAaOCcvXYYiqqY9znZwGqAJgdC6PZqkGwNK',1,'activo'
+);
+
+insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+profesion_usuario,especialidad_usuario,
+ocupacion_usuario,
+comunidad_usuario,
+estado_civil_usuario,
+escolaridad_usuario,
+autoidentificacion_usuario,
+nro_seguro_usuario,
+nro_car_form_usuario,
+sexo_usuario,
+tipo_usuario,contrasena_usuario,cod_cds,estado)values(75451256,
+'medico','Salome','mamani','romina','0000-00-00',0,63258974,'calle brasil','medico','Pediatra',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'medico','$2y$10$Uo.szMVEPkBINp.2FrLnk.M0NjZRqCQRZw6PohOy9RRp2YvQc8rfS',1,'activo'
+);
+
+insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+profesion_usuario,especialidad_usuario,
+ocupacion_usuario,
+comunidad_usuario,
+estado_civil_usuario,
+escolaridad_usuario,
+autoidentificacion_usuario,
+nro_seguro_usuario,
+nro_car_form_usuario,
+sexo_usuario,
+tipo_usuario,contrasena_usuario,cod_cds,estado)values(72354512,
+'admin','Carlos','Mamani','Lopes','0000-00-00',0,63247512,'calle ecuador en tre la paz',
+'Ingeniero informatico','computacion',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'admin','$2y$10$HcDmz5/npUWmiwxbW0QK8.fp2fvu0xcbAU8McwvvJDRBf29TvuroS',1,'activo');
+
+insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+profesion_usuario,especialidad_usuario,
+ocupacion_usuario,
+comunidad_usuario,
+estado_civil_usuario,
+escolaridad_usuario,
+autoidentificacion_usuario,
+nro_seguro_usuario,
+nro_car_form_usuario,
+sexo_usuario,
+tipo_usuario,contrasena_usuario,cod_cds,estado)values(0,
+'','juan jose','Romay','Titi','1992-02-04',32,0,'Z1',
+'','',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'',
+'paciente'
+,'',1,'activo'
+);
+
+insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+profesion_usuario,especialidad_usuario,
+ocupacion_usuario,
+comunidad_usuario,
+estado_civil_usuario,
+escolaridad_usuario,
+autoidentificacion_usuario,
+nro_seguro_usuario,
+nro_car_form_usuario,
+sexo_usuario,
+tipo_usuario,contrasena_usuario,cod_cds,estado)values(0,
+'','Gustavo','Mamani','Nina','1992-02-04',32,0,'Z2',
+'','','','','','','','','','',
+'paciente'
+,'',1,'activo'
+);
+
+insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+profesion_usuario,especialidad_usuario,
+ocupacion_usuario,
+comunidad_usuario,
+estado_civil_usuario,
+escolaridad_usuario,
+autoidentificacion_usuario,
+nro_seguro_usuario,
+nro_car_form_usuario,
+sexo_usuario,
+tipo_usuario,contrasena_usuario,cod_cds,estado)values(0,
+'','Gabriela','Romay','Calani','1992-02-04',32,0,'Z2',
+'','','','','','','','','','',
+'paciente'
+,'',1,'activo'
+);
+
+insert into usuario(ci_usuario,usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+profesion_usuario,especialidad_usuario,
+ocupacion_usuario,
+comunidad_usuario,
+estado_civil_usuario,
+escolaridad_usuario,
+autoidentificacion_usuario,
+nro_seguro_usuario,
+nro_car_form_usuario,
+sexo_usuario,
+tipo_usuario,contrasena_usuario,cod_cds,estado)values(0,
+'','Hernan','Lopes','Peres','1992-02-04',32,63260832,'Z2',
+'','','panadero','cala cala','casado','secundaria','quechua','4545-asdf-45123','1222','Masculino',
+'responsable'
+,'',1,'activo'
+);
+
+insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
+fecha_retorno_historia_rd,
+pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-02-05','10:08','c. ext.','no','no','0000-00-00',
+3,2,5,1,'activo');
+
+insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
+fecha_retorno_historia_rd,
+pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-05-24','10:08','c. ext.','no','no','0000-00-00',
+3,2,6,1,'activo');
+insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
+fecha_retorno_historia_rd,
+pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-05-24','10:08','c. ext.','no','si','0000-00-00',
+3,2,7,1,'activo');
+
+
+
+insert into historial(zona_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his)values(
+'z5',3,7,1,8);
