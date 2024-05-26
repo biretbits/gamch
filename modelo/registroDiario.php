@@ -63,13 +63,31 @@ class RegistroDiario
 
   public function buscarPacientesql($nombre){
     $nombre = strtolower($nombre);
-    $lis = "select *from usuario where LOWER(nombre_usuario) like '%$nombre%' and tipo_usuario = 'paciente'";
+    $lis = "SELECT * FROM usuario
+      WHERE tipo_usuario = 'paciente'AND (LOWER(nombre_usuario) LIKE '%$nombre%' OR LOWER(ap_usuario) LIKE '%$nombre%' or LOWER(am_usuario) like '%$nombre%')
+          LIMIT 5 OFFSET 0;";
     $resul = $this->con->query($lis);
     return $resul;
     mysqli_close($this->con);
   }
+
+  public function buscarrespAdmisionsql($respadmision){
+    $respadmision = strtolower($respadmision);
+    $lis = "SELECT * FROM usuario
+      WHERE tipo_usuario = 'admision'AND (LOWER(nombre_usuario) LIKE '%$respadmision%' OR LOWER(ap_usuario) LIKE '%$respadmision%' or LOWER(am_usuario) like '%$respadmision%')
+          LIMIT 5 OFFSET 0;";
+    $resul = $this->con->query($lis);
+    return $resul;
+    mysqli_close($this->con);
 }
-
-
-
+public function buscarpersonalAtencionsql($personalquebrindalaatencion){
+   $personalquebrindalaatencion = strtolower($personalquebrindalaatencion);
+   $lis = "SELECT * FROM usuario
+     WHERE tipo_usuario = 'medico'AND (LOWER(nombre_usuario) LIKE '%$personalquebrindalaatencion%' OR LOWER(ap_usuario) LIKE '%$personalquebrindalaatencion%' or LOWER(am_usuario) like '%$personalquebrindalaatencion%')
+         LIMIT 5 OFFSET 0;";
+   $resul = $this->con->query($lis);
+   return $resul;
+   mysqli_close($this->con);
+ }
+}
  ?>

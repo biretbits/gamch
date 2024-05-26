@@ -270,6 +270,34 @@ echo "<div class='row'>
     $resul = $this->Uniendo($res,$rdi);
     require("../vista/registroDiario/reporteRegistroDiario.php");
   }
+  public function buscarBDrespAdmision($respadmision){
+        $rdi =new RegistroDiario();
+  	   $re = $rdi->buscarrespAdmisionsql($respadmision);
+       $datos = array();
+      if ($re->num_rows > 0) {
+     // Recoger los resultados en un array
+       while($row = $re->fetch_assoc()) {
+        $datos[] = $row;
+      }
+        echo json_encode($datos);
+    } else {
+        echo json_encode([]);
+    }
+    }
+    public function buscapbridaAtencion($personalquebrindalaatencion){
+        $rdi =new RegistroDiario();
+  	   $re = $rdi->buscarpersonalAtencionsql($personalquebrindalaatencion);
+       $datos = array();
+      if ($re->num_rows > 0) {
+     // Recoger los resultados en un array
+       while($row = $re->fetch_assoc()) {
+        $datos[] = $row;
+      }
+        echo json_encode($datos);
+    } else {
+        echo json_encode([]);
+    }
+  }
 
 	public function v_index(){
 	    header("location: ../index.php");
@@ -292,6 +320,12 @@ echo "<div class='row'>
 	}
   if(isset($_GET["accion"]) && $_GET["accion"]=="gr"){
 		$rd->GenerarReportes($_POST["fechai"],$_POST["fechaf"],$_POST["buscar"],$_POST["paginas"],$_POST["listarDeCuantos"]);
+	}
+  if(isset($_GET["accion"]) && $_GET["accion"]=="bra"){
+		$rd->buscarBDrespAdmision($_POST['respadmision']);
+	}
+  if(isset($_GET["accion"]) && $_GET["accion"]=="bpba"){
+		$rd->buscapbridaAtencion($_POST['personalquebrindalaatencion']);
 	}
 
 
