@@ -124,7 +124,8 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fech
               }else{
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
-                  onclick='accionHitorialVer()'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
+                  onclick='accionHitorialVer(".$fi["paciente_rd"].")'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
+
                 echo "</div>";
               }
               echo "</td>";
@@ -133,8 +134,8 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fech
               echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-info' title='Editar'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                  //  echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                echo "<button type='button' class='btn btn-info' title='Editar' onclick = 'editarpaciente(".$fi["cod_rd"].",".$fi["paciente_rd"].",\"".$buscar."\",".$pagina.",".$listarDeCuanto.",\"".$fecha."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                    //  echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
 
                 echo "</div>";
               echo "</td>";
@@ -299,6 +300,89 @@ echo "<div class='row'>
     }
   }
 
+  public function insertarNewpaciente($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
+  $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria){
+    $rnp= new RegistroDiario();
+    //echo $cod_usuario;
+    $resp = $rnp->insertarNewpacientes($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
+    $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria);
+    //echo $cod_usuario;
+    if($resp != ""){
+        echo "correcto";
+    } else{
+        echo "error";
+    }
+  }
+  public function insertarActualizacionPaciente($cod_rd,$cod_usuario,
+  $nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,$signos_sintomas,$historiaclinica,$personalatencion,
+  $respadmision,$fechaderetornodeHistoria){
+    $rnp= new RegistroDiario();
+    //echo $cod_usuario;
+    /*$respA = $rnp->insertarNewpacientes($cod_rd,$paciente,$buscar,$pagina,$listarDeCuanto,$fecha,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
+    $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria);*/
+    //echo $cod_usuario;
+    $resul = $rnp->UpdateDatosRegistroDiario($cod_rd,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,
+    $direccion_usuario,$servicio,$signos_sintomas,$historiaclinica,$personalatencion,
+    $respadmision,$fechaderetornodeHistoria);
+    if($resul!= ""){
+        echo "correcto";
+    } else{
+        echo "error";
+    }
+  }
+
+
+  //despues de actualizar los datos llamamos esta funcion
+  public function visualizarTablaUsuarios($pagina,$listarDeCuanto,$buscar){
+    if(!is_numeric($pagina) && !is_numeric($listarDeCuanto)){
+        $this->v_index();
+    }
+    $u = new Usuario();
+    $resultodoUsuarios = $u->SelectPorBusqueda("",false,false);
+    $num_filas_total = mysqli_num_rows($resultodoUsuarios);
+    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+            //calculamos el registro inicial
+    $inicioList = ($pagina - 1) * $listarDeCuanto;
+    // Verificar si la consulta devuelve resultados
+    $resul = $u->SelectPorBusqueda("",$inicioList,$listarDeCuanto);
+    require("../vista/admin/tablaUsuarios.php");
+  }
+
+  //funcion pra modificar los datos del usuario
+  public function modificarUsuario($cod_usuario){
+    $usu = new Usuario();
+    $re = $usu->selectDatosUsuario($cod_usuario);
+    if ($re && $re->num_rows > 0) {//se encontro el usuario buscado ahora lo mostramos en el formulario de registro
+      echo "correcto";
+    }else{
+      echo "error";
+    }
+  }
+  //visulizar formulario de acturalizar registros con los datos del cod_usuario buscado
+  public function visualizarFormPaciente($cod_rd,$paciente_rd,$buscar,$pagina,$listarDeCuanto,$fecha){
+    $s = new RegistroDiario();
+    $resul = $s->seleccionarDatos($cod_rd,$paciente_rd);
+    if(isset($resul) && $resul->num_rows > 0){
+      $fe = mysqli_fetch_array($resul);//si hay entonces guardamos los datos en una variable
+    }
+    $nombreP = $s->selectNombreUsuario($fe["pe_brinda_atencion_rd"]);
+    $nombreR = $s->selectNombreUsuario($fe["resp_admision_rd"]);
+    require("../vista/registroDiario/ActualizarregistroDiario.php");
+  }
+
+
+  public function BuscarRegistrosDiarioTablaDespuesDeActualizar($buscar,$pagina,$listarDeCuanto,$fecha){
+    $rdi =new RegistroDiario();
+    $resultodoUsuarios = $rdi->SelectPorBusquedaRegistroDiario("",false,false,false);
+    $num_filas_total = mysqli_num_rows($resultodoUsuarios);
+    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+            //calculamos el registro inicial
+    $inicioList = ($pagina - 1) * $listarDeCuanto;
+    // Verificar si la consulta devuelve resultados
+    $res = $rdi->SelectPorBusquedaRegistroDiario("",$inicioList,$listarDeCuanto,false);
+    $resul = $this->Uniendo($res,$rdi);
+    require ("../vista/registroDiario/tablaRegistroDiario.php");
+  }
 	public function v_index(){
 	    header("location: ../index.php");
 	}
@@ -328,5 +412,47 @@ echo "<div class='row'>
 		$rd->buscapbridaAtencion($_POST['personalquebrindalaatencion']);
 	}
 
+  if(isset($_GET["accion"]) && $_GET["accion"]=="rNp"){
+      		$rd->insertarNewpaciente(
+            $_POST["cod_usuario"],
+            $_POST["nombre"],
+            $_POST["ap_usuario"],
+            $_POST["am_usuario"],
+            $_POST["fecha_nacimiento"],
+            $_POST["edad"],
+            $_POST["direccion_usuario"],
+            $_POST["servicio"],
+            $_POST["historiaclinica"],
+            $_POST["signos_sintomas"],
+            $_POST["personalatencion"],
+            $_POST["respadmision"],
+            $_POST["fechaderetornodeHistoria"]
+            );
+          }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="fa"){
+        $rd->visualizarFormPaciente($_POST["cod_rd"],$_POST["paciente_rd"],$_POST["buscar"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["fecha"]);
+    	}
+      if(isset($_GET["accion"]) && $_GET["accion"]=="rNpA"){
+          		$rd->insertarActualizacionPaciente(
+                $_POST["cod_rd"],
+                $_POST["cod_usuario"],
+                $_POST["nombre"],
+                $_POST["ap_usuario"],
+                $_POST["am_usuario"],
+                $_POST["fecha_nacimiento"],
+                $_POST["edad"],
+                $_POST["direccion_usuario"],
+                $_POST["servicio"],
+                $_POST["signos_sintomas"],
+                $_POST["historiaclinica"],
+                $_POST["personalatencion"],
+                $_POST["respadmision"],
+                $_POST["fechaderetornodeHistoria"]);
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="taR"){
+  		$rd->BuscarRegistrosDiarioTablaDespuesDeActualizar($_POST["buscar"],$_POST["page"],$_POST["listarDeCuanto"],$_POST["fecha"]);
+  	}
 
 ?>

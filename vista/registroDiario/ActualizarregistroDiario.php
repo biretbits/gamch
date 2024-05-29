@@ -4,39 +4,54 @@
     <div class="col-md-10 offset-md-1">
       <div class="card">
         <div class="card-header">
-          FORMULARIO DE REGISTRO DIARIO
+          FORMULARIO ACTUALIZACION DE REGISTRO DIARIO
         </div>
         <div class="card-body">
           <form>
             <div class="row">
-              <input type="hidden" name="cod_usuario" id="cod_usuario" value="">
-              <input type="hidden" name="cd_admision" id="cd_admision" value="">
-              <input type="hidden" name="cd_medico" id="cd_medico" value="">
+              <input type="hidden" name="cod_usuario" id="cod_usuario"
+              value="<?php $msg = (isset($fe["paciente_rd"]) && is_numeric($fe["paciente_rd"])) ? $fe["paciente_rd"]:""; echo $msg; ?>">
+              <input type="hidden" name="cd_admision" id="cd_admision"
+              value="<?php $msg = (isset($fe["resp_admision_rd"]) && is_numeric($fe["resp_admision_rd"])) ? $fe["resp_admision_rd"]:""; echo $msg; ?>">
+              <input type="hidden" name="cd_medico" id="cd_medico"
+              value="<?php $msg = (isset($fe["pe_brinda_atencion_rd"]) && is_numeric($fe["pe_brinda_atencion_rd"])) ? $fe["pe_brinda_atencion_rd"]:""; echo $msg; ?>">
+
+              <input type="hidden" name="buscar" id="buscar" value = '<?php echo $buscar; ?>'>
+              <input type="hidden" name="pagina" id="pagina" value='<?php echo $pagina; ?>'>
+              <input type="hidden" name="listarDeCuanto" id="listarDeCuanto" value='<?php echo $listarDeCuanto; ?>'>
+              <input type="hidden" name="fecha" id="fecha" value='<?php echo $fecha; ?>'>
+              <input type="hidden" name="cod_rd" id="cod_rd" value="<?php echo $cod_rd; ?>">
               <div class="col-md-4 mb-3">
                 <label for="Nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre" onkeyup="buscarExitepaciente()">
+                <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre" onkeyup="buscarExitepaciente()"
+                value="<?php $msg = (isset($fe["nombre_usuario"]) && is_string($fe["nombre_usuario"])) ? $fe["nombre_usuario"]:""; echo $msg; ?>">
                 <div id="resultado" align='left' class='alert alert-light mb-0 py-0 border-0'>
                 </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="ap_usuario" class="form-label">Apellido paterno</label>
-                <input type="text" class="form-control" id="ap_usuario" placeholder="Ingresa Apellido paterno">
+                <input type="text" class="form-control" id="ap_usuario" placeholder="Ingresa Apellido paterno"
+                value="<?php $msg = (isset($fe["ap_usuario"]) && is_string($fe["ap_usuario"])) ? $fe["ap_usuario"]:""; echo $msg; ?>">
               </div>
               <div class="col-md-4 mb-3">
                 <label for="am_usuario" class="form-label">Apellido materno</label>
-                <input type="text" class="form-control" id="am_usuario" placeholder="Ingresa Apellido materno">
+                <input type="text" class="form-control" id="am_usuario" placeholder="Ingresa Apellido materno"
+                value="<?php $msg = (isset($fe["am_usuario"]) && is_string($fe["am_usuario"])) ? $fe["am_usuario"]:""; echo $msg; ?>">
               </div>
               <div class="col-md-4 mb-3">
                 <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
-                <input type="date" class="form-control" id="fecha_nacimiento" placeholder="Ingresa tu Fecha de Nacimiento">
+                <input type="date" class="form-control" id="fecha_nacimiento" placeholder="Ingresa tu Fecha de Nacimiento"
+                value="<?php $msg = (isset($fe["fecha_nac_usuario"]) && is_string($fe["fecha_nac_usuario"])) ? $fe["fecha_nac_usuario"]:""; echo $msg; ?>">
               </div>
               <div class="col-md-4 mb-3">
                 <label for="edad" class="form-label">Edad</label>
-                <input type="number" class="form-control" id="edad" placeholder="Ingresa Tu Edad">
+                <input type="number" class="form-control" id="edad" placeholder="Ingresa Tu Edad"
+                value="<?php $msg = (isset($fe["edad_usuario"]) && is_string($fe["edad_usuario"])) ? $fe["edad_usuario"]:""; echo $msg; ?>">
               </div>
               <div class="col-md-4 mb-3">
                 <label for="direccion_usuario" class="form-label">Dirección</label>
-                <input type="text" class="form-control" id="direccion_usuario" placeholder="Ingresa Tu Dirección">
+                <input type="text" class="form-control" id="direccion_usuario" placeholder="Ingresa Tu Dirección"
+                value="<?php $msg = (isset($fe["direccion_usuario"]) && is_string($fe["direccion_usuario"])) ? $fe["direccion_usuario"]:""; echo $msg; ?>">
               </div>
             </div>
           </form>
@@ -46,35 +61,41 @@
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label for="servicio" class="form-label">Servicio</label>
-                <input type="text" class="form-control" id="servicio" placeholder="servicio">
+                <input type="text" class="form-control" id="servicio" placeholder="servicio"
+                value="<?php $msg = (isset($fe["servicio_rd"]) && is_string($fe["servicio_rd"])) ? $fe["servicio_rd"]:""; echo $msg; ?>">
               </div>
               <div class="col-md-4 mb-3">
                 <label for="Signos y Sintomas" class="form-label">Signos y Sintomas</label>
-                <input type="text" class="form-control" id="signos_sintomas" placeholder="signos y Sintomas">
+                <input type="text" class="form-control" id="signos_sintomas" placeholder="signos y Sintomas"
+                value="<?php $msg = (isset($fe["signo_sintomas_rd"]) && is_string($fe["signo_sintomas_rd"])) ? $fe["signo_sintomas_rd"]:""; echo $msg; ?>">
               </div>
               <div class="col-md-4 mb-3">
                 <label for="personal que brinda la atencion" class="form-label">personal que brinda la atencion</label>
-                <input type="text" class="form-control" id="personalatencion" placeholder="personal que brinda la atencion" onkeyup= "atencionMedico()">
+                <input type="text" class="form-control" id="personalatencion" placeholder="personal que brinda la atencion" onkeyup= "atencionMedico()"
+                value="<?php $msg = (isset($nombreP) && is_string($nombreP)) ? $nombreP:""; echo $msg; ?>">
                 <div id="resultadomedico" align='left' class='alert alert-light mb-0 py-0 border-0'>
               </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="resp. admision" class="form-label">resp. admision</label>
-                <input type="text" class="form-control" id="respadmision" placeholder="responsable de Admision" onkeyup="buscarResponsableAdmision()">
+                <input type="text" class="form-control" id="respadmision" placeholder="responsable de Admision" onkeyup="buscarResponsableAdmision()"
+                value="<?php $msg = (isset($nombreR) && is_string($nombreR)) ? $nombreR:""; echo $msg; ?>">
                 <div id="resultadoadmision" align='left' class='alert alert-light mb-0 py-0 border-0'>
                 </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="fecha de retorno de Historia" class="form-label">fecha de retorno de Historia</label>
-                <input type="date" class="form-control" id="fechaderetornodeHistoria" placeholder="fecha de retorno de Historia">
+                <input type="date" class="form-control" id="fechaderetornodeHistoria" placeholder="fecha de retorno de Historia"
+                value="<?php $msg = (isset($fe["fecha_retorno_historia_rd"]) && is_string($fe["fecha_retorno_historia_rd"])) ? $fe["fecha_retorno_historia_rd"]:""; echo $msg; ?>">
               </div>
 
               <div class="col-md-4 mb-3">
                 <label for="Historia clinica" class="form-label"></label>
-                <input type="hidden" class="form-control" id="historiaclinica" placeholder="Historia clinica">
+                <input type="hidden" class="form-control" id="historiaclinica" placeholder="Historia clinica"
+                value="<?php $msg = (isset($fe["historial_clinico_rd"]) && is_string($fe["historial_clinico_rd"])) ? $fe["historial_clinico_rd"]:""; echo $msg; ?>">
               </div>
             </div>
-            <button type="button" class="btn btn-primary" onclick="insertardatosus()">Registrar</button>
+            <button type="button" class="btn btn-primary" onclick="insertardatosus()">REGISTRAR CAMBIOS</button>
           </form>
         </div>
         <div class="card-footer text-muted">
@@ -90,81 +111,11 @@ position: absolute;
 z-index: 999;
 color: black;
 overflow-y: auto;
-width: 30%;
+width: 100%;
 transform: translateY(-5px);
 }
 </style>
 <script type="text/javascript">
-//funcion para buscar si existe el Paciente
-  function buscarExitepaciente(){
-    vaciarDESPUESdeUNtiempo();
-    var nombre = document.getElementById("nombre").value;
-    if(nombre != ""){
-    $.ajax({
-  		url: "../controlador/registroDiario.controlador.php?accion=bp",
-  		type: "POST",
-  		data: {nombre:nombre},
-  		dataType: "json",
-      success: function(data) {
-        if(data!=""){
-          var unir="";
-          for (let i = 0; i < data.length; i++) {
-            var usuario = data[i];
-            unir+="<div><div id='u' style=' display: inline-block;'>"+Convertir(data[i].nombre_usuario)+"</div> ";
-            unir+="<div id='ap' style=' display: inline-block;'> "+Convertir(data[i].ap_usuario)+"</div> ";
-            unir+="<div id='am' style=' display: inline-block;'> "+Convertir(data[i].am_usuario)+"</div> ";
-            unir+="<div id='fn' style=' display: inline-block;'> "+data[i].fecha_nac_usuario+"</div>";
-            unir+="<div id='ed' style=' display: inline-block;display:none;'>"+data[i].edad_usuario+"</div>";
-            unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].direccion_usuario+"</div>";
-            unir+="<div id='c' style=' display: inline-block;display:none;'>"+data[i].cod_usuario+"</div></div>";
-
-          }
-
-          visualizarUser(unir);
-          $('#resultado div').on('click', function() {
-                  //obtenemos los datos del usuario div resultado
-            var nombre = $(this).children().eq(0).text();
-            var ap = $(this).children().eq(1).text();
-            var am = $(this).children().eq(2).text();
-            var fn = $(this).children().eq(3).text();
-            var ed = $(this).children().eq(4).text();
-            var d = $(this).children().eq(5).text();
-            var c = $(this).children().eq(6).text();
-
-              //dentro de los id de la vista mostramos los datos que estan en el div resultado
-              if(nombre != ""){
-                document.getElementById("nombre").disabled = true;
-                document.getElementById("nombre").value = nombre;
-                document.getElementById("ap_usuario").disabled = true;
-                document.getElementById("ap_usuario").value = ap;
-                document.getElementById("am_usuario").disabled = true;
-                document.getElementById("am_usuario").value = am;
-                document.getElementById("fecha_nacimiento").disabled = true;
-                var fecha = new Date(fn); // Puedes modificar esta fecha según tus necesidades
-
-                // Formatear la fecha como una cadena para asignarla al campo de tipo date
-                var fechaFormateada = fecha.toISOString().split('T')[0];
-                document.getElementById("fecha_nacimiento").value = fechaFormateada;
-                document.getElementById("edad").disabled = true;
-                document.getElementById("edad").value = ed;
-                document.getElementById("direccion_usuario").disabled = true;
-                document.getElementById("direccion_usuario").value = d;
-                document.getElementById("cod_usuario").disabled = true;
-                document.getElementById("cod_usuario").value = c;
-                $('#resultado').html(""); //para vaciar
-
-              }
-          });
-        }else{
-          $('#resultado').html("<div class='alert alert-light' role='alert'>No se encontro resultados</div>");
-        }
-
-  		}
-  	});
-  }else{
-    $('#resultado').html("");
-  }
-}
 function Convertir(t){
   let palabras = t.split(" ");
   let nombreConInicialesMayusculas = "";
@@ -174,23 +125,8 @@ function Convertir(t){
      return nombreConInicialesMayusculas.trim();
  }
 
-  function visualizarUser(unir){
-
-  $('#resultado').html(unir);
-  //colocamos un color de css
-  $('#resultado').css({
-   'cursor': 'pointer',
-   'font-size':'15px'
-   });
-   // Obtener el elemento div con el id "results"
-  /* const divResults = document.getElementById('results');   // Cambiar la clase del div
-  divResults.setAttribute('class', 'alert alert-primary mb-0 py-0 border-0');
-*/
-}
-
 
 function buscarResponsableAdmision() {
-        vaciarDESPUESdeUNtiempoAdmision();
         var respadmision = document.getElementById("respadmision").value;
         if (respadmision != "") {
             $.ajax({
@@ -264,7 +200,7 @@ function buscarResponsableAdmision() {
 
     }
     function atencionMedico() {
-      vaciarDESPUESdeUNtiempoMedico();
+
             var personalquebrindalaatencion = document.getElementById("personalatencion").value;
             if ( personalquebrindalaatencion != "") {
                 $.ajax({
@@ -331,15 +267,15 @@ function buscarResponsableAdmision() {
                  'cursor': 'pointer',
                  'font-size':'15px'
                  });
-                 // Obtener el elemento div con el id "results"
-                /* const divResults = document.getElementById('results');   // Cambiar la clase del div
-                divResults.setAttribute('class', 'alert alert-primary mb-0 py-0 border-0');
-              */
 
         }
 
         function insertardatosus(){
-        	//alert(accion);
+            var cod_rd = document.getElementById("cod_rd").value;
+            var buscar = document.getElementById("buscar").value;
+            var listarDeCuanto = document.getElementById("listarDeCuanto").value;
+            var fecha = document.getElementById("fecha").value;
+            var pagina = document.getElementById("pagina").value;
           var cod_usuario = document.getElementById("cod_usuario").value;
         	var nombre = document.getElementById("nombre").value;
         	var ap_usuario = document.getElementById("ap_usuario").value;
@@ -355,31 +291,13 @@ function buscarResponsableAdmision() {
         	var fechaderetornodeHistoria = document.getElementById("fechaderetornodeHistoria").value;
 
          	if(nombre==""||ap_usuario==""||am_usuario==""||fecha_nacimiento==""||direccion_usuario==""||servicio==""
-          ||signos_sintomas==""||historiaclinica==""||personalatencion==""||respadmision==""){
+          ||signos_sintomas==""||historiaclinica==""){
         		ingreseNPdatos();
         		return;
         	}
-        /*
-        	var pagina="";
-        	var listarDeCuanto="";
-        	var buscar="";
-        	var cod_usuario="";
-        	if(accion == 1){//1 es actualizae 0 es registrar
-        		if(contrasena_usuario == "" && confirmar_contrasena_usuario == ""){
-        		}else{
-        			if(contrasena_usuario != confirmar_contrasena_usuario){
-        				confirmarcontrasena();
-        				return;
-        			}
-        		}
-         		 pagina = document.getElementById("pagina").value;
-        	 	 listarDeCuanto = document.getElementById("listarDeCuanto").value;
-        		 buscar = document.getElementById("buscar").value;
-        		 cod_usuario = document.getElementById("cod_usuario").value;
-        	}else{
-        	}*/
         	var datos = new FormData(); // Crear un objeto FormData vacío
-        	datos.append("cod_usuario",cod_usuario);
+          datos.append("cod_rd",cod_rd);
+          datos.append("cod_usuario",cod_usuario);
         	datos.append("nombre",nombre);
         	datos.append("ap_usuario",ap_usuario);
         	datos.append("am_usuario",am_usuario);
@@ -394,7 +312,7 @@ function buscarResponsableAdmision() {
         	datos.append("fechaderetornodeHistoria",fechaderetornodeHistoria);
 
           $.ajax({
-            url: "../controlador/registroDiario.controlador.php?accion=rNp",
+            url: "../controlador/registroDiario.controlador.php?accion=rNpA",
             type: "POST",
             data: datos,
             contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -403,14 +321,8 @@ function buscarResponsableAdmision() {
               //alert(data+"dasdas");
               data=$.trim(data);
               if(data == "correcto"){
-
-                //if(accion == 1){
-                  //  alertCorrectoUp();
-                    // close(pagina,listarDeCuanto,buscar);
-                //}else{
-                  alertCorrecto();
-                //}
-                IRalLinkTablaRegistroDiario();
+                alertCorrectoUp();
+                IRalLinkTablaRegistroDiario(listarDeCuanto,pagina,buscar,fecha);
               }else {
                 Swal.fire({
                  icon: 'error',
@@ -424,43 +336,24 @@ function buscarResponsableAdmision() {
           });
         }
 
+        //funcion para ir al index cuando ingrese un usuario del sistema
+        function IRalLinkTablaRegistroDiario(listarDeCuanto,pagina,buscar,fecha){
+          setTimeout(() => {
+            formularioS(pagina,listarDeCuanto,buscar,fecha);
+          }, 1500);
+        }
 
-        //funcion para ir al index cuando ingrese un usuario del sistema
-        function vaciarDESPUESdeUNtiempo(){
-          setTimeout(() => {
-            $('#resultado').html("");
-          }, 5000);
-        }
-        function vaciarDESPUESdeUNtiempoMedico(){
-          setTimeout(() => {
-            $('#resultadomedico').html("");
-          }, 5000);
-        }
-        function vaciarDESPUESdeUNtiempoAdmision(){
-          setTimeout(() => {
-            $('#resultadoadmision').html("");
-          }, 5000);
-        }
-        //funcion para ir al index cuando ingrese un usuario del sistema
-        function IRalLinkTablaRegistroDiario(){
-          setTimeout(() => {
-            location.href="../controlador/registroDiario.controlador.php?accion=vtd";
-           }, 1500);
-        }
-        function close(pagina,listarDeCuanto,buscar){
-          setTimeout(() => {
-            formularioS(pagina,listarDeCuanto,buscar);
-           }, 1500);
-        }
-        function formularioS(pagina,listarDeCuanto,buscar){
+        function formularioS(pagina,listarDeCuanto,buscar,fecha){
           var form = document.createElement('form');
            form.method = 'post';
-           form.action = '../controlador/usuario.controlador.php?accion=fm2'; // Coloca la URL de destino correcta
+           form.action = '../controlador/registroDiario.controlador.php?accion=taR'; // Coloca la URL de destino correcta
            // Agregar campos ocultos para cada dato
            var datos = {
-               pagina: pagina,
+               page: pagina,
                listarDeCuanto: listarDeCuanto,
-               buscar: buscar
+               buscar: buscar,
+               fecha:fecha
+
            };
            for (var key in datos) {
                if (datos.hasOwnProperty(key)) {
@@ -504,64 +397,6 @@ function buscarResponsableAdmision() {
            timer: 1500
          });
         }
-        function selectUsuario(){
-          Swal.fire({
-           icon: 'error',
-           title: '¡Error!',
-           text: '¡Por favor seleccione!',
-           showConfirmButton: false,
-           timer: 1500
-         });
-        }
-         function confirmarcontrasena(){
-           Swal.fire({
-            icon: 'error',
-            title: '¡Error!',
-            text: '¡Confirmación de Contraseña incorrecta !',
-            showConfirmButton: false,
-            timer: 1500
-          });
-         }
-
-        //funcion para mostrar un aler de bienvenido cuando ingreso un usuario del sistema existente
-          function alertCorrecto(){
-            Swal.fire({
-             icon: 'success',
-             title: '¡Correcto!',
-             text: '¡registro correcto!',
-             showConfirmButton: false,
-             timer: 1500
-           });
-           IRalLink();
-          }
-          //funcion para ir al index cuando ingrese un usuario del sistema
-          function IRalLink(){
-            setTimeout(() => {
-              location.href="../controlador/usuario.controlador.php?accion=vut";
-             }, 1500);
-          }
-          var cam  = true;
-          function CamposContrasena(){
-            var con = "";
-            if(cam == true){
-              con += "<br><div class='input-group'>";
-                con += "	<input class='form-control' type='password'  id='contraseña_usuario' name ='contraseña_usuario' placeholder='contraseña nueva'>";
-                con += "</div> <br>";
-                con += "<div class='input-group'>";
-                con += "	<input class='form-control' type='password'  id='confirmar_contraseña_usuario' name ='confirmar_contraseña_usuario' placeholder='confirmar contraseña usuario'>";
-                con += "</div>";
-              cam = false;
-            }else{
-              con += "<div class='input-group'>";
-                con += "	<input class='form-control' type='hidden'  id='contraseña_usuario' name ='contraseña_usuario' placeholder='contraseña nueva'>";
-                con += "</div>";
-                con += "<div class='input-group'>";
-                con += "	<input class='form-control' type='hidden'  id='confirmar_contraseña_usuario' name ='confirmar_contraseña_usuario' placeholder='confirmar contraseña usuario'>";
-                con += "</div>";
-              cam = true;
-            }
-            $("#campo").html(con);
-          }
 
 </script>
 

@@ -31,7 +31,7 @@ class Historial
     $sql.=" and (rd.fecha_rd >= '$fechai' and  rd.fecha_rd <= '$fechaf') ";
   }
     if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
-      $sql.="ORDER BY h.cod_his DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
+      $sql.=" ORDER BY h.cod_his DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
     }
 
     $resul = $this->con->query($sql);
