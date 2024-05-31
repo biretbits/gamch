@@ -123,8 +123,8 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fech
 
               }else{
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
-                  onclick='accionHitorialVer(".$fi["paciente_rd"].")'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
+                echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
+                onclick='accionHitorialVer(".$fi["paciente_rd"].",".$fi["cod_rd"].")'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
 
                 echo "</div>";
               }

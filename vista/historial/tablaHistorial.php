@@ -18,7 +18,7 @@
       </select>
     </div>
     <div class="col-auto mb-2" title="Registro de nuevo hisorial">
-      <button type="button" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+      <button type="button" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="RegistroHistorial(<?php echo $paciente_rd;?>,<?php echo $cod_rd; ?>) ">
         <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
       </button>
     </div>
@@ -99,7 +99,7 @@
           </thead>
           <tbody>
       <?php
-      if ($resul && count($resul) > 0) {
+      if ($resul && count($resul) > 0){
           $i = 0;
         foreach ($resul as $fi){
             echo "<tr>";
@@ -224,5 +224,29 @@ echo "</div>
    ?>
  </div>
  <!-- modal de seleccion de fechas-->
+<script type="text/javascript">
+function RegistroHistorial(paciente_rd,cod_rd){
 
+  var form = document.createElement('form');
+   form.method = 'post';
+   form.action = "../controlador/historial.controlador.php?accion=visFH"; // Coloca la URL de destino correcta
+   // Agregar campos ocultos para cada dato
+   var datos = {
+       paciente_rd:paciente_rd,
+       cod_rd:cod_rd
+  };
+   for (var key in datos) {
+       if (datos.hasOwnProperty(key)) {
+           var input = document.createElement('input');
+           input.type = 'hidden';
+           input.name = key;
+           input.value = datos[key];
+           form.appendChild(input);
+       }
+   }
+ // Agregar el formulario al cuerpo del documento y enviarlo
+ document.body.appendChild(form);
+ form.submit();
+}
+</script>
 <?php require("../librerias/footeruni.php"); ?>

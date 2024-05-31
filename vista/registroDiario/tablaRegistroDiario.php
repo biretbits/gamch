@@ -131,7 +131,7 @@
               }else{
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
-                  onclick='accionHitorialVer(".$fi["paciente_rd"].")'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
+                  onclick='accionHitorialVer(".$fi["paciente_rd"].",".$fi["cod_rd"].")'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
 
                 echo "</div>";
               }
@@ -143,7 +143,7 @@
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   echo "<button type='button' class='btn btn-info' title='Editar' onclick = 'editarpaciente(".$fi["cod_rd"].",".$fi["paciente_rd"].",\"".$buscar."\",".$pagina.",".$listarDeCuanto.",\"".$fecha."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-
+                  
                 echo "</div>";
               echo "</td>";
 
@@ -338,13 +338,14 @@ function BuscarRegistrosDiarios(page){
     form.submit();
    }
    //funcion para ver el historial del paciente
-   function accionHitorialVer(paciente_rd){
+   function accionHitorialVer(paciente_rd,cod_rd){
        var form = document.createElement('form');
         form.method = 'post';
         form.action = '../controlador/historial.controlador.php?accion=vht'; // Coloca la URL de destino correcta
         // Agregar campos ocultos para cada dato
         var datos = {
-            paciente_rd:paciente_rd
+            paciente_rd:paciente_rd,
+            cod_rd:cod_rd
         };
         for (var key in datos) {
             if (datos.hasOwnProperty(key)) {
