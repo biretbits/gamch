@@ -69,6 +69,15 @@ class Historial
     return $resul;
     mysqli_close($this->con);
   }
+
+  public function buscarBDpacienteResponsablesql($nombre){
+    $nombre = strtolower($nombre);
+    $lis = "SELECT * FROM usuario WHERE tipo_usuario = 'paciente' or tipo_usuario = 'responsable' AND (LOWER(nombre_usuario) LIKE '%$nombre%' OR LOWER(ap_usuario) LIKE '%$nombre%' or LOWER(am_usuario) like '%$nombre%') LIMIT 5 OFFSET 0;";
+    $resul = $this->con->query($lis);
+    return $resul;
+    mysqli_close($this->con);
+  }
+
 }
 
 

@@ -71,7 +71,9 @@ class HistorialControlador{
     return $ar; // Devolver el array completo fuera del bucle
 }
 public function verFormRegistroHistorial($paciente_rd,$cod_rd){
-  require ("../vista/historial/RegistroHistorial.php");
+  $h =new Historial();
+  $re = $h->selectNombreUsuario($paciente_rd);
+  require ("../vista/historial/registroHistorial.php");
 }
 
 public function registroDatosResponsablePaciente($Nombre_responsable,$ap_responsable,$am_responsable,$fecha_nacimiento_responsable,$sexo_responsable,
@@ -87,6 +89,20 @@ $am_usuario,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,
       echo "error";
   }
 }
+public function buscarBDpacienteResponsable($nombre){
+  $h =new Historial();
+  $re = $h->buscarBDpacienteResponsablesql($nombre);
+  $datos = array();
+  if ($re->num_rows > 0) {
+  // Recoger los resultados en un array
+    while($row = $re->fetch_assoc()) {
+      $datos[] = $row;
+    }
+      echo json_encode($datos);
+  } else {
+      echo json_encode([]);
+  }
+}
 
 
 }
@@ -98,9 +114,8 @@ $am_usuario,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,
   if(isset($_GET["accion"]) && $_GET["accion"]=="visFH"){
     $hc->verFormRegistroHistorial($_POST["paciente_rd"],$_POST["cod_rd"]);
   }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="visFH"){
-    $hc->registroDatosResponsablePaciente(
-
+  if(isset($_GET["accion"]) && $_GET["accion"]=="Rfh"){
+    $hc->registroDatosResponsablePacienteSS(
       $_POST["Nombre_responsable"],
       $_POST["ap_responsable"],
       $_POST["am_responsable"],
@@ -122,6 +137,9 @@ $am_usuario,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,
       $_POST["fecha_de_consulta"],
       $_POST["estado_civil"],
       $_POST["escolaridad"]);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="rbph"){
+    $hc->buscarBDpacienteResponsable($_POST['nombre']);
   }
 
 ?>

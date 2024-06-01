@@ -1,6 +1,6 @@
-<?php require("../librerias/headeradmin1.php"); ?>
-<?php echo $paciente_rd; ?>
-<?php echo $cod_rd; ?>
+<?php require("../librerias/headeradmin1.php");
+$fi = mysqli_fetch_array($re);
+?>
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-10 offset-md-1">
@@ -10,87 +10,91 @@
         </div>
         <div class="card-body">
           <form>
-            <input type="text" name="paciente_rd" id="paciente_rd" value="">
-            <input type="text" name="cod_rd" id="cod_rd" value="">
+            <input type="text" name="paciente_rd" id="paciente_rd" value="<?php $m = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd: ""; echo $m; ?>">
+            <input type="text" name="cod_rd" id="cod_rd" value="<?php $m = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:"";echo $m;  ?>">
+            <input type="text" name="cod_usuario" id = "cod_usuario" value="">
             <div class="row">
               <div class="col-md-4 mb-3">
-                <label for="Nombre_responsable" class="form-label">Nombre de Responsable</label>
-                <input type="text" class="form-control" id="Nombre_responsable" placeholder="Nombre de Responsable">
-                <div id="resultado" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                <label  class="form-label">Nombre de Responsable</label>
+                <input type="text" class="form-control" id="Nombre_responsable" placeholder="Nombre de Responsable" onkeyup='buscarExitepaciente()'>
+                <div id="resultado12" align='left' class='alert alert-light mb-0 py-0 border-0'>
                 </div>
               </div>
               <div class="col-md-4 mb-3">
-                <label for="ap_responsable" class="form-label">Apellido paterno del Responsable</label>
+                <label  class="form-label">Apellido paterno del Responsable</label>
                 <input type="text" class="form-control" id="ap_responsable" placeholder="Ingresa Apellido paterno">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="am_responsable" class="form-label">Apellido materno</label>
+                <label  class="form-label">Apellido materno</label>
                 <input type="text" class="form-control" id="am_responsable" placeholder="Ingresa Apellido materno">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="fecha_nacimiento_responsable" class="form-label">Fecha de Nacimiento del Responsable</label>
+                <label  class="form-label">Fecha de Nacimiento del Responsable</label>
                 <input type="date" class="form-control" id="fecha_nacimiento_responsable" placeholder="Fecha de Nacimiento">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="sexo" class="form-label">Sexo</label>
+                <label  class="form-label">Sexo</label>
                 <input type="text" class="form-control" id="sexo_responsable" placeholder="Sexo">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="ocupacion_responsable" class="form-label">Ocupacion del Responsable</label>
-                <input type="string" class="form-control" id="ocupacion_responsable" placeholder="ocupacion">
+                <label  class="form-label">Ocupacion del Responsable</label>
+                <input type="text" class="form-control" id="ocupacion_responsable" placeholder="ocupacion">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="direccion_responsable" class="form-label">Dirección del Responsable</label>
+                <label  class="form-label">Dirección del Responsable</label>
                 <input type="text" class="form-control" id="direccion_responsable" placeholder="Dirección ">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="telefono" class="form-label">Telefono del Responsable</label>
-  <              <input type="text" class="form-control" id="telefono_resposable" placeholder="Telefono">
+                <label  class="form-label">Telefono del Responsable</label>
+                <input type="text" class="form-control" id="telefono_resposable" placeholder="Telefono">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="comunidad_responsable" class="form-label">Comunidad del Responsable</label>
+                <label  class="form-label">Comunidad del Responsable</label>
                 <input type="text" class="form-control" id="comunidad_responsable" placeholder="Comunidad">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="No_ci" class="form-label">C.I.</label>
+                <label  class="form-label">C.I.</label>
                 <input type="text" class="form-control" id="ci" placeholder="ci">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="N seguro" class="form-label">Numero de Seguro</label>
+                <label  class="form-label">Numero de Seguro</label>
                 <input type="text" class="form-control" id="n_seguro" placeholder="Numero de Seguro">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="N carp fam" class="form-label">Numero de Carp Fam</label>
+                <label  class="form-label">Numero de Carp Fam</label>
                 <input type="text" class="form-control" id="n_carp_fam" placeholder="Numero Carp Fam">
               </div>
             </div>
           </form>
         </div>
+        </div>
+        <div class="card">
         <div class="card-header">
          IDENTIFICACION DEL PACIENTE/USUARIO
+          <h6>Complete los datos del paciente <?php echo $fi["nombre_usuario"]." ".$fi["ap_usuario"]." ".$fi["am_usuario"]; ?></h6>
         </div>
         <div class="card-body">
           <form>
             <div class="row">
               <div class="col-md-4 mb-3">
-                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
+                <label  class="form-label">Fecha de Nacimiento</label>
                 <input type="date" class="form-control" id="fecha_nacimiento" placeholder="Ingresa tu Fecha de Nacimiento">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="sexo" class="form-label">Sexo</label>
+                <label class="form-label">Sexo</label>
                 <input type="text" class="form-control" id="sexo" placeholder="Sexo">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="ocupacion" class="form-label">Ocupacion</label>
+                <label class="form-label">Ocupacion</label>
                 <input type="string" class="form-control" id="ocupacion" placeholder="Ocupacion">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="fecha_de_consulta" class="form-label">Fecha de Consulta</label>
+                <label  class="form-label">Fecha de Consulta</label>
                 <input type="text" class="form-control" id="fecha_de_consulta" placeholder="Fecha de Consulta">
               </div>
 
               <div class="col-md-4 mb-3">
-                <label for="estadocivil" class="form-label">Estado Civil</label>
+                <label class="form-label">Estado Civil</label>
                 <select class="form-select" id="estado_civil" >
                   <?php
                   $ara = ['soltero(a)','casado(a)','divorciado(a)','union estable'];
@@ -113,7 +117,7 @@
                 </select>
               </div>
               <div class="col-md-4 mb-3">
-                <label for="escolaridad" class="form-label">Escolaridad</label>
+                <label  class="form-label">Escolaridad</label>
                 <input type="text" class="form-control" id="escolaridad" placeholder="Seleccione">
               </div>
             </div>
@@ -127,34 +131,42 @@
     </div>
   </div>
 </div>
-
-
+<style media="screen">
+#resultado12{
+position: absolute;
+z-index: 999;
+color: black;
+overflow-y: auto;
+width: 30%;
+transform: translateY(-5px);
+}
+</style>
 
 <script type="text/javascript">
 
 function RegistroHistorial(){
 //responsable de familia
-var Nombre_responsable =document.getElementById("Nombre_responsable").value
-var ap_responsable =document.getElementById("ap_responsable").value
-var am_responsable =document.getElementById("am_responsable").value
-var fecha_nacimiento_responsable =document.getElementById("fecha_nacimiento_responsable").value
-var sexo_responsable =document.getElementById("sexo_responsable").value
-var ocupacion_responsable =document.getElementById("ocupacion_responsable").value
-var direccion_responsable =document.getElementById("direccion_responsable").value
-var telefono_resposable =document.getElementById("telefono_resposable").value
-var comunidad_responsable =document.getElementById("comunidad_responsable").value
-var ci =document.getElementById("ci").value
-var n_seguro =document.getElementById("n_seguro").value
-var n_carp_fam =document.getElementById("n_carp_fam").value
+var Nombre_responsable =document.getElementById("Nombre_responsable").value;
+var ap_responsable =document.getElementById("ap_responsable").value;
+var am_responsable =document.getElementById("am_responsable").value;
+var fecha_nacimiento_responsable =document.getElementById("fecha_nacimiento_responsable").value;
+var sexo_responsable =document.getElementById("sexo_responsable").value;
+var ocupacion_responsable =document.getElementById("ocupacion_responsable").value;
+var direccion_responsable =document.getElementById("direccion_responsable").value;
+var telefono_resposable =document.getElementById("telefono_resposable").value;
+var comunidad_responsable =document.getElementById("comunidad_responsable").value;
+var ci =document.getElementById("ci").value;
+var n_seguro =document.getElementById("n_seguro").value;
+var n_carp_fam =document.getElementById("n_carp_fam").value;
 //identificacion del paciente
-var paciente_rd = document.getElementById("paciente_rd").value
-var cod_rd = document.getElementById("$cod_rd").value
-var fecha_nacimiento = document.getElementById("fecha_nacimiento").value
-var sexo = document.getElementById("sexo").value
-var ocupacion = document.getElementById("ocupacion").value
-var fecha_de_consulta = document.getElementById("fecha_de_consulta").value
-var estado_civil = document.getElementById("estado_civil").value
-var escolaridad = document.getElementById("escolaridad").value
+var paciente_rd = document.getElementById("paciente_rd").value;
+var cod_rd = document.getElementById("cod_rd").value;
+var fecha_nacimiento = document.getElementById("fecha_nacimiento").value;
+var sexo = document.getElementById("sexo").value;
+var ocupacion = document.getElementById("ocupacion").value;
+var fecha_de_consulta = document.getElementById("fecha_de_consulta").value;
+var estado_civil = document.getElementById("estado_civil").value;
+var escolaridad = document.getElementById("escolaridad").value;
 
 if(Nombre_responsable==""||ap_responsable==""||am_responsable==""||fecha_nacimiento_responsable==""||sexo_responsable==""||ocupacion_responsable==""
 ||direccion_responsable==""||comunidad_responsable==""||ci==""||nombre==""||ap_usuario==""||am_usuario==""||fecha_nacimiento==""
@@ -188,7 +200,7 @@ datos.append("estado_civil",estado_civil);
 datos.append("escolaridad",escolaridad);
 
 $.ajax({
-  url: "../controlador/hisorial.controlador.php?accion=rhRyP",
+  url: "../controlador/historial.controlador.php?accion=rhRyP",
   type: "POST",
   data: datos,
   contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -228,7 +240,142 @@ function ingreseNPdatos(){
    timer: 1500
  });
 }
-
+function vaciarDESPUESdeUNtiempo(){
+  setTimeout(() => {
+    $('#resultado12').html("");
+  }, 5000);
 }
+
+//funcion para buscar si existe el Paciente
+  function buscarExitepaciente(){
+    vaciarDESPUESdeUNtiempo();
+    var nombre = document.getElementById("Nombre_responsable").value;
+    if(nombre != ""){
+      alert(nombre);
+      $.ajax({
+    		url: "../controlador/historial.controlador.php?accion=rbph",
+    		type: "POST",
+    		data: {nombre:nombre},
+    		dataType: "json",
+        success: function(data) {
+
+          console.log(data);
+          if(data!=""){
+            var unir="";
+            for (let i = 0; i < data.length; i++) {
+              var usuario = data[i];
+              unir+="<div><div id='u' style=' display: inline-block;'>"+Convertir(data[i].nombre_usuario)+"</div> ";
+              unir+="<div id='ap' style=' display: inline-block;'> "+Convertir(data[i].ap_usuario)+"</div> ";
+              unir+="<div id='am' style=' display: inline-block;'> "+Convertir(data[i].am_usuario)+"</div> ";
+              unir+="<div id='fn' style=' display: inline-block;'> "+data[i].fecha_nac_usuario+"</div>";
+              unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].direccion_usuario+"</div>";
+              unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].sexo_usuario+"</div>";
+              unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].ocupacion_usuario+"</div>";
+              unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].telefono_usuario+"</div>";
+              unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].comunidad_usuario+"</div>";
+              unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].ci_usuario+"</div>";
+              unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].nro_seguro_usuario+"</div>";
+              unir+="<div id='d' style=' display: inline-block;display:none;'>"+data[i].nro_car_form_usuario+"</div>";
+              unir+="<div id='c' style=' display: inline-block;display:none;'>"+data[i].cod_usuario+"</div></div>";
+            }
+            visualizarUser(unir);
+            $('#resultado12 div').on('click', function() {
+                    //obtenemos los datos del usuario div resultado12
+              var nombre = $(this).children().eq(0).text();
+              var ap = $(this).children().eq(1).text();
+              var am = $(this).children().eq(2).text();
+              var fn = $(this).children().eq(3).text();
+              var d = $(this).children().eq(4).text();
+              var sexo = $(this).children().eq(5).text();
+
+              var ocu = $(this).children().eq(6).text();
+              var tele = $(this).children().eq(7).text();
+              var comuni = $(this).children().eq(8).text();
+              var ci = $(this).children().eq(9).text();
+              var nro_seg = $(this).children().eq(10).text();
+              var nro_car = $(this).children().eq(11).text();
+              var cd_u = $(this).children().eq(12).text();
+                //dentro de los id de la vista mostramos los datos que estan en el div resultado12
+                if(nombre != ""){
+                  var r1 = (nombre) ? true : false;
+                  document.getElementById("Nombre_responsable").disabled = r1;
+                  document.getElementById("Nombre_responsable").value = nombre;
+                  r1 = (ap) ? true : false;
+                  document.getElementById("ap_responsable").disabled = r1;
+                  document.getElementById("ap_responsable").value = ap;
+                  r1 = (am) ? true : false;
+                  document.getElementById("am_responsable").disabled = r1;
+                  document.getElementById("am_responsable").value = am;
+                  r1 = (fn) ? true : false;
+                  document.getElementById("fecha_nacimiento_responsable").disabled = r1;
+                  var fecha = new Date(fn); // Puedes modificar esta fecha según tus necesidades
+
+                  // Formatear la fecha como una cadena para asignarla al campo de tipo date
+                  var fechaFormateada = fecha.toISOString().split('T')[0];
+                  document.getElementById("fecha_nacimiento_responsable").value = fechaFormateada;
+                  r1 = (sexo) ? true : false;
+                  document.getElementById("sexo_responsable").disabled = r1;
+                  document.getElementById("sexo_responsable").value = sexo;
+                  r1 = (d) ? true : false;
+                  document.getElementById("direccion_responsable").disabled = r1;
+                  document.getElementById("direccion_responsable").value = d;
+                  r1 = (ocu) ? true : false;
+                  document.getElementById("ocupacion_responsable").disabled = r1;
+                  document.getElementById("ocupacion_responsable").value = ocu;
+                  r1 = (tele && tele != 0) ? true : false;
+                  document.getElementById("telefono_resposable").disabled = r1;
+                  document.getElementById("telefono_resposable").value = tele;
+                  r1 = (comuni) ? true : false;
+                  document.getElementById("comunidad_responsable").disabled = r1;
+                  document.getElementById("comunidad_responsable").value = comuni;
+                  r1 = (ci && ci != 0) ? true : false;
+                  document.getElementById("ci").disabled = r1;
+                  document.getElementById("ci").value = ci;
+                  r1 = (nro_seg && nro_seg !=0) ? true : false;
+                  document.getElementById("n_seguro").disabled = r1;
+                  document.getElementById("n_seguro").value = nro_seg;
+                  r1 = (nro_car && nro_car != 0) ? true : false;
+                  document.getElementById("n_carp_fam").disabled = r1;
+                  document.getElementById("n_carp_fam").value = nro_car;
+                  r1 = (cd_u) ? true : false;
+                  document.getElementById("cod_usuario").disabled = r1;
+                  document.getElementById("cod_usuario").value = cd_u;
+                  $('#resultado12').html(""); //para vaciar
+                }
+            });
+        }else{
+          $('#resultado12').html("<div class='alert alert-light' role='alert'>No se encontro resultado12s</div>");
+        }
+  		}
+  	});
+  }else{
+    $('#resultado12').html("");
+  }
+}
+
+function Convertir(t){
+  let palabras = t.split(" ");
+  let nombreConInicialesMayusculas = "";
+   for (let i = 0; i < palabras.length; i++) {
+     nombreConInicialesMayusculas += palabras[i].charAt(0).toUpperCase() + palabras[i].slice(1) + " ";
+    }
+     return nombreConInicialesMayusculas.trim();
+ }
+
+  function visualizarUser(unir){
+
+  $('#resultado12').html(unir);
+  //colocamos un color de css
+  $('#resultado12').css({
+   'cursor': 'pointer',
+   'font-size':'15px'
+   });
+   // Obtener el elemento div con el id "results"
+  /* const divResults = document.getElementById('results');   // Cambiar la clase del div
+  divResults.setAttribute('class', 'alert alert-primary mb-0 py-0 border-0');
+*/
+}
+
+
 </script>
 <?php require("../librerias/footeruni.php"); ?>
