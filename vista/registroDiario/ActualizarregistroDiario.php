@@ -58,11 +58,33 @@
         </div>
         <div class="card-body">
           <form>
+            <?php
+            $as = ["Seleccione servicio","Enfermería","Consultorio Odontológico","Servicio del PAI","Crecimiento y desarrollo","Consultorio Médico","Farmacia"]
+             ?>
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label for="servicio" class="form-label">Servicio</label>
-                <input type="text" class="form-control" id="servicio" placeholder="servicio"
-                value="<?php $msg = (isset($fe["servicio_rd"]) && is_string($fe["servicio_rd"])) ? $fe["servicio_rd"]:""; echo $msg; ?>">
+                <select id='servicio' name="servicio" class="form-select">
+                  <?php
+                if(isset($fe["servicio_rd"]) && is_string($fe["servicio_rd"])) {
+                  foreach ($as as $servicio) {
+                    if($servicio == $fe["servicio_rd"]){
+                      echo "<option selected>$servicio</option>";
+                    }else{
+                      echo "<option >$servicio</option>";
+                    }
+                  }
+                }else{
+                  echo "<option value=''>Seleccione servicio</option>
+                    <option >Enfermería</option>
+                    <option >Consultorio Odontológico</option>
+                    <option >Servicio del PAI</option>
+                    <option >Crecimiento y desarrollo</option>
+                    <option >Consultorio Médico</option>
+                    <option >Farmacia</option>";
+                }
+                ?>
+              </select>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="Signos y Sintomas" class="form-label">Signos y Sintomas</label>
@@ -290,11 +312,15 @@ function buscarResponsableAdmision() {
         	var cd_admision = document.getElementById("cd_admision").value;
         	var fechaderetornodeHistoria = document.getElementById("fechaderetornodeHistoria").value;
 
-         	if(nombre==""||ap_usuario==""||am_usuario==""||fecha_nacimiento==""||direccion_usuario==""||servicio==""
+         	if(nombre==""||ap_usuario==""||am_usuario==""||fecha_nacimiento==""||direccion_usuario==""
           ||signos_sintomas==""||historiaclinica==""){
         		ingreseNPdatos();
         		return;
         	}
+          if(servicio == "Seleccione servicio" || servicio == ""){
+            seleccione();
+            return
+          }
         	var datos = new FormData(); // Crear un objeto FormData vacío
           datos.append("cod_rd",cod_rd);
           datos.append("cod_usuario",cod_usuario);
@@ -318,7 +344,7 @@ function buscarResponsableAdmision() {
             contentType: false, // Deshabilitar la codificación de tipo MIME
             processData: false, // Deshabilitar la codificación de datos
             success: function(data) {
-              //alert(data+"dasdas");
+              alert(data+"dasdas");
               data=$.trim(data);
               if(data == "correcto"){
                 alertCorrectoUp();
@@ -393,6 +419,15 @@ function buscarResponsableAdmision() {
            icon: 'error',
            title: '¡Error!',
            text: '¡Ingrese los Datos!',
+           showConfirmButton: false,
+           timer: 1500
+         });
+        }
+        function seleccione(){
+          Swal.fire({
+           icon: 'error',
+           title: '¡Error!',
+           text: '¡Seleccione!',
            showConfirmButton: false,
            timer: 1500
          });

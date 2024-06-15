@@ -1,15 +1,50 @@
 <?php require("../librerias/headeradmin1.php"); ?>
 <?php $RegistroDiario=$_SERVER["REQUEST_URI"];
 $_SESSION["diario"] = $RegistroDiario;?>
-
+<style media="screen">
+  #co{
+    color:gray;
+    font-size: 17px
+  }
+</style>
 <div class="container mt-5">
-  <br>
   <?php
-  echo "<div style='background-color:beige;color:red'>ruta: / <a href='$RegistroDiario'>Registro Diario</a></div>"; ?>
-  <h4>Registro Diario de Pacientes</h4>
+  echo "<div id='color1'><a href='$RegistroDiario'id='co'>Registro Diario</a>></div>"; ?>
+  <div class="row" >
+     <div class="col-12">
+       <hr>
+     </div>
+   </div>
+   <div class="row">
+     <div class="col-auto mb-2" style="color:gray">
+         <h5>Registro Diario de Pacientes</h5>
+     </div>
+     <div class="col-3 mb-1">
+       <!-- espacio vacío para mantener el diseño intacto -->
+     </div>
+     <div class="col-auto mb-2">
+       <input type="date" name="fecha" id="fecha" value="" onchange="BuscarRegistrosDiarios(1)" class="form-control">
+     </div>
+
+     <div class="col-auto mb-2" title="Registro Diario">
+       <button type="button" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="visualizarRegistrodiario()">
+         <img src='../imagenes/paciente.ico' style='height: 25px;width: 25px;'> Nuevo Registro
+       </button>
+     </div>
+     <div class="col-auto mb-2" title="Reporte">
+       <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
+         <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'> Reporte Diario
+       </button>
+     </div>
+   </div>
+   <div class="row" >
+      <div class="col-12">
+        <hr>
+      </div>
+    </div>
 
   <div class="row align-items-center">
-    <label for="selectPage" class="form-label col-auto mb-2">Page</label>
+    <label for="selectPage" class="form-label col-auto mb-2">Listar</label>
     <div class="col-auto mb-2">
       <select class="form-select" id="selectList" onchange="BuscarRegistrosDiarios(1)" name="selectList">
         <option>--</option>
@@ -23,22 +58,10 @@ $_SESSION["diario"] = $RegistroDiario;?>
         <option>1000</option>
       </select>
     </div>
-    <div class="col-auto mb-2" title="Registro Diario">
-      <button type="button" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="visualizarRegistrodiario()">
-        <img src='../imagenes/paciente.ico' style='height: 25px;width: 25px;'>
-      </button>
-    </div>
-    <div class="col-auto mb-2">
-      <input type="date" name="fecha" id="fecha" value="" onchange="BuscarRegistrosDiarios(1)" class="form-control">
-    </div>
-    <div class="col-auto mb-2" title="Reporte">
-      <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
-        <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
-      </button>
-    </div>
-    <div class="col-auto mb-2">
+    <div class="col-4 mb-4">
       <!-- espacio vacío para mantener el diseño intacto -->
     </div>
+
     <div class="col mb-2">
       <input type="text" class="form-control" placeholder="Buscar..." id='buscaru' onkeyup="BuscarRegistrosDiarios(1)">
     </div>

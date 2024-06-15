@@ -46,7 +46,7 @@ class RegistroDiarioControlador{
             "cod_rd" => $fi["cod_rd"],
             "fecha_rd" => $fi["fecha_rd"],
             "hora_rd" => $fi["hora_rd"],
-            "servicio_rd" => $fi["servicio_rd"],
+            "servicio_rd" => $rdi->selectServicio($fi["servicio_rd"]),
             "signo_sintomas_rd" => $fi["signo_sintomas_rd"],
             "historial_clinico_rd" => $fi["historial_clinico_rd"],
             "fecha_retorno_historia_rd" => $fi["fecha_retorno_historia_rd"],
@@ -383,6 +383,21 @@ echo "<div class='row'>
 	public function v_index(){
 	    header("location: ../index.php");
 	}
+
+  public function reportesRegistroDiario(){
+    $rdi =new RegistroDiario();
+    $listarDeCuanto = 5;$pagina = 1;$buscar = "";$fecha = date('Y-m-d');
+    $resultodoUsuarios = $rdi->SelectPorBusquedaRegistroDiario("",false,false,false);
+    $num_filas_total = mysqli_num_rows($resultodoUsuarios);
+    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+            //calculamos el registro inicial
+    $inicioList = ($pagina - 1) * $listarDeCuanto;
+    // Verificar si la consulta devuelve resultados
+    $res = $rdi->SelectPorBusquedaRegistroDiario("",$inicioList,$listarDeCuanto,false);
+    $resul = $this->Uniendo($res,$rdi);
+    $resultado = $rdi->seleccionarServicios();
+    require("../vista/registroDiario/reportesDiario.php");
+  }
 }
 
 	$rd=new  RegistroDiarioControlador();
@@ -450,6 +465,9 @@ echo "<div class='row'>
 
     if(isset($_GET["accion"]) && $_GET["accion"]=="taR"){
   		$rd->BuscarRegistrosDiarioTablaDespuesDeActualizar($_POST["buscar"],$_POST["page"],$_POST["listarDeCuanto"],$_POST["fecha"]);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rpd"){
+  		$rd->reportesRegistroDiario();
   	}
 
 ?>

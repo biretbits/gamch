@@ -53,10 +53,18 @@ echo "<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-s
                 <li class='nav-item ms-2' title='Usuarios'>
                     <a class='nav-link btn btn-outline-warning' href='../controlador/usuario.controlador.php?accion=vut'><img src='../imagenes/admin.ico'style='height: 25px;width: 25px;'></a>
                 </li>";
+                echo "
+                  <li class='nav-item ms-2' title='Servicios'>
+                      <a class='nav-link btn btn-outline-warning' href='../controlador/usuario.controlador.php?accion=rsr'><img src='../imagenes/servicio.png'style='height: 25px;width: 25px;'></a>
+                  </li>";
               }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admision"){
                 echo "
                   <li class='nav-item ms-2' title='Registro diario'>
                       <a class='nav-link btn btn-outline-warning' href='../controlador/registroDiario.controlador.php?accion=vtd'><img src='../imagenes/archivo.ico'style='height: 25px;width: 25px;'></a>
+                  </li>";
+                echo "
+                  <li class='nav-item ms-2' title='Reportes'>
+                      <a class='nav-link btn btn-outline-warning' href='../controlador/registroDiario.controlador.php?accion=rpd'><img src='../imagenes/reporte.ico'style='height: 25px;width: 25px;'></a>
                   </li>";
               }
      echo "</ul>

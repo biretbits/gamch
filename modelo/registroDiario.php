@@ -149,6 +149,21 @@ $respadmision,$fechaderetornodeHistoria){
   }
   return $resus;
 }
+public function selectServicio($id){
+  $lis = "select *from servicio where cod_servicio=$id";
+  $resul = $this->con->query($lis);
+  $fi=mysqli_fetch_array($resul);
+  $nombre = $fi["nombre_servicio"];
+  return $nombre;
+  mysqli_close($this->con);
+}
+
+public function seleccionarServicios(){
+  $lis = "select *from servicio";
+  $resul = $this->con->query($lis);
+  return $resul;
+  mysqli_close($this->con);
+}
 
 }
  ?>

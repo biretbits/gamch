@@ -34,11 +34,21 @@ estado char(15),
 foreign key(cod_cds)references centro_de_salud(cod_cds)on delete restrict on update restrict
 );
 
+
+
+create table servicio(
+cod_servicio int not null auto_increment primary key,
+nombre_servicio varchar(100),
+descripcion_servicio varchar(100),
+estado char(10)
+);
+
+
 CREATE TABLE registro_diario (
    cod_rd INT(11) NOT NULL AUTO_INCREMENT,
    fecha_rd DATE DEFAULT NULL,
    hora_rd TIME DEFAULT NULL,
-   servicio_rd CHAR(100) DEFAULT NULL,
+   servicio_rd int DEFAULT NULL,
    signo_sintomas_rd CHAR(100) DEFAULT NULL,
    historial_clinico_rd CHAR(10) DEFAULT NULL,
    fecha_retorno_historia_rd date,
@@ -48,6 +58,7 @@ CREATE TABLE registro_diario (
    cod_cds INT(11) NOT NULL,
    estado CHAR(15) DEFAULT NULL,
    PRIMARY KEY (cod_rd, paciente_rd,cod_cds),
+   foreign key(servicio_rd)references servicio(cod_servicio)on delete restrict on update restrict,
    FOREIGN KEY (pe_brinda_atencion_rd) REFERENCES usuario(cod_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
    FOREIGN KEY (resp_admision_rd) REFERENCES usuario(cod_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
    FOREIGN KEY (paciente_rd) REFERENCES usuario(cod_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -70,7 +81,6 @@ primary key(cod_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his),
 foreign key(cod_rd,paciente_rd,cod_cds)references registro_diario(cod_rd,paciente_rd,cod_cds)on delete restrict on update restrict,
 foreign key(cod_responsable_familia_his)references usuario(cod_usuario)on delete restrict on update restrict
 );
-
 
 
     --------------------------------------------------------------+---------+
@@ -246,18 +256,26 @@ tipo_usuario,contrasena_usuario,cod_cds,estado)values(0,
 ,'',1,'activo'
 );
 
+
+  insert into servicio(nombre_servicio)values('Enfermería');
+  insert into servicio(nombre_servicio)values('Consultorio Odontológico');
+  insert into servicio(nombre_servicio)values('Servicio del PAI');
+  insert into servicio(nombre_servicio)values('Crecimiento y desarrollo');
+  insert into servicio(nombre_servicio)values('Consultorio Médico');
+  insert into servicio(nombre_servicio)values('Farmacia');
+
 insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
 fecha_retorno_historia_rd,
-pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-02-05','10:08','c. ext.','no','no','0000-00-00',
+pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-02-05','10:08',1,'no','no','0000-00-00',
 3,2,5,1,'activo');
 
 insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
 fecha_retorno_historia_rd,
-pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-05-24','10:08','c. ext.','no','no','0000-00-00',
+pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-05-24','10:08',1,'no','no','0000-00-00',
 3,2,6,1,'activo');
 insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
 fecha_retorno_historia_rd,
-pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-05-24','10:08','c. ext.','no','si','0000-00-00',
+pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-05-24','10:08',1,'no','si','0000-00-00',
 3,2,7,1,'activo');
 
 

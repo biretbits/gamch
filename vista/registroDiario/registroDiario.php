@@ -51,8 +51,13 @@
               <div class="col-md-4 mb-3">
                 <label for="servicio" class="form-label">Servicio</label>
                 <select id='servicio' name="servicio" class="form-select">
-                  <option value="">Odontologia</option>
-                  <option value="">Pediatria</option>
+                  <option value="">Seleccione servicio</option>
+                  <option>Enfermería</option>
+                  <option>Consultorio Odontológico</option>
+                  <option>Servicio del PAI</option>
+                  <option>Crecimiento y desarrollo</option>
+                  <option>Consultorio Médico</option>
+                  <option>Farmacia</option>
                 </select>
               </div>
               <div class="col-md-4 mb-3">
@@ -360,12 +365,16 @@ function buscarResponsableAdmision() {
         	var cd_atencion = document.getElementById("cd_medico").value;
         	var cd_admision = document.getElementById("cd_admision").value;
         	var fechaderetornodeHistoria = document.getElementById("fechaderetornodeHistoria").value;
-
-         	if(nombre==""||ap_usuario==""||am_usuario==""||fecha_nacimiento==""||direccion_usuario==""||servicio==""
+         	if(nombre==""||ap_usuario==""||am_usuario==""||fecha_nacimiento==""||direccion_usuario==""
           ||signos_sintomas==""||personalatencion==""||respadmision==""){
         		ingreseNPdatos();
         		return;
         	}
+        
+          if(servicio == "Seleccione servicio" || servicio == ""){
+            seleccione();
+            return
+          }
         /*
         	var pagina="";
         	var listarDeCuanto="";
@@ -430,7 +439,15 @@ function buscarResponsableAdmision() {
             }
           });
         }
-
+        function seleccione(){
+          Swal.fire({
+           icon: 'error',
+           title: '¡Error!',
+           text: '¡Seleccione!',
+           showConfirmButton: false,
+           timer: 1500
+         });
+        }
 
         //funcion para ir al index cuando ingrese un usuario del sistema
         function vaciarDESPUESdeUNtiempo(){
