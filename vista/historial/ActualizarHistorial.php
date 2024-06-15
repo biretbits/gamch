@@ -1,5 +1,17 @@
 <?php require("../librerias/headeradmin1.php");
-$fi = mysqli_fetch_array($re);
+if ($resul && count($resul) > 0){
+    $i = 0;
+  foreach ($resul as $fi){
+    $datosResponsable = $fi['datos_responsable_familia'];
+    foreach ($datosResponsable as $resFamiliar) {
+      echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
+    }
+    $datospaciente=$fi["paciente_rd_nombre"];
+    foreach ($datospaciente as $paciente) {
+      echo $paciente["nombre_usuario_re"]." ".$paciente["ap_usuario_re"]." ".$paciente["am_usuario_re"];
+    }
+  }
+}
 ?>
 <?php
     $regHis = $_SERVER["REQUEST_URI"];

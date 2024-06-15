@@ -1,7 +1,11 @@
 <?php require("../librerias/headeradmin1.php"); ?>
+<?php $Registro=$_SERVER["REQUEST_URI"];
+      $diario = $_SESSION["diario"];
+?>
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-10 offset-md-1">
+      <?php echo "<div style='background-color:beige;color:red'>ruta: / <a href='$diario'>Registro Diario</a> / <a href='$Registro'>Registrar</a></div>"; ?>
       <div class="card">
         <div class="card-header">
           FORMULARIO DE REGISTRO DIARIO
@@ -9,7 +13,7 @@
         <div class="card-body">
           <form>
             <div class="row">
-              <input type="hidden" name="cod_usuario" id="cod_usuario" value="">
+              <input type="text" name="cod_usuario" id="cod_usuario" value="">
               <input type="hidden" name="cd_admision" id="cd_admision" value="">
               <input type="hidden" name="cd_medico" id="cd_medico" value="">
               <div class="col-md-4 mb-3">
@@ -46,7 +50,10 @@
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label for="servicio" class="form-label">Servicio</label>
-                <input type="text" class="form-control" id="servicio" placeholder="servicio">
+                <select id='servicio' name="servicio" class="form-select">
+                  <option value="">Odontologia</option>
+                  <option value="">Pediatria</option>
+                </select>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="Signos y Sintomas" class="form-label">Signos y Sintomas</label>
@@ -355,7 +362,7 @@ function buscarResponsableAdmision() {
         	var fechaderetornodeHistoria = document.getElementById("fechaderetornodeHistoria").value;
 
          	if(nombre==""||ap_usuario==""||am_usuario==""||fecha_nacimiento==""||direccion_usuario==""||servicio==""
-          ||signos_sintomas==""||historiaclinica==""||personalatencion==""||respadmision==""){
+          ||signos_sintomas==""||personalatencion==""||respadmision==""){
         		ingreseNPdatos();
         		return;
         	}
@@ -400,7 +407,7 @@ function buscarResponsableAdmision() {
             contentType: false, // Deshabilitar la codificación de tipo MIME
             processData: false, // Deshabilitar la codificación de datos
             success: function(data) {
-              //alert(data+"dasdas");
+              alert(data+"dasdas");
               data=$.trim(data);
               if(data == "correcto"){
 

@@ -4,10 +4,9 @@ require "controlador/sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
     require_once("librerias/headeradmin.php");
-		//("location: ../index.php");
-
+    
+    require('vista/principal/sql.php');
     include('vista/principal/principalClinica.php');
-  //}
 
 
 ?>

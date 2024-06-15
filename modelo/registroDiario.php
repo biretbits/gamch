@@ -99,33 +99,31 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
      '','','','','','','','','','','paciente','',1,'activo'
    );";
       $resul = $this->con->query($sql);
-  }
 
-
-   if($resul =! ""){
-     $sql = 'select max(cod_usuario) as c from usuario;';
-     $resul = $this->con->query($sql);
-     $fi=mysqli_fetch_array($resul);
-     $cod_usuario = $fi["c"];
-   }
-   $fechaActual = date("Y-m-d");
-   $horaActual = date("H:i:s");
-
-   $sql = "
-   insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
-   fecha_retorno_historia_rd,pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('$fechaActual','$horaActual',
-   '$servicio','$signos_sintomas','no','$fechaderetornodeHistoria',$personalatencion,$respadmision,$cod_usuario,1,'activo');";
-   // Retornar el resultado
-   if($cod_usuario!= "" && is_numeric($cod_usuario)){
-     $sql_con = "select *from historial where paciente_rd = $cod_usuario";
-     $res = $this->con->query($sql_con);
-     if ($res && $res->num_rows > 0) {
-       $sql1 = "update registro_diario historial_clinico_rd = 'si' where paciente_rd = $cod_usuario";
-       $this->con->query($sql1);
+      if($resul =! ""){
+       $sql = 'select max(cod_usuario) as c from usuario;';
+       $resul2 = $this->con->query($sql);
+       $fi=mysqli_fetch_array($resul2);
+       $cod_usuario = $fi["c"];
      }
   }
 
-  $resu = $this->con->query($sql);
+
+   $fechaActual = date("Y-m-d");
+   $horaActual = date("H:i:s");
+
+   $sql = "insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
+   fecha_retorno_historia_rd,pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('$fechaActual','$horaActual',
+   '$servicio','$signos_sintomas','no','$fechaderetornodeHistoria',$personalatencion,$respadmision,$cod_usuario,1,'activo');";
+   $resu = $this->con->query($sql);#ejecutamos y ya existe esta fila con el campo no
+
+   $sql_consu = "select *from historial where paciente_rd = $cod_usuario";#buscamos si el usuario tiene historial registrado si o no
+   $res = $this->con->query($sql_consu);
+   $si = "no";#luego realizamos esta consulta
+   if(mysqli_num_rows($res) > 0) {
+     $sqlnew = "update registro_diario set historial_clinico_rd = 'si' where paciente_rd = $cod_usuario";
+     $re78 = $this->con->query($sqlnew);
+   }
   return $resu;
   mysqli_close($this->con);
 }

@@ -1,11 +1,17 @@
 <?php require("../librerias/headeradmin1.php"); ?>
+<?php $tablahis=$_SERVER["REQUEST_URI"];
+      $diario = $_SESSION["diario"];
+      $_SESSION['this']=$tablahis;
+?>
 <div class="container mt-5">
-  <h2>Historial Clinico</h2>
-
+  <?php echo "<div style='background-color:beige;color:red'>ruta: / <a href='$diario'>Registro Diario</a> / <a href='#' onclick='accionHitorialVer($paciente_rd,$cod_rd)'>Historial</a></div>"; ?>
+  <h4>Historial Clinico</h4>
+  <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
+  <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
   <div class="row align-items-center">
     <label for="selectPage" class="form-label col-auto mb-2">Page</label>
     <div class="col-auto mb-2">
-      <select class="form-select" id="selectList" name="selectList">
+      <select class="form-select" id="selectList" name="selectList" onchange="BuscarRegistrosHistorial(1)">
         <option>--</option>
         <option>5</option>
         <option>10</option>
@@ -23,7 +29,7 @@
       </button>
     </div>
     <div class="col-auto mb-2">
-      <input type="date" name="fecha" id="fecha" value="" class="form-control">
+      <input type="date" name="fecha" id="fecha" value="" class="form-control" onchange="BuscarRegistrosHistorial(1)">
     </div>
     <div class="col-auto mb-2" title="Reporte">
       <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
@@ -93,18 +99,18 @@
               <th>Zona</th>
               <th>Responsable Familiar</th>
               <th>Paciente</th>
-              <th>Fecha de Nacimiento</th>
               <th>Acción</th>
             </tr>
           </thead>
           <tbody>
+
       <?php
       if ($resul && count($resul) > 0){
           $i = 0;
         foreach ($resul as $fi){
             echo "<tr>";
               echo "<td>".($i+1)."</td>";
-              echo "<td>".$fi['fecha_rd']."</td>";
+              echo "<td>".$fi['fecha']."</td>";
               echo "<td>".$fi['zona_his']."</td>";
               $datosResponsable = $fi['datos_responsable_familia'];
               echo "<td>";
@@ -112,24 +118,28 @@
                 echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
               }
               echo "</td>";
-              echo "<td>".$fi['nombre_usuario']." ".$fi['ap_usuario']." ".$fi['am_usuario']."</td>";
-              echo "<td>".$fi['fecha_nac_usuario']."</td>";
+
+              $datospaciente = $fi['paciente_rd_nombre'];
+              echo "<td>";
+              foreach ($datospaciente as $datos) {
+                echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
+              }
+              echo "</td>";
 
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-info' title='Editar'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarHistorial(".$fi['cod_his'].",".$fi['cod_rd'].",".$fi['paciente_rd'].",".$listarDeCuanto.",".$pagina.",\"".$fecha."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-
                 echo "</div>";
               echo "</td>";
-
 
             echo "</tr>";
             $i++;
           }
         }else{
-          $resul = 'No se encontro resultados';
-          echo $resul;
+          echo "<tr>";
+          echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+          echo "</tr>";
         }
          ?>
         </tbody>
@@ -160,19 +170,19 @@ echo "<div class='row'>
 
       // previous label
       if ($pagina != 1) {
-        echo "<li class='page-item'><a class='page-link'  onclick=\"BuscarRegistrosDiarios(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
+        echo "<li class='page-item'><a class='page-link'  onclick=\"BuscarRegistrosHistorial(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
       }
       if($pagina==1) {
         echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
       } else if($pagina==2) {
-        echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosDiarios(1)\" class='page-link'>$anterior</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosHistorial(1)\" class='page-link'>$anterior</a></li>";
       }else {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosDiarios($pagina-1)\">$anterior</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosHistorial($pagina-1)\">$anterior</a></li>";
 
       }
       // first label
       if($pagina>($adjacents+1)) {
-        echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"BuscarRegistrosDiarios(1)\">1</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"BuscarRegistrosHistorial(1)\">1</a></li>";
       }
       // interval
       if($pagina>($adjacents+2)) {
@@ -187,9 +197,9 @@ echo "<div class='row'>
         if($i==$pagina) {
           echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
         }else if($i==1) {
-          echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"BuscarRegistrosDiarios(1)\">$i</a></li>";
+          echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"BuscarRegistrosHistorial(1)\">$i</a></li>";
         }else {
-          echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosDiarios(".$i.")\" class='page-link'>$i</a></li>";
+          echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosHistorial(".$i.")\" class='page-link'>$i</a></li>";
         }
       }
 
@@ -201,17 +211,17 @@ echo "<div class='row'>
       // last
 
       if($pagina<($TotalPaginas-$adjacents)) {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarRegistrosDiarios($TotalPaginas)\">$TotalPaginas</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarRegistrosHistorial($TotalPaginas)\">$TotalPaginas</a></li>";
       }
       // next
 
       if($pagina<$TotalPaginas) {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosDiarios($pagina+1)\">$siguiente</a></li>";
+        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosHistorial($pagina+1)\">$siguiente</a></li>";
       }else {
         echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
       }
       if ($pagina != $TotalPaginas) {
-        echo "<li class='page-item'><a class='page-link' onclick=\"BuscarRegistrosDiarios($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
+        echo "<li class='page-item'><a class='page-link' onclick=\"BuscarRegistrosHistorial($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
       }
 
       echo "</ul>";
@@ -225,6 +235,39 @@ echo "</div>
  </div>
  <!-- modal de seleccion de fechas-->
 <script type="text/javascript">
+function BuscarRegistrosHistorial(page){
+    var obt_lis = document.getElementById("selectList").value;
+    var listarDeCuanto = verificarList(obt_lis);
+    var fecha = document.getElementById("fecha").value;
+    var paciente_rd = document.getElementById("paciente_rd").value;
+    var cod_rd = document.getElementById("cod_rd").value;
+    //ponerFechactualAlModalDeReporte(listarDeCuanto,buscar,page,fecha);
+    var datos = new FormData(); // Crear un objeto FormData vacío
+    datos.append('pagina', page);
+    datos.append('listarDeCuanto',listarDeCuanto);
+    datos.append('fecha',fecha);
+    datos.append("paciente_rd",paciente_rd);
+    datos.append("cod_rd",cod_rd);
+      $.ajax({
+        url: "../controlador/historial.controlador.php?accion=bht",
+        type: "POST",
+        data: datos,
+        contentType: false, // Deshabilitar la codificación de tipo MIME
+        processData: false, // Deshabilitar la codificación de datos
+        success: function(data) {
+  //    alert(data+"dasdas");
+          $("#verDatos").html(data);
+        }
+      });
+  }
+
+  function verificarList(valor){
+    if(valor != "" && valor != "--"){
+      return valor;
+    }else{
+      return 5;
+    }
+  }
 function RegistroHistorial(paciente_rd,cod_rd){
 
   var form = document.createElement('form');
@@ -248,5 +291,57 @@ function RegistroHistorial(paciente_rd,cod_rd){
  document.body.appendChild(form);
  form.submit();
 }
+function accionHitorialVer(paciente_rd,cod_rd){
+    var form = document.createElement('form');
+     form.method = 'post';
+     form.action = '../controlador/historial.controlador.php?accion=vht'; // Coloca la URL de destino correcta
+     // Agregar campos ocultos para cada dato
+     var datos = {
+         paciente_rd:paciente_rd,
+         cod_rd:cod_rd
+     };
+     for (var key in datos) {
+         if (datos.hasOwnProperty(key)) {
+             var input = document.createElement('input');
+             input.type = 'hidden';
+             input.name = key;
+             input.value = datos[key];
+             form.appendChild(input);
+         }
+     }
+   // Agregar el formulario al cuerpo del documento y enviarlo
+   document.body.appendChild(form);
+   form.submit();
+}
+
+function ActualizarHistorial(cod_his,cod_rd,paciente_rd,listarDeCuanto,pagina,fecha){
+  var selectList = document.getElementsByName("selectList").value;
+    var fecha = document.getElementsByName("fecha").value;
+  var form = document.createElement('form');
+   form.method = 'post';
+   form.action = '../controlador/historial.controlador.php?accion=aht'; // Coloca la URL de destino correcta
+   // Agregar campos ocultos para cada dato
+   var datos = {
+       paciente_rd:paciente_rd,
+       cod_rd:cod_rd,
+       cod_his:cod_his,
+       listarDeCuanto:listarDeCuanto,
+       pagina:pagina,
+       fecha:fecha
+   };
+   for (var key in datos) {
+       if (datos.hasOwnProperty(key)) {
+           var input = document.createElement('input');
+           input.type = 'hidden';
+           input.name = key;
+           input.value = datos[key];
+           form.appendChild(input);
+       }
+   }
+  // Agregar el formulario al cuerpo del documento y enviarlo
+  document.body.appendChild(form);
+  form.submit();
+}
+
 </script>
 <?php require("../librerias/footeruni.php"); ?>

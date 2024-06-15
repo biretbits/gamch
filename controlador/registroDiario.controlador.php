@@ -65,7 +65,7 @@ class RegistroDiarioControlador{
 
 public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fecha){
   $rdi =new RegistroDiario();
-  $resultodoUsuarios = $rdi->SelectPorBusquedaRegistroDiario($buscar,false,false,false);
+  $resultodoUsuarios = $rdi->SelectPorBusquedaRegistroDiario($buscar,false,false,$fecha);
   $num_filas_total = mysqli_num_rows($resultodoUsuarios);
   $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
           //calculamos el registro inicial
@@ -116,11 +116,9 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fech
               echo "<td>".$fi['medico_nombre']."</td>";
               echo "<td>";
               if(isset($fi['historial_clinico_rd']) && $fi['historial_clinico_rd'] == "no"){
-
                     echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                      echo "<button type='button' class='btn btn-dark' title='Sin historial' style='font-size:10px'>Sin historial</button>";
+                      echo "<button type='button' class='btn btn-dark' title='Sin historial' style='font-size:10px'onclick='accionHitorialVer(".$fi["paciente_rd"].",".$fi["cod_rd"].")'>Sin historial</button>";
                     echo "</div>";
-
               }else{
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                 echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
@@ -223,7 +221,6 @@ echo "<div class='row'>
         echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarRegistrosDiarios($TotalPaginas)\">$TotalPaginas</a></li>";
       }
       // next
-
       if($pagina<$TotalPaginas) {
         echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosDiarios($pagina+1)\">$siguiente</a></li>";
       }else {

@@ -1,6 +1,12 @@
 <?php require("../librerias/headeradmin1.php"); ?>
+<?php $RegistroDiario=$_SERVER["REQUEST_URI"];
+$_SESSION["diario"] = $RegistroDiario;?>
+
 <div class="container mt-5">
-  <h2>Registro Diario de Pacientes</h2>
+  <br>
+  <?php
+  echo "<div style='background-color:beige;color:red'>ruta: / <a href='$RegistroDiario'>Registro Diario</a></div>"; ?>
+  <h4>Registro Diario de Pacientes</h4>
 
   <div class="row align-items-center">
     <label for="selectPage" class="form-label col-auto mb-2">Page</label>
@@ -125,7 +131,7 @@
               if(isset($fi['historial_clinico_rd']) && $fi['historial_clinico_rd'] == "no"){
 
                     echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                      echo "<button type='button' class='btn btn-dark' title='Sin historial' style='font-size:10px'>Sin historial</button>";
+                      echo "<button type='button' class='btn btn-dark' title='Sin historial' style='font-size:10px' onclick='accionHitorialVer(".$fi["paciente_rd"].",".$fi["cod_rd"].")'>Sin historial</button>";
                     echo "</div>";
 
               }else{
@@ -143,7 +149,7 @@
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   echo "<button type='button' class='btn btn-info' title='Editar' onclick = 'editarpaciente(".$fi["cod_rd"].",".$fi["paciente_rd"].",\"".$buscar."\",".$pagina.",".$listarDeCuanto.",\"".$fecha."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-                  
+
                 echo "</div>";
               echo "</td>";
 

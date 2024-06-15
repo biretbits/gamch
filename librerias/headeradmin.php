@@ -19,7 +19,8 @@
 <style type="text/css">
 
 body{
-  background-image: url("imagenes/agu/f1b.jpg");
+  background-color: rgba(240, 230, 140, 0,5);
+  background-image: url("imagenes/jj.jpg");
 	margin: 0;
   margin-bottom: 40px;
 }

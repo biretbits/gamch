@@ -63,6 +63,8 @@ paciente_rd int,
 cod_cds int,
 cod_responsable_familia_his int,
 archivo char(100),
+fecha date,
+hora time,
 estado char(20),
 primary key(cod_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his),
 foreign key(cod_rd,paciente_rd,cod_cds)references registro_diario(cod_rd,paciente_rd,cod_cds)on delete restrict on update restrict,
@@ -260,5 +262,5 @@ pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('2024-0
 
 
 
-insert into historial(zona_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his,archivo,estado)values(
-'z5',3,7,1,8,'','activo');
+insert into historial(zona_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his,archivo,fecha,hora,estado)values(
+'z5',3,7,1,8,'','2024-02-02','20:05:00','activo');
