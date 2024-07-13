@@ -48,11 +48,11 @@
   </div>
   <div class="row">
   <?php if(!isset($_SESSION['tipo_usuario'])){
-        ?><div class="alert alert-success border border-success border-3" style=" box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);">
+        ?><div class="alert alert-success border border-success border-3" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);">
             <div class="justify-content-center d-flex " style="height: 100vh;">
               <div class="col-lg-5 col-md-6 col-12">
                 <div class="card" style="background-color:khaki">
-                  <div class="card-body">
+                  <div class="card-body" style="background: linear-gradient(to right, #ff7e5f, #feb47b);">
                     <center>
                       <h3 Style='color:blue;text-shadow: 2px 2px 2px black;'>Acceso</h3></center>
                     <center>
@@ -73,7 +73,7 @@
                           </button>
                         </div>
                         <br>
-                        <button type="button" class="btn btn-warning"   style='padding:3px 3px'id="submit" value="Ingresar" onclick="VerificarDatos();"><i class="fas fa-sign-in-alt login-icon"></i> Ingresar</button>
+                        <button type="button" class="btn btn-warning" id="submit" value="Ingresar" onclick="VerificarDatos();">   <img src='imagenes/entrar.ico' height='25' width='25' alt='Imagen centrada'> Ingresar</button>
                         <br>
                     </form>
                   </div>
@@ -84,7 +84,92 @@
         <?php } ?>
     </div>
 </div>
+<script type="text/javascript">
+document.querySelector('#contrasena').addEventListener ('keypress',function(e){
+validar(e);
+})
+document.querySelector('#usuario').addEventListener ('keypress',function(e){
+validar(e);
+})
+//funcion para validar se  haya pulsado enter incluyendo dispositivos moviles
 
+function validar(e) {
+let tecla = (document.all) ? e.keyCode : e.which;
+if (tecla==13) VerificarDatos();
+}
+//funcion para visualizar la contrasena
+function mostrar() {
+  var contrasena = document.getElementById("contrasena");
+  var bx = document.querySelector(".che");
+  if(contrasena.type === 'password'){
+    contrasena.type = 'text';
+  }else{
+    contrasena.type = 'password';
+  }
+}
+
+
+function VerificarDatos(){
+  //alert(456);
+  var usuario = document.getElementById("usuario").value;
+  var contrasena = document.getElementById("contrasena").value;
+  //alert(usuario);
+    var datos=new  FormData();
+    datos.append("usuario",usuario);
+    datos.append("contrasena",contrasena);
+    $.ajax({
+      type: "POST", //type of submit
+      cache: false, //important or else you might get wrong data returned to you
+      url: "controlador/logeo.controlador.php?accion=vcu", //destination
+      datatype: "html", //expected data format from process.php
+      data: datos, //target your form's data and serialize for a POST
+      contentType:false,
+      processData:false,
+      success: function(r){
+        //alert(r);
+        r=$.trim(r);
+        if(r == "admin"){
+          alertCorrecto();
+        }else if(r == "medico"){
+          alertCorrecto();
+        }else if(r == "admision"){
+          alertCorrecto();
+        }else{
+          Swal.fire({
+           icon: 'error',
+           title: '¡Error!',
+           text: '¡Hubo un problema al iniciar sesión!',
+           showConfirmButton: false,
+           timer: 1500
+         });
+        }
+      }
+    });
+
+}
+//funcion para mostrar un aler de bienvenido cuando ingreso un usuario del sistema existente
+function alertCorrecto(){
+  Swal.fire({
+   icon: 'success',
+   title: '¡Bienvenido!',
+   text: '¡Inicio de session correcto!',
+   showConfirmButton: false,
+   timer: 1500
+ });
+ IRalLink();
+}
+//funcion para ir al index cuando ingrese un usuario del sistema
+function IRalLink(){
+  setTimeout(() => {
+    location.href="index.php";
+   }, 1500);
+}
+/*function close(){
+  setTimeout(() => {
+     swal.close();
+   }, 1500);
+}*/
+</script>
 <style media="screen">
   .fondo{
     background-color: orange;
@@ -96,7 +181,7 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   }
   .colortex{
-    background-color: rgba(0, 255, 0, 0.3);
+  background: linear-gradient(to right, orange, yellow);
    color: #ffffff; /* Color blanco para el texto */
    text-shadow: 2px 2px 4px rgba(250, 0, 0, 0.3); /* Sombra del texto */
    text-align: center;

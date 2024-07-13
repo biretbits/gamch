@@ -30,9 +30,8 @@ html {
 }
 </style>
 </head>
-<body>
+<body  style="background: linear-gradient(to right,WhiteSmoke,white);">
   <div class="container">
-  	<br><br>
 <?php
 $name = "";
 if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){

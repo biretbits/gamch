@@ -3,9 +3,8 @@
 <br><br><br><br>
 <div class="container">
     <div class="row" >
-				<div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3
-                    col-12">
-				 <div class="modal-content" style='padding:20px 15px;' >
+				<div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
+				 <div class="modal-content" style='padding:20px 15px;background: linear-gradient(to right, gray, white);' >
 					<center>
 					<h3 Style='color:blue;text-shadow: 2px 2px 2px black;'>Acceso</h3></center>
                     <center>
@@ -27,7 +26,7 @@
                 </button>
 							</div>
 							<br>
-              <button type="button" class="btn btn-warning"   style='padding:3px 3px'id="submit" value="Ingresar" onclick="VerificarDatos();"><i class="fas fa-sign-in-alt login-icon"></i> Ingresar</button>
+              <button type="button" class="btn btn-warning" id="submit" value="Ingresar" onclick="VerificarDatos();"><img src='../imagenes/entrar.ico' height='25' width='25' alt='Imagen centrada'>  Ingresar</button>
 
 							<br>
 						</form>

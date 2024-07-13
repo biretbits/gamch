@@ -5,6 +5,7 @@
 	}
 
 ?>
+<br>
 <div class="modal-dialog text-center" >
 	<div class="panel-body col-xl-10 col-lg-10 col-md-9">
     <div class="modal-content" style='padding:20px 10px'>
@@ -74,19 +75,23 @@
 								}else{
 						 ?>
 			            <div class='input-group'>
-			              <input class="form-control" type="password"  id="contraseña_usuario" name ="contraseña_usuario" placeholder="contraseña_usuario" value='<?php $smg = ""; $msg = (isset($fe["contrasena_usuario"]) && is_string($fe["contrasena_usuario"])) ? $fe["contrasena_usuario"] :""; echo $msg;?>'>
-			            </div> <br>
+			              <input class="form-control" type="password"  id="contraseña_usuario" name ="contraseña_usuario" placeholder="contraseña_usuario" onkeyup="comprovando()"value='<?php $smg = ""; $msg = (isset($fe["contrasena_usuario"]) && is_string($fe["contrasena_usuario"])) ? $fe["contrasena_usuario"] :""; echo $msg;?>'>
+										<button class="btn btn-outline-secondary che" type="button" id="che" onclick="mostrar()">
+											<img src='../imagenes/ojo.ico'style='height: 25px;width: 25px;'>
+										</button>
+
+								  </div>
+										<span id="message" class="error"></span>
+									<div id='validandoContrasena'>
+
+									</div>
 									<div class='input-group'>
-											<input class="form-control" type="password"  id="confirmar_contraseña_usuario" name ="confirmar_contraseña_usuario" placeholder="confirmar_contraseña_usuario">
-							   	</div> <br>
+											<input class="form-control" type="password"  id="confirmar_contraseña_usuario" name ="confirmar_contraseña_usuario" onkeyup="validarIguales()" placeholder="confirmar_contraseña_usuario">
+
+									</div>	<span id='message_conf'></span>
 					<?php } ?>
 					<div id="campo">
-							<div class='input-group'>
-								<input class='form-control' type='hidden'  id='contraseña_usuario' name ='contraseña_usuario' placeholder='contraseña nueva'>
-							</div>
-							<div class='input-group'>
-								<input class='form-control' type='hidden'  id='confirmar_contraseña_usuario' name ='confirmar_contraseña_usuario' placeholder='confirmar contraseña usuario'>
-							</div>
+
 					</div>
 					</div>
 					<?php  $dato = "";$dato = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? 1 : 0;?>
@@ -95,9 +100,33 @@
       </div>
 		</div>
 </div>
+<style media="screen">
+
+	 .checkmark {
+		 display: none;
+		 font-size: 20px;
+	 }
+	 .checkmark.visible {
+		 display: inline;
+		 color: green;
+		 animation: fadeIn 0.5s;
+	 }
+	 .list-item.validated {
+		 animation: popIn 0.5s;
+	 }
+	 @keyframes fadeIn {
+		 from { opacity: 0; }
+		 to { opacity: 1; }
+	 }
+	 @keyframes popIn {
+		 0% { transform: scale(0.5); opacity: 0; }
+		 100% { transform: scale(1); opacity: 1; }
+	 }
+</style>
 <script type="text/javascript">
 function insertardatosus(accion){
 	//alert(accion);
+
 	var usuario = document.getElementById("usuario").value;
 	var nombre_usuario = document.getElementById("nombre_usuario").value;
 	var ap_usuario = document.getElementById("ap_usuario").value;
@@ -110,6 +139,11 @@ function insertardatosus(accion){
 	var tipo_usuario = document.getElementById("tipo_usuario").value;
 	var contrasena_usuario = document.getElementById("contraseña_usuario").value;
 	var confirmar_contrasena_usuario = document.getElementById("confirmar_contraseña_usuario").value;
+	if(usuario==""||nombre_usuario==""||ap_usuario==""||am_usuario==""
+		 	||direccion_usuario==""){
+		ingresedatos();
+		return;
+	}
 	if(tipo_usuario == "seleccione"){
 		selectUsuario();
 		return;
@@ -120,12 +154,13 @@ function insertardatosus(accion){
 		 return;
 		}
 	}
-	if(usuario==""||nombre_usuario==""||ap_usuario==""||am_usuario==""
-		 	||direccion_usuario==""){
-		ingresedatos();
+
+	var result = validarLetras()
+	if(result == 0){
+		eliminar();
 		return;
 	}
-
+	eliminar();
 	var pagina="";
 	var listarDeCuanto="";
 	var buscar="";
@@ -291,22 +326,127 @@ function selectUsuario(){
 		var con = "";
 		if(cam == true){
 			con += "<br><div class='input-group'>";
-				con += "	<input class='form-control' type='password'  id='contraseña_usuario' name ='contraseña_usuario' placeholder='contraseña nueva'>";
-				con += "</div> <br>";
+				con += "	<input class='form-control' type='password'  id='contraseña_usuario' name ='contraseña_usuario' onkeyup='comprovando()' placeholder='contraseña nueva'>";
+				con += "<button class='btn btn-outline-secondary che' type='button' id='che' onclick='mostrar()'>";
+				con += "<img src='../imagenes/ojo.ico'style='height: 25px;width: 25px;'>";
+				con += "</button></div>";
+				con += "<span id='message' class='error'></span>";
+				con += "<div id='validandoContrasena'></div>";
 				con += "<div class='input-group'>";
-				con += "	<input class='form-control' type='password'  id='confirmar_contraseña_usuario' name ='confirmar_contraseña_usuario' placeholder='confirmar contraseña usuario'>";
-				con += "</div>";
+				con += "	<input class='form-control' type='password'  id='confirmar_contraseña_usuario' name ='confirmar_contraseña_usuario' onkeyup='validarIguales()'placeholder='confirmar contraseña usuario'>";
+				con += "</div><span id='message_conf'></span>";
 			cam = false;
 		}else{
-			con += "<div class='input-group'>";
-				con += "	<input class='form-control' type='hidden'  id='contraseña_usuario' name ='contraseña_usuario' placeholder='contraseña nueva'>";
-				con += "</div>";
-				con += "<div class='input-group'>";
-				con += "	<input class='form-control' type='hidden'  id='confirmar_contraseña_usuario' name ='confirmar_contraseña_usuario' placeholder='confirmar contraseña usuario'>";
-				con += "</div>";
+			con = '';
 			cam = true;
 		}
 		$("#campo").html(con);
+		if(cam == false){
+				ver();
+		}
+
+	}
+	ver();
+	function comprovando(){
+		const passwordInput = document.getElementById('contraseña_usuario');
+    const uppercaseCheck = document.getElementById('check-uppercase');
+    const lowercaseCheck = document.getElementById('check-lowercase');
+    const numberCheck = document.getElementById('check-number');
+    const specialCheck = document.getElementById('check-special');
+		 const lengthCheck = document.getElementById('check-length');
+
+    const uppercaseItem = document.getElementById('uppercase');
+    const lowercaseItem = document.getElementById('lowercase');
+    const numberItem = document.getElementById('number');
+    const specialItem = document.getElementById('special');
+		const lengthItem = document.getElementById('length');
+    passwordInput.addEventListener('input', function() {
+      const password = passwordInput.value;
+			const hasMinLength = password.length >= 8;
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /[0-9]/.test(password);
+      const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+      // Actualizar estado visual de cada criterio
+      updateCheckmark(hasUpperCase, uppercaseCheck, uppercaseItem);
+      updateCheckmark(hasLowerCase, lowercaseCheck, lowercaseItem);
+      updateCheckmark(hasNumbers, numberCheck, numberItem);
+      updateCheckmark(hasSpecialChars, specialCheck, specialItem);
+
+	    updateCheckmark(hasMinLength, lengthCheck, lengthItem);
+    });
+
+
+	}
+	function updateCheckmark(condition, checkmarkElement, listItemElement) {
+		if (condition) {
+			checkmarkElement.classList.add('visible');
+			listItemElement.classList.add('validated');
+		} else {
+			checkmarkElement.classList.remove('visible');
+			listItemElement.classList.remove('validated');
+		}
+	}
+
+	function validarLetras(){
+		const password = document.getElementById("contraseña_usuario").value;
+		 const hasUpperCase = /[A-Z]/.test(password);
+		 const hasLowerCase = /[a-z]/.test(password);
+		 const hasNumbers = /[0-9]/.test(password);
+		 const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+		 var c = 1;
+		 if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChars) {
+			  $("#message").html("<div class = 'alert alert-danger'>La contraseña debe contener mayúsculas, minúsculas, números, caracteres especiales y al menos 8 caracteres.</div>");
+			 event.preventDefault();
+			 c = 0;
+		 } else {
+			 $("#message").html("<div class = 'alert alert-success'>La contraseña es valida</div>");
+			 c= 1;
+		 }
+		 return c;
+	}
+	function eliminar(){
+		setTimeout(function() {
+			 $("#message").html("");
+		}, 3000);
+	}
+	function mostrar() {
+    var contrasena = document.getElementById("contraseña_usuario");
+    var bx = document.querySelector(".che");
+    if(contrasena.type === 'password'){
+      contrasena.type = 'text';
+    }else{
+      contrasena.type = 'password';
+    }
+  }
+	function validarIguales(){
+		  var contrasena = document.getElementById("contraseña_usuario").value;
+			var conf_contrasena = document.getElementById("confirmar_contraseña_usuario").value;
+			if(contrasena == conf_contrasena){
+					$("#message_conf").html("<div class = 'alert alert-success'>La confirmación es correcta</div>");
+						eliminarConfirmar();
+			}else{
+					$("#message_conf").html("<div class = 'alert alert-danger'>La confirmación no es correcto</div>");
+			}
+
+	}
+	function eliminarConfirmar(){
+		setTimeout(function() {
+			 $("#message_conf").html("");
+		}, 3000);
+	}
+	function ver(){
+		var con = '';
+		con +="<ul style='font-size:12px'>";
+		con +=" La contraseña debe contener:";
+		con +="	<li id='uppercase'>Letras mayúscula <span class='checkmark' id='check-uppercase'>&#10003;</span></li>";
+		con +="	<li id='lowercase'>Letras minúscula <span class='checkmark' id='check-lowercase'>&#10003;</span></li>";
+		con +="	<li id='number'>Números <span class='checkmark' id='check-number'>&#10003;</span></li>";
+		con +="	<li id='special'>Carácteres especiales <span class='checkmark' id='check-special'>&#10003;</span></li>";
+		con += "<li id='length' class='list-item'>Al menos 8 caracteres <span class='checkmark' id='check-length'>&#10003;</span></li>";
+    con +="	</ul>";
+		$("#validandoContrasena").html(con);
 	}
 </script>
 <?php require ("../librerias/footeruni.php"); ?>
