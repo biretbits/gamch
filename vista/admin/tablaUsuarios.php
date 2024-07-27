@@ -1,5 +1,6 @@
 <?php require("../librerias/headeradmin1.php"); ?>
 <br>
+<div class="container">
 <div class="container mt-5">
   <h2>Usuarios</h2>
   <div class="row">
@@ -176,7 +177,7 @@ echo "</div>
   }
    ?>
  </div>
-
+ </div>
 
 <script type="text/javascript">
 function BuscarUsuarios(page){
@@ -302,5 +303,4 @@ function BuscarUsuarios(page){
   	});
    }
 </script>
-
 <?php require("../librerias/footeruni.php"); ?>

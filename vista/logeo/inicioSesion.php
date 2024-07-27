@@ -34,8 +34,15 @@
 				</div>
 			</div>
 		</div>
-
-<br>
+    <br>
+            <div class="container px-5 text-center" style='background-color:DarkKhaki; opacity: 0.7;border-radius: 50%;'>
+                <div class="row gx-6 justify-content-center">
+                    <div class="col-xl-10">
+                        <div class="h3 mb-6"style='color:black'>"Más vale prevenir que curar."</div>
+                    </div>
+                </div>
+            </div>
+<br><br><br><br><br><br>
 <script type="text/javascript">
   document.querySelector('#contrasena').addEventListener ('keypress',function(e){
   validar(e);
@@ -123,8 +130,6 @@
 </script>
 
 </div>
-</body>
-</html>
 
 <style>
 	body{

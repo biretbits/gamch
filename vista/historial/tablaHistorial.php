@@ -3,6 +3,7 @@
       $diario = $_SESSION["diario"];
       $_SESSION['this']=$tablahis;
 ?>
+<div class="container">
 <div class="container mt-5">
   <?php echo "<div style='background-color:beige;color:red'>ruta: / <a href='$diario'>Registro Diario</a> / <a href='#' onclick='accionHitorialVer($paciente_rd,$cod_rd)'>Historial</a></div>"; ?>
   <h4>Historial Clinico</h4>
@@ -232,6 +233,7 @@ echo "</div>
 
   }
    ?>
+ </div>
  </div>
  <!-- modal de seleccion de fechas-->
 <script type="text/javascript">

@@ -1,5 +1,47 @@
 
+<header class="masthead "  style='background: linear-gradient(to right, PapayaWhip, PaleGreen);'>
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center">
+            <div class="col-lg-6 ">
+                <!-- Mashead text and app badges-->
+                <div class="mb-5 mb-lg-0 text-center text-lg-start">
+                    <h1 class="display-1 lh-1 mb-3">Centro de Salud. Cala Cala</h1>
+                    <p class="lead fw-normal text-muted mb-5">Bienvenidos a nuestro centro de salud, donde tu bienestar es nuestra prioridad.</p>
+                    <div class="d-flex flex-column flex-lg-row align-items-center">
+                        <a class="me-lg-3 mb-4 mb-lg-0" href="#!"><img class="app-badge" src="assets/img/google-play-badge.svg" alt="..." /></a>
+                        <a href="#!"><img class="app-badge" src="assets/img/app-store-badge.svg" alt="..." /></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <!-- Masthead device mockup feature-->
+                <div class="masthead-device-mockup">
+                    <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="circleGradient" gradientTransform="rotate(45)">
+                                <stop class="gradient-start-color" offset="0%"></stop>
+                                <stop class="gradient-end-color" offset="100%"></stop>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="50"></circle></svg
+                    ><div class="device-wrapper">
+                        <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
+                              <img src="imagenes/fig.png" alt="Imagen Salud" class="screen bg-black img-fluid rounded-circle colorsh"  style="max-height: 100%;max-width:100%">
 
+                                <!-- PUT CONTENTS HERE:-->
+                                <!-- * * This can be a video, image, or just about anything else.-->
+                                <!-- * * Set the max width of your media to 100% and the height to-->
+                                <!-- * * 100% like the demo example below.-->
+                              <!--  <video muted="muted" autoplay="" loop="" style="max-width: 100%; height: 100%"><source src="assets/img/demo-screen.mp4" type="video/mp4" /></video>-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!--
 <div class="colortex">
   <div class="row">
 
@@ -17,7 +59,7 @@
        <p class="lead">Bienvenidos a nuestro centro de salud, donde tu bienestar es nuestra prioridad.</p>
        <div class="departamentos_visitados">
          <?php
-         if(isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] == 'admision'){
+         /*if(isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] == 'admision'){
            $resul =select_registro_diario();
            while($fi=mysqli_fetch_array($resul)){
              //echo " , ".$fi["servicio_rd"];
@@ -41,18 +83,19 @@
              </div>
           </div>
           ";
-        }?>
+        }*/?>
        </div>
    </div>
   </div>
-  </div>
+  </div>-->
+ 
   <div class="row">
   <?php if(!isset($_SESSION['tipo_usuario'])){
-        ?><div class="alert alert-success border border-success border-3" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);">
-            <div class="justify-content-center d-flex " style="height: 100vh;">
+        ?><div class="alert alert-success border border-success border-3" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);background: linear-gradient(to right, OldLace,white, Gainsboro);">
+            <div class="justify-content-center d-flex ">
               <div class="col-lg-5 col-md-6 col-12">
                 <div class="card" style="background-color:khaki">
-                  <div class="card-body" style="background: linear-gradient(to right, #ff7e5f, #feb47b);">
+                  <div class="card-body" style="background: linear-gradient(to right, black, #feb47b);">
                     <center>
                       <h3 Style='color:blue;text-shadow: 2px 2px 2px black;'>Acceso</h3></center>
                     <center>
@@ -84,6 +127,90 @@
         <?php } ?>
     </div>
 </div>
+<aside class="text-center bg-gradient-primary-to-secondary">
+            <div class="container px-5">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-xl-8">
+                        <div class="h2 fs-1 text-white mb-4">"An intuitive solution to a common problem that we all face, wrapped up in a single app!"</div>
+                        <img src="assets/img/tnw-logo.svg" alt="..." style="height: 3rem" />
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <section id="features">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-8 order-lg-1 mb-5 mb-lg-0">
+                        <div class="container-fluid px-5">
+                            <div class="row gx-5">
+                                <div class="col-md-6 mb-5">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt">Device Mockups</h3>
+                                        <p class="text-muted mb-0">Ready to use HTML/CSS device mockups, no Photoshop required!</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-5">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt">Flexible Use</h3>
+                                        <p class="text-muted mb-0">Put an image, video, animation, or anything else in the screen!</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-5 mb-md-0">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt">Free to Use</h3>
+                                        <p class="text-muted mb-0">As always, this theme is free to download and use for any purpose!</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- Feature item-->
+                                    <div class="text-center">
+                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
+                                        <h3 class="font-alt">Open Source</h3>
+                                        <p class="text-muted mb-0">Since this theme is MIT licensed, you can use it commercially!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 order-lg-0">
+                        <!-- Features section device mockup-->
+                        <div class="features-device-mockup">
+                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="circleGradient" gradientTransform="rotate(45)">
+                                        <stop class="gradient-start-color" offset="0%"></stop>
+                                        <stop class="gradient-end-color" offset="100%"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="50" r="50"></circle></svg
+                            ><svg class="shape-1 d-none d-sm-block" viewBox="0 0 240.83 240.83" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03" transform="translate(120.42 -49.88) rotate(45)"></rect>
+                                <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03" transform="translate(-49.88 120.42) rotate(-45)"></rect></svg
+                            ><svg class="shape-2 d-none d-sm-block" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"></circle></svg>
+                            <div class="device-wrapper">
+                                <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
+                                    <div class="screen bg-black">
+                                        <!-- PUT CONTENTS HERE:-->
+                                        <!-- * * This can be a video, image, or just about anything else.-->
+                                        <!-- * * Set the max width of your media to 100% and the height to-->
+                                        <!-- * * 100% like the demo example below.-->
+                                        <video muted="muted" autoplay="" loop="" style="max-width: 100%; height: 100%"><source src="assets/img/demo-screen.mp4" type="video/mp4" /></video>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 <script type="text/javascript">
 document.querySelector('#contrasena').addEventListener ('keypress',function(e){
 validar(e);
