@@ -7,7 +7,8 @@ $_SESSION["diario"] = $RegistroDiario;?>
     font-size: 17px
   }
 </style>
-<div class="container mt-5">
+<div class="container main-content">
+<div class="container">
   <?php
   echo "<div id='color1'><a href='$RegistroDiario'id='co'>Registro Diario</a>></div>"; ?>
   <div class="row" >
@@ -275,6 +276,7 @@ echo "</div>
 
   }
    ?>
+ </div>
  </div>
  <!-- modal de seleccion de fechas-->
 

@@ -1,5 +1,5 @@
 
-</body>
+</div>
 
 <footer class="bg-black text-center py-5">
     <div class="container px-5">
@@ -12,16 +12,14 @@
             <a href="#!">FAQ</a>
         </div>
     </div>
+</body>
+
 </footer><style type="text/css">
 footer {
-    position:absolute;
-   left:0px;
-   bottom:0px;
-   height:30px;
-   width:100%;
-   background:black;color:white;
-   text-align: center;
-   padding: 30px 0px;
-   font-size:12px;
-  }
+  flex-shrink: 0;
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
 </style>

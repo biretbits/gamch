@@ -2,7 +2,8 @@
 <?php $Registro=$_SERVER["REQUEST_URI"];
       $diario = $_SESSION["diario"];
 ?>
-<div class="container mt-5">
+<div class="container main-content">
+<div class="container">
   <div class="row">
     <div class="col-md-10 offset-md-1">
       <?php echo "<div style='background-color:beige;color:red'>ruta: / <a href='$diario'>Registro Diario</a> / <a href='$Registro'>Registrar</a></div>"; ?>
@@ -51,13 +52,12 @@
               <div class="col-md-4 mb-3">
                 <label for="servicio" class="form-label">Servicio</label>
                 <select id='servicio' name="servicio" class="form-select">
-                  <option value="">Seleccione servicio</option>
-                  <option>Enfermería</option>
-                  <option>Consultorio Odontológico</option>
-                  <option>Servicio del PAI</option>
-                  <option>Crecimiento y desarrollo</option>
-                  <option>Consultorio Médico</option>
-                  <option>Farmacia</option>
+                    <option value="">Seleccione servicio</option>
+                  <?php
+                    while($row=mysqli_fetch_array($servicios)){
+                      echo "<option value='".$row['cod_servicio']."'>".$row['nombre_servicio']."</option>";
+                    }
+                   ?>
                 </select>
               </div>
               <div class="col-md-4 mb-3">
@@ -95,6 +95,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 <style media="screen">
 #resultado,#resultadoadmision,#resultadomedico{
@@ -370,7 +371,7 @@ function buscarResponsableAdmision() {
         		ingreseNPdatos();
         		return;
         	}
-        
+
           if(servicio == "Seleccione servicio" || servicio == ""){
             seleccione();
             return

@@ -5,7 +5,7 @@
             <div class="col-lg-6 ">
                 <!-- Mashead text and app badges-->
                 <div class="mb-5 mb-lg-0 text-center text-lg-start">
-                    <h1 class="display-1 lh-1 mb-3">Centro de Salud. Cala Cala</h1>
+                    <h1 class="display-1 lh-1 mb-3 colorful-text">Centro de Salud. Cala Cala</h1>
                     <p class="lead fw-normal text-muted mb-5">Bienvenidos a nuestro centro de salud, donde tu bienestar es nuestra prioridad.</p>
                     <div class="d-flex flex-column flex-lg-row align-items-center">
                         <a class="me-lg-3 mb-4 mb-lg-0" href="#!"><img class="app-badge" src="assets/img/google-play-badge.svg" alt="..." /></a>
@@ -16,17 +16,8 @@
             <div class="col-lg-6">
                 <!-- Masthead device mockup feature-->
                 <div class="masthead-device-mockup">
-                    <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="circleGradient" gradientTransform="rotate(45)">
-                                <stop class="gradient-start-color" offset="0%"></stop>
-                                <stop class="gradient-end-color" offset="100%"></stop>
-                            </linearGradient>
-                        </defs>
-                        <circle cx="50" cy="50" r="50"></circle></svg
-                    ><div class="device-wrapper">
-                        <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-                              <img src="imagenes/fig.png" alt="Imagen Salud" class="screen bg-black img-fluid rounded-circle colorsh"  style="max-height: 100%;max-width:100%">
+                    <div class="device-wrapper"  style="background-color:rgba(255,255,255,0.5);border-radius:200px">
+                              <img src="imagenes/nuevo.png" alt="Imagen Salud" class="screen bg-black img-fluid rounded-circle colorsh"  style="height:400px;max-height: 100%;max-width:100%">
 
                                 <!-- PUT CONTENTS HERE:-->
                                 <!-- * * This can be a video, image, or just about anything else.-->
@@ -34,12 +25,24 @@
                                 <!-- * * 100% like the demo example below.-->
                               <!--  <video muted="muted" autoplay="" loop="" style="max-width: 100%; height: 100%"><source src="assets/img/demo-screen.mp4" type="video/mp4" /></video>-->
 
-                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <style media="screen">
+    .colorful-text {
+         font-size: 4em;
+         font-weight: bold;
+         background: linear-gradient(45deg, #f06, #4a90e2, #50e3c2, #f5a623);
+         background-clip: text;
+         color: transparent;
+         text-shadow: 1px 2px 4px rgba(50, 0, 100, 0.3);
+         animation: textAnimation 3s infinite linear;
+
+     }
+    </style>
 </header>
 <!--
 <div class="colortex">
@@ -88,7 +91,7 @@
    </div>
   </div>
   </div>-->
- 
+
   <div class="row">
   <?php if(!isset($_SESSION['tipo_usuario'])){
         ?><div class="alert alert-success border border-success border-3" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);background: linear-gradient(to right, OldLace,white, Gainsboro);">
@@ -128,15 +131,52 @@
     </div>
 </div>
 <aside class="text-center bg-gradient-primary-to-secondary">
+  <?php   $fecha_actual = date('Y-m-d');
+    echo "<h6>Total de pacientes atendidos por servicios hoy ".$fecha_actual."</h6>"; ?>
             <div class="container px-5">
-                <div class="row gx-5 justify-content-center">
-                    <div class="col-xl-8">
-                        <div class="h2 fs-1 text-white mb-4">"An intuitive solution to a common problem that we all face, wrapped up in a single app!"</div>
-                        <img src="assets/img/tnw-logo.svg" alt="..." style="height: 3rem" />
-                    </div>
-                </div>
+
+                      <?php
+                      require_once('sql.php');
+                    //  if(isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] == 'admision'){
+                        $servicios = selecionarServicios();
+                        $resul =select_registro_diario();
+                        $diccionario_servicio = array();
+                        while($fi=mysqli_fetch_array($servicios)){
+                          $diccionario_servicio[$fi['cod_servicio']] = array("contar" => 0, "nombre" => $fi['nombre_servicio']);
+                        }
+                        while($fi=mysqli_fetch_array($resul)){
+                          $diccionario_servicio[$fi["servicio_rd"]]['contar']+=1;
+
+                        }
+                        $servicios = selecionarServicios();
+
+                          echo "<div class='row'>";
+
+                        while($fi=mysqli_fetch_array($servicios)){
+                          echo "<div class='col-xl-4 col-md-7 mb-5'>
+                              <div class='card border-primary shadow h-100 py-2'>
+                                  <div class='card-body'>
+                                      <div class='row no-gutters align-items-center'>
+                                          <div class='col mr-2'>
+                                              <div class='text-xs font-weight-bold text-primary text-uppercase'>
+                                                  ".$diccionario_servicio[$fi["cod_servicio"]]['nombre']."</div>
+                                              <div class='h5 mb-0 font-weight-bold text-gray-800'>".$diccionario_servicio[$fi["cod_servicio"]]['contar']." Pacientes</div>
+                                          </div><div class='col-md-6 mx-auto'>
+                                            <img src='imagenes/pacienteuser.png' height='200' width='200' class='img-fluid mx-auto d-block' alt='Imagen centrada'>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
+                       ";
+                     }
+                     echo "</div>";
+                     //}
+                     ?>
+
             </div>
-        </aside>
+</aside>
         <section id="features">
             <div class="container px-5">
                 <div class="row gx-5 align-items-center">

@@ -18,20 +18,33 @@
 
 </head>
 <style type="text/css">
+html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+  }
 
-html {
-  position: relative;
-}
+  body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+  }
+  .content {
+    flex: 1 0 auto;
+  }
+  .main-content {
+      padding-top: 80px; /* Ajusta este valor según la altura de tu navbar */
+  }
 </style>
-<body   id="page-top">
-  
-<?php
-$name = "";
-if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
-  $name = $_SESSION["usuario"];
-}
+<body  id="page-top">
+  <div class="content">
+  <?php
+  $name = "";
+  if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
+    $name = $_SESSION["usuario"];
+  }
 
-echo "<nav style=' border-bottom: 1px solid silver;' class='navbar navbar-expand-lg navbar-light fixed-top shadow-sm' id='mainNav'>
+  echo "<nav style=' border-bottom: 1px solid silver;' class='navbar navbar-expand-lg navbar-light fixed-top shadow-sm' id='mainNav'>
     <div class='container px-5'>
         <a href='#' class='navbar-brand fw-bold'><img src='imagenes/cds.ico' height='30' width='30' class='rounded-circle'>Centro De Salud</a>
 

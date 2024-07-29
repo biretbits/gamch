@@ -23,6 +23,14 @@ class Servicio
     mysqli_close($this->con);
   }
 
+  public function Selecionar_servicios(){
+    $sql = "select *from servicio";
+    $resul = $this->con->query($sql);
+    // Retornar el resultado
+    return $resul;
+    mysqli_close($this->con);
+  }
+
 }
 
 

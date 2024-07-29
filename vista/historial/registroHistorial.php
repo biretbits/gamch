@@ -6,7 +6,9 @@ $fi = mysqli_fetch_array($re);
     $tablahis=$_SESSION['this'];
       $diario = $_SESSION["diario"];
 ?>
-<div class="container mt-5">
+
+<div class="container main-content">
+<div class="container">
   <div class="row">
     <div class="col-md-10 offset-md-1">
       <?php echo "<div style='background-color:beige;color:red'>ruta: / <a href='$diario'>Registro Diario</a> / <a href='#' onclick='accionHitorialVer($paciente_rd,$cod_rd)'>Historial</a> / <a href='#'onclick='RegistroHistorial($paciente_rd,$cod_rd)'>Registro Historial</a></div>"; ?>
@@ -150,6 +152,7 @@ $fi = mysqli_fetch_array($re);
       </div>
     </div>
   </div>
+</div>
 </div>
 <style media="screen">
 #resultado12{

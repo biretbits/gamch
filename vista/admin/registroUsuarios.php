@@ -5,10 +5,9 @@
 	}
 
 ?>
-<br>
-<div class="modal-dialog text-center" >
-	<div class="panel-body col-xl-10 col-lg-10 col-md-9">
-    <div class="modal-content" style='padding:20px 10px'>
+<div class="container main-content">
+	<div class="container d-flex justify-content-center align-items-center">
+	   <div class="card p-4" style="max-width: 400px; width: 100%;">
     	<center>
         <h2 Style='color:blue;text-shadow: 2px 2px 2px black;'>
 					<?php $smg = "";$msg = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? "Actualizar usuario" : "Registro de usuario"; echo $msg;?></h2>
@@ -99,7 +98,7 @@
 
       </div>
 		</div>
-</div>
+
 <style media="screen">
 
 	 .checkmark {
@@ -449,4 +448,6 @@ function selectUsuario(){
 		$("#validandoContrasena").html(con);
 	}
 </script>
+</div>
+
 <?php require ("../librerias/footeruni.php"); ?>

@@ -1,5 +1,6 @@
 <?php
 require_once '../modelo/registroDiario.php';
+require_once '../modelo/servicio.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
@@ -240,6 +241,8 @@ echo "<div class='row'>
   }
 
   public function visualizarFormularioRegistroDiario(){
+    $ser = new Servicio();
+    $servicios = $ser->Selecionar_servicios();
     require ("../vista/registroDiario/registroDiario.php");
   }
   public function buscarBDpaciente($nombre){
@@ -364,6 +367,8 @@ echo "<div class='row'>
     }
     $nombreP = $s->selectNombreUsuario($fe["pe_brinda_atencion_rd"]);
     $nombreR = $s->selectNombreUsuario($fe["resp_admision_rd"]);
+    $ser = new Servicio();
+    $servicios = $ser->Selecionar_servicios();
     require("../vista/registroDiario/ActualizarregistroDiario.php");
   }
 

@@ -1,7 +1,7 @@
 <?php require("../librerias/headeradmin1.php"); ?>
-<br>
+
+<div class="container main-content">
 <div class="container">
-<div class="container mt-5">
   <h2>Usuarios</h2>
   <div class="row">
       <label for="selectPage" class="form-label">Page</label>

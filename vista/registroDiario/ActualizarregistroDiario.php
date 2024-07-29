@@ -1,5 +1,7 @@
 <?php require("../librerias/headeradmin1.php"); ?>
-<div class="container mt-5">
+
+<div class="container main-content">
+<div class="container">
   <div class="row">
     <div class="col-md-10 offset-md-1">
       <div class="card">
@@ -58,30 +60,25 @@
         </div>
         <div class="card-body">
           <form>
-            <?php
-            $as = ["Seleccione servicio","Enfermería","Consultorio Odontológico","Servicio del PAI","Crecimiento y desarrollo","Consultorio Médico","Farmacia"]
-             ?>
+
             <div class="row">
               <div class="col-md-4 mb-3">
                 <label for="servicio" class="form-label">Servicio</label>
                 <select id='servicio' name="servicio" class="form-select">
+                  <option value="">Seleccione servicio</option>
                   <?php
                 if(isset($fe["servicio_rd"]) && is_string($fe["servicio_rd"])) {
-                  foreach ($as as $servicio) {
-                    if($servicio == $fe["servicio_rd"]){
-                      echo "<option selected>$servicio</option>";
+                  while($row=mysqli_fetch_array($servicios)) {
+                    if($row['cod_servicio'] == $fe["servicio_rd"]){
+                      echo "<option value='".$row['cod_servicio']."' selected>".$row['nombre_servicio']."</option>";
                     }else{
-                      echo "<option >$servicio</option>";
+                      echo "<option value='".$row['cod_servicio']."'>".$row['nombre_servicio']."</option>";
                     }
                   }
                 }else{
-                  echo "<option value=''>Seleccione servicio</option>
-                    <option >Enfermería</option>
-                    <option >Consultorio Odontológico</option>
-                    <option >Servicio del PAI</option>
-                    <option >Crecimiento y desarrollo</option>
-                    <option >Consultorio Médico</option>
-                    <option >Farmacia</option>";
+                  while($row=mysqli_fetch_array($servicios)){
+                    echo "<option value='".$row['cod_servicio']."'>".$row['nombre_servicio']."</option>";
+                  }
                 }
                 ?>
               </select>
@@ -126,6 +123,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 <style media="screen">
 #resultado,#resultadoadmision,#resultadomedico{
