@@ -277,9 +277,7 @@ class UsuarioControlador{
     }
   }
 
-  public function VerServicios(){
-    require("../vista/servicio/RegistroServicio.php");
-  }
+
 }
 
 
@@ -321,7 +319,7 @@ class UsuarioControlador{
           $_POST["profesion_usuario"],
           $_POST["especialidad_usuario"],
           $_POST["tipo_usuario"],
-          $_POST["contraseña_usuario"],
+          $_POST["contrasena_usuario"],
           $_POST["cod_usuario"],
           $_POST["accion"]
           );
@@ -346,7 +344,5 @@ class UsuarioControlador{
   if(isset($_GET["accion"]) && $_GET["accion"] == "fm2"){
     $uc->visualizarTablaUsuarios($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
   }
-  if(isset($_GET["accion"]) && $_GET["accion"] == "rsr"){
-    $uc->VerServicios();
-  }
+
 ?>

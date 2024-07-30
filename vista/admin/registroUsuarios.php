@@ -66,19 +66,12 @@
 								 ?>
 			        </select>
             </div> <br>
-						<?php
-								if(isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])){
-									echo "<center>";
-										echo "<input class='btn btn-warning'  type='button' id='submit' value = 'Cambiar Contraseña' onclick='CamposContrasena()'>";
-									echo "</center>";
-								}else{
-						 ?>
+
 			            <div class='input-group'>
-			              <input class="form-control" type="password"  id="contraseña_usuario" name ="contraseña_usuario" placeholder="contraseña_usuario" onkeyup="comprovando()"value='<?php $smg = ""; $msg = (isset($fe["contrasena_usuario"]) && is_string($fe["contrasena_usuario"])) ? $fe["contrasena_usuario"] :""; echo $msg;?>'>
+			              <input class="form-control" type="password"  id="contrasena_usuario" name ="contrasena_usuario" placeholder="contraseña del usuario" onkeyup="comprovando()" value=''>
 										<button class="btn btn-outline-secondary che" type="button" id="che" onclick="mostrar()">
 											<img src='../imagenes/ojo.ico'style='height: 25px;width: 25px;'>
 										</button>
-
 								  </div>
 										<span id="message" class="error"></span>
 									<div id='validandoContrasena'>
@@ -88,7 +81,7 @@
 											<input class="form-control" type="password"  id="confirmar_contraseña_usuario" name ="confirmar_contraseña_usuario" onkeyup="validarIguales()" placeholder="confirmar_contraseña_usuario">
 
 									</div>	<span id='message_conf'></span>
-					<?php } ?>
+
 					<div id="campo">
 
 					</div>
@@ -136,8 +129,11 @@ function insertardatosus(accion){
 	var profesion_usuario = document.getElementById("profesion_usuario").value;
 	var especialidad_usuario = document.getElementById("especialidad_usuario").value;
 	var tipo_usuario = document.getElementById("tipo_usuario").value;
-	var contrasena_usuario = document.getElementById("contraseña_usuario").value;
+
+	var contrasena_usuario = document.getElementById("contrasena_usuario").value;
+
 	var confirmar_contrasena_usuario = document.getElementById("confirmar_contraseña_usuario").value;
+
 	if(usuario==""||nombre_usuario==""||ap_usuario==""||am_usuario==""
 		 	||direccion_usuario==""){
 		ingresedatos();
@@ -154,30 +150,39 @@ function insertardatosus(accion){
 		}
 	}
 
-	var result = validarLetras()
-	if(result == 0){
-		eliminar();
-		return;
-	}
-	eliminar();
+
+
 	var pagina="";
 	var listarDeCuanto="";
 	var buscar="";
 	var cod_usuario="";
+	//alert(accion);
 	if(accion == 1){//1 es actualizae 0 es registrar
 		if(contrasena_usuario == "" && confirmar_contrasena_usuario == ""){
 		}else{
 			if(contrasena_usuario != confirmar_contrasena_usuario){
+				//alert(456);
 				confirmarcontrasena();
 				return;
+			}else{
+				//validando si la contraseña tiene letras numeros mayusculas y etc
+				var result = validarLetras()
+				if(result == 0){
+					eliminar();
+					return;
+				}
 			}
 		}
-
 		 pagina = document.getElementById("pagina").value;
 	 	 listarDeCuanto = document.getElementById("listarDeCuanto").value;
 		 buscar = document.getElementById("buscar").value;
 		 cod_usuario = document.getElementById("cod_usuario").value;
 	}else{
+		var result = validarLetras()
+		if(result == 0){
+			eliminar();
+			return;
+		}
 		if(contrasena_usuario != confirmar_contrasena_usuario && contrasena_usuario != "" && confirmar_contrasena_usuario !=""){
 			confirmarcontrasena();
 			return;
@@ -194,7 +199,7 @@ function insertardatosus(accion){
 	datos.append("profesion_usuario",profesion_usuario);
 	datos.append("especialidad_usuario",especialidad_usuario);
 	datos.append("tipo_usuario",tipo_usuario);
-	datos.append("contraseña_usuario",contrasena_usuario);
+	datos.append("contrasena_usuario",contrasena_usuario);
 	datos.append("cod_usuario",cod_usuario);
 	datos.append("accion",accion);
 
@@ -320,34 +325,10 @@ function selectUsuario(){
       location.href="../controlador/usuario.controlador.php?accion=vut";
      }, 1500);
   }
-	var cam  = true;
-	function CamposContrasena(){
-		var con = "";
-		if(cam == true){
-			con += "<br><div class='input-group'>";
-				con += "	<input class='form-control' type='password'  id='contraseña_usuario' name ='contraseña_usuario' onkeyup='comprovando()' placeholder='contraseña nueva'>";
-				con += "<button class='btn btn-outline-secondary che' type='button' id='che' onclick='mostrar()'>";
-				con += "<img src='../imagenes/ojo.ico'style='height: 25px;width: 25px;'>";
-				con += "</button></div>";
-				con += "<span id='message' class='error'></span>";
-				con += "<div id='validandoContrasena'></div>";
-				con += "<div class='input-group'>";
-				con += "	<input class='form-control' type='password'  id='confirmar_contraseña_usuario' name ='confirmar_contraseña_usuario' onkeyup='validarIguales()'placeholder='confirmar contraseña usuario'>";
-				con += "</div><span id='message_conf'></span>";
-			cam = false;
-		}else{
-			con = '';
-			cam = true;
-		}
-		$("#campo").html(con);
-		if(cam == false){
-				ver();
-		}
 
-	}
 	ver();
 	function comprovando(){
-		const passwordInput = document.getElementById('contraseña_usuario');
+		const passwordInput = document.getElementById('contrasena_usuario');
     const uppercaseCheck = document.getElementById('check-uppercase');
     const lowercaseCheck = document.getElementById('check-lowercase');
     const numberCheck = document.getElementById('check-number');
@@ -389,7 +370,7 @@ function selectUsuario(){
 	}
 
 	function validarLetras(){
-		const password = document.getElementById("contraseña_usuario").value;
+		const password = document.getElementById("contrasena_usuario").value;
 		 const hasUpperCase = /[A-Z]/.test(password);
 		 const hasLowerCase = /[a-z]/.test(password);
 		 const hasNumbers = /[0-9]/.test(password);
@@ -411,7 +392,7 @@ function selectUsuario(){
 		}, 3000);
 	}
 	function mostrar() {
-    var contrasena = document.getElementById("contraseña_usuario");
+    var contrasena = document.getElementById("contrasena_usuario");
     var bx = document.querySelector(".che");
     if(contrasena.type === 'password'){
       contrasena.type = 'text';
@@ -420,7 +401,7 @@ function selectUsuario(){
     }
   }
 	function validarIguales(){
-		  var contrasena = document.getElementById("contraseña_usuario").value;
+		  var contrasena = document.getElementById("contrasena_usuario").value;
 			var conf_contrasena = document.getElementById("confirmar_contraseña_usuario").value;
 			if(contrasena == conf_contrasena){
 					$("#message_conf").html("<div class = 'alert alert-success'>La confirmación es correcta</div>");

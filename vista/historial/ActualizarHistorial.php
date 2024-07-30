@@ -1,29 +1,50 @@
-<?php require("../librerias/headeradmin1.php");
+<?php require("../librerias/headeradmin1.php");?>
+<?php
+$nombre = '';
+$ap = '';
+$am = '';
 if ($resul && count($resul) > 0){
     $i = 0;
-  foreach ($resul as $fi){
-    $datosResponsable = $fi['datos_responsable_familia'];
-    foreach ($datosResponsable as $resFamiliar) {
-      echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
-    }
-    $datospaciente=$fi["paciente_rd_nombre"];
-    foreach ($datospaciente as $paciente) {
-      echo $paciente["nombre_usuario_re"]." ".$paciente["ap_usuario_re"]." ".$paciente["am_usuario_re"];
-    }
+    foreach ($resul as $fi) {
+      // Procesar datos responsables
+      $datosResponsable = $fi['datos_responsable_familia'];
+      /*foreach ($datosResponsable as $resFamiliar) {
+          echo $resFamiliar["nombre_usuario_re"] . " " . $resFamiliar["ap_usuario_re"] . " " . $resFamiliar["am_usuario_re"];
+      }*/
+      // Procesar datos del paciente
+      $datospaciente = $fi["paciente_rd_nombre"];
+      // Verificar que $datospaciente sea un arreglo antes de iterar
+      if (is_array($datospaciente)) {
+
+          foreach ($datospaciente as $paciente) {
+              // Verificar que las claves existan
+              $nombre = isset($paciente["nombre_usuario_re"]) ? $paciente["nombre_usuario_re"] : '';
+              $ap = isset($paciente["ap_usuario_re"]) ? $paciente["ap_usuario_re"] : '';
+              $am = isset($paciente["am_usuario_re"]) ? $paciente["am_usuario_re"] : '';
+            }
+      } else {
+          //echo "<br>Datos del paciente no disponibles o no es un arreglo.";
+      }
   }
+
 }
 ?>
 <?php
     $regHis = $_SERVER["REQUEST_URI"];
     $tablahis=$_SESSION['this'];
-      $diario = $_SESSION["diario"];
+    $diario = $_SESSION["diario"];
 ?>
 
 <div class="container main-content">
 <div class="container">
+  <?php echo "<div id='color1'><a href='$diario'id='co'>Registro Diario</a>><a href='#' onclick='accionHitorialVer($paciente_rd,$cod_rd)'id='co'>Historial</a>><a href='#'onclick='ActualizarHistorial($cod_his,$cod_rd,$paciente_rd,$listarDeCuanto,$pagina,\"$fecha\")'id='co'>Registro Historial</a>></div>"; ?>
+  <div class="row" >
+     <div class="col-12">
+       <hr>
+     </div>
+   </div>
   <div class="row">
     <div class="col-md-10 offset-md-1">
-      <?php echo "<div style='background-color:beige;color:red'>ruta: / <a href='$diario'>Registro Diario</a> / <a href='#' onclick='accionHitorialVer($paciente_rd,$cod_rd)'>Historial</a> / <a href='#'onclick='RegistroHistorial($paciente_rd,$cod_rd)'>Registro Historial</a></div>"; ?>
 
       <div class="card">
 
@@ -33,9 +54,9 @@ if ($resul && count($resul) > 0){
         </div>
         <div class="card-body">
           <form>
-            <input type="text" name="paciente_rd" id="paciente_rd" value="<?php $m = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd: ""; echo $m; ?>">
-            <input type="text" name="cod_rd" id="cod_rd" value="<?php $m = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:"";echo $m;  ?>">
-            <input type="text" name="cod_usuario" id = "cod_usuario" value="">
+            <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $m = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd: ""; echo $m; ?>">
+            <input type="hidden" name="cod_rd" id="cod_rd" value="<?php $m = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:"";echo $m;  ?>">
+            <input type="hidden" name="cod_usuario" id = "cod_usuario" value="">
 
             <div class="row">
               <div class="col-md-4 mb-3">
@@ -99,7 +120,7 @@ if ($resul && count($resul) > 0){
         <div class="card">
         <div class="card-header">
          IDENTIFICACION DEL PACIENTE/USUARIO
-          <h6>Complete los datos del paciente <?php echo $fi["nombre_usuario"]." ".$fi["ap_usuario"]." ".$fi["am_usuario"]; ?></h6>
+          <h6>Complete los datos del paciente <?php echo $nombre." ".$ap." ".$am; ?></h6>
         </div>
         <div class="card-body">
           <form>
@@ -435,30 +456,33 @@ function accionHitorialVer(paciente_rd,cod_rd){
    document.body.appendChild(form);
    form.submit();
 }
-
-
-function RegistroHistorial(paciente_rd,cod_rd){
-
-var form = document.createElement('form');
- form.method = 'post';
- form.action = "../controlador/historial.controlador.php?accion=visFH"; // Coloca la URL de destino correcta
- // Agregar campos ocultos para cada dato
- var datos = {
-     paciente_rd:paciente_rd,
-     cod_rd:cod_rd
-};
- for (var key in datos) {
-     if (datos.hasOwnProperty(key)) {
-         var input = document.createElement('input');
-         input.type = 'hidden';
-         input.name = key;
-         input.value = datos[key];
-         form.appendChild(input);
-     }
- }
-// Agregar el formulario al cuerpo del documento y enviarlo
-document.body.appendChild(form);
-form.submit();
+function ActualizarHistorial(cod_his,cod_rd,paciente_rd,listarDeCuanto,pagina,fecha){
+  var selectList = document.getElementsByName("selectList").value;
+    var fecha = document.getElementsByName("fecha").value;
+  var form = document.createElement('form');
+   form.method = 'post';
+   form.action = '../controlador/historial.controlador.php?accion=aht'; // Coloca la URL de destino correcta
+   // Agregar campos ocultos para cada dato
+   var datos = {
+       paciente_rd:paciente_rd,
+       cod_rd:cod_rd,
+       cod_his:cod_his,
+       listarDeCuanto:listarDeCuanto,
+       pagina:pagina,
+       fecha:fecha
+   };
+   for (var key in datos) {
+       if (datos.hasOwnProperty(key)) {
+           var input = document.createElement('input');
+           input.type = 'hidden';
+           input.name = key;
+           input.value = datos[key];
+           form.appendChild(input);
+       }
+   }
+  // Agregar el formulario al cuerpo del documento y enviarlo
+  document.body.appendChild(form);
+  form.submit();
 }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

@@ -1,7 +1,8 @@
 <?php
 function mesEnTexto($d) {
+  $d = intval($d);
    // fecha en formato AAAA-MM-DD
-  $numMonth = date("n", ($d)); // obtener el número de mes (sin ceros iniciales)
+  $numMonth =  ($d); // obtener el número de mes (sin ceros iniciales)
   $MonthEsp = array(
       1 => "enero",
       2 => "febrero",

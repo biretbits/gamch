@@ -1,12 +1,7 @@
 <?php require("../librerias/headeradmin1.php"); ?>
 <?php $RegistroDiario=$_SERVER["REQUEST_URI"];
 $_SESSION["diario"] = $RegistroDiario;?>
-<style media="screen">
-  #co{
-    color:gray;
-    font-size: 17px
-  }
-</style>
+
 <div class="container main-content">
 <div class="container">
   <?php

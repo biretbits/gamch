@@ -1,7 +1,16 @@
 <?php require("../librerias/headeradmin1.php"); ?>
-
+<?php $actualizar=$_SERVER["REQUEST_URI"];
+      $diario = $_SESSION["diario"];
+?>
 <div class="container main-content">
 <div class="container">
+  <?php
+  echo "<div id='color1'><a href='$diario'id='co'>Registro Diario</a>><a href='#' onclick='editarpaciente($cod_rd,$paciente_rd,\"$buscar\",$pagina,$listarDeCuanto,\"$fecha\")'id='co'>Actualizar registro diario</a>></div>"; ?>
+  <div class="row" >
+     <div class="col-12">
+       <hr>
+     </div>
+   </div>
   <div class="row">
     <div class="col-md-10 offset-md-1">
       <div class="card">
@@ -429,6 +438,33 @@ function buscarResponsableAdmision() {
            showConfirmButton: false,
            timer: 1500
          });
+        }
+
+        function editarpaciente(cod_rd,paciente,buscar,pagina,listarDeCuanto,fecha){
+          var form = document.createElement('form');
+           form.method = 'post';
+           form.action = '../controlador/registroDiario.controlador.php?accion=fa'; // Coloca la URL de destino correcta
+           // Agregar campos ocultos para cada dato
+           var datos = {
+               cod_rd:cod_rd,
+               paciente_rd:paciente,
+               buscar:buscar,
+               pagina:pagina,
+               listarDeCuanto:listarDeCuanto,
+               fecha:fecha
+           };
+           for (var key in datos) {
+               if (datos.hasOwnProperty(key)) {
+                   var input = document.createElement('input');
+                   input.type = 'hidden';
+                   input.name = key;
+                   input.value = datos[key];
+                   form.appendChild(input);
+               }
+           }
+         // Agregar el formulario al cuerpo del documento y enviarlo
+         document.body.appendChild(form);
+         form.submit();
         }
 
 </script>

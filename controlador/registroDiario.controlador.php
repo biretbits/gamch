@@ -474,5 +474,6 @@ echo "<div class='row'>
     if(isset($_GET["accion"]) && $_GET["accion"]=="rpd"){
   		$rd->reportesRegistroDiario();
   	}
+  
 
 ?>

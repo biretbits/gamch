@@ -165,5 +165,31 @@ public function seleccionarServicios(){
   mysqli_close($this->con);
 }
 
+  public function seleccionarRegistrosDiario($fechai,$fechaf){
+    $sql = '';
+    $sql = "select r.servicio_rd,s.nombre_servicio from registro_diario as r inner join servicio as s where r.servicio_rd=s.cod_servicio ";
+    if($fechai != '' and $fechaf!=''){
+      if ($fechai > $fechaf) {
+          $aux = $fechai;
+          $fechai=$fechaf;
+          $fechaf=$aux;
+      } elseif ($fechai < $fechaf) {
+
+      }
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechaf."')";
+    }else if($fechai !=''&&$fechaf==''){
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechai."')";
+    }else if($fechai ==''&&$fechaf!=''){
+      $sql.=" and (r.fecha_rd >= '".$fechaf."' and r.fecha_rd <= '".$fechaf."')";
+    }else{
+      $fechai=date('Y-m-d');
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechai."')";
+    }
+    //echo $sql;
+    $resul = $this->con->query($sql);
+    return $resul;
+    mysqli_close($this->con);
+  }
+
 }
  ?>

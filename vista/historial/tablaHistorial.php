@@ -6,7 +6,15 @@
 
 <div class="container main-content">
 <div class="container">
-  <?php echo "<div style='background-color:beige;color:red'>ruta: / <a href='$diario'>Registro Diario</a> / <a href='#' onclick='accionHitorialVer($paciente_rd,$cod_rd)'>Historial</a></div>"; ?>
+  <?php
+  echo "<div id='color1'><a href='$diario'id='co'>Registro Diario</a>><a href='#'
+   onclick='accionHitorialVer($paciente_rd,$cod_rd)'
+   id='co'>Historial</a>></div>"; ?>
+  <div class="row" >
+     <div class="col-12">
+       <hr>
+     </div>
+   </div>
   <h4>Historial Clinico</h4>
   <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
   <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
@@ -345,6 +353,27 @@ function ActualizarHistorial(cod_his,cod_rd,paciente_rd,listarDeCuanto,pagina,fe
   document.body.appendChild(form);
   form.submit();
 }
-
+function accionHitorialVer(paciente_rd,cod_rd){
+    var form = document.createElement('form');
+     form.method = 'post';
+     form.action = '../controlador/historial.controlador.php?accion=vht'; // Coloca la URL de destino correcta
+     // Agregar campos ocultos para cada dato
+     var datos = {
+         paciente_rd:paciente_rd,
+         cod_rd:cod_rd
+     };
+     for (var key in datos) {
+         if (datos.hasOwnProperty(key)) {
+             var input = document.createElement('input');
+             input.type = 'hidden';
+             input.name = key;
+             input.value = datos[key];
+             form.appendChild(input);
+         }
+     }
+   // Agregar el formulario al cuerpo del documento y enviarlo
+   document.body.appendChild(form);
+   form.submit();
+}
 </script>
 <?php require("../librerias/footeruni.php"); ?>

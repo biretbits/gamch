@@ -11,8 +11,12 @@ $fi = mysqli_fetch_array($re);
 <div class="container">
   <div class="row">
     <div class="col-md-10 offset-md-1">
-      <?php echo "<div style='background-color:beige;color:red'>ruta: / <a href='$diario'>Registro Diario</a> / <a href='#' onclick='accionHitorialVer($paciente_rd,$cod_rd)'>Historial</a> / <a href='#'onclick='RegistroHistorial($paciente_rd,$cod_rd)'>Registro Historial</a></div>"; ?>
-
+      <?php echo "<div id='color1'><a href='$diario'id='co'>Registro Diario</a>><a href='#' onclick='accionHitorialVer($paciente_rd,$cod_rd)'id='co'>Historial</a>><a href='#'id='co'onclick='RegistroHistorial($paciente_rd,$cod_rd)'>Registro Historial</a>></div>"; ?>
+      <div class="row" >
+         <div class="col-12">
+           <hr>
+         </div>
+       </div>
       <div class="card">
 
         <div class="card-header">

@@ -35,6 +35,10 @@ html, body {
   .main-content {
       padding-top: 80px; /* Ajusta este valor según la altura de tu navbar */
   }
+  #co{
+    color:gray;
+    font-size: 17px
+  }
 </style>
 <body  id="page-top">
   <div class="content">
@@ -63,13 +67,17 @@ html, body {
                 </li>";
                 echo "
                   <li class='nav-item' title='Usuarios'>
-                      <a class='nav-link btn btn-outline-warning' href='controlador/usuario.controlador.php?accion=rsr'><img src='imagenes/servicio.png'style='height: 25px;width: 25px;'></a>
+                      <a class='nav-link btn btn-outline-warning' href='controlador/servicio.controlador.php?accion=rsr'><img src='imagenes/servicio.ico'style='height: 25px;width: 25px;'></a>
                   </li>";
               }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admision"){
                 echo "
                   <li class='nav-item' title='Registro diario'>
                       <a class='nav-link btn btn-outline-warning' href='controlador/registroDiario.controlador.php?accion=vtd'><img src='imagenes/archivo.ico'style='height: 25px;width: 25px;'></a>
-                  </li>";
+                  </li>
+                  <li class='nav-item' title='Registro diario'>
+                      <a class='nav-link btn btn-outline-warning' href='controlador/servicio.controlador.php?accion=vTs'><img src='imagenes/servicio.ico'style='height: 25px;width: 25px;'></a>
+                  </li>
+                  ";
               }
           if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
             echo "<li class='nav-item dropdown' title='Nombre Usuario'>
