@@ -66,7 +66,7 @@
                     <a class='nav-link btn btn-outline-warning' href='../controlador/usuario.controlador.php?accion=vut'><img src='../imagenes/admin.ico'style='height: 25px;width: 25px;'></a>
                 </li>";
                 echo "
-                  <li class='nav-item' title='Usuarios'>
+                  <li class='nav-item' title='Servicios'>
                       <a class='nav-link btn btn-outline-warning' href='../controlador/servicio.controlador.php?accion=rsr'><img src='../imagenes/servicio.ico'style='height: 25px;width: 25px;'></a>
                   </li>";
               }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admision"){
@@ -74,27 +74,19 @@
                   <li class='nav-item' title='Registro diario'>
                       <a class='nav-link btn btn-outline-warning' href='../controlador/registroDiario.controlador.php?accion=vtd'><img src='../imagenes/archivo.ico'style='height: 25px;width: 25px;'></a>
                   </li>
-                  <li class='nav-item' title='Registro diario'>
+                  <li class='nav-item' title='Servicios'>
                       <a class='nav-link btn btn-outline-warning' href='../controlador/servicio.controlador.php?accion=vTs'><img src='../imagenes/servicio.ico'style='height: 25px;width: 25px;'></a>
                   </li>
                   ";
               }
-          if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admin"){
-            echo "<li class='nav-item dropdown' title='Nombre Usuario'>
-              <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                  hola ".$name."
-              </a>
-              <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
-                  <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                    <a class='nav-link text-info btn btn-outline-warning' href='#'>Editar</a>
-                  </li>
-                  <li><hr class='dropdown-divider'></li>
-                  <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                    <a class='nav-link text-primary btn btn-outline-danger' href='../controlador/logeo.controlador.php?accion=salir'><img src='../imagenes/apagar.ico'style='height: 25px;width: 25px;'></a>
-                  </li>
-              </ul>
-              </li>";
-            }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
+          
+            if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "farmacia"){
+              echo "
+                <li class='nav-item' title='Farmacia'>
+                    <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vtf'><img src='imagenes/farmacia.ico'style='height: 25px;width: 25px;'></a>
+                </li>";
+            }
+            if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
               echo "<li class='nav-item dropdown ms-2' title='Nombre Usuario'>
                 <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
                     hola ".$name."

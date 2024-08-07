@@ -16,7 +16,14 @@ class Usuario
 	}
 
   public function validarBD($usuario) {
-    $lis = "select *from usuario where usuario='".$usuario."' and estado='activo'";
+    $lis = "select count(*) from usuario where usuario='".$usuario."' and estado='activo'";
+    $resul = $this->con->query($lis);
+    return $resul;
+    mysqli_close($this->con);
+  }
+
+  public function validarBDTodo($usuario) {
+    $lis = "select * from usuario where usuario='".$usuario."' and estado='activo'";
     $resul = $this->con->query($lis);
     return $resul;
     mysqli_close($this->con);

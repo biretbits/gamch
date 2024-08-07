@@ -13,7 +13,7 @@
 						<form method="POST">
 
 							<div class='input-group'>
-								<input class="form-control" style="color:black" type="text"  id="usuario" name ="usuario" placeholder=" Nombre usuario">
+								<input class="form-control" style="color:black" type="text"  id="usuario" name ="usuario" placeholder=" Nombre usuario" >
 									<span class='input-group-addon' id='grupo_user'></span>
 							</div>
 							<span id="text_user"></span>
@@ -44,6 +44,8 @@
             </div>
 <br><br><br><br><br><br>
 <script type="text/javascript">
+
+
   document.querySelector('#contrasena').addEventListener ('keypress',function(e){
   validar(e);
   })
@@ -84,13 +86,15 @@
         contentType:false,
         processData:false,
         success: function(r){
-          //alert(r);
+        //  alert(r);
           r=$.trim(r);
           if(r == "admin"){
             alertCorrecto();
           }else if(r == "medico"){
             alertCorrecto();
           }else if(r == "admision"){
+            alertCorrecto();
+          }else if(r == "farmacia"){
             alertCorrecto();
           }else{
             Swal.fire({

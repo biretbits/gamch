@@ -5,6 +5,7 @@
 	}
 
 ?>
+<?php  $dato = "";$dato = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? 1 : 0;?>
 <div class="container main-content">
 	<div class="container d-flex justify-content-center align-items-center">
 	   <div class="card p-4" style="max-width: 400px; width: 100%;">
@@ -13,16 +14,18 @@
 					<?php $smg = "";$msg = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? "Actualizar usuario" : "Registro de usuario"; echo $msg;?></h2>
 			</center>
           <div class="card-body">
+						<input type="hidden" name="user_actual" id='user_actual' value='<?php $smg = ""; $msg = (isset($fe["usuario"]) && is_string($fe["usuario"])) ? $fe["usuario"] :""; echo $msg;?>'>
 						<input type="hidden" name="pagina" id="pagina" value='<?php $smg = ""; $msg = (isset($pagina) && is_numeric($pagina)) ? $pagina :""; echo $msg;?>'>
 						<input type="hidden" name="listarDeCuanto" id="listarDeCuanto" value='<?php $smg = ""; $msg = (isset($listarDeCuanto) && is_string($listarDeCuanto)) ? $listarDeCuanto :""; echo $msg;?>'>
 						<input type="hidden" name="buscar" id="buscar"  value='<?php $smg = ""; $msg = (isset($buscar) && $buscar != "") ? $buscar :""; echo $msg;?>'>
-						<input type="hidden" name="cod_usuario" id="cod_usuario" value='<?php $smg = ""; $msg = (isset($cod_usuario) && is_numeric($cod_usuario)) ? $cod_usuario :""; echo $msg;?>'>
+						<input type="hidden" name="cod_usuario" id="cod_usuario" onkeyup="validarUsuario()" value='<?php $smg = ""; $msg = (isset($cod_usuario) && is_numeric($cod_usuario)) ? $cod_usuario :""; echo $msg;?>'>
         		<div class='input-group'>
-            <input class="form-control" type="text"  id="usuario" name ="usuario" placeholder="Usuario" value='<?php $smg = ""; $msg = (isset($fe["usuario"]) && is_string($fe["usuario"])) ? $fe["usuario"] :""; echo $msg;?>'>
-            </div> <br>
+            <input class="form-control" type="text" onkeyup="validarUsuario('<?php echo $dato; ?>')" id="usuario" name ="usuario" placeholder="Usuario" value='<?php $smg = ""; $msg = (isset($fe["usuario"]) && is_string($fe["usuario"])) ? $fe["usuario"] :""; echo $msg;?>'>
+            </div>	<span id="text_user"></span> <br>
             <div class='input-group'>
               <input class="form-control" type="text"  id="nombre_usuario" name ="nombre_usuario" placeholder="Nombre" value='<?php $smg = ""; $msg = (isset($fe["nombre_usuario"]) && is_string($fe["nombre_usuario"])) ? $fe["nombre_usuario"] :""; echo $msg;?>'>
-            </div> <br>
+            </div>
+						<br>
             <div class='input-group'>
               <input class="form-control" type="text"  id="ap_usuario" name ="ap_usuario" placeholder="Apellido paterno" value='<?php $smg = ""; $msg = (isset($fe["ap_usuario"]) && is_string($fe["ap_usuario"])) ? $fe["ap_usuario"] :""; echo $msg;?>'>
             </div> <br>
@@ -46,22 +49,21 @@
             </div> <br>
             <div class='input-group'>
 							<select class="form-select" id="tipo_usuario" >
+								<option value="">Seleccione tipo de usuario</option>
 								<?php
-								$ara = ['medico','encargado','paciente','admision'];
+								$ara = ['medico','encargado','paciente','admision','farmacia'];
 									if(isset($fe["tipo_usuario"]) && is_string($fe["tipo_usuario"])){
 										for($i = 0;$i<count($ara);$i++){
 											if($ara[$i] == $fe["tipo_usuario"]){
-												echo "<option selected>".$ara[$i]."</option>";
+												echo "<option selected value='".$ara[$i]."'>".$ara[$i]."</option>";
 											}else{
-												echo "<option>".$ara[$i]."</option>";
+												echo "<option value='".$ara[$i]."'>".$ara[$i]."</option>";
 											}
 										}
 									}else{
-								echo "<option>seleccione</option>
-				          		<option>medico</option>
-				          		<option>encargado</option>
-											<option>admision</option>
-				          		<option>paciente</option>";
+										for($i = 0;$i<count($ara);$i++){
+												echo "<option value='".$ara[$i]."'>".$ara[$i]."</option>";
+										}
 									}
 								 ?>
 			        </select>
@@ -86,7 +88,7 @@
 
 					</div>
 					</div>
-					<?php  $dato = "";$dato = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? 1 : 0;?>
+
         		<input class="btn btn-primary"  type="button" id="submit" value="<?php $smg = "";$msg = (isset($fe["cod_usuario"]) && is_numeric($fe["cod_usuario"])) ? "Actualizar" : "Registrar"; echo $msg;?>" onclick= "insertardatosus('<?php echo $dato; ?>')">
 
       </div>
@@ -116,9 +118,62 @@
 	 }
 </style>
 <script type="text/javascript">
-function insertardatosus(accion){
-	//alert(accion);
+var globa= 0
+function validarUsuario(accion){
+		var usuario = document.getElementById('usuario').value;
+		var user = document.getElementById("user_actual").value;
+		var datos=new  FormData();
+		if(usuario == ''){
+			eliminarCampo();
+			return;
+		}
+	//	alert(456);
+		var si = 1;
+		if(accion == 1&&usuario==user)
+		{
+			si = 0;
+			globa = 0;
+			eliminarCampo();
+		}else if(accion == 1 && usuario!=user){
+			si = 1;
+			eliminarCampo();
+		}
+		if(si == 1){
+			datos.append("usuario",usuario);
+			$.ajax({
+				type: "POST", //type of submit
+				cache: false, //important or else you might get wrong data returned to you
+				url: "../controlador/logeo.controlador.php?accion=vsx", //destination
+				datatype: "html", //expected data format from process.php
+				data: datos, //target your form's data and serialize for a POST
+				contentType:false,
+				processData:false,
+				success: function(r){
+					//alert(r);
+					if(r == 'existe'){
+						$("#text_user").html("<div class = 'alert alert-danger'>El usuario ya existe ponga otro</div>");
+						globa = 1;
+					}else{
+						$("#text_user").html("<div class = 'alert alert-success'>Usuario correcto</div>");
+						globa = 0;
+					}
 
+				}
+			});
+	}
+}
+function eliminarCampo(){
+	setTimeout(function() {
+		 $("#text_user").html("");
+	}, 2000);
+}
+
+function insertardatosus(accion){
+	//alert(accion+"   "+globa);
+	if(globa == 1){
+		$("#text_user").html("<div class = 'alert alert-danger'>El usuario ya existe ponga otro</div>");
+		return;
+	}
 	var usuario = document.getElementById("usuario").value;
 	var nombre_usuario = document.getElementById("nombre_usuario").value;
 	var ap_usuario = document.getElementById("ap_usuario").value;
@@ -143,7 +198,7 @@ function insertardatosus(accion){
 		selectUsuario();
 		return;
 	}
-	if(tipo_usuario == "medico" || tipo_usuario == "encargado"){
+	if(tipo_usuario == "medico" || tipo_usuario == "encargado" || tipo_usuario == "farmacia"|| tipo_usuario == "admision"){
 	 if(profesion_usuario == "" || especialidad_usuario =="" ||telefono_usuario==""||ci==""){
 		 ingresedatosPro();
 		 return;
@@ -171,6 +226,20 @@ function insertardatosus(accion){
 					eliminar();
 					return;
 				}
+				if(contrasena_usuario != ''){
+					if(confirmar_contrasena_usuario != ''){
+						if(contrasena_usuario != confirmar_contrasena_usuario){
+							confirmarcontrasena();
+							return;
+						}
+					}else{
+						contrasenaVacio();
+						return ;
+					}
+				}else{
+					contrasenaVacio();
+					return ;
+				}
 			}
 		}
 		 pagina = document.getElementById("pagina").value;
@@ -183,10 +252,22 @@ function insertardatosus(accion){
 			eliminar();
 			return;
 		}
-		if(contrasena_usuario != confirmar_contrasena_usuario && contrasena_usuario != "" && confirmar_contrasena_usuario !=""){
-			confirmarcontrasena();
-			return;
+
+		if(contrasena_usuario != ''){
+			if(confirmar_contrasena_usuario != ''){
+				if(contrasena_usuario != confirmar_contrasena_usuario){
+					confirmarcontrasena();
+					return;
+				}
+			}else{
+				contrasenaVacio();
+				return ;
+			}
+		}else{
+			contrasenaVacio();
+			return ;
 		}
+
 	}
 	var datos = new FormData(); // Crear un objeto FormData vacío
 	datos.append("usuario",usuario);
@@ -276,6 +357,15 @@ function ingresedatosPro(){
 	 icon: 'info',
 	 title: '¡Información!',
 	 text: '¡Es necesario la Profesión y la Especialidad!',
+	 showConfirmButton: false,
+	 timer: 2000
+ });
+}
+function contrasenaVacio(){
+	Swal.fire({
+	 icon: 'info',
+	 title: '¡Información!',
+	 text: '¡Falta contraseña o confirmar la contraseña!',
 	 showConfirmButton: false,
 	 timer: 2000
  });

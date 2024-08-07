@@ -17,17 +17,17 @@ class LogeoControlador{
 
 	public function verificarLogin($usuario,$contrasena){
 		$us=new Usuario();
-		$resul = $us->validarBD($usuario);
-		if ($resul === false) {
-        echo "error";
-    } elseif ($resul->num_rows == 0) {
+		$resul1 = $us->validarBD($usuario);
+		$fila1 = mysqli_fetch_array($resul1);
+		if ($fila1['count(*)'] == 0) {
         echo "error";
     } else {
+				$resul = $us->validarBDTodo($usuario);
         $fila = mysqli_fetch_array($resul);
         if ($fila === null) {
             echo "error";
         } else {
-            //echo "Contraseña de la base de datos: ".$fila["contrasena_usuario"];
+          //  echo "Contraseña de la base de datos: ".$fila["contrasena_usuario"]." usuario ".$contrasena;
             if (password_verify($contrasena, $fila['contrasena_usuario'])) {
                 $_SESSION["usuario"] = $fila["usuario"];
                 $_SESSION["nombre_usuario"] = $fila["nombre_usuario"];
@@ -50,6 +50,17 @@ class LogeoControlador{
 	public function v_index(){
 	    header("location: ../index.php");
 	}
+
+	public function validar_usuario_si_existe($usuario){
+		$us=new Usuario();
+		$resul = $us->validarBD($usuario);
+		$fila = mysqli_fetch_array($resul);
+		if ($fila['count(*)'] == 0) {
+				echo "no_existe";
+		} else {
+			echo "existe";
+		}
+	}
 }
 
 	$lc=new  LogeoControlador();
@@ -68,6 +79,9 @@ class LogeoControlador{
 	{
 		$lc->v_index();
 	}
-
+	if(isset($_GET["accion"])&&$_GET["accion"]=="vsx")
+	{
+		$lc->validar_usuario_si_existe($_POST['usuario']);
+	}
 
 ?>

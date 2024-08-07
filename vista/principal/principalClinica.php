@@ -8,9 +8,9 @@
                     <h1 class="display-1 lh-1 mb-3 colorful-text">Centro de Salud. Cala Cala</h1>
                     <p class="lead fw-normal text-muted mb-5">Bienvenidos a nuestro centro de salud, donde tu bienestar es nuestra prioridad.</p>
                     <div class="d-flex flex-column flex-lg-row align-items-center">
-                        <a class="me-lg-3 mb-4 mb-lg-0" href="#!"><img class="app-badge" src="assets/img/google-play-badge.svg" alt="..." /></a>
+                      <!--  <a class="me-lg-3 mb-4 mb-lg-0" href="#!"><img class="app-badge" src="assets/img/google-play-badge.svg" alt="..." /></a>
                         <a href="#!"><img class="app-badge" src="assets/img/app-store-badge.svg" alt="..." /></a>
-                    </div>
+                    --></div>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -300,6 +300,8 @@ function VerificarDatos(){
         }else if(r == "medico"){
           alertCorrecto();
         }else if(r == "admision"){
+          alertCorrecto();
+        }else if(r == "farmacia"){
           alertCorrecto();
         }else{
           Swal.fire({
