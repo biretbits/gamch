@@ -54,8 +54,8 @@ class FarmaciaControlador{
                 echo "<td>".$fi['nombre_forma']."</td>";
                 echo "<td>";
                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_forma'] . ", \"" .($fi['nombre_forma']) . "\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                  //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_forma'] . ", \"" .($fi['nombre_forma']) . "\")'data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+  //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                   echo "</div>";
                 echo "</td>";
 
@@ -190,8 +190,8 @@ class FarmaciaControlador{
               echo "<td>".$fi['concentracion']."</td>";
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_conc'] . ", \"" .($fi['concentracion']) . "\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_conc'] . ", \"" .($fi['concentracion']) . "\")'  data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+//echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                 echo "</div>";
               echo "</td>";
 
@@ -313,6 +313,10 @@ class FarmaciaControlador{
             <tr>
               <th>N°</th>
               <th>Nombre generico</th>
+              <th>Enfermedad</th>
+              <th>Vitrina</th>
+              <th>Stock minimo</th>
+                <th>Stock maximo</th>
               <th>Acción</th>
             </tr>
           </thead>
@@ -323,10 +327,14 @@ class FarmaciaControlador{
             echo "<tr>";
               echo "<td>".($i+1)."</td>";
               echo "<td>".$fi['nombre']."</td>";
+              echo "<td>".$fi['enfermedad']."</td>";
+              echo "<td>".$fi['vitrina']."</td>";
+              echo "<td>".$fi['stockmin']."</td>";
+              echo "<td>".$fi['stockmax']."</td>";
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_generico'] . ", \"" .($fi['nombre']) . "\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",\"".$fi['stockmax']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+  //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                 echo "</div>";
               echo "</td>";
 
@@ -417,9 +425,9 @@ class FarmaciaControlador{
     }
   }
 
-  public function registrarNombreGenerico($generico,$cod_generico){
+  public function registrarNombreGenerico($generico,$cod_generico,$enfermedad,$vitrina,$stockmin,$stockmax){
     $fa =new Farmacia();
-    $resul = $fa->InsertarActualizarNombreGenerico($generico,$cod_generico);
+    $resul = $fa->InsertarActualizarNombreGenerico($generico,$cod_generico,$enfermedad,$vitrina,$stockmin,$stockmax);
     if($resul != ""){
         echo "correcto";
     } else{
@@ -445,6 +453,52 @@ class FarmaciaControlador{
     }
   }
 
+  public function visualizarProductoFarmacia(){
+    $fa =new Farmacia();
+    $listarDeCuanto = 5;$pagina = 1;$buscar = "";
+    $resul1 = $fa->SeleccionarProducto(false,false,$buscar);
+    $num_filas_total = mysqli_num_rows($resul1);
+    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+            //calculamos el registro inicial
+    $inicioList = ($pagina - 1) * $listarDeCuanto;
+    // Verificar si la consulta devuelve resultados
+    $resul = $fa->SeleccionarProducto($inicioList,$listarDeCuanto,$buscar);
+    //$resul = $this->Uniendo($res,$fa);*/
+    //$r = $fa->p();
+    //$ret = $this->Uniendo($resul,$fa);
+    $rng=$fa->seleccionarNG();
+    $rc=$fa->seleccionarC();
+    $rp=$fa->seleccionarP();
+    require("../vista/farmacia/farmaciaProducto.php");
+  }
+
+ function Uniendo($resul, $rdi) {
+    $ar = [];
+    while ($fi = mysqli_fetch_array($resul)) {
+        // Añadir cada fila al array con una estructura correcta
+        $entry = [
+            "cod_producto" => $fi["cod_producto"],
+            "codigo" => $fi["codigo"],
+            "cod_generico" => $fi["cod_generico"],
+            "cod_forma" => $fi["cod_forma"],
+            "cod_conc" => $fi["cod_conc"],
+            "enfermedad" => $fi["enfermedad"],
+            "estado" => $fi["estado"],
+            "cod_generico" => $fi["cod_generico"],
+            "nombre" => $fi["nombre"],
+            "estado" => $fi["estado"],
+            "cod_forma" => $fi["cod_forma"],
+            "nombre_forma" => $fi["nombre_forma"],
+            "estado" => $fi["estado"],
+            "cod_conc" => $fi["cod_conc"],
+            "concentracion" => $fi["concentracion"],
+            "estado" => $fi["estado"],
+        ];
+        $ar[] = $entry; // Agregar la entrada al array principal
+    }
+    return $ar; // Devolver el array completo fuera del bucle
+  }
+
 
 }
 
@@ -456,7 +510,7 @@ class FarmaciaControlador{
 		$f->BuscarNombreGenerico($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
 	}
   if(isset($_GET["accion"]) && $_GET["accion"]=="rfnt"){
-    $f->registrarNombreGenerico($_POST["generico"],$_POST["cod_generico"]);
+    $f->registrarNombreGenerico($_POST["generico"],$_POST["cod_generico"],$_POST['enfermedad'],$_POST['vitrina'],$_POST['stockmin'],$_POST['stockmax']);
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="vtf"){
 		$f->visualizarConcentracion();
@@ -477,5 +531,8 @@ class FarmaciaControlador{
   if(isset($_GET["accion"]) && $_GET["accion"]=="rp"){
     $f->registrarPresentacion($_POST["generico"],$_POST["cod_generico"]);
   }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="vpf"){
+		$f->visualizarProductoFarmacia();
+	}
 
 ?>

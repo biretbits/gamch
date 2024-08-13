@@ -18,28 +18,8 @@
 
 
           <div class="row">
-              <div class="col-lg-4">
-                  <!-- Mashead text and app badges-->
-                  <div class="sticky-col">
-                    <div class="card shadow-lg">
-                     <div class="card-body">
-                       <h6 class="card-title text-center">Registro y Actualización de Concentración, unidad de medida</h6>
-                       <form>
-                         <div class="mb-3">
-                           <label for="name" class="form-label">Unidad de medida</label>
-                           <input type="text" class="form-control" id="generico" name='generico' placeholder="Unidad medida">
-                         </div>
-                         <div class="d-grid gap-2">
-                           <button type="button" class="btn btn-primary" onclick="registrar()">Registrar</button>
 
-                         </div>
-                       </form>
-                     </div>
-                   </div>
-                   <br>
-                  </div>
-              </div>
-              <div class="col-lg-8">
+              <div class="col-lg-12">
                   <!-- Masthead device mockup feature-->
                   <div class="masthead-device-mockup">
                     <input type="hidden" name="cod_generico" id="cod_generico" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
@@ -68,14 +48,18 @@
                           <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
-                      <div class="col-auto mb-1" title="Registro de nuevo hisorial">
-                        <input type="text" name="buscar" id='buscar'class="form-control" placeholder="Buscar....." onkeyup="Buscar(1)">
+                      <div class="col-auto mb-2" title="Registrar o actualizar">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','')">
+                          <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
+                        </button>
                       </div>
 
                       <div class="col-auto mb-2">
                         <!-- espacio vacío para mantener el diseño intacto -->
                       </div>
                       <div class="col mb-2">
+                        <input type="text" name="buscar" id='buscar'class="form-control" placeholder="Buscar....." onkeyup="Buscar(1)">
+
                         </div>
                     </div>
                     </div>
@@ -84,6 +68,36 @@
                     // Obtener la fecha actual en formato YYYY-MM-DD
                       $fechaActual = date('Y-m-d');
                     ?>
+                    <div class="modal fade" id="ModalRegistro" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h6 class="modal-title" id="miModalRegistro">Registro y Actualización de Concentración, unidad de medida</h6>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!-- Contenido del modal -->
+                        <div class="modal-body">
+                          <div class="card shadow-lg">
+                           <div class="card-body">
+                             <form>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Unidad de medida</label>
+                                 <input type="text" class="form-control" id="generico" name='generico' placeholder="Unidad medida">
+                               </div>
+
+                             </form>
+                           </div>
+                         </div>
+                        <!-- Pie de página del modal -->
+                      </div>
+                        <div class="modal-footer">
+                          <button title='Guardar'type="button" class="btn btn-primary" onclick="registrar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'></button>
+                         <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                     <div class="modal fade" id="ModalReportePorFecha" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
@@ -152,7 +166,7 @@
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
 
-                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_conc'] . ", \"" .($fi['concentracion']) . "\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_conc'] . ", \"" .($fi['concentracion']) . "\")'  data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
       //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "</div>";
                                 echo "</td>";
@@ -373,10 +387,12 @@ function Buscar(page){
         Buscar(pagina);
         document.getElementById("cod_generico").value='';
         document.getElementById("generico").value='';
+          $('#ModalRegistro').modal('hide');
       }, 1500);
     }else{
       setTimeout(() => {
         location.href="../controlador/farmacia.controlador.php?accion=vtf";
+          $('#ModalRegistro').modal('hide');
       }, 1500);
     }
   }

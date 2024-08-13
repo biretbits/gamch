@@ -9,7 +9,7 @@
 
    ?>
 
-<h4>Forma de presentación</h4>
+<h4>Productos Farmacéuticos</h4>
 <div class="row" >
      <div class="col-12">
        <hr>
@@ -18,8 +18,8 @@
 
 
           <div class="row">
-              <div class="col-lg-12">
 
+              <div class="col-lg-12">
                   <!-- Masthead device mockup feature-->
                   <div class="masthead-device-mockup">
                     <input type="hidden" name="cod_generico" id="cod_generico" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
@@ -48,7 +48,7 @@
                           <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
-                      <div class="col-auto mb-2" title="Registrar y actualizar">
+                      <div class="col-auto mb-2" title="Registrar o Actualizar">
                         <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','')">
                           <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
                         </button>
@@ -72,7 +72,7 @@
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h6 class="modal-title" id="miModalRegistro">Registro y Actualización de forma de presentación</h6>
+                          <h6 class="modal-title" id="miModalRegistro">Registro o Actualización de producto farmaceutico</h6>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Contenido del modal -->
@@ -81,8 +81,49 @@
                            <div class="card-body">
                              <form>
                                <div class="mb-3">
-                                 <label for="name" class="form-label">Forma de presentación</label>
-                                 <input type="text" class="form-control" id="generico" name='generico' placeholder="Forma de presentación">
+                                 <label for="name" class="form-label">Codigo</label>
+                                 <input type="text" class="form-control" id="codigo" name='codigo' placeholder="Ponga el codigo del producto">
+                               </div>
+
+                               <div class="mb-3">
+                                 <label for="selectPage" class="form-label col-auto mb-2">Nombre Generico</label>
+                                 <div class="col-auto mb-2">
+                                   <select class="form-select" id="selectList" name="selectList">
+                                     <option value=''></option>
+                                     <?php
+                                       while($row=mysqli_fetch_array($rng)){
+                                         echo "<option value='".$row['cod_generico']."'>".$row['nombre']."</option>";
+                                       }
+                                      ?>
+                                   </select>
+                                 </div>
+                                 <label for="selectPage" class="form-label col-auto mb-2">Forma de presentación</label>
+                                 <div class="col-auto mb-2">
+                                   <select class="form-select" id="selectList" name="selectList">
+                                     <option value=''></option>
+                                     <?php
+                                       while($row=mysqli_fetch_array($rp)){
+                                         echo "<option value='".$row['cod_forma']."'>".$row['nombre_forma']."</option>";
+                                       }
+                                      ?>
+                                   </select>
+                                 </div>
+                                 <label for="selectPage" class="form-label col-auto mb-2">Concentración, unidad de medida</label>
+                                 <div class="col-auto mb-2">
+                                   <select class="form-select" id="selectList" name="selectList">
+                                     <option value=''></option>
+                                     <?php
+                                       while($row=mysqli_fetch_array($rc)){
+                                         echo "<option value='".$row['cod_conc']."'>".$row['concentracion']."</option>";
+                                       }
+                                      ?>
+                                   </select>
+                                 </div>
+
+                               </div>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Enfermedad</label>
+                                 <input type="text" class="form-control" id="enfermedad" name='enfermedad' placeholder="Ponga la enfermedad">
                                </div>
 
                              </form>
@@ -97,7 +138,6 @@
                       </div>
                     </div>
                   </div>
-
                     <div class="modal fade" id="ModalReportePorFecha" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
@@ -149,7 +189,11 @@
                             <thead style="font-size:12px">
                               <tr>
                                 <th>N°</th>
-                                <th>Presentación</th>
+                                <th>Codigo</th>
+                                <th>Nombre Generico</th>
+                                <th>Forma presentación</th>
+                                <th>Concentración unidad medida</th>
+                                <th>Enfermedad</th>
                                 <th>Acción</th>
                               </tr>
                             </thead>
@@ -162,11 +206,15 @@
                           foreach ($resul as $fi){
                               echo "<tr>";
                                 echo "<td>".($i+1)."</td>";
+                                echo "<td>".$fi['codigo']."</td>";
+                                echo "<td>".$fi['nombre']."</td>";
                                 echo "<td>".$fi['nombre_forma']."</td>";
+                                echo "<td>".$fi['concentracion']."</td>";
+                                echo "<td>".$fi['enfermedad']."</td>";
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
 
-                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_forma'] . ", \"" .($fi['nombre_forma']) . "\")'data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_forma'] . ", \"" .($fi['nombre_forma']) . "\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
       //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "</div>";
                                 echo "</td>";
@@ -388,12 +436,10 @@ function Buscar(page){
         Buscar(pagina);
         document.getElementById("cod_generico").value='';
         document.getElementById("generico").value='';
-          $('#ModalRegistro').modal('hide');
       }, 1500);
     }else{
       setTimeout(() => {
         location.href="../controlador/farmacia.controlador.php?accion=vfp";
-          $('#ModalRegistro').modal('hide');
       }, 1500);
     }
   }

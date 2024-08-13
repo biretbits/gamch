@@ -9,7 +9,7 @@
 
    ?>
 
-<h4>Nombre Generico</h4>
+<h4>Productos Farmacéuticos</h4>
 <div class="row" >
      <div class="col-12">
        <hr>
@@ -18,28 +18,14 @@
 
 
           <div class="row">
-              <div class="col-lg-4">
+              <div class="col-lg-12">
                   <!-- Mashead text and app badges-->
                   <div class="sticky-col">
-                    <div class="card shadow-lg">
-                     <div class="card-body">
-                       <h6 class="card-title text-center">Registro y Actualización de nombre generico</h6>
-                       <form>
-                         <div class="mb-3">
-                           <label for="name" class="form-label">Nombre nuevo generico</label>
-                           <input type="text" class="form-control" id="generico" name='generico' placeholder="Nombre generico">
-                         </div>
-                         <div class="d-grid gap-2">
-                           <button type="button" class="btn btn-primary" onclick="registrar()">Registrar</button>
 
-                         </div>
-                       </form>
-                     </div>
-                   </div>
                    <br>
                   </div>
-              </div>
-              <div class="col-lg-8">
+
+                </div>
                   <!-- Masthead device mockup feature-->
                   <div class="masthead-device-mockup">
                     <input type="hidden" name="cod_generico" id="cod_generico" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
@@ -68,15 +54,18 @@
                           <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
-                      <div class="col-auto mb-1" title="Registro de nuevo hisorial">
-                        <input type="text" name="buscar" id='buscar'class="form-control" placeholder="Buscar....." onkeyup="Buscar(1)">
+                      <div class="col-auto mb-2" title="Registro o actualizar">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','','','',0,0)">
+                          <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
+                        </button>
                       </div>
 
                       <div class="col-auto mb-2">
                         <!-- espacio vacío para mantener el diseño intacto -->
                       </div>
                       <div class="col mb-2">
-                        </div>
+                        <input type="text" name="buscar" id='buscar'class="form-control" placeholder="Buscar....." onkeyup="Buscar(1)">
+                      </div>
                     </div>
                     </div>
                     <!-- modal para generar fechas desde seleccionar fechas -->
@@ -84,6 +73,54 @@
                     // Obtener la fecha actual en formato YYYY-MM-DD
                       $fechaActual = date('Y-m-d');
                     ?>
+                    <div class="modal fade" id="ModalRegistro" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h6 class="modal-title" id="miModalRegistro">Registro o Actualización de producto farmaceutico</h6>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!-- Contenido del modal -->
+                        <div class="modal-body">
+                          <div class="card shadow-lg">
+                           <div class="card-body">
+                             <h6 class="card-title text-center"></h6>
+                             <form>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Nombre nuevo generico</label>
+                                 <input type="text" class="form-control" id="generico" name='generico' placeholder="Nombre generico">
+                               </div>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Enfermedad</label>
+                                 <input type="text" class="form-control" id="enfermedad" name='enfermedad' placeholder="Enfermedad">
+                               </div>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Vitrina</label>
+                                 <input type="text" class="form-control" id="vitrina" name='vitrina' placeholder="Vitrina o lugar">
+                               </div>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Stock minimo</label>
+                                 <input type="number" class="form-control" id="stockmin" min='0'name='stockmin' value='0' placeholder="stock minimo">
+                               </div>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Stock maximo</label>
+                                 <input type="number" class="form-control" id="stockmax" min='0'name='stockmax' value='0' placeholder="stock maximo">
+                               </div>
+                               <div class="d-grid gap-2">
+                               </div>
+                             </form>
+                           </div>
+                         </div>
+                        <!-- Pie de página del modal -->
+                      </div>
+                        <div class="modal-footer">
+                          <button title='Guardar'type="button" class="btn btn-primary" onclick="registrar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'></button>
+                         <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                     <div class="modal fade" id="ModalReportePorFecha" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
@@ -136,6 +173,10 @@
                               <tr>
                                 <th>N°</th>
                                 <th>Nombre generico</th>
+                                <th>Enfermedad</th>
+                                <th>Vitrina</th>
+                                <th>Stock minimo</th>
+                                <th>Stock maximo</th>
                                 <th>Acción</th>
                               </tr>
                             </thead>
@@ -149,10 +190,15 @@
                               echo "<tr>";
                                 echo "<td>".($i+1)."</td>";
                                 echo "<td>".$fi['nombre']."</td>";
+
+                                echo "<td>".$fi['enfermedad']."</td>";
+                                echo "<td>".$fi['vitrina']."</td>";
+                                echo "<td>".$fi['stockmin']."</td>";
+                                echo "<td>".$fi['stockmax']."</td>";
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
 
-                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(" . $fi['cod_generico'] . ", \"" .($fi['nombre']) . "\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",\"".$fi['stockmax']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
       //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "</div>";
                                 echo "</td>";
@@ -312,14 +358,28 @@ function Buscar(page){
 
   function registrar(){
     var generico = document.getElementById("generico").value;
+    var enfermedad = document.getElementById("enfermedad").value;
+    var vitrina = document.getElementById("vitrina").value;
+    var stockmin = parseInt(document.getElementById("stockmin").value);
+    var stockmax = parseInt(document.getElementById("stockmax").value);
+
+    if((stockmin)==0 || (stockmax)==0){
+      Error23();
+      return;
+    }
     if(generico == ''){
       Vacio();
       return;
     }
     var cod_generico = document.getElementById("cod_generico").value;
+
     var datos = new FormData(); // Crear un objeto FormData vacío
     datos.append('generico', generico);
     datos.append('cod_generico',cod_generico);
+    datos.append("enfermedad",enfermedad);
+    datos.append("vitrina",vitrina);
+    datos.append("stockmin",stockmin);
+    datos.append("stockmax",stockmax);
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=rfnt",
         type: "POST",
@@ -356,6 +416,15 @@ function Buscar(page){
      timer: 1500
    });
   }
+  function Error23(){
+    Swal.fire({
+     icon: 'error',
+     title: '¡Error!',
+     text: '¡Es necesario los campos de stock, los datos deben ser mayor a cero!',
+     showConfirmButton: false,
+     timer: 1900
+   });
+  }
   function Vacio(){
     Swal.fire({
      icon: 'error',
@@ -374,16 +443,28 @@ function Buscar(page){
         Buscar(pagina);
         document.getElementById("cod_generico").value='';
         document.getElementById("generico").value='';
+        document.getElementById("enfermedad").value = '';
+        document.getElementById("vitrina").value = '';
+        document.getElementById("stockmin").value = '';
+        document.getElementById("stockmax").value = '';
+        $('#ModalRegistro').modal('hide');
       }, 1500);
     }else{
       setTimeout(() => {
+        $('#ModalRegistro').modal('hide');
+
         location.href="../controlador/farmacia.controlador.php?accion=ngf";
+
       }, 1500);
     }
   }
-  function ActualizarNombreGenerico(cod_generico,nombre){
+  function ActualizarNombreGenerico(cod_generico,nombre,enfermedad,vitrina,stockmin,stockmax){
     document.getElementById('cod_generico').value=cod_generico;
     document.getElementById("generico").value=nombre;
+    document.getElementById("enfermedad").value=enfermedad;
+    document.getElementById("vitrina").value=vitrina;
+    document.getElementById("stockmin").value=stockmin;
+    document.getElementById("stockmax").value=stockmax;
   }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

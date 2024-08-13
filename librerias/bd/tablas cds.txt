@@ -1,0 +1,79 @@
+tabla farmaci 
+CREATE TABLE producto (
+    cod_producto INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    codigo CHAR(20),
+    cod_generico INT,   
+    cod_forma INT,
+    cod_conc INT,
+    enfermedad VARCHAR(100) DEFAULT '',
+    estado CHAR(10) DEFAULT 'activo',
+    FOREIGN KEY (cod_forma) REFERENCES forma_presentacion(cod_forma) 
+        ON DELETE RESTRICT 
+        ON UPDATE RESTRICT,
+    FOREIGN KEY (cod_conc) REFERENCES conc_uni_med(cod_conc) 
+        ON DELETE RESTRICT 
+        ON UPDATE RESTRICT,
+    FOREIGN KEY (cod_generico) REFERENCES nombre_generico(cod_generico) 
+        ON DELETE RESTRICT 
+        ON UPDATE RESTRICT
+);
+
+
+CREATE TABLE entrada (
+    cod_entrada INT NOT NULL AUTO_INCREMENT,
+    cantidad INT,
+    cantidad_actual INT,
+    stock_min INT,
+    stock_max INT,
+    vitrina CHAR(30),
+    fecha DATE,
+    vencimiento DATE,
+    cod_producto INT,
+    cod_forma INT,
+    cod_conc INT,
+ 	estado CHAR(10) DEFAULT 'activo',
+    PRIMARY KEY (cod_entrada), -- Definimos solo una clave primaria
+    FOREIGN KEY (cod_producto) REFERENCES producto(cod_producto) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    FOREIGN KEY (cod_forma) REFERENCES forma_presentacion(cod_forma) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    FOREIGN KEY (cod_conc) REFERENCES conc_uni_med(cod_conc) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+create table salida(
+cod_salida int not null auto_increment primary key,
+cantidad int,
+cod_usuario int,
+cod_producto int,
+ estado CHAR(10) DEFAULT 'activo',
+foreign key(cod_usuario)references usuario(cod_usuario)on delete restrict on update restrict,
+foreign key(cod_producto)references producto(cod_producto)on delete restrict on update restrict);
+
+
+CREATE TABLE entrada_total (
+    cod_total INT NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Corrección en "prmary"
+    cantidad_total INT,
+    cod_producto INT,
+ estado CHAR(10) DEFAULT 'activo',
+    FOREIGN KEY (cod_producto) REFERENCES producto(cod_producto) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE p (
+    cod_producto INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    codigo CHAR(10),
+    cod_generico char(200),
+    cod_forma char(200),
+    cod_conc char(200)
+);
+
+drop table nombre_generico;
+drop table conc_uni_med;
+drop table forma_presentacion;
+create table nombre_generico(cod_generico int not null auto_increment primary key,nombre char(150));
+create table conc_uni_med(cod_conc int not null auto_increment primary key,concentracion char(60));
+create table forma_presentacion(cod_forma int not null auto_increment primary key,nombre_forma char(150));
+
+LOAD DATA INFILE 'F:/unidad.csv' INTO TABLE  conc_uni_med FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(concentracion);  
+LOAD DATA INFILE 'F:/nombre_generico.txt' INTO TABLE  nombre_generico FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(nombre);  
+LOAD DATA INFILE 'F:/forma.csv' INTO TABLE  forma_presentacion FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(nombre_forma);  
+
+
+LOAD DATA INFILE 'F:/ahora.txt' INTO TABLE  p FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(codigo,cod_generico,cod_forma,cod_conc);  

@@ -99,6 +99,10 @@ html, body {
                         <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vfp'>Presentación</a>
                     </li>";
                   echo "
+                    <li class='nav-item' title='Producto farmacéutico'>
+                        <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vpf'>Producto farmacéutico</a>
+                    </li>";
+                  echo "
                     <li class='nav-item' title='Entrada'>
                         <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vtf'>Entrada</a>
                     </li>";
