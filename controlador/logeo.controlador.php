@@ -29,6 +29,7 @@ class LogeoControlador{
         } else {
           //  echo "Contraseña de la base de datos: ".$fila["contrasena_usuario"]." usuario ".$contrasena;
             if (password_verify($contrasena, $fila['contrasena_usuario'])) {
+								$_SESSION['cod_usuario'] = $fila['cod_usuario'];
                 $_SESSION["usuario"] = $fila["usuario"];
                 $_SESSION["nombre_usuario"] = $fila["nombre_usuario"];
                 $_SESSION["ap_usuario"] = $fila["ap_usuario"];

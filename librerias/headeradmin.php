@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <title></title>
 
@@ -87,8 +87,8 @@ html, body {
                 </a>
                 <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>";
               echo "
-                <li class='nav-item' title='Nombre Generico'>
-                    <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=ngf'>Nombre Generico</a>
+                <li class='nav-item' title='Productos Farmacéuticos'>
+                    <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=ngf'>Productos Farmacéuticos</a>
                 </li>";
                 echo "
                   <li class='nav-item' title='Concentración Unidad de medida'>
@@ -99,16 +99,12 @@ html, body {
                         <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vfp'>Presentación</a>
                     </li>";
                   echo "
-                    <li class='nav-item' title='Producto farmacéutico'>
-                        <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vpf'>Producto farmacéutico</a>
-                    </li>";
-                  echo "
                     <li class='nav-item' title='Entrada'>
-                        <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vtf'>Entrada</a>
+                        <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vpf'>Entrada</a>
                     </li>";
                   echo "
                     <li class='nav-item' title='Salida'>
-                        <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vtf'>Salida</a>
+                        <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=vsf'>Salida</a>
                     </li>";
                 echo "</ul>
                 </li>";

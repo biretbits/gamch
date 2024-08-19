@@ -9,7 +9,7 @@
 
    ?>
 
-<h4>Entrada de Productos Farmacéuticos</h4>
+<h4>Salida de productos farmaceuticos</h4>
 <div class="row" >
      <div class="col-12">
        <hr>
@@ -88,8 +88,14 @@
                                  </div>
                                </div>
                                <div class="mb-3">
+                                 <label for="name" class="form-label">Stock Total</label>
+                                 <input disabled type="text" class="form-control" id="total_stock" name='total_stock' min='1' value='0' placeholder="Stock Total">
+                               </div>
+                               <p id='stock_es' class='form-control'></p>
+                               <input type="text" name="stock_producto" id='stock_producto'value="">
+                               <div class="mb-3">
                                  <label for="name" class="form-label">Cantidad</label>
-                                 <input type="number" class="form-control" id="cantidad" name='cantidad' min='1' value='1' placeholder="Cantidad">
+                                 <input type="number" class="form-control" id="cantidad"  min='1' value='1' placeholder="cantidad" onchange="nuevoCantidad()">
                                </div>
                                <div class="mb-3">
                                  <label for="vencimiento" class="form-label">Vencimiento</label>
@@ -167,7 +173,6 @@
                                 <th>vencimiento</th>
                                 <th>Fecha</th>
                                 <th>Estado producto</th>
-                                <th>Encargado</th>
                                 <th>Acción</th>
                               </tr>
                             </thead>
@@ -208,24 +213,17 @@
                                 }else if($fi['estado_producto'] == 'vencido'){
                                   echo "<td style='color:red;background-color:#ffc8af;text-align:center'>".$fi['estado_producto']."</td>";
                                 }
-                                echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
-
-                                $unir = $fi['nombre']." ".$formaa." ".$concentra;
-                                $enable = '';
-                                if($fi['estado_producto']=='vencido'){
-                                    $enable='disabled';
-                                }
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                                  if($fi["estado"] == "activo"){
-                                    echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-                                  }else{
-                                    echo "<button type='button' class='btn' style='background-color:#f1948a' title='Activar' onclick='accionBtnActivar(\"desactivo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
-                                 }
+                              $unir = $fi['nombre']." ".$formaa." ".$concentra;
+                              $enable = '';
+                              if($fi['estado_producto']=='vencido'){
+                                  $enable='disabled';
+                              }
+                              echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+      //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "</div>";
-                              echo "</td>";
-
+                                echo "</td>";
 
                               echo "</tr>";
                               $i++;
@@ -492,6 +490,8 @@ function Buscar(page){
                         unir+="<div id='u' style=' display: inline-block;display:none;'>"+(data[i].cod_generico)+"</div> ";
                         unir+="<div id='u' style=' display: inline-block;'>"+(data[i].nombre)+"</div> ";
                         unir+="<div id='ap' style=' display: inline-block;'> "+(data[i].nombre_forma)+"</div> ";
+                        unir+="<div id='ap' style=' display: inline-block;display:none;'> "+(data[i].cantidad_total)+"</div> ";
+                        unir+="<div id='ap' style=' display: inline-block;display:none;'> "+(data[i].stock_producto)+"</div> ";
                         unir+="<div id='am' style=' display: inline-block;'> "+(data[i].concentracion)+"</div></div>";
 
                       }
@@ -502,11 +502,25 @@ function Buscar(page){
                         var cod_producto = $(this).children().eq(0).text();
                         var nombre = $(this).children().eq(1).text();
                         var nombre_forma = $(this).children().eq(2).text();
-                        var concentracion = $(this).children().eq(3).text();
+                        var total = $(this).children().eq(3).text();
+                        var estado = $(this).children().eq(4).text();
+                        var concentracion = $(this).children().eq(5).text();
                           //dentro de los id de la vista mostramos los datos que estan en el div resultado
                           if(nombre != ""){
+
                             document.getElementById("nombre_producto").value = (nombre)+" "+(nombre_forma)+" "+(concentracion);
                             document.getElementById("cod_producto").value = cod_producto;
+
+                            document.getElementById("total_stock").value=total;
+                            var es = document.getElementById("stock_es");
+                            if(estado.trim() == 'si'){
+                              es.textContent ='Stock bajo';
+                              es.style.backgroundColor = 'red';
+                            }else{
+                              es.textContent ='Stock adecuado';
+                              es.style.backgroundColor = 'green';
+                            }
+                            document.getElementById("stock_producto").value=estado;
                             $('#resultadoProducto').html(""); //para vaciar
                           }
                       });
@@ -540,44 +554,13 @@ function Buscar(page){
                });
       }
 
+function nuevoCantidad(){
+  var cantidad = parseInt(document.getElementById("cantidad").value);
+  var total = parseInt(document.getElementById("total_stock").value);
+  if(cantidad>total){
+    document.getElementById("cantidad").value=total;
+  }
 
-        function accionBtnActivar(accion,pagina,listarDeCuanto,buscar,cod_entrada,fechai,fechaf){
-          var buscar = document.getElementById("buscar").value;
-          var datos = new FormData(); // Crear un objeto FormData vacío
-          datos.append('accion', accion);
-          datos.append("pagina",pagina);
-          datos.append("listarDeCuanto",listarDeCuanto);
-          datos.append("buscar",buscar);
-          datos.append("fechai",fechai);
-          datos.append("fechaf",fechaf);
-          datos.append("cod_entrada",cod_entrada);
-          //alert(accion+"   "+buscar+"    "+cod_generico);
-          $.ajax({
-            url: "../controlador/farmacia.controlador.php?accion=dbe",
-            type: "POST",
-            data: datos,
-            contentType: false, // Deshabilitar la codificación de tipo MIME
-            processData: false, // Deshabilitar la codificación de datos
-            success: function(data) {
-          //alert(data+"dasdas");
-              data=$.trim(data);
-              if(data == "error"){
-                error();
-              }else{
-                $("#verDatos").html(data);
-              }
-            }
-          });
-        }
-
-      function error(){
-        Swal.fire({
-         icon: 'error',
-         title: '¡Error!',
-         text: '¡Ocurrio un error!',
-         showConfirmButton: false,
-         timer: 1500
-       });
-      }
+}
 </script>
 <?php require("../librerias/footeruni.php"); ?>

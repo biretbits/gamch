@@ -1,20 +1,20 @@
-tabla farmaci 
+tabla farmaci
 CREATE TABLE producto (
-    cod_producto INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    cod_generico INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     codigo CHAR(20),
-    cod_generico INT,   
+    nombre char(150),
+    enfermedad char(150) DEFAULT '',
+    vitrina char(30),
+    stockmin int,
+    stockmax int,
     cod_forma INT,
     cod_conc INT,
-    enfermedad VARCHAR(100) DEFAULT '',
     estado CHAR(10) DEFAULT 'activo',
-    FOREIGN KEY (cod_forma) REFERENCES forma_presentacion(cod_forma) 
-        ON DELETE RESTRICT 
+    FOREIGN KEY (cod_forma) REFERENCES forma_presentacion(cod_forma)
+        ON DELETE RESTRICT
         ON UPDATE RESTRICT,
-    FOREIGN KEY (cod_conc) REFERENCES conc_uni_med(cod_conc) 
-        ON DELETE RESTRICT 
-        ON UPDATE RESTRICT,
-    FOREIGN KEY (cod_generico) REFERENCES nombre_generico(cod_generico) 
-        ON DELETE RESTRICT 
+    FOREIGN KEY (cod_conc) REFERENCES conc_uni_med(cod_conc)
+        ON DELETE RESTRICT
         ON UPDATE RESTRICT
 );
 
@@ -71,9 +71,34 @@ create table nombre_generico(cod_generico int not null auto_increment primary ke
 create table conc_uni_med(cod_conc int not null auto_increment primary key,concentracion char(60));
 create table forma_presentacion(cod_forma int not null auto_increment primary key,nombre_forma char(150));
 
-LOAD DATA INFILE 'F:/unidad.csv' INTO TABLE  conc_uni_med FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(concentracion);  
-LOAD DATA INFILE 'F:/nombre_generico.txt' INTO TABLE  nombre_generico FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(nombre);  
-LOAD DATA INFILE 'F:/forma.csv' INTO TABLE  forma_presentacion FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(nombre_forma);  
+LOAD DATA INFILE 'F:/unidad.csv' INTO TABLE  conc_uni_med FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(concentracion);
+LOAD DATA INFILE 'F:/nombre_generico.txt' INTO TABLE  nombre_generico FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(nombre);
+LOAD DATA INFILE 'F:/forma.csv' INTO TABLE  forma_presentacion FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(nombre_forma);
 
 
-LOAD DATA INFILE 'F:/ahora.txt' INTO TABLE  p FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(codigo,cod_generico,cod_forma,cod_conc);  
+LOAD DATA INFILE 'F:/ahora.txt' INTO TABLE  p FIELDS TERMINATED BY ','   ENCLOSED BY '"' LINES TERMINATED BY '\n'(codigo,cod_generico,cod_forma,cod_conc);
+
+create table stock_producto(
+cod_stock int not null auto_increment primary key,
+cod_producto int,
+estado_stock char(10) DEFAULT 'no',
+
+
+)
+
+create table salida(
+    -> cod_salidad int not null auto_increment primary key,
+    -> cantidad_salida int,
+    -> cod_generico int,
+    -> foreign key(cod_generico)references producto(cod_generico)on delete restrict on update restrict)
+
+
+
+ss
+cod_salidad       int  pk
+cantidad_salida   int
+cod_generico      int  fk
+cod_usuario       int  mul
+cod_paciente      int  mul
+fecha             date
+estado            char

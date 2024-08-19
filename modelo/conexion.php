@@ -21,6 +21,7 @@ class Conexion{
 
 
 			if($cnmysql!=null){
+				$cnmysql->set_charset("utf8mb4");
 				return $cnmysql;
 
 			}

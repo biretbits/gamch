@@ -55,7 +55,7 @@
                         </button>
                       </div>
                       <div class="col-auto mb-2" title="Registro o actualizar">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','','','',0,0)">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','','','',0,0,0,0)">
                           <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -104,8 +104,31 @@
                                </div>
                                <div class="mb-3">
                                  <label for="name" class="form-label">Stock maximo</label>
-                                 <input type="number" class="form-control" id="stockmax" min='0'name='stockmax' value='0' placeholder="stock maximo">
+                                 <input type="number" class="form-control" id="stockmax" min='0'name='stockmax' value='1' placeholder="stock maximo">
                                </div>
+
+                               <div class="mb-3">
+                                  <label for="cod_forma" class="form-label">Forma de presentación</label>
+                                   <select id='cod_forma' name="cod_forma" class="form-select">
+                                       <option value="">Seleccione forma de presentación</option>
+                                    <?php
+                                     while($row=mysqli_fetch_array($rp)){
+                                        echo "<option value='".$row['cod_forma']."'>".$row['nombre_forma']."</option>";
+                                      }
+                                    ?>
+                                  </select>
+                              </div>
+                              <div class="mb-3">
+                                 <label for="cod_conc" class="form-label">Concentración unidad de medida</label>
+                                  <select id='cod_conc' name="cod_conc" class="form-select">
+                                      <option value="">Seleccione Concentración unidad de medida</option>
+                                   <?php
+                                    while($row=mysqli_fetch_array($rc)){
+                                       echo "<option value='".$row['cod_conc']."'>".$row['concentracion']."</option>";
+                                     }
+                                   ?>
+                                 </select>
+                             </div>
                                <div class="d-grid gap-2">
                                </div>
                              </form>
@@ -172,11 +195,16 @@
                             <thead style="font-size:12px">
                               <tr>
                                 <th>N°</th>
+                                <th>Codigo</th>
                                 <th>Nombre generico</th>
+                                <th>Forma de presentación</th>
+                                <th>Concentración unidad de medida</th>
                                 <th>Enfermedad</th>
                                 <th>Vitrina</th>
                                 <th>Stock minimo</th>
-                                <th>Stock maximo</th>
+                                <th>Stock</th>
+                                <th>Estado</th>
+                                <th>Encargado</th>
                                 <th>Acción</th>
                               </tr>
                             </thead>
@@ -189,19 +217,33 @@
                           foreach ($resul as $fi){
                               echo "<tr>";
                                 echo "<td>".($i+1)."</td>";
+                                echo "<td>".$fi['codigo']."</td>";
                                 echo "<td>".$fi['nombre']."</td>";
-
+                                echo "<td>".$fi['nombre_forma']."</td>";
+                                echo "<td>".$fi['concentracion']."</td>";
                                 echo "<td>".$fi['enfermedad']."</td>";
                                 echo "<td>".$fi['vitrina']."</td>";
                                 echo "<td>".$fi['stockmin']."</td>";
-                                echo "<td>".$fi['stockmax']."</td>";
+                                echo "<td>".$fi['cantidad_total']."</td>";
+                                if($fi['stock_producto'] == 'si'){
+                                  echo "<td style='background-color:#ffafaf;color:red;text-align:center;font-size:13px'>Stock bajo</td>";
+                                }else{
+                                  echo "<td style='background-color:#bfffaf:color:green;text-align:center;font-size:13px'>Stock Adecuado</td>";
+                                }
+                                echo "<td>".$fi['nombre_usuario']." ".$fi['ap_usuario']."</td>";
+
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-
-                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",\"".$fi['stockmax']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-      //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",\"".$fi['stockmax']."\",";
+                                  $dd.="\"".$fi['cod_forma']."\",\"".$fi['cod_conc']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo $dd;
+                                  if($fi["estado"] == "activo"){
+                                    echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_generico'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  }else{
+                                    echo "<button type='button' class='btn' style='background-color:#f1948a' title='Activar' onclick='accionBtnActivar(\"desactivo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_generico'].")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
+                                 }
                                   echo "</div>";
-                                echo "</td>";
+                              echo "</td>";
 
                               echo "</tr>";
                               $i++;
@@ -362,15 +404,21 @@ function Buscar(page){
     var vitrina = document.getElementById("vitrina").value;
     var stockmin = parseInt(document.getElementById("stockmin").value);
     var stockmax = parseInt(document.getElementById("stockmax").value);
-
-    if((stockmin)==0 || (stockmax)==0){
-      Error23();
-      return;
-    }
+    var cod_forma = document.getElementById("cod_forma").value;
+    var cod_conc = document.getElementById("cod_conc").value;
     if(generico == ''){
       Vacio();
       return;
     }
+    if((stockmin)==0 || (stockmax)==0){
+      Error23();
+      return;
+    }
+    if(cod_forma=='' || cod_conc==''){
+      seleccione();
+      return;
+    }
+
     var cod_generico = document.getElementById("cod_generico").value;
 
     var datos = new FormData(); // Crear un objeto FormData vacío
@@ -380,6 +428,8 @@ function Buscar(page){
     datos.append("vitrina",vitrina);
     datos.append("stockmin",stockmin);
     datos.append("stockmax",stockmax);
+    datos.append("cod_forma",cod_forma);
+    datos.append("cod_conc",cod_conc);
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=rfnt",
         type: "POST",
@@ -387,7 +437,7 @@ function Buscar(page){
         contentType: false, // Deshabilitar la codificación de tipo MIME
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-          //alert(data+"dasdas");
+        alert(data+"dasdas");
           if(data == 'correcto'){
             Correcto();
           }else{
@@ -396,6 +446,16 @@ function Buscar(page){
           IRalLink(cod_generico);
         }
       });
+  }
+
+  function seleccione(){
+    Swal.fire({
+     icon: 'error',
+     title: '¡Error!',
+     text: '¡Seleccione!',
+     showConfirmButton: false,
+     timer: 1500
+   });
   }
 
   function Correcto(){
@@ -447,6 +507,8 @@ function Buscar(page){
         document.getElementById("vitrina").value = '';
         document.getElementById("stockmin").value = '';
         document.getElementById("stockmax").value = '';
+        document.getElementById("cod_forma").value='';
+        document.getElementById("cod_conc").value='';
         $('#ModalRegistro').modal('hide');
       }, 1500);
     }else{
@@ -458,13 +520,60 @@ function Buscar(page){
       }, 1500);
     }
   }
-  function ActualizarNombreGenerico(cod_generico,nombre,enfermedad,vitrina,stockmin,stockmax){
+  function ActualizarNombreGenerico(cod_generico,nombre,enfermedad,vitrina,stockmin,stockmax,cod_forma,cod_conc){
     document.getElementById('cod_generico').value=cod_generico;
     document.getElementById("generico").value=nombre;
     document.getElementById("enfermedad").value=enfermedad;
     document.getElementById("vitrina").value=vitrina;
     document.getElementById("stockmin").value=stockmin;
     document.getElementById("stockmax").value=stockmax;
+    if(cod_forma == 0){
+      document.getElementById("cod_forma").selectedIndex = 0;
+    }else{
+      document.getElementById("cod_forma").value=cod_forma;
+    }
+    if(cod_forma == 0){
+      document.getElementById("cod_conc").selectedIndex = 0;
+    }else{
+      document.getElementById("cod_conc").value=cod_conc;
+    }
   }
+
+  function accionBtnActivar(accion,pagina,listarDeCuanto,buscar,cod_generico){
+    var buscar = document.getElementById("buscar").value;
+    var datos = new FormData(); // Crear un objeto FormData vacío
+    datos.append('accion', accion);
+    datos.append("pagina",pagina);
+    datos.append("listarDeCuanto",listarDeCuanto);
+    datos.append("buscar",buscar);
+    datos.append("cod_generico",cod_generico);
+    //alert(accion+"   "+buscar+"    "+cod_generico);
+    $.ajax({
+      url: "../controlador/farmacia.controlador.php?accion=dNg",
+      type: "POST",
+      data: datos,
+      contentType: false, // Deshabilitar la codificación de tipo MIME
+      processData: false, // Deshabilitar la codificación de datos
+      success: function(data) {
+    //alert(data+"dasdas");
+        data=$.trim(data);
+        if(data == "error"){
+          error();
+        }else{
+          $("#verDatos").html(data);
+        }
+      }
+    });
+  }
+
+function error(){
+  Swal.fire({
+   icon: 'error',
+   title: '¡Error!',
+   text: '¡Ocurrio un error!',
+   showConfirmButton: false,
+   timer: 1500
+ });
+}
 </script>
 <?php require("../librerias/footeruni.php"); ?>

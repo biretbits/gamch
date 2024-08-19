@@ -93,7 +93,14 @@
   </div>-->
 
   <div class="row">
-  <?php if(!isset($_SESSION['tipo_usuario'])){
+  <?php
+  if(isset($_SESSION['tipo_usuario'])!=""){
+    require_once('sql.php');
+    ActualizarEntrada();
+    ActualizarCantidad();
+
+  }
+  if(!isset($_SESSION['tipo_usuario'])){
         ?><div class="alert alert-success border border-success border-3" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.5);background: linear-gradient(to right, OldLace,white, Gainsboro);">
             <div class="justify-content-center d-flex ">
               <div class="col-lg-5 col-md-6 col-12">
