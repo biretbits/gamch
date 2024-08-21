@@ -42,7 +42,7 @@ function ActualizarEntrada(){
   $cnmysql=conec();
 	mysqli_set_charset($cnmysql,"utf8");
   $fechaActual = date('Y-m-d');
-  $select="select *from entrada";
+  $select="select *from entrada where estado = 'activo'";
 	$da=$cnmysql->query($select);
   $fecha1_time = strtotime($fechaActual);
   while($fi=mysqli_fetch_array($da)){

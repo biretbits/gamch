@@ -560,6 +560,7 @@ class FarmaciaControlador{
               "cantidad" => $fi["cantidad"],
               "vencimiento" => $fi["vencimiento"],
               "fecha" => $fi["fecha"],
+              "manipulado" => $fi["manipulado"],
               "cod_generico" => $fi["cod_generico"],
               "estado_producto" => $fi["estado_producto"],
                 "codigo" => $fi["codigo"],
@@ -679,13 +680,18 @@ class FarmaciaControlador{
                 echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
 
                 $unir = $fi['nombre']." ".$formaa." ".$concentra;
-                $enable = '';
+                $enable = '';$title='Editar';
                 if($fi['estado_producto']=='vencido'){
                     $enable='disabled';
+                    $title='El producto esta vencido';
+                }
+                if($fi['manipulado'] == 'si'){
+                  $enable = 'disabled';
+                  $title='El producto ya se uso';
                 }
                 echo "<td>";
                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-info' title='$title' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                   if($fi["estado"] == "activo"){
                     echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                   }else{
@@ -808,6 +814,20 @@ class FarmaciaControlador{
       }
     }
 
+    public function buscarPacienteFarmacia($nombre_paciente){
+      $fa =new Farmacia();
+      $re = $fa->buscarPacienteFar($nombre_paciente);
+      $datos = array();
+      if ($re->num_rows > 0) {
+     // Recoger los resultados en un array
+       while($row = $re->fetch_assoc()) {
+        $datos[] = $row;
+      }
+          echo json_encode($datos);
+      } else {
+          echo json_encode([]);
+      }
+    }
     public function VisualizarSalidaFarmacia(){
       $fa =new Farmacia();
       $listarDeCuanto = 5;$pagina = 1;$buscar = "";
@@ -880,6 +900,118 @@ class FarmaciaControlador{
       }
     }
 
+   public function InsertarActualizarSalida($cod_producto,$cantidad,$cod_salida,$id_paciente){
+     $fa =new Farmacia();
+     $fechaActual = date('Y-m-d');
+     if(is_numeric($cod_salida)){//si existe el cod_salida esta queriendo editar
+       $fa->actualizar_datos_entrada($cod_salida);
+     }
+     $resultado = $fa->entradaTodo($fechaActual,$cod_producto);//seleccionar todas las entradas pero desde una fecha y de un producto
+     $retorno = $this->disminuir_stock($resultado,$fa,$cantidad);//funcion para dsminuir la cantidad
+     $codigos = $retorno[0];//codigos separado por comas
+     $cat_res = $retorno[1];//cantidades restado separado por comas
+     $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
+     $this->ActualizarCantidad($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
+     $usuario=$_SESSION["cod_usuario"];
+     $resul=$fa->insertarNuevoRegistroSalida($cod_producto,$cantidad,$cod_salida,$id_paciente,$codigos,$usuario,$fechaActual,$cat_res);
+     if($resul!=''){
+       echo "correcto";
+     }else{
+       echo "error";
+     }
+   }
+
+   function disminuir_stock($r, $f, $cantidad) {
+     // Inicializamos arrays para almacenar los códigos y las cantidades restantes
+     $codigos = array();
+     $cant_resta = array();
+
+     while ($fila = mysqli_fetch_array($r)) {
+         $cantidad_entrada = $fila["cantidad"];
+         $cod_entrada = $fila["cod_entrada"];
+         $resul = 0;
+         $cat = 0;
+         if ($cantidad_entrada != 0) {
+             if ($cantidad_entrada > $cantidad) {
+                 $resul = $cantidad_entrada - $cantidad;
+                 $cat = $cantidad;
+                 $cantidad = 0;
+             } else if ($cantidad_entrada < $cantidad) {//30  80 se requiere
+                 $resta = $cantidad - $cantidad_entrada;//50=80-30
+                 $cantidad = $resta;
+                 $res2 = $cantidad - $resta;//80-50=30
+                 $resul = $cantidad_entrada - $res2;//30-30=0
+                 $cat = $res2;
+             } else {
+                 $resul = 0;
+                 $cat = $cantidad;
+                 $cantidad = 0;
+             }
+
+              // Agregamos el código y la cantidad restante a los arrays
+              $codigos[] = $cod_entrada;
+              $cant_resta[] = $cat;
+              // Llamada a función para actualizar la cantidad
+              $this->actualizar_Cantidad($resul, $fila['cod_entrada'], $f);
+
+             if ($cantidad == 0) {
+                 break;
+             }
+
+        }
+     }
+     // Convertimos los arrays a cadenas separadas por comas
+     $codigos = implode(",", $codigos);
+     $cant_resta = implode(",", $cant_resta);
+     // Devolvemos los resultados
+     return array($codigos, $cant_resta);
+   }
+
+
+    function actualizar_Cantidad($nueva_cantidad,$cod_entrada,$f){
+      $f->actualizarCantidad($nueva_cantidad,$cod_entrada);
+    }
+    function ActualizarEntradas($fechaActual,$f){
+      $da=$f->seleccionarEntradas();
+      $fecha1_time = strtotime($fechaActual);
+      while($fi=mysqli_fetch_array($da)){
+        $fechaVencimiento = $fi['vencimiento'];
+        $fecha2_time = strtotime($fechaVencimiento);
+        if($fecha1_time>=$fecha2_time){
+        //  echo $fecha1_time.">=".$fecha2_time." vencido";
+          $f->ProductoVencido($fi['cod_entrada']);
+        }
+      }
+    }
+
+    function ActualizarCantidad($fechaActual,$f){
+      $da=$f->SeleccionarProductosTodo();
+      $new = array();
+      while($fila = mysqli_fetch_array($da)){
+        $new[$fila["cod_generico"]]=array("total" => 0);
+      }
+      $da1=$f->seleccionarEntradas();
+      $fecha2_time = strtotime($fechaActual);
+      while($fi=mysqli_fetch_array($da1)){
+        $fecha1_time = strtotime($fi['vencimiento']);
+        if($fecha1_time>$fecha2_time){
+          $new[$fi["cod_generico"]]["total"]=$new[$fi["cod_generico"]]["total"]+$fi['cantidad'];
+          //echo "aaaa".$new[$fi["cod_generico"]]["total"]."<br>";
+        }
+      }
+
+    	$da2==$f->SeleccionarProductosTodo();
+      while($fil = mysqli_fetch_array($da2)){
+        $sql = '';
+        if($new[$fil['cod_generico']]['total']<=$fil["stockmin"]){
+            $f->actualizarCantidadNuevo('si',$new[$fil['cod_generico']]['total'],$fil["cod_generico"]);
+        }else{
+            $f->actualizarCantidadNuevo('no',$new[$fil['cod_generico']]['total'],$fil["cod_generico"]);
+          $r=$cnmysql->query($sql);
+        }
+      }
+    }
+
 
   }
 
@@ -935,6 +1067,11 @@ class FarmaciaControlador{
   if(isset($_GET["accion"]) && $_GET['accion']=='dbe'){
     $f->EliminarEF($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_entrada"],$_POST["fechai"],$_POST["fechaf"]);
 	}
+  if(isset($_GET["accion"]) && $_GET['accion']=='resf'){
+    $f->InsertarActualizarSalida($_POST["cod_producto"],$_POST["cantidad"],$_POST["cod_salida"],$_POST["id_paciente"]);
+  }
 
-
+  if(isset($_GET["accion"]) && $_GET["accion"]=="buf"){
+		$f->buscarPacienteFarmacia($_POST['cod_paciente']);
+	}
 ?>

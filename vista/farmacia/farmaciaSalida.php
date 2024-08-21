@@ -80,7 +80,14 @@
                            <div class="card-body">
                              <form>
                                <input type="text" name="cod_producto"id='cod_producto' value="">
-                               <input type="text" name="cod_entrada" id='cod_entrada' value="">
+                               <input type="text" name="cod_salida" id='cod_salida' value="">
+                               <input type="text" name="usuario_id" id='usuario_id' value="">
+                               <div class="mb-3">
+                                 <label for="cod_paciente" class="form-label">Paciente</label>
+                                 <input type="text" class="form-control" id="cod_paciente" placeholder="Busque al paciente" onkeyup="buscarPaciente()">
+                                 <div id="resultadoPaciente" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                                 </div>
+                               </div>
                                <div class="mb-3">
                                  <label for="cod_producto" class="form-label">Producto farmaceutico</label>
                                  <input type="text" class="form-control" id="nombre_producto" placeholder="Busque el producto" onkeyup="buscarProductoNuevo()">
@@ -220,7 +227,7 @@
                               if($fi['estado_producto']=='vencido'){
                                   $enable='disabled';
                               }
-                              echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                              echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarEntrada(".$fi['cod_salida'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
       //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "</div>";
                                 echo "</td>";
@@ -384,32 +391,32 @@ function Buscar(page){
 
   function registrar(){
     var cod_producto = document.getElementById("cod_producto").value;
+    var cod_salida = document.getElementById("cod_salida").value;
     var cantidad = document.getElementById("cantidad").value;
-    var vencimiento = document.getElementById("vencimiento").value;
-    var cod_entrada = document.getElementById("cod_entrada").value;
-    if(cod_producto == "" || cantidad == "" ||vencimiento==""){
+    var id_paciente = document.getElementById("usuario_id").value;
+    if(cantidad == "" || cod_producto == '' || id_paciente == ''){
       Vacio();
       return;
     }
     var datos = new FormData(); // Crear un objeto FormData vacío
     datos.append("cod_producto",cod_producto);
     datos.append("cantidad",cantidad);
-    datos.append("vencimiento",vencimiento);
-    datos.append("cod_entrada",cod_entrada);
+    datos.append("cod_salida",cod_salida);
+    datos.append("id_paciente",id_paciente);
       $.ajax({
-        url: "../controlador/farmacia.controlador.php?accion=rpe",
+        url: "../controlador/farmacia.controlador.php?accion=resf",
         type: "POST",
         data: datos,
         contentType: false, // Deshabilitar la codificación de tipo MIME
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-        //alert(data+"dasdas");
+        alert(data+"dasdas");
           if(data == 'correcto'){
             Correcto();
           }else{
             Error1();
           }
-          IRalLink(cod_entrada);
+          IRalLink(cod_salida);
         }
       });
   }
@@ -442,13 +449,13 @@ function Buscar(page){
    });
   }
 
-  function IRalLink(cod_entrada){
-    if(cod_entrada!=''){
+  function IRalLink(cod_salida){
+    if(cod_salida!=''){
       setTimeout(() => {
         var pagina = document.getElementById("paginas").value;
         if(pagina==''){pagina=1;}
         Buscar(pagina);
-        document.getElementById("cod_entrada").value='';
+        document.getElementById("cod_salida").value='';
         document.getElementById("cod_producto").value='';
         document.getElementById("cantidad").value='';
         document.getElementById("vencimiento").value='';
@@ -461,8 +468,8 @@ function Buscar(page){
       }, 1500);
     }
   }
-  function ActualizarEntrada(cod_entrada,cantidad,vencimiento,cod_generico,nombre_producto){
-    document.getElementById('cod_entrada').value=cod_entrada;
+  function ActualizarEntrada(cod_salida,cantidad,vencimiento,cod_generico,nombre_producto){
+    document.getElementById('cod_salida').value=cod_salida;
     document.getElementById("cantidad").value=cantidad;
     document.getElementById("vencimiento").value=vencimiento;
     document.getElementById("cod_producto").value=cod_generico;
@@ -560,7 +567,79 @@ function nuevoCantidad(){
   if(cantidad>total){
     document.getElementById("cantidad").value=total;
   }
-
 }
+
+
+  function buscarPaciente() {
+          //vaciarDESPUESdeUNtiempoAdmision();
+          var nombre_paciente = document.getElementById("cod_paciente").value;
+          if (nombre_paciente != "") {
+            //alert(nombre_paciente);
+              $.ajax({
+                  url: "../controlador/farmacia.controlador.php?accion=buf",
+                  type: "POST",
+              		data: {cod_paciente:nombre_paciente},
+              		dataType: "json",
+                  success: function(data) {
+                    //alert(data);
+                    if(data!=""){
+                      var unir="";
+                      for (let i = 0; i < data.length; i++) {
+                        var usuario = data[i];
+
+                        unir+="<div>";
+                        unir+="<div id='u' style=' display: inline-block;display:none;'>"+(data[i].cod_usuario)+"</div> ";
+                        unir+="<div id='u' style=' display: inline-block;'>CI: "+(data[i].ci_usuario)+"</div> ";
+                        unir+="<div id='u' style=' display: inline-block;'>"+(data[i].nombre_usuario)+"</div> ";
+                        unir+="<div id='ap' style=' display: inline-block;'> "+(data[i].ap_usuario)+"</div> ";
+                        unir+="<div id='am' style=' display: inline-block;'> "+(data[i].am_usuario)+"</div></div>";
+
+                      }
+
+                      visualizarPaciente(unir);
+                      $('#resultadoPaciente div').on('click', function() {
+                              //obtenemos los datos del usuario div resultado
+                        var cod_usuario = $(this).children().eq(0).text();
+                        var ci = $(this).children().eq(1).text();
+                        var nombre_usuario = $(this).children().eq(2).text();
+                        var ap_usuario = $(this).children().eq(3).text();
+                        var am_usuario = $(this).children().eq(4).text();
+                          //dentro de los id de la vista mostramos los datos que estan en el div resultado
+                        if(nombre_usuario != ""){
+                          alert(ci);
+                            document.getElementById("usuario_id").value=cod_usuario;
+                            document.getElementById("cod_paciente").value =(nombre_usuario)+" "+(ap_usuario)+" "+am_usuario;
+                          $('#resultadoPaciente').html(""); //para vaciar
+                        }
+                      });
+                    }else{
+                      $('#resultadoPaciente').html("<div class='alert alert-light' role='alert'>No se encontro resultados</div>");
+                    }
+
+              		}
+              	});
+              }else{
+                $('#resultadoPaciente').html("");
+                document.getElementById("cod_usuario").value='';
+              }
+            }
+            function Convertir(t){
+              let palabras = t.split(" ");
+              let nombreConInicialesMayusculas = "";
+               for (let i = 0; i < palabras.length; i++) {
+                 nombreConInicialesMayusculas += palabras[i].charAt(0).toUpperCase() + palabras[i].slice(1) + " ";
+                }
+                 return nombreConInicialesMayusculas.trim();
+             }
+
+              function visualizarPaciente(unir){
+
+              $('#resultadoPaciente').html(unir);
+              //colocamos un color de css
+              $('#resultadoPaciente').css({
+               'cursor': 'pointer',
+               'font-size':'15px'
+               });
+      }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

@@ -211,13 +211,18 @@
                                 echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
 
                                 $unir = $fi['nombre']." ".$formaa." ".$concentra;
-                                $enable = '';
+                                $enable = '';$title='Editar';
                                 if($fi['estado_producto']=='vencido'){
                                     $enable='disabled';
+                                    $title='El producto esta vencido';
+                                }
+                                if($fi['manipulado'] == 'si'){
+                                  $enable = 'disabled';
+                                  $title='El producto ya se uso';
                                 }
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-info' title='$title' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                                   if($fi["estado"] == "activo"){
                                     echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   }else{
