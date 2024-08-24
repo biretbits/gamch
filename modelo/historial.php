@@ -46,12 +46,14 @@ class Historial
     $a = [];
     while ($fi = mysqli_fetch_array($resul)) {
       $datos = [
+          "cod_usuario" => $fi["cod_usuario"],
           "nombre_usuario_re" => $fi["nombre_usuario"],
           "ap_usuario_re" => $fi["ap_usuario"],
           "ci_usuario" => $fi["ci_usuario"],
           "am_usuario_re" => $fi["am_usuario"],
           "fn_usuario_re" => $fi["fecha_nac_usuario"],
           "edad_usuario" => $fi["edad_usuario"],
+          "sexo_usuario" =>$fi["sexo_usuario"],
           "ocupacion_usuario" => $fi["ocupacion_usuario"],
           "comunidad_usuario" => $fi["comunidad_usuario"],
           "estado_civil_usuario" => $fi["estado_civil_usuario"],
@@ -113,9 +115,11 @@ class Historial
 
 
 
-  public function insertarNewResponsableyPacientes($Nombre_responsable,$ap_responsable,$am_responsable,$fecha_nacimiento_responsable,$sexo_responsable,
-  $ocupacion_responsable,$direccion_responsable,$telefono_resposable,$comunidad_responsable,$ci,$n_seguro,$n_carp_fam,$zona_his,$cod_usuario,$paciente_rd,
-  $cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad){
+  public function insertarNewResponsableyPacientes($Nombre_responsable,$ap_responsable,$am_responsable,
+  $fecha_nacimiento_responsable,$sexo_responsable,
+  $ocupacion_responsable,$direccion_responsable,$telefono_resposable,$comunidad_responsable,$ci,$n_seguro,$n_carp_fam,$zona_his
+  ,$cod_usuario,$paciente_rd,
+  $cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_his){
     $sql = "";
     if($cod_usuario !=""){ //existe usuario
       $sql = "update usuario set ";
@@ -135,22 +139,42 @@ class Historial
       }else if($ocupacion_responsable != "" && $si == 'si'){
         $sql.= " ,ocupacion_usuario = '$ocupacion_responsable'";
       }
-      if($telefono_resposable == "" && $si == 'no'){
+      if($telefono_resposable != "" && $si == 'no'){
         $sql.= " telefono_usuario = '$telefono_resposable'";
         $si = 'si';
       }else
-      if($telefono_resposable == "" && $si == 'si'){
+      if($telefono_resposable != "" && $si == 'si'){
         $sql.= " ,telefono_usuario = '$telefono_resposable'";
       }
-      if($comunidad_responsable == "" && $si == 'no'){
+      if($comunidad_responsable != "" && $si == 'no'){
         $sql.= " comunidad_usuario = '$comunidad_responsable'";
         $si = 'si';
       }else
-      if($comunidad_responsable == "" && $si == 'si'){
+      if($comunidad_responsable != "" && $si == 'si'){
         $sql.= " ,comunidad_usuario = '$comunidad_responsable'";
       }
+
+      if($ci != "" && $si == 'no'){
+        $sql.= " ci_usuario = '$ci'";
+        $si = 'si';
+      }elseif($ci != "" && $si == 'si'){
+        $sql.= " ,ci_usuario = '$ci'";
+      }
+
+      if($n_seguro != "" && $si == 'no'){
+        $sql.= " nro_seguro_usuario = '$n_seguro'";
+        $si = 'si';
+      }else if($n_seguro != "" && $si == 'si'){
+        $sql.= " ,nro_seguro_usuario = '$n_seguro'";
+      }
+      if($n_carp_fam != "" && $si == 'no'){
+        $sql.= " nro_car_form_usuario = '$n_carp_fam'";
+        $si = 'si';
+      }else if($n_carp_fam != "" && $si == 'si'){
+        $sql.= " ,nro_car_form_usuario= '$n_carp_fam'";
+      }
       $sql.= "   WHERE cod_usuario = $cod_usuario";
-      //echo $sql." prueba";
+      //echo "??????".$sql." prueba";
       $resul = $this->con->query($sql);
     }else{
       $sql = "insert into usuario(nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,sexo_usuario,ocupacion_usuario,direccion_usuario,
@@ -165,11 +189,22 @@ class Historial
         $cod_usuario = $fi["c"];
       }
     }
+    //actualizar los datos del paciente pero solo algunos datospaciente
+    //echo "e".$estado_civil." es ".$escolaridad." fn  ".$fecha_nacimiento."   ".$paciente_rd."   ".$sexo;
+    $sql23 = "update usuario set fecha_nac_usuario='$fecha_nacimiento',sexo_usuario='$sexo',ocupacion_usuario='$ocupacion',
+    estado_civil_usuario='$estado_civil', escolaridad_usuario='$escolaridad' where cod_usuario = $paciente_rd";
+    $this->con->query($sql23);
+
     $fechaActual = date("Y-m-d");
     $horaActual = date("H:i:s");
-    $sql = "insert into historial(zona_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his,archivo,fecha,hora,estado)values(
-    '$zona_his',$cod_rd,$paciente_rd,1,$cod_usuario,'','$fechaActual','$horaActual','activo')";
+    $sql = '';
 
+    if(is_numeric($cod_his)){//actualizar historial
+      $sql ="update historial set zona_his='$zona_his',cod_responsable_familia_his=$cod_usuario,archivo='' where cod_his=$cod_his";
+    }else{
+      $sql = "insert into historial(zona_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his,archivo,fecha,hora,estado)values(
+      '$zona_his',$cod_rd,$paciente_rd,1,$cod_usuario,'','$fechaActual','$horaActual','activo')";
+    }
     $res = $this->con->query($sql);   // Retornar el resultado
 
     if($res===TRUE){

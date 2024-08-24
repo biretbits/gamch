@@ -49,7 +49,7 @@
                         </button>
                       </div>
                       <div class="col-auto mb-2" title="Registrar o Actualizar">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarEntrada('','','','','')">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarSalida('',0,'','',0,'','')">
                           <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -84,13 +84,13 @@
                                <input type="text" name="usuario_id" id='usuario_id' value="">
                                <div class="mb-3">
                                  <label for="cod_paciente" class="form-label">Paciente</label>
-                                 <input type="text" class="form-control" id="cod_paciente" placeholder="Busque al paciente" onkeyup="buscarPaciente()">
+                                 <input type="text" class="form-control" id="cod_paciente" placeholder="Busque al paciente" onkeyup="buscarPaciente()"autocomplete="off">
                                  <div id="resultadoPaciente" align='left' class='alert alert-light mb-0 py-0 border-0'>
                                  </div>
                                </div>
                                <div class="mb-3">
                                  <label for="cod_producto" class="form-label">Producto farmaceutico</label>
-                                 <input type="text" class="form-control" id="nombre_producto" placeholder="Busque el producto" onkeyup="buscarProductoNuevo()">
+                                 <input type="text" class="form-control" id="nombre_producto" placeholder="Busque el producto" onkeyup="buscarProductoNuevo()" autocomplete="off">
                                  <div id="resultadoProducto" align='left' class='alert alert-light mb-0 py-0 border-0'>
                                  </div>
                                </div>
@@ -99,14 +99,9 @@
                                  <input disabled type="text" class="form-control" id="total_stock" name='total_stock' min='1' value='0' placeholder="Stock Total">
                                </div>
                                <p id='stock_es' class='form-control'></p>
-                               <input type="text" name="stock_producto" id='stock_producto'value="">
                                <div class="mb-3">
                                  <label for="name" class="form-label">Cantidad</label>
                                  <input type="number" class="form-control" id="cantidad"  min='1' value='1' placeholder="cantidad" onchange="nuevoCantidad()">
-                               </div>
-                               <div class="mb-3">
-                                 <label for="vencimiento" class="form-label">Vencimiento</label>
-                                 <input type="date" class="form-control" id="vencimiento" name='vencimiento' placeholder="Vencimiento">
                                </div>
 
                              </form>
@@ -174,18 +169,17 @@
                                 <th>N°</th>
                                 <th>Codigo</th>
                                 <th>Nombre Generico</th>
-                                <th>Forma presentación</th>
-                                <th>Concentración unidad medida</th>
-                                <th>Cantidad</th>
-                                <th>vencimiento</th>
+                                <th>Paciente</th>
+                                <th>Encargado Farmacia</th>
+                                <th>Cantidad Obtenida</th>
                                 <th>Fecha</th>
-                                <th>Estado producto</th>
                                 <th>Acción</th>
                               </tr>
                             </thead>
                             <tbody>
 
                         <?php
+                        //echo "<br><br><br><br><br>".count($resul);
                         if ($resul && count($resul) > 0) {
                           $i = $inicioList;
                           foreach ($resul as $fi){
@@ -194,41 +188,32 @@
                                 echo "<td>".$fi['codigo']."</td>";
                                 echo "<td>".$fi['nombre']."</td>";
 
-                                $forma = $fi['nombre_forma'];
-                                $formaa = "";
+                                $paciente = $fi['cod_paciente'];
+                                $cod_paciente = '';
                                 echo "<td>";
-                                foreach ($forma as $form) {
-                                  echo $form["nombre_forma"];
-                                  $formaa=$form["nombre_forma"];
+                                foreach ($paciente as $form) {
+                                  $datos_paciente = $form["nombre_usuario"]." ".$form["ap_usuario"]." ".$form["am_usuario"];
+                                  echo $form["nombre_usuario"]." ".$form["ap_usuario"]." ".$form["am_usuario"];
+                                  $cod_paciente=$form["cod_usuario"];
                                 }
                                 echo "</td>";
-                                $concentracion = $fi['concentracion'];
-                                $concentra = "";
+                                $Encargado = $fi['cod_usuario'];
+                                $cod_usuario = "";
                                 echo "<td>";
-                                foreach ($concentracion as $conc) {
-                                  echo $conc["concentracion"];
-                                  $concentra =$conc['concentracion'];
+                                foreach ($Encargado as $conc) {
+                                  echo $conc["nombre_usuario"]." ".$conc["ap_usuario"]." ".$conc["am_usuario"];
+                                  $cod_usuario =$conc['cod_usuario'];
                                 }
                                 echo "</td>";
 
-                                echo "<td>".$fi['cantidad']."</td>";
-                                echo "<td>".$fi['vencimiento']."</td>";
+                                echo "<td>".$fi['cantidad_salida']."</td>";
                                 echo "<td>".$fi['fecha']."</td>";
 
-                                if($fi['estado_producto'] == 'activo'){
-                                  echo "<td style='color:green;background-color:#dbffaf;text-align:center'>".$fi['estado_producto']."</td>";
-                                }else if($fi['estado_producto'] == 'vencido'){
-                                  echo "<td style='color:red;background-color:#ffc8af;text-align:center'>".$fi['estado_producto']."</td>";
-                                }
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                              $unir = $fi['nombre']." ".$formaa." ".$concentra;
-                              $enable = '';
-                              if($fi['estado_producto']=='vencido'){
-                                  $enable='disabled';
-                              }
-                              echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarEntrada(".$fi['cod_salida'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-      //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                                //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
+                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$fi['cantidad_salida'].",\"".$datos_paciente."\",\"".$fi['nombre']."\",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'].")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-danger' title='Eliminar' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "</div>";
                                 echo "</td>";
 
@@ -369,7 +354,7 @@ function Buscar(page){
     datos.append("fechai",fechai);
     datos.append("fechaf",fechaf);
       $.ajax({
-        url: "../controlador/farmacia.controlador.php?accion=bft",
+        url: "../controlador/farmacia.controlador.php?accion=vsta",
         type: "POST",
         data: datos,
         contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -394,6 +379,15 @@ function Buscar(page){
     var cod_salida = document.getElementById("cod_salida").value;
     var cantidad = document.getElementById("cantidad").value;
     var id_paciente = document.getElementById("usuario_id").value;
+    var total = parseInt(document.getElementById("total_stock").value);
+    if(cantidad>total){
+      cambie_Cantidad();
+      return;
+    }
+    if(total==0){
+      StockBajo();
+      return;
+    }
     if(cantidad == "" || cod_producto == '' || id_paciente == ''){
       Vacio();
       return;
@@ -413,6 +407,8 @@ function Buscar(page){
         alert(data+"dasdas");
           if(data == 'correcto'){
             Correcto();
+          }else if(data == 'fecha_vencido'){
+            vencido();
           }else{
             Error1();
           }
@@ -420,6 +416,36 @@ function Buscar(page){
         }
       });
   }
+
+  function vencido() {
+    Swal.fire({
+        icon: 'info',
+        title: '¡Información!',
+        text: '¡Lo siento, no podrá actualizar, ya que se encontró que en el abastecimiento ya vencieron algunos productos!',
+        showConfirmButton: false,
+        timer: 2000
+    });
+}
+
+  function StockBajo() {
+    Swal.fire({
+        icon: 'info',
+        title: '¡Información!',
+        text: '¡Lo siento, No se podra actualizar el stock es muy bajo!',
+        showConfirmButton: false,
+        timer: 2000
+    });
+}
+
+  function cambie_Cantidad() {
+    Swal.fire({
+        icon: 'info',
+        title: '¡Información!',
+        text: '¡La cantidad solicitada supera al stock que se tiene!',
+        showConfirmButton: false,
+        timer: 2000
+    });
+}
 
   function Correcto(){
     Swal.fire({
@@ -455,25 +481,31 @@ function Buscar(page){
         var pagina = document.getElementById("paginas").value;
         if(pagina==''){pagina=1;}
         Buscar(pagina);
-        document.getElementById("cod_salida").value='';
-        document.getElementById("cod_producto").value='';
-        document.getElementById("cantidad").value='';
-        document.getElementById("vencimiento").value='';
+        document.getElementById('cod_salida').value="";
+        document.getElementById("cantidad").value="";
+        document.getElementById("usuario_id").value="";
+        document.getElementById("cod_producto").value="";
+        document.getElementById("nombre_producto").value="";
+        document.getElementById("cod_paciente").value="";
+        document.getElementById("total_stock").value="";
         $('#ModalRegistro').modal('hide');
       }, 1500);
     }else{
       setTimeout(() => {
-        location.href="../controlador/farmacia.controlador.php?accion=vpf";
+        location.href="../controlador/farmacia.controlador.php?accion=vsf";
         $('#ModalRegistro').modal('hide');
       }, 1500);
     }
   }
-  function ActualizarEntrada(cod_salida,cantidad,vencimiento,cod_generico,nombre_producto){
+  function ActualizarSalida(cod_salida,cantidad_salida,datos_paciente,nombre,stock_producto,cod_paciente,cod_generico){
+  //  alert(cod_salida+" "+cantidad_salida+" "+datos_paciente+"  "+nombre+" "+stock_producto+" "+cod_paciente+" "+cod_generico);
     document.getElementById('cod_salida').value=cod_salida;
-    document.getElementById("cantidad").value=cantidad;
-    document.getElementById("vencimiento").value=vencimiento;
+    document.getElementById("cantidad").value=cantidad_salida;
+    document.getElementById("usuario_id").value=cod_paciente;
     document.getElementById("cod_producto").value=cod_generico;
-    document.getElementById("nombre_producto").value=nombre_producto;
+    document.getElementById("nombre_producto").value=nombre;
+    document.getElementById("cod_paciente").value=datos_paciente;
+    document.getElementById("total_stock").value=stock_producto;
   }
 
 
@@ -527,7 +559,7 @@ function Buscar(page){
                               es.textContent ='Stock adecuado';
                               es.style.backgroundColor = 'green';
                             }
-                            document.getElementById("stock_producto").value=estado;
+
                             $('#resultadoProducto').html(""); //para vaciar
                           }
                       });
@@ -606,7 +638,7 @@ function nuevoCantidad(){
                         var am_usuario = $(this).children().eq(4).text();
                           //dentro de los id de la vista mostramos los datos que estan en el div resultado
                         if(nombre_usuario != ""){
-                          alert(ci);
+                          //alert(ci);
                             document.getElementById("usuario_id").value=cod_usuario;
                             document.getElementById("cod_paciente").value =(nombre_usuario)+" "+(ap_usuario)+" "+am_usuario;
                           $('#resultadoPaciente').html(""); //para vaciar
@@ -640,6 +672,59 @@ function nuevoCantidad(){
                'cursor': 'pointer',
                'font-size':'15px'
                });
+      }
+      function eliminar(cod_salida){
+        var obt_lis = document.getElementById("selectList").value;
+
+        var listarDeCuanto = verificarList(obt_lis);
+        var buscar = document.getElementById("buscar").value;
+        var page = document.getElementById("paginas").value;
+        if(page ==''){
+          page=5;
+        }
+        var fechai=document.getElementById("fechai").value;
+        var fechaf=document.getElementById("fechaf").value;
+        //alert(buscar+"   "+fechai);
+        //ponerFechactualAlModalDeReporte(listarDeCuanto,buscar,page,fecha);
+        var datos = new FormData(); // Crear un objeto FormData vacío
+        datos.append("cod_salida",cod_salida);
+        datos.append('pagina', page);
+        datos.append('listarDeCuanto',listarDeCuanto);
+        datos.append("buscar",buscar);
+        datos.append("fechai",fechai);
+        datos.append("fechaf",fechaf);
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "Tenga en cuenta que no podrás revertir esto, se eliminara por completo .",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+          $.ajax({
+             url: "../controlador/farmacia.controlador.php?accion=efs",
+             type: "POST",
+             data: datos,
+             contentType: false, // Deshabilitar la codificación de tipo MIME
+             processData: false, // Deshabilitar la codificación de datos
+            success: function(data) {
+              if(data=='error'){
+                Error1();
+              }else if(data == 'fecha_vencido'){
+                vencido();
+              }else{
+                Correcto();
+                setTimeout(() => {
+                  $("#verDatos").html(data);
+                }, 1500);
+              }
+             }
+           });
+         }
+       });
       }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

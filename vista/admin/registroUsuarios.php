@@ -75,10 +75,8 @@
 											<img src='../imagenes/ojo.ico'style='height: 25px;width: 25px;'>
 										</button>
 								  </div>
-										<span id="message" class="error"></span>
-									<div id='validandoContrasena'>
-
-									</div>
+										<span id="message" class="error" style="font-size:12px"></span>
+									<br>
 									<div class='input-group'>
 											<input class="form-control" type="password"  id="confirmar_contraseña_usuario" name ="confirmar_contraseña_usuario" onkeyup="validarIguales()" placeholder="confirmar_contraseña_usuario">
 
@@ -221,9 +219,10 @@ function insertardatosus(accion){
 				return;
 			}else{
 				//validando si la contraseña tiene letras numeros mayusculas y etc
-				var result = validarLetras()
+				var result = comprovando();
+				//alert(result);
 				if(result == 0){
-					eliminar();
+					//eliminar();
 					return;
 				}
 				if(contrasena_usuario != ''){
@@ -247,9 +246,9 @@ function insertardatosus(accion){
 		 buscar = document.getElementById("buscar").value;
 		 cod_usuario = document.getElementById("cod_usuario").value;
 	}else{
-		var result = validarLetras()
+		var result = comprovando()
 		if(result == 0){
-			eliminar();
+			//eliminar();
 			return;
 		}
 
@@ -269,6 +268,7 @@ function insertardatosus(accion){
 		}
 
 	}
+	eliminar();
 	var datos = new FormData(); // Crear un objeto FormData vacío
 	datos.append("usuario",usuario);
 	datos.append("nombre_usuario",nombre_usuario);
@@ -416,21 +416,9 @@ function selectUsuario(){
      }, 1500);
   }
 
-	ver();
 	function comprovando(){
 		const passwordInput = document.getElementById('contrasena_usuario');
-    const uppercaseCheck = document.getElementById('check-uppercase');
-    const lowercaseCheck = document.getElementById('check-lowercase');
-    const numberCheck = document.getElementById('check-number');
-    const specialCheck = document.getElementById('check-special');
-		 const lengthCheck = document.getElementById('check-length');
-
-    const uppercaseItem = document.getElementById('uppercase');
-    const lowercaseItem = document.getElementById('lowercase');
-    const numberItem = document.getElementById('number');
-    const specialItem = document.getElementById('special');
-		const lengthItem = document.getElementById('length');
-    passwordInput.addEventListener('input', function() {
+		var retornar = 0;
       const password = passwordInput.value;
 			const hasMinLength = password.length >= 8;
       const hasUpperCase = /[A-Z]/.test(password);
@@ -439,43 +427,32 @@ function selectUsuario(){
       const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
       // Actualizar estado visual de cada criterio
-      updateCheckmark(hasUpperCase, uppercaseCheck, uppercaseItem);
-      updateCheckmark(hasLowerCase, lowercaseCheck, lowercaseItem);
-      updateCheckmark(hasNumbers, numberCheck, numberItem);
-      updateCheckmark(hasSpecialChars, specialCheck, specialItem);
+			var may=updateCheckmark(hasUpperCase);
+      var min=updateCheckmark(hasLowerCase);
+      var num=updateCheckmark(hasNumbers);
+      var esp=updateCheckmark(hasSpecialChars);
+	    var mayor=updateCheckmark(hasMinLength);
 
-	    updateCheckmark(hasMinLength, lengthCheck, lengthItem);
-    });
+			if(may == 1 && min==1 && num == 1 && esp == 1 && mayor==1){
+				$("#message").html("<div class = 'alert alert-success'>La contraseña es correcto</div>");
+				eliminar();
+				retornar=1;
+			}else{
+				retornar=0;
+			}
 
+		return retornar;
 
 	}
-	function updateCheckmark(condition, checkmarkElement, listItemElement) {
+	function updateCheckmark(condition) {
 		if (condition) {
-			checkmarkElement.classList.add('visible');
-			listItemElement.classList.add('validated');
+			return 1;
 		} else {
-			checkmarkElement.classList.remove('visible');
-			listItemElement.classList.remove('validated');
+			$("#message").html("<div class = 'alert alert-danger'>La contraseña debe contener mayúsculas, minúsculas, números, caracteres especiales y al menos 8 caracteres.</div>");
+			return 0;
 		}
 	}
 
-	function validarLetras(){
-		const password = document.getElementById("contrasena_usuario").value;
-		 const hasUpperCase = /[A-Z]/.test(password);
-		 const hasLowerCase = /[a-z]/.test(password);
-		 const hasNumbers = /[0-9]/.test(password);
-		 const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-		 var c = 1;
-		 if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChars) {
-			  $("#message").html("<div class = 'alert alert-danger'>La contraseña debe contener mayúsculas, minúsculas, números, caracteres especiales y al menos 8 caracteres.</div>");
-			 event.preventDefault();
-			 c = 0;
-		 } else {
-			 $("#message").html("<div class = 'alert alert-success'>La contraseña es valida</div>");
-			 c= 1;
-		 }
-		 return c;
-	}
 	function eliminar(){
 		setTimeout(function() {
 			 $("#message").html("");
@@ -506,18 +483,7 @@ function selectUsuario(){
 			 $("#message_conf").html("");
 		}, 3000);
 	}
-	function ver(){
-		var con = '';
-		con +="<ul style='font-size:12px'>";
-		con +=" La contraseña debe contener:";
-		con +="	<li id='uppercase'>Letras mayúscula <span class='checkmark' id='check-uppercase'>&#10003;</span></li>";
-		con +="	<li id='lowercase'>Letras minúscula <span class='checkmark' id='check-lowercase'>&#10003;</span></li>";
-		con +="	<li id='number'>Números <span class='checkmark' id='check-number'>&#10003;</span></li>";
-		con +="	<li id='special'>Carácteres especiales <span class='checkmark' id='check-special'>&#10003;</span></li>";
-		con += "<li id='length' class='list-item'>Al menos 8 caracteres <span class='checkmark' id='check-length'>&#10003;</span></li>";
-    con +="	</ul>";
-		$("#validandoContrasena").html(con);
-	}
+
 </script>
 </div>
 

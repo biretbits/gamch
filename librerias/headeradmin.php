@@ -50,7 +50,7 @@ html, body {
 
   echo "<nav style=' border-bottom: 1px solid silver;' class='navbar navbar-expand-lg navbar-light fixed-top shadow-sm' id='mainNav'>
     <div class='container px-5'>
-        <a href='#' class='navbar-brand fw-bold'><img src='imagenes/cds.ico' height='30' width='30' class='rounded-circle'>Centro De Salud</a>
+        <a href='#' class='navbar-brand fw-bold'><img src='imagenes/cds.ico' height='30' width='30' class='rounded-circle'> Centro De Salud</a>
 
         <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
             Menu <span class='navbar-toggler-icon'></span>
@@ -81,7 +81,7 @@ html, body {
               }
 
             if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "farmacia"){
-              echo "<li class='nav-item dropdown ms-2' title='Farmacia'>
+              echo "<li class='nav-item dropdown' title='Farmacia'>
                 <a class='nav-link dropdown-toggle btn btn-outline-warning' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
                   <img src='imagenes/farmacia.ico'style='height: 25px;width: 25px;'> Farmacia
                 </a>
@@ -110,7 +110,7 @@ html, body {
                 </li>";
             }
              if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
-              echo "<li class='nav-item dropdown ms-2' title='Nombre Usuario'>
+              echo "<li class='nav-item dropdown' title='Nombre Usuario'>
                 <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
                     hola ".$name."
                 </a>

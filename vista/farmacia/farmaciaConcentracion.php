@@ -44,7 +44,7 @@
                       </div>
 
                       <div class="col-auto mb-2" title="Reporte">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" onclick="reporte()">
                           <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -399,6 +399,29 @@ function Buscar(page){
   function ActualizarNombreGenerico(cod_generico,nombre){
     document.getElementById('cod_generico').value=cod_generico;
     document.getElementById("generico").value=nombre;
+  }
+
+  function reporte(){
+    var buscar = document.getElementById("buscar").value;
+    var form = document.createElement('form');
+     form.method = 'post';
+     form.action = '../controlador/farmacia.controlador.php?accion=rcu'; // Coloca la URL de destino correcta
+     // Agregar campos ocultos para cada dato
+     var datos = {
+       buscar:buscar,
+     };
+     for (var key in datos) {
+         if (datos.hasOwnProperty(key)) {
+             var input = document.createElement('input');
+             input.type = 'hidden';
+             input.name = key;
+             input.value = datos[key];
+             form.appendChild(input);
+         }
+     }
+   // Agregar el formulario al cuerpo del documento y enviarlo
+   document.body.appendChild(form);
+   form.submit();
   }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

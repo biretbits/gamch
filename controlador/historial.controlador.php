@@ -18,6 +18,8 @@ class HistorialControlador{
     // Verificar si la consulta devuelve resultados
     $res = $rdi->SelectPorBusquedaHistorial(false,false,false,$paciente_rd,false,false);
     $resul = $this->Uniendo($res,$rdi);
+    $resul7 = $this->Uniendo($res,$rdi);
+    $re = $rdi->selectNombreUsuario($paciente_rd);
     require ("../vista/historial/tablaHistorial.php");
   }
   //funciones para encontrar los nombres de los usuarios como doctor y el de admision
@@ -39,6 +41,7 @@ class HistorialControlador{
             "hora" => $fi["hora"],
             "estado_h" => $fi["estado"]
           ];
+
         $ar[] = $entry; // Agregar la entrada al array principal
     }
     return $ar; // Devolver el array completo fuera del bucle
@@ -92,20 +95,15 @@ class HistorialControlador{
     }
     return $ar; // Devolver el array completo fuera del bucle
 }*/
-public function verFormRegistroHistorial($paciente_rd,$cod_rd){
-  $h =new Historial();
-  $re = $h->selectNombreUsuario($paciente_rd);
-  require ("../vista/historial/registroHistorial.php");
-}
 
 public function registroDatosResponsablePaciente($Nombre_responsable,$ap_responsable,$am_responsable,$fecha_nacimiento_responsable,$sexo_responsable,
 $ocupacion_responsable,$direccion_responsable,$telefono_resposable,$comunidad_responsable,$ci,$n_seguro,$n_carp_fam,$zona_his,$cod_usuario,$paciente_rd,
-$cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad){
+$cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_historial){
   $rnp= new historial();
   //echo $cod_usuario;
   $resp = $rnp->insertarNewResponsableyPacientes($Nombre_responsable,$ap_responsable,$am_responsable,$fecha_nacimiento_responsable,$sexo_responsable,
   $ocupacion_responsable,$direccion_responsable,$telefono_resposable,$comunidad_responsable,$ci,$n_seguro,$n_carp_fam,$zona_his,$cod_usuario,$paciente_rd,
-  $cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad);
+  $cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_historial);
   //echo $cod_usuario;
   if($resp != ""){
       echo "correcto";
@@ -316,9 +314,7 @@ echo "<div class='row'>
   if(isset($_GET["accion"]) && $_GET["accion"]=="vht"){
 		$hc->verTablaHistorial($_POST["paciente_rd"],$_POST["cod_rd"]);
 	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="visFH"){
-    $hc->verFormRegistroHistorial($_POST["paciente_rd"],$_POST["cod_rd"]);
-  }
+
   if(isset($_GET["accion"]) && $_GET["accion"]=="rhRyP"){
     $hc->registroDatosResponsablePaciente(
       $_POST["Nombre_responsable"],
@@ -342,7 +338,9 @@ echo "<div class='row'>
       $_POST["ocupacion"],
       $_POST["fecha_de_consulta"],
       $_POST["estado_civil"],
-      $_POST["escolaridad"]);
+      $_POST["escolaridad"],
+      $_POST["cod_historial"]
+    );
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="rbph"){
     $hc->buscarBDpacienteResponsable($_POST['nombre']);

@@ -163,7 +163,11 @@ $_SESSION["diario"] = $RegistroDiario;?>
               echo "</td>";
 
               echo "<td>".$fi['admision_nombre']."</td>";
-              echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
+              if($fi["fecha_retorno_historia_rd"]=='0000-00-00'){
+                echo "<td style='font-size:13px;color:blue'>Sin fecha de retorno</td>";
+              }else{
+                echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
+              }
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   echo "<button type='button' class='btn btn-info' title='Editar' onclick = 'editarpaciente(".$fi["cod_rd"].",".$fi["paciente_rd"].",\"".$buscar."\",".$pagina.",".$listarDeCuanto.",\"".$fecha."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";

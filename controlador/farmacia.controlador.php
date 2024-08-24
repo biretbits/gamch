@@ -1,11 +1,13 @@
 <?php
 require_once '../modelo/farmacia.php';
+require_once '../modelo/usuario.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
 if(isset($_SESSION["tipo_usuario"])==""){
     $ins->Redireccionar_inicio();
 }
+date_default_timezone_set('America/La_Paz');
 class FarmaciaControlador{
 
   //funcion de presentacion date_create_from_format
@@ -502,10 +504,10 @@ class FarmaciaControlador{
 
   }
 
-  public function registrarNombreGenerico($generico,$cod_generico,$enfermedad,$vitrina,$stockmin,$stockmax,$cod_forma,$cod_conc){
+  public function registrarNombreGenerico($generico,$cod_generico,$enfermedad,$vitrina,$stockmin,$stockmax,$cod_forma,$cod_conc,$codigo){
     $fa =new Farmacia();
     $usuario=$_SESSION["cod_usuario"];
-    $resul = $fa->InsertarActualizarNombreGenerico($generico,$cod_generico,$enfermedad,$vitrina,$stockmin,$stockmax,$cod_forma,$cod_conc,$usuario);
+    $resul = $fa->InsertarActualizarNombreGenerico($generico,$cod_generico,$enfermedad,$vitrina,$stockmin,$stockmax,$cod_forma,$cod_conc,$usuario,$codigo);
     if($resul != ""){
         echo "correcto";
     } else{
@@ -533,14 +535,14 @@ class FarmaciaControlador{
 
   public function visualizarProductoFarmacia(){
     $fa =new Farmacia();
-    $listarDeCuanto = 5;$pagina = 1;$buscar = "";$fechai=false;$fechaf=false;
-    $resul1 = $fa->SeleccionarProducto(false,false,$buscar,false,false);
+    $listarDeCuanto = 5;$pagina = 1;$buscar = "";$fechai=false;$fechaf=false;$estadoProducto=false;
+    $resul1 = $fa->SeleccionarProducto(false,false,$buscar,false,false,false);
     $num_filas_total = mysqli_num_rows($resul1);
     $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
             //calculamos el registro inicial
     $inicioList = ($pagina - 1) * $listarDeCuanto;
     // Verificar si la consulta devuelve resultados
-    $res = $fa->SeleccionarProducto($inicioList,$listarDeCuanto,$buscar,false,false);
+    $res = $fa->SeleccionarProducto($inicioList,$listarDeCuanto,$buscar,false,false,false);
     //$resul = $this->Uniendo($res,$fa);*/
     //$r = $fa->p();
     $resul = $this->UniendoProducto($res,$fa);
@@ -584,18 +586,17 @@ class FarmaciaControlador{
 
     public function insertarDatosEntrada($cod_producto,$cantidad,$vencimiento,$cod_entrada){
       $fechaActual = date('Y-m-d');
+      $hora = date('H:i:s');
       $fa =new Farmacia();
       $usuario=$_SESSION["cod_usuario"];
-      $resul=$fa->InsertEntradaProducto($cantidad,$vencimiento,$fechaActual,$cod_producto,$cod_entrada,$usuario);
-      if($resul != ""){
-          echo "correcto";
-      } else{
-          echo "error";
-      }
+
+      $resul=$fa->InsertEntradaProducto($cantidad,$vencimiento,$fechaActual,$cod_producto,$cod_entrada,$usuario,$hora);
+      $this->ActualizarCantidadEnentrada($fechaActual,$fa);
+      echo $resul;
     }
-    public function visualizarBusquedaFarmacia($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
+    public function visualizarBusquedaFarmacia($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf,$estadoProducto){
       $fa =new Farmacia();
-      $listarDeCuanto = $listarDeCuanto;$pagina = $pagina;$buscar = $buscar;$fechai=$fechai;$fechaf=$fechaf;
+      $listarDeCuanto = $listarDeCuanto;$pagina = $pagina;$buscar = $buscar;$fechai=$fechai;$fechaf=$fechaf;$estadoProducto=$estadoProducto;
       if($fechai!=''&&$fechaf==''){
         $fechaf=$fechai;
       }else if($fechai==''&&$fechaf!=''){
@@ -607,7 +608,7 @@ class FarmaciaControlador{
         $fechaf=$aux;
       }
 
-      $resul1 = $fa->SeleccionarProducto(false,false,$buscar,$fechai,$fechaf);
+      $resul1 = $fa->SeleccionarProducto(false,false,$buscar,$fechai,$fechaf,false);
       if(is_string($resul1)){
         echo "<h6>Ocurrio un error, $resul1</h6>";
       }else{
@@ -616,7 +617,7 @@ class FarmaciaControlador{
               //calculamos el registro inicial
       $inicioList = ($pagina - 1) * $listarDeCuanto;
       // Verificar si la consulta devuelve resultados
-      $res = $fa->SeleccionarProducto($inicioList,$listarDeCuanto,$buscar,$fechai,$fechaf);
+      $res = $fa->SeleccionarProducto($inicioList,$listarDeCuanto,$buscar,$fechai,$fechaf,$estadoProducto);
       //$resul = $this->Uniendo($res,$fa);*/
       //$r = $fa->p();
       $resul = $this->UniendoProducto($res,$fa);
@@ -845,34 +846,216 @@ class FarmaciaControlador{
       $rc=$fa->seleccionarC();
       $rp=$fa->seleccionarP();
       require("../vista/farmacia/farmaciaSalida.php");
+    }
 
+    public function VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
+      $fa =new Farmacia();
+      $listarDeCuanto = $listarDeCuanto;$pagina = $pagina;$buscar = $buscar;$fechai=$fechai;$fechaf=$fechaf;
+      if($fechai =='' or $fechaf == '')
+      {
+        $fechai=false;$fechaf=false;
+      }else{
+        if($fechai!=''&&$fechaf==''){
+          $fechaf=$fechai;
+        }else if($fechai==''&&$fechaf!=''){
+          $fechai=$fechaf;
+        }
+        if($fechai>$fechaf){
+          $aux=$fechai;
+          $fechai=$fechaf;
+          $fechaf=$aux;
+        }
+      }
+      $resul1 = $fa->SeleccionarSalida(false,false,$buscar,$fechai,$fechaf);
+      if(is_string($resul1)){
+        echo "<h6>Ocurrio un error, $resul1</h6>";
+      }else{
+        $num_filas_total = mysqli_num_rows($resul1);
+        $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+                //calculamos el registro inicial
+        $inicioList = ($pagina - 1) * $listarDeCuanto;
+        // Verificar si la consulta devuelve resultados
+        $res = $fa->SeleccionarSalida($inicioList,$listarDeCuanto,$buscar,$fechai,$fechaf);
+        //$resul = $this->Uniendo($res,$fa);*/
+        //$r = $fa->p();
+        $resul = $this->UniendoSalida($res,$fa);
+        echo "<div class='row'>
+          <div class='col'>
+            <div class='table-responsive'>
+            <table class='table'>
+              <thead style='font-size:12px'>
+                <tr>
+                  <th>N°</th>
+                  <th>Codigo</th>
+                  <th>Nombre Generico</th>
+                  <th>Paciente</th>
+                  <th>Encargado Farmacia</th>
+                  <th>Cantidad Obtenida</th>
+                  <th>Fecha</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>";
+          if ($resul && count($resul) > 0) {
+            $i = $inicioList;
+            foreach ($resul as $fi){
+                echo "<tr>";
+                  echo "<td>".($i+1)."</td>";
+                  echo "<td>".$fi['codigo']."</td>";
+                  echo "<td>".$fi['nombre']."</td>";
+
+                  $paciente = $fi['cod_paciente'];
+                  $cod_paciente = '';
+                  echo "<td>";
+                  foreach ($paciente as $form) {
+                    $datos_paciente = $form["nombre_usuario"]." ".$form["ap_usuario"]." ".$form["am_usuario"];
+                    echo $form["nombre_usuario"]." ".$form["ap_usuario"]." ".$form["am_usuario"];
+                    $cod_paciente=$form["cod_usuario"];
+                  }
+                  echo "</td>";
+                  $Encargado = $fi['cod_usuario'];
+                  $cod_usuario = "";
+                  echo "<td>";
+                  foreach ($Encargado as $conc) {
+                    echo $conc["nombre_usuario"]." ".$conc["ap_usuario"]." ".$conc["am_usuario"];
+                    $cod_usuario =$conc['cod_usuario'];
+                  }
+                  echo "</td>";
+
+                  echo "<td>".$fi['cantidad_salida']."</td>";
+                  echo "<td>".$fi['fecha']."</td>";
+
+                  echo "<td>";
+                    echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                  //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
+                    echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$fi['cantidad_salida'].",\"".$datos_paciente."\",\"".$fi['nombre']."\",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'].")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                    echo "<button type='button' class='btn btn-danger' title='Eliminar' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                    echo "</div>";
+                  echo "</td>";
+
+                echo "</tr>";
+                $i++;
+              }
+            }else{
+              echo "<tr>";
+              echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+              echo "</tr>";
+            }
+            echo "
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>";
+      if($TotalPaginas!=0){
+        $adjacents=1;
+        $anterior = "&lsaquo; Anterior";
+        $siguiente = "Siguiente &rsaquo;";
+    echo "<div class='row'>
+          <div class='col'>";
+
+        echo "<div class='d-flex flex-wrap flex-sm-row justify-content-between'>";
+          echo '<ul class="pagination">';
+            echo "pagina &nbsp;".$pagina."&nbsp;con&nbsp;";
+              $total=$inicioList+$pagina;
+              if($TotalPaginas > $num_filas_total){
+                $TotalPaginas = $num_filas_total;
+              }
+            echo '<li class="page-item active"><a class=" href="#"> '.($TotalPaginas).' </a></li> ';
+            echo " &nbsp;de&nbsp;".$num_filas_total." registros";
+          echo '</ul>';
+
+          echo '<ul class="pagination d-flex flex-wrap">';
+
+          // previous label
+          if ($pagina != 1) {
+            echo "<li class='page-item'><a class='page-link'  onclick=\"Buscar(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
+          }
+          if($pagina==1) {
+            echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
+          } else if($pagina==2) {
+            echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"Buscar(1)\" class='page-link'>$anterior</a></li>";
+          }else {
+            echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"Buscar($pagina-1)\">$anterior</a></li>";
+
+          }
+          // first label
+          if($pagina>($adjacents+1)) {
+            echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"Buscar(1)\">1</a></li>";
+          }
+          // interval
+          if($pagina>($adjacents+2)) {
+            echo"<li class='page-item'><a class='page-link'>...</a></li>";
+          }
+
+          // pages
+
+          $pmin = ($pagina>$adjacents) ? ($pagina-$adjacents) : 1;
+          $pmax = ($pagina<($TotalPaginas-$adjacents)) ? ($pagina+$adjacents) : $TotalPaginas;
+          for($i=$pmin; $i<=$pmax; $i++) {
+            if($i==$pagina) {
+              echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
+            }else if($i==1) {
+              echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"Buscar(1)\">$i</a></li>";
+            }else {
+              echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"Buscar(".$i.")\" class='page-link'>$i</a></li>";
+            }
+          }
+
+          // interval
+
+          if($pagina<($TotalPaginas-$adjacents-1)) {
+            echo "<li class='page-item'><a class='page-link'>...</a></li>";
+          }
+          // last
+
+          if($pagina<($TotalPaginas-$adjacents)) {
+            echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"Buscar($TotalPaginas)\">$TotalPaginas</a></li>";
+          }
+          // next
+
+          if($pagina<$TotalPaginas) {
+            echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"Buscar($pagina+1)\">$siguiente</a></li>";
+          }else {
+            echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
+          }
+          if ($pagina != $TotalPaginas) {
+            echo "<li class='page-item'><a class='page-link' onclick=\"Buscar($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
+          }
+
+          echo "</ul>";
+          echo "</div>";
+
+    echo "</div>
+        </div>";
+
+      }
+      }
     }
 
       function UniendoSalida($resul, $fa){
         $ar = [];
-      if($resul !=""){
+        $u = new Usuario();
+        if($resul !=""){
           while ($fi = mysqli_fetch_array($resul)) {
           // Añadir cada fila al array con una estructura correcta
-              $entry = [
-                  "cod_salida" => $fi["cod_salida"],
+           $entry = [
+                  "cod_salida" => $fi["cod_salidad"],
                   "cantidad_salida" => $fi["cantidad_salida"],
                   "cod_generico" => $fi["cod_generico"],
+                  "cod_paciente" => $u->selectDatosUsuario($fi["cod_paciente"]),
+                  "cod_usuario" => $u->selectDatosUsuario($fi["cod_usuario"]),
                   "fecha" => $fi["fecha"],
                   "estado" => $fi["estado"],
-                  "cod_generico" => $fi["cod_generico"],
-                    "codigo" => $fi["codigo"],
+                  "codigo" => $fi["codigo"],
                     "nombre" => $fi["nombre"],
                     "enfermedad" => $fi["enfermedad"],
                     "vitrina" => $fi["vitrina"],
                     "stockmin" => $fi["stockmin"],
                     "stockmax" => $fi["stockmax"],
                     "cod_forma" => $fi["cod_forma"],
-                    "nombre_forma" => $fa->seleccionarPID($fi['cod_forma']),
-                    "cod_conc" => $fi["cod_conc"],
-                    "concentracion" => $fa->seleccionarCID($fi['cod_conc']),
                     "stock_producto"=> $fi['stock_producto'],
                     "cantidad_total"=>$fi["cantidad_total"],
-                    "estado" => $fi["estado"],
                   ];
                   $ar[] = $entry; // Agregar la entrada al array principal
               }
@@ -890,34 +1073,52 @@ class FarmaciaControlador{
       }
     }
 
-    public function EliminarEF($accion,$pagina,$listarDeCuanto,$buscar,$cod_entrada,$fechai,$fechaf){
+    public function EliminarEF($accion,$pagina,$listarDeCuanto,$buscar,$cod_entrada,$fechai,$fechaf,$estadoProducto){
       $fa =new Farmacia();
       $resul=$fa->UpdateEF($accion,$cod_entrada);
-      if($resul!=''){
-        $this->visualizarBusquedaFarmacia($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
+      if($resul=='ya_se_uso'){
+        echo "ya_se_uso";
       }else{
-        echo "error";
+        if($resul=='correcto'){
+          $this->visualizarBusquedaFarmacia($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf,$estadoProducto);
+        }else{
+          echo "error";
+        }
       }
     }
 
    public function InsertarActualizarSalida($cod_producto,$cantidad,$cod_salida,$id_paciente){
      $fa =new Farmacia();
      $fechaActual = date('Y-m-d');
+     $hora = date('H:i:s');
+     $cc=0;
+     //echo "cod_salida  ".$cod_salida;
      if(is_numeric($cod_salida)){//si existe el cod_salida esta queriendo editar
-       $fa->actualizar_datos_entrada($cod_salida);
+       $cc = $fa->actualizar_datos_entrada($cod_salida);
+       if($cc==0){
+         $re = $fa->seleccionarCantEntrada($cod_salida);
+         $codigos = $re[0];
+         $cantiEntra = $re[1];
+         $fa->SumasActualizar($codigos,$cantiEntra);
+       }
      }
-     $resultado = $fa->entradaTodo($fechaActual,$cod_producto);//seleccionar todas las entradas pero desde una fecha y de un producto
-     $retorno = $this->disminuir_stock($resultado,$fa,$cantidad);//funcion para dsminuir la cantidad
-     $codigos = $retorno[0];//codigos separado por comas
-     $cat_res = $retorno[1];//cantidades restado separado por comas
-     $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
-     $this->ActualizarCantidad($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
-     $usuario=$_SESSION["cod_usuario"];
-     $resul=$fa->insertarNuevoRegistroSalida($cod_producto,$cantidad,$cod_salida,$id_paciente,$codigos,$usuario,$fechaActual,$cat_res);
-     if($resul!=''){
-       echo "correcto";
+     if($cc == 0){
+       $resultado = $fa->entradaTodo($fechaActual,$cod_producto);//seleccionar todas las entradas pero desde una fecha y de un producto
+       $retorno = $this->disminuir_stock($resultado,$fa,$cantidad);//funcion para dsminuir la cantidad
+       $codigos = $retorno[0];//codigos separado por comas
+       $cat_res = $retorno[1];//cantidades restado separado por comas
+       $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
+       $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
+       $usuario=$_SESSION["cod_usuario"];
+
+       $resul=$fa->insertarNuevoRegistroSalida($cod_producto,$cantidad,$cod_salida,$id_paciente,$codigos,$usuario,$fechaActual,$cat_res,$hora);
+       if($resul!=''){
+         echo "correcto";
+       }else{
+         echo "error";
+       }
      }else{
-       echo "error";
+       echo "fecha_vencido";
      }
    }
 
@@ -931,6 +1132,7 @@ class FarmaciaControlador{
          $cod_entrada = $fila["cod_entrada"];
          $resul = 0;
          $cat = 0;
+         //echo $cantidad_entrada." ddd ".$cantidad."<br>";
          if ($cantidad_entrada != 0) {
              if ($cantidad_entrada > $cantidad) {
                  $resul = $cantidad_entrada - $cantidad;
@@ -938,10 +1140,10 @@ class FarmaciaControlador{
                  $cantidad = 0;
              } else if ($cantidad_entrada < $cantidad) {//30  80 se requiere
                  $resta = $cantidad - $cantidad_entrada;//50=80-30
-                 $cantidad = $resta;
                  $res2 = $cantidad - $resta;//80-50=30
                  $resul = $cantidad_entrada - $res2;//30-30=0
                  $cat = $res2;
+                $cantidad = $resta;
              } else {
                  $resul = 0;
                  $cat = $cantidad;
@@ -951,10 +1153,11 @@ class FarmaciaControlador{
               // Agregamos el código y la cantidad restante a los arrays
               $codigos[] = $cod_entrada;
               $cant_resta[] = $cat;
+              //echo "resul = ".$resul." === ".$fila['cod_entrada']."<br>";
               // Llamada a función para actualizar la cantidad
               $this->actualizar_Cantidad($resul, $fila['cod_entrada'], $f);
 
-             if ($cantidad == 0) {
+             if ($cantidad <= 0) {
                  break;
              }
 
@@ -984,7 +1187,7 @@ class FarmaciaControlador{
       }
     }
 
-    function ActualizarCantidad($fechaActual,$f){
+    function ActualizarCantidadEnentrada($fechaActual,$f){
       $da=$f->SeleccionarProductosTodo();
       $new = array();
       while($fila = mysqli_fetch_array($da)){
@@ -1000,18 +1203,86 @@ class FarmaciaControlador{
         }
       }
 
-    	$da2==$f->SeleccionarProductosTodo();
+    	$da2=$f->SeleccionarProductosTodo();
       while($fil = mysqli_fetch_array($da2)){
         $sql = '';
         if($new[$fil['cod_generico']]['total']<=$fil["stockmin"]){
             $f->actualizarCantidadNuevo('si',$new[$fil['cod_generico']]['total'],$fil["cod_generico"]);
         }else{
             $f->actualizarCantidadNuevo('no',$new[$fil['cod_generico']]['total'],$fil["cod_generico"]);
-          $r=$cnmysql->query($sql);
         }
       }
     }
 
+    public function EliminarSalida($cod_salida,$pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
+      $fa =new Farmacia();
+      $cc=0;$fechaActual = date('Y-m-d');
+      if(is_numeric($cod_salida)){//si existe el cod_salida esta queriendo editar
+        $cc = $fa->actualizar_datos_entrada($cod_salida);//slo verificamos si esta vencido o no
+      }
+      if($cc == 0){//no esta vencido el producto se puede eliminar
+        $re = $fa->seleccionarCantEntrada($cod_salida);
+        $codigos = $re[0];
+        $cantiEntra = $re[1];
+        $fa->SumasActualizar($codigos,$cantiEntra);
+        $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
+        $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
+        $resul = $fa->eliminarRegistro($cod_salida);
+        //$resul = 'correcto';
+        if($resul!=''){
+          $this->VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
+        }else{
+          echo "error";
+        }
+      }else{//producto vencido no se puede eliminar
+          echo "fecha_vencido";
+      }
+    }
+
+    function ReporteConcentracionUnidadMedida($buscar){
+      $fa =new Farmacia();
+      $fechaActual = date('Y-m-d');
+      $resul = $fa->SeleccionarConcentracion('','',$buscar);
+      require("../vista/farmacia/ReporteConcetracion.php");
+    }
+
+    function ReportePresentacion($buscar){
+      $fa =new Farmacia();
+      $fechaActual = date('Y-m-d');
+      $resul = $fa->SeleccionarPresentacion('','',$buscar);
+      require("../vista/farmacia/ReportePresentacion.php");
+    }
+
+    function ReporteNombreGenerico($buscar){
+      $fa =new Farmacia();
+      $fechaActual = date('Y-m-d');
+      $resul = $fa->SeleccionarNombreGenerico('','',$buscar);
+      require("../vista/farmacia/ReporteNombreGenerico.php");
+    }
+
+    function ReporteProductoEntrada($buscar,$fechai,$fechaf,$estadoProducto){
+      $fa =new Farmacia();
+      $fechaActual = date('Y-m-d');
+      if($fechai==''&&$fechaf==''){
+        $fechai=$fechaActual;$fechaf=$fechaActual;
+      }else{
+        if($fechai!=''&&$fechaf==''){
+          $fechaf=$fechai;
+        }else if($fechai==''&&$fechaf!=''){
+          $fechai=$fechaf;
+        }
+        if($fechai>$fechaf){
+          $aux=$fechai;
+          $fechai=$fechaf;
+          $fechaf=$aux;
+        }
+      }
+
+      $res = $fa->SeleccionarProducto('','',$buscar,$fechai,$fechaf,$estadoProducto);
+      $resul = $this->UniendoProducto($res,$fa);
+      
+      require("../vista/farmacia/ReporteEntrada.php");
+    }
 
   }
 
@@ -1023,7 +1294,7 @@ class FarmaciaControlador{
 		$f->BuscarNombreGenerico($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
 	}
   if(isset($_GET["accion"]) && $_GET["accion"]=="rfnt"){
-    $f->registrarNombreGenerico($_POST["generico"],$_POST["cod_generico"],$_POST['enfermedad'],$_POST['vitrina'],$_POST['stockmin'],$_POST['stockmax'],$_POST['cod_forma'],$_POST['cod_conc']);
+    $f->registrarNombreGenerico($_POST["generico"],$_POST["cod_generico"],$_POST['enfermedad'],$_POST['vitrina'],$_POST['stockmin'],$_POST['stockmax'],$_POST['cod_forma'],$_POST['cod_conc'],$_POST['codigo']);
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="vtf"){
 		$f->visualizarConcentracion();
@@ -1052,7 +1323,7 @@ class FarmaciaControlador{
 	}
 
   if(isset($_GET["accion"]) && $_GET["accion"]=="bft"){
-		$f->visualizarBusquedaFarmacia($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+		$f->visualizarBusquedaFarmacia($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf'],$_POST['estadoProducto']);
 	}
   if(isset($_GET["accion"]) && $_GET["accion"]=="bcp"){
 		$f->buscarProductoFarmaceutico($_POST['cod_producto']);
@@ -1065,7 +1336,7 @@ class FarmaciaControlador{
 	}
 
   if(isset($_GET["accion"]) && $_GET['accion']=='dbe'){
-    $f->EliminarEF($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_entrada"],$_POST["fechai"],$_POST["fechaf"]);
+    $f->EliminarEF($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_entrada"],$_POST["fechai"],$_POST["fechaf"],$_POST['estadoProducto']);
 	}
   if(isset($_GET["accion"]) && $_GET['accion']=='resf'){
     $f->InsertarActualizarSalida($_POST["cod_producto"],$_POST["cantidad"],$_POST["cod_salida"],$_POST["id_paciente"]);
@@ -1074,4 +1345,22 @@ class FarmaciaControlador{
   if(isset($_GET["accion"]) && $_GET["accion"]=="buf"){
 		$f->buscarPacienteFarmacia($_POST['cod_paciente']);
 	}
+  if(isset($_GET["accion"]) && $_GET["accion"]=="efs"){
+		$f->EliminarSalida($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+	}
+  if(isset($_GET["accion"]) && $_GET["accion"]=="vsta"){
+		$f->VisualizarSalidaFarmaciaTabla($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+	}
+  if(isset($_GET["accion"]) && $_GET["accion"]=="rcu"){
+  	$f->ReporteConcentracionUnidadMedida($_POST['buscar']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="rpr"){
+  	$f->ReportePresentacion($_POST['buscar']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="rpg"){
+    $f->ReporteNombreGenerico($_POST['buscar']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="rpng"){
+    $f->ReporteProductoEntrada($_POST['buscar'],$_POST["fechai"],$_POST["fechaf"],$_POST["estadoProducto"]);
+  }
 ?>

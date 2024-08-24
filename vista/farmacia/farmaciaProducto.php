@@ -44,7 +44,7 @@
                       </div>
 
                       <div class="col-auto mb-2" title="Reporte">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" onclick="reporte()">
                           <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -55,7 +55,11 @@
                       </div>
 
                       <div class="col-auto mb-2">
-                        <!-- espacio vacío para mantener el diseño intacto -->
+                          <select class="form-select" id="estadoProducto" name="estadoProducto" onchange="Buscar(1)">
+                              <option value=''>E. Producto</option>
+                              <option value='activo'>Activos</option>
+                              <option value='vencido'>Vencidos</option>
+                            </select>
                       </div>
                       <div class="col mb-2">
                         <input type="text" name="buscar" id='buscar'class="form-control" placeholder="Buscar....." onkeyup="Buscar(1)">
@@ -108,44 +112,6 @@
                       </div>
                     </div>
                   </div>
-                    <div class="modal fade" id="ModalReportePorFecha" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="miModalLabel">Selección de fechas</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <!-- Contenido del modal -->
-                          <div class="modal-body">
-                            <form class="form-inline" >
-                              <input type="hidden" name="pagina1" id='pagina1' value="">
-                              <div class="row mb-3">
-                                <label for="fecha1" class="form-label">Fecha inicio</label>
-                                <div class="input-group">
-                                  <input type="date" id="fecha1" name="fecha1" value="<?php echo $fechaActual; ?>" class="form-control">
-                                </div>
-                              </div>
-                              <div class="row mb-3">
-                                <label for="fecha1" class="form-label">Fecha final</label>
-                                <div class="input-group">
-                                  <input type="date" id="fecha2" name="fecha2" value="<?php echo $fechaActual; ?>" class="form-control">
-                                </div>
-                              </div>
-                              <div class="for-control alert alert-light">
-                                Nota:
-                                Seleccione de que fecha a que fecha quiere generar reporte
-                              </div>
-                            </form>
-                          </div>
-                          <!-- Pie de página del modal -->
-                          <div class="modal-footer">
-                            <button type="button"  class="btn btn-success" title = 'Generar reporte' onclick="GenerarReporte()"><img src='../imagenes/aceptar.ico' style='height: 25px;width: 25px;'> Generar</button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
                     <div class="row" >
                          <div class="col-12">
                            <hr>
@@ -360,6 +326,7 @@ function Buscar(page){
     document.getElementById("paginas").value=page;
     var fechai=document.getElementById("fechai").value;
     var fechaf=document.getElementById("fechaf").value;
+    var estadoProducto=document.getElementById("estadoProducto").value;
     //alert(buscar);
     //ponerFechactualAlModalDeReporte(listarDeCuanto,buscar,page,fecha);
     var datos = new FormData(); // Crear un objeto FormData vacío
@@ -368,6 +335,7 @@ function Buscar(page){
     datos.append("buscar",buscar);
     datos.append("fechai",fechai);
     datos.append("fechaf",fechaf);
+    datos.append("estadoProducto",estadoProducto);
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=bft",
         type: "POST",
@@ -411,7 +379,9 @@ function Buscar(page){
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
         //alert(data+"dasdas");
-          if(data == 'correcto'){
+          if(data == 'ya_se_uso'){
+            usado();
+          }else if(data == 'correcto'){
             Correcto();
           }else{
             Error1();
@@ -421,6 +391,25 @@ function Buscar(page){
       });
   }
 
+    function usado(){
+      Swal.fire({
+       icon: 'info',
+       title: '¡Información!',
+       text: '¡No se pudo actualizar porque ya se utilizo, le pido que registre como nuevo!',
+       showConfirmButton: false,
+       timer: 3000
+     });
+    }
+
+      function usado2(){
+          Swal.fire({
+           icon: 'info',
+           title: '¡Información!',
+           text: '¡No se pudo Desactivar, porque ya se uso la cantidad registrada!',
+           showConfirmButton: false,
+           timer: 3000
+         });
+        }
   function Correcto(){
     Swal.fire({
      icon: 'success',
@@ -495,6 +484,7 @@ function Buscar(page){
 
                         unir+="<div>";
                         unir+="<div id='u' style=' display: inline-block;display:none;'>"+(data[i].cod_generico)+"</div> ";
+                        unir+="<div id='u' style=' display: inline-block;'>"+(data[i].codigo)+"</div> ";
                         unir+="<div id='u' style=' display: inline-block;'>"+(data[i].nombre)+"</div> ";
                         unir+="<div id='ap' style=' display: inline-block;'> "+(data[i].nombre_forma)+"</div> ";
                         unir+="<div id='am' style=' display: inline-block;'> "+(data[i].concentracion)+"</div></div>";
@@ -505,9 +495,10 @@ function Buscar(page){
                       $('#resultadoProducto div').on('click', function() {
                               //obtenemos los datos del usuario div resultado
                         var cod_producto = $(this).children().eq(0).text();
-                        var nombre = $(this).children().eq(1).text();
-                        var nombre_forma = $(this).children().eq(2).text();
-                        var concentracion = $(this).children().eq(3).text();
+                        var codigo = $(this).children().eq(1).text();
+                        var nombre = $(this).children().eq(2).text();
+                        var nombre_forma = $(this).children().eq(3).text();
+                        var concentracion = $(this).children().eq(4).text();
                           //dentro de los id de la vista mostramos los datos que estan en el div resultado
                           if(nombre != ""){
                             document.getElementById("nombre_producto").value = (nombre)+" "+(nombre_forma)+" "+(concentracion);
@@ -547,6 +538,7 @@ function Buscar(page){
 
 
         function accionBtnActivar(accion,pagina,listarDeCuanto,buscar,cod_entrada,fechai,fechaf){
+          var estadoProducto=document.getElementById("estadoProducto").value;
           var buscar = document.getElementById("buscar").value;
           var datos = new FormData(); // Crear un objeto FormData vacío
           datos.append('accion', accion);
@@ -555,6 +547,7 @@ function Buscar(page){
           datos.append("buscar",buscar);
           datos.append("fechai",fechai);
           datos.append("fechaf",fechaf);
+          datos.append("estadoProducto",estadoProducto);
           datos.append("cod_entrada",cod_entrada);
           //alert(accion+"   "+buscar+"    "+cod_generico);
           $.ajax({
@@ -564,10 +557,12 @@ function Buscar(page){
             contentType: false, // Deshabilitar la codificación de tipo MIME
             processData: false, // Deshabilitar la codificación de datos
             success: function(data) {
-          //alert(data+"dasdas");
+        //alert(data+"dasdas");
               data=$.trim(data);
               if(data == "error"){
                 error();
+              }else if(data == 'ya_se_uso'){
+                usado2();
               }else{
                 $("#verDatos").html(data);
               }
@@ -584,5 +579,34 @@ function Buscar(page){
          timer: 1500
        });
       }
+      function reporte(){
+        var buscar = document.getElementById("buscar").value;
+        var fechai = document.getElementById("fechai").value;
+        var fechaf = document.getElementById("fechaf").value;
+        var estadoProducto = document.getElementById("estadoProducto").value;
+        var form = document.createElement('form');
+         form.method = 'post';
+         form.action = '../controlador/farmacia.controlador.php?accion=rpng'; // Coloca la URL de destino correcta
+         // Agregar campos ocultos para cada dato
+         var datos = {
+           buscar:buscar,
+           fechai:fechai,
+           fechaf:fechaf,
+           estadoProducto:estadoProducto
+         };
+         for (var key in datos) {
+             if (datos.hasOwnProperty(key)) {
+                 var input = document.createElement('input');
+                 input.type = 'hidden';
+                 input.name = key;
+                 input.value = datos[key];
+                 form.appendChild(input);
+             }
+         }
+       // Agregar el formulario al cuerpo del documento y enviarlo
+       document.body.appendChild(form);
+       form.submit();
+      }
+
 </script>
 <?php require("../librerias/footeruni.php"); ?>

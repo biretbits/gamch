@@ -50,12 +50,12 @@
                       </div>
 
                       <div class="col-auto mb-2" title="Reporte">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" onclick="reporte()">
                           <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
                       <div class="col-auto mb-2" title="Registro o actualizar">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','','','',0,0,0,0)">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','','','',0,0,0,0,'')">
                           <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -86,6 +86,10 @@
                            <div class="card-body">
                              <h6 class="card-title text-center"></h6>
                              <form>
+                                 <div class="mb-3">
+                                   <label for="name" class="form-label">Codigo</label>
+                                   <input type="text" class="form-control" id="codigo" name='codigo' placeholder="Codigo del producto">
+                                 </div>
                                <div class="mb-3">
                                  <label for="name" class="form-label">Nombre nuevo generico</label>
                                  <input type="text" class="form-control" id="generico" name='generico' placeholder="Nombre generico">
@@ -235,7 +239,7 @@
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                                   $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",\"".$fi['stockmax']."\",";
-                                  $dd.="\"".$fi['cod_forma']."\",\"".$fi['cod_conc']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  $dd.="\"".$fi['cod_forma']."\",\"".$fi['cod_conc']."\",\"".$fi['codigo']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo $dd;
                                   if($fi["estado"] == "activo"){
                                     echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_generico'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
@@ -399,6 +403,7 @@ function Buscar(page){
   }
 
   function registrar(){
+    var codigo = document.getElementById("codigo").value;
     var generico = document.getElementById("generico").value;
     var enfermedad = document.getElementById("enfermedad").value;
     var vitrina = document.getElementById("vitrina").value;
@@ -430,6 +435,7 @@ function Buscar(page){
     datos.append("stockmax",stockmax);
     datos.append("cod_forma",cod_forma);
     datos.append("cod_conc",cod_conc);
+    datos.append("codigo",codigo);
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=rfnt",
         type: "POST",
@@ -437,7 +443,7 @@ function Buscar(page){
         contentType: false, // Deshabilitar la codificación de tipo MIME
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-        alert(data+"dasdas");
+      //alert(data+"dasdas");
           if(data == 'correcto'){
             Correcto();
           }else{
@@ -520,13 +526,14 @@ function Buscar(page){
       }, 1500);
     }
   }
-  function ActualizarNombreGenerico(cod_generico,nombre,enfermedad,vitrina,stockmin,stockmax,cod_forma,cod_conc){
+  function ActualizarNombreGenerico(cod_generico,nombre,enfermedad,vitrina,stockmin,stockmax,cod_forma,cod_conc,codigo){
     document.getElementById('cod_generico').value=cod_generico;
     document.getElementById("generico").value=nombre;
     document.getElementById("enfermedad").value=enfermedad;
     document.getElementById("vitrina").value=vitrina;
     document.getElementById("stockmin").value=stockmin;
     document.getElementById("stockmax").value=stockmax;
+    document.getElementById("codigo").value=codigo;
     if(cod_forma == 0){
       document.getElementById("cod_forma").selectedIndex = 0;
     }else{
@@ -574,6 +581,28 @@ function error(){
    showConfirmButton: false,
    timer: 1500
  });
+}
+function reporte(){
+  var buscar = document.getElementById("buscar").value;
+  var form = document.createElement('form');
+   form.method = 'post';
+   form.action = '../controlador/farmacia.controlador.php?accion=rpg'; // Coloca la URL de destino correcta
+   // Agregar campos ocultos para cada dato
+   var datos = {
+     buscar:buscar,
+   };
+   for (var key in datos) {
+       if (datos.hasOwnProperty(key)) {
+           var input = document.createElement('input');
+           input.type = 'hidden';
+           input.name = key;
+           input.value = datos[key];
+           form.appendChild(input);
+       }
+   }
+ // Agregar el formulario al cuerpo del documento y enviarlo
+ document.body.appendChild(form);
+ form.submit();
 }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

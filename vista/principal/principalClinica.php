@@ -105,7 +105,7 @@
             <div class="justify-content-center d-flex ">
               <div class="col-lg-5 col-md-6 col-12">
                 <div class="card" style="background-color:khaki">
-                  <div class="card-body" style="background: linear-gradient(to right, black, #feb47b);">
+                  <div class="card-body" style="background: linear-gradient(to right, yellow, #feb47b);">
                     <center>
                       <h3 Style='color:blue;text-shadow: 2px 2px 2px black;'>Acceso</h3></center>
                     <center>
@@ -193,36 +193,21 @@
                                 <div class="col-md-6 mb-5">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-phone icon-feature text-gradient d-block mb-3"></i>
-                                        <h3 class="font-alt">Device Mockups</h3>
-                                        <p class="text-muted mb-0">Ready to use HTML/CSS device mockups, no Photoshop required!</p>
+                                      La salud es un tesoro invaluable que, muchas veces, no apreciamos plenamente hasta que se ve comprometida. Cuidar de nuestro bienestar físico y mental no es solo una responsabilidad personal, sino también un acto de amor hacia nosotros mismos y quienes nos rodean. La salud abarca mucho más que la ausencia de enfermedad; es un estado de equilibrio en el que el cuerpo, la mente y el espíritu funcionan en armonía.
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-5">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-camera icon-feature text-gradient d-block mb-3"></i>
-                                        <h3 class="font-alt">Flexible Use</h3>
-                                        <p class="text-muted mb-0">Put an image, video, animation, or anything else in the screen!</p>
-                                    </div>
+                                    El descanso es otro componente esencial. En una sociedad que a menudo glorifica el ajetreo constante y el sacrificio del sueño en nombre de la productividad, es vital recordar que el cuerpo y la mente necesitan tiempo para recuperarse. Dormir bien es crucial para la memoria, la concentración y el bienestar emocional.
+                                  </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-5 mb-md-0">
                                     <!-- Feature item-->
                                     <div class="text-center">
-                                        <i class="bi-gift icon-feature text-gradient d-block mb-3"></i>
-                                        <h3 class="font-alt">Free to Use</h3>
-                                        <p class="text-muted mb-0">As always, this theme is free to download and use for any purpose!</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <!-- Feature item-->
-                                    <div class="text-center">
-                                        <i class="bi-patch-check icon-feature text-gradient d-block mb-3"></i>
-                                        <h3 class="font-alt">Open Source</h3>
-                                        <p class="text-muted mb-0">Since this theme is MIT licensed, you can use it commercially!</p>
-                                    </div>
+                                    La prevención es otra clave para una buena salud. Los chequeos médicos regulares, las vacunas y la adopción de hábitos saludables pueden evitar que pequeños problemas se conviertan en grandes preocupaciones. Recordemos que nuestra salud es nuestro principal recurso para disfrutar de la vida, trabajar, aprender y compartir con los demás.</div>
                                 </div>
                             </div>
                         </div>
@@ -230,26 +215,15 @@
                     <div class="col-lg-4 order-lg-0">
                         <!-- Features section device mockup-->
                         <div class="features-device-mockup">
-                            <svg class="circle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="circleGradient" gradientTransform="rotate(45)">
-                                        <stop class="gradient-start-color" offset="0%"></stop>
-                                        <stop class="gradient-end-color" offset="100%"></stop>
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="50" r="50"></circle></svg
-                            ><svg class="shape-1 d-none d-sm-block" viewBox="0 0 240.83 240.83" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03" transform="translate(120.42 -49.88) rotate(45)"></rect>
-                                <rect x="-32.54" y="78.39" width="305.92" height="84.05" rx="42.03" transform="translate(-49.88 120.42) rotate(-45)"></rect></svg
-                            ><svg class="shape-2 d-none d-sm-block" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"></circle></svg>
-                            <div class="device-wrapper">
+                             <div class="device-wrapper">
                                 <div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
-                                    <div class="screen bg-black">
+                                    <div class="screen bg-white">
                                         <!-- PUT CONTENTS HERE:-->
                                         <!-- * * This can be a video, image, or just about anything else.-->
                                         <!-- * * Set the max width of your media to 100% and the height to-->
                                         <!-- * * 100% like the demo example below.-->
-                                        <video muted="muted" autoplay="" loop="" style="max-width: 100%; height: 100%"><source src="assets/img/demo-screen.mp4" type="video/mp4" /></video>
+                                        <img src="imagenes/medi.jpg" alt="Imagen Salud" class="screen bg-black img-fluid rounded-circle colorsh"  style="height:500px;max-height: 100%;max-width:100%">
+
                                     </div>
                                 </div>
                             </div>

@@ -35,14 +35,19 @@
 			</div>
 		</div>
     <br>
-            <div class="container px-5 text-center" style='background-color:DarkKhaki; opacity: 0.7;border-radius: 50%;'>
-                <div class="row gx-6 justify-content-center">
-                    <div class="col-xl-10">
-                        <div class="h3 mb-6"style='color:black'>"Más vale prevenir que curar."</div>
-                    </div>
-                </div>
-            </div>
-<br><br><br><br><br><br>
+    <div class="row">
+      <div class="col-6">
+        <div class="container px-5 text-center" style='background-color:DarkKhaki; border-radius: 3%;'>
+                <div style='color:black'>"Más vale prevenir que curar."</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="container px-5 text-center" style='background-color:Khaki; border-radius: 3%;'>
+                <div style='color:black'>"El que tiene salud, lo tiene todo."</div>
+        </div>
+      </div>
+    </div>
+<br>
 <script type="text/javascript">
 
 
