@@ -87,7 +87,7 @@
                                <input type="text" name="cod_entrada" id='cod_entrada' value="">
                                <div class="mb-3">
                                  <label for="cod_producto" class="form-label">Producto farmaceutico</label>
-                                 <input type="text" class="form-control" id="nombre_producto" placeholder="Busque el producto" onkeyup="buscarProductoNuevo()">
+                                 <input type="text" class="form-control" id="nombre_producto" placeholder="Busque el producto" onkeyup="buscarProductoNuevo()" autocomplete="off">
                                  <div id="resultadoProducto" align='left' class='alert alert-light mb-0 py-0 border-0'>
                                  </div>
                                </div>

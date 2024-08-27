@@ -49,7 +49,7 @@
                         </button>
                       </div>
                       <div class="col-auto mb-2" title="Registrar o Actualizar">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarSalida('',0,'','',0,'','')">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarSalida('','','','',0,'')">
                           <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -82,6 +82,12 @@
                                <input type="text" name="cod_producto"id='cod_producto' value="">
                                <input type="text" name="cod_salida" id='cod_salida' value="">
                                <input type="text" name="usuario_id" id='usuario_id' value="">
+                               <input type="text" name="codigos" id='codigos'value="">
+                               <input type="text" name="actualizar" id='actualizar' value="">
+                               <div class="mb-3">
+                                 <label for="nombre_receta" class="form-label">Nombre receta</label>
+                                 <input type="text" class="form-control" id="nombre_receta" placeholder="Nombre de la receta" autocomplete="off">
+                              </div>
                                <div class="mb-3">
                                  <label for="cod_paciente" class="form-label">Paciente</label>
                                  <input type="text" class="form-control" id="cod_paciente" placeholder="Busque al paciente" onkeyup="buscarPaciente()"autocomplete="off">
@@ -101,16 +107,33 @@
                                <p id='stock_es' class='form-control'></p>
                                <div class="mb-3">
                                  <label for="name" class="form-label">Cantidad</label>
-                                 <input type="number" class="form-control" id="cantidad"  min='1' value='1' placeholder="cantidad" onchange="nuevoCantidad()">
+                                 <input type="number" class="form-control" id="cantidad"  min='1' value='1' placeholder="cantidad">
                                </div>
-
+                               <div class="modal-footer">
+                                 <button title='Guardar'type="button" id='btnr'class="btn btn-primary" onclick="registrar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'> Agregar producto</button>
+                               </div>
+                               <div class="table-responsive">
+                                <table class="table" id="tablaProductos">
+                                  <thead>
+                                    <tr style="font-size:13px">
+                                      <th>Codigo</th>
+                                      <th>Producto</th>
+                                      <th>Cantidad</th>
+                                      <th>Acciones</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <!-- Aquí se agregarán las filas dinámicamente -->
+                                  </tbody>
+                                </table>
+                              </div>
                              </form>
                            </div>
                          </div>
                         <!-- Pie de página del modal -->
                       </div>
                         <div class="modal-footer">
-                          <button title='Guardar'type="button" class="btn btn-primary" onclick="registrar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'></button>
+                        <button title='Permite guardar el dato como entregado al cliente' type="button" id='btne' class="btn btn-success" onclick="Entregar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'> Entregar</button>
                          <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
                         </div>
                       </div>
@@ -159,6 +182,53 @@
                            <hr>
                          </div>
                        </div>
+
+                       <div class="modal fade" id="ModalEditar" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+                       <div class="modal-dialog">
+                         <div class="modal-content">
+                           <div class="modal-header">
+                             <h6 class="modal-title" id="miModalRegistro">Actualizar la cantidad del producto solicitado</h6>
+                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                           </div>
+                           <!-- Contenido del modal -->
+                           <div class="modal-body">
+                             <div class="card shadow-lg">
+                              <div class="card-body">
+                                <form>
+                                  <input type="text" name="cod_producto1"id='cod_producto1' value="">
+                                  <input type="text" name="cod_solicitado1" id='cod_solicitado1' value="">
+                                  <input type="text" name="codigos1" id='codigos1'value="">
+                                  <input type="text" name="cantidadRestado1" id='cantidadRestado1' value="">
+                                  <input type="text" name="codigos_entrada1" id='codigos_entrada1' value="">
+                                  <input type="text" name="fila" id='fila' value="">
+                                  <div class="mb-3">
+                                    <label for="nombre_producto1" class="form-label">Producto farmaceutico</label>
+                                    <input type="text" class="form-control" id="nombre_producto1" placeholder="Busque el producto" onkeyup="buscarProductoNuevo1()" autocomplete="off">
+                                    <div id="resultadoProducto1" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                                    </div>
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="name" class="form-label">Stock Total</label>
+                                    <input disabled type="text" class="form-control" id="total_stock1" name='total_stock1' min='1' value='0' placeholder="Stock Total">
+                                  </div>
+                                  <p id='stock_es1' class='form-control'></p>
+                                  <div class="mb-3">
+                                    <label for="name" class="form-label">Cantidad</label>
+                                    <input type="number" class="form-control" id="cantidad1"  min='1' value='1' placeholder="cantidad" >
+                                  </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                           <!-- Pie de página del modal -->
+                           <div class="modal-footer">
+                            <button title='Guardar'type="button" class="btn btn-primary" onclick="editarProductoSolicitado()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'> Guardar Cambios</button>
+                            <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
+                           </div>
+                         </div>
+                         </div>
+                       </div>
+                     </div>
                     <div class="verDatos" id="verDatos">
                       <div class="row">
                         <div class="col">
@@ -167,12 +237,11 @@
                             <thead style="font-size:12px">
                               <tr>
                                 <th>N°</th>
-                                <th>Codigo</th>
-                                <th>Nombre Generico</th>
+                                <th>Nombre Receta</th>
                                 <th>Paciente</th>
                                 <th>Encargado Farmacia</th>
-                                <th>Cantidad Obtenida</th>
                                 <th>Fecha</th>
+                                <th>Entregado</th>
                                 <th>Acción</th>
                               </tr>
                             </thead>
@@ -180,13 +249,12 @@
 
                         <?php
                         //echo "<br><br><br><br><br>".count($resul);
-                        if ($resul && count($resul) > 0) {
+                      if ($resul && count($resul) > 0) {
                           $i = $inicioList;
                           foreach ($resul as $fi){
                               echo "<tr>";
                                 echo "<td>".($i+1)."</td>";
-                                echo "<td>".$fi['codigo']."</td>";
-                                echo "<td>".$fi['nombre']."</td>";
+                                echo "<td>".$fi['nombre_receta']."</td>";
 
                                 $paciente = $fi['cod_paciente'];
                                 $cod_paciente = '';
@@ -206,13 +274,16 @@
                                 }
                                 echo "</td>";
 
-                                echo "<td>".$fi['cantidad_salida']."</td>";
-                                echo "<td>".$fi['fecha']."</td>";
-
+                                echo "<td>".$fi['fechaHora']."</td>";
+                                if($fi["entregado"] == 'si'){
+                                  echo "<td  style='color:green;background-color:#dbffaf;text-align:center'>Entregado</td>";
+                                }else{
+                                  echo "<td  style='color:red;background-color:#faa3aA;text-align:center'>No entregado</td>";
+                                }
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                                 //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
-                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$fi['cantidad_salida'].",\"".$datos_paciente."\",\"".$fi['nombre']."\",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'].")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "<button type='button' class='btn btn-danger' title='Eliminar' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "</div>";
                                 echo "</td>";
@@ -377,9 +448,13 @@ function Buscar(page){
   function registrar(){
     var cod_producto = document.getElementById("cod_producto").value;
     var cod_salida = document.getElementById("cod_salida").value;
-    var cantidad = document.getElementById("cantidad").value;
+    var cantidad = parseInt(document.getElementById("cantidad").value);
     var id_paciente = document.getElementById("usuario_id").value;
     var total = parseInt(document.getElementById("total_stock").value);
+    var nombre_producto = document.getElementById("nombre_producto").value;
+    var nombre_receta = document.getElementById("nombre_receta").value;
+    var actualizar=document.getElementById("actualizar").value;
+    var codigos = document.getElementById("codigos").value;
     if(cantidad>total){
       cambie_Cantidad();
       return;
@@ -397,6 +472,8 @@ function Buscar(page){
     datos.append("cantidad",cantidad);
     datos.append("cod_salida",cod_salida);
     datos.append("id_paciente",id_paciente);
+    datos.append("nombre_receta",nombre_receta);
+    datos.append("actualizar",actualizar);
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=resf",
         type: "POST",
@@ -405,14 +482,24 @@ function Buscar(page){
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
         alert(data+"dasdas");
-          if(data == 'correcto'){
-            Correcto();
-          }else if(data == 'fecha_vencido'){
+          if(data == 'fecha_vencido'){
             vencido();
-          }else{
+          }else if(data == 'error'){
             Error1();
+          }else{
+            Correcto3();
+            agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,'');
+            document.getElementById("nombre_producto").value='';
+            document.getElementById("cod_producto").value='';
+            document.getElementById("cantidad").value='';
+            document.getElementById("total_stock").value='';
+            document.getElementById("nombre_receta").disabled=true;
+            document.getElementById("cod_paciente").disabled=true;
+            var es = document.getElementById("stock_es");
+            es.textContent ='';
+            es.style.backgroundColor = 'white';
           }
-          IRalLink(cod_salida);
+          //IRalLink(cod_salida);
         }
       });
   }
@@ -456,6 +543,16 @@ function Buscar(page){
      timer: 1500
    });
   }
+
+    function Correcto3(){
+      Swal.fire({
+       icon: 'success',
+       title: '¡Correcto!',
+       text: '¡Se agrego corretamente el producto farmacéutico!',
+       showConfirmButton: false,
+       timer: 1500
+     });
+    }
   function Error1(){
     Swal.fire({
      icon: 'error',
@@ -497,15 +594,32 @@ function Buscar(page){
       }, 1500);
     }
   }
-  function ActualizarSalida(cod_salida,cantidad_salida,datos_paciente,nombre,stock_producto,cod_paciente,cod_generico){
+  function ActualizarSalida(cod_salida,usuario_id,nombre_receta,cod_paciente,actualizar,entregado){
   //  alert(cod_salida+" "+cantidad_salida+" "+datos_paciente+"  "+nombre+" "+stock_producto+" "+cod_paciente+" "+cod_generico);
-    document.getElementById('cod_salida').value=cod_salida;
-    document.getElementById("cantidad").value=cantidad_salida;
-    document.getElementById("usuario_id").value=cod_paciente;
-    document.getElementById("cod_producto").value=cod_generico;
-    document.getElementById("nombre_producto").value=nombre;
-    document.getElementById("cod_paciente").value=datos_paciente;
-    document.getElementById("total_stock").value=stock_producto;
+    document.getElementById("cod_salida").value=cod_salida;
+    document.getElementById("usuario_id").value=usuario_id;
+    document.getElementById("nombre_receta").value=nombre_receta;
+    document.getElementById("cod_paciente").value=cod_paciente;
+    document.getElementById("actualizar").value=actualizar;
+    if(actualizar==0){
+      document.getElementById("cod_producto").value='';
+      document.getElementById("codigos").value='';
+      document.getElementById("cod_paciente").value='';
+      document.getElementById("nombre_producto").value='';
+      document.getElementById("total_stock").value='';
+      document.getElementById("cantidad").value='';
+      document.getElementById("btnr").disabled=false;
+      document.getElementById("btne").disabled=false;
+    }else{
+      BuscarDatosProductosSolicitados(cod_salida,entregado);
+    }
+    if(entregado != "" && entregado == 'si'){
+      document.getElementById("btnr").disabled=true;
+      document.getElementById("btne").disabled=true;
+    }else{
+      document.getElementById("btnr").disabled=false;
+      document.getElementById("btne").disabled=false;
+    }
   }
 
 
@@ -527,6 +641,7 @@ function Buscar(page){
 
                         unir+="<div>";
                         unir+="<div id='u' style=' display: inline-block;display:none;'>"+(data[i].cod_generico)+"</div> ";
+                        unir+="<div id='u' style=' display: inline-block;'>"+(data[i].codigo)+"</div> ";
                         unir+="<div id='u' style=' display: inline-block;'>"+(data[i].nombre)+"</div> ";
                         unir+="<div id='ap' style=' display: inline-block;'> "+(data[i].nombre_forma)+"</div> ";
                         unir+="<div id='ap' style=' display: inline-block;display:none;'> "+(data[i].cantidad_total)+"</div> ";
@@ -539,17 +654,18 @@ function Buscar(page){
                       $('#resultadoProducto div').on('click', function() {
                               //obtenemos los datos del usuario div resultado
                         var cod_producto = $(this).children().eq(0).text();
-                        var nombre = $(this).children().eq(1).text();
-                        var nombre_forma = $(this).children().eq(2).text();
-                        var total = $(this).children().eq(3).text();
-                        var estado = $(this).children().eq(4).text();
-                        var concentracion = $(this).children().eq(5).text();
+                        var codigos = $(this).children().eq(1).text();
+                        var nombre = $(this).children().eq(2).text();
+                        var nombre_forma = $(this).children().eq(3).text();
+                        var total = $(this).children().eq(4).text();
+                        var estado = $(this).children().eq(5).text();
+                        var concentracion = $(this).children().eq(6).text();
                           //dentro de los id de la vista mostramos los datos que estan en el div resultado
                           if(nombre != ""){
 
-                            document.getElementById("nombre_producto").value = (nombre)+" "+(nombre_forma)+" "+(concentracion);
+                            document.getElementById("nombre_producto").value = (nombre);
                             document.getElementById("cod_producto").value = cod_producto;
-
+                            document.getElementById("codigos").value=codigos;
                             document.getElementById("total_stock").value=total;
                             var es = document.getElementById("stock_es");
                             if(estado.trim() == 'si'){
@@ -592,14 +708,6 @@ function Buscar(page){
                'font-size':'15px'
                });
       }
-
-function nuevoCantidad(){
-  var cantidad = parseInt(document.getElementById("cantidad").value);
-  var total = parseInt(document.getElementById("total_stock").value);
-  if(cantidad>total){
-    document.getElementById("cantidad").value=total;
-  }
-}
 
 
   function buscarPaciente() {
@@ -726,5 +834,313 @@ function nuevoCantidad(){
          }
        });
       }
+
+        function buscarProductoNuevo1() {
+                //vaciarDESPUESdeUNtiempoAdmision();
+                var nombre_producto = document.getElementById("nombre_producto1").value;
+                if (nombre_producto != "") {
+                    $.ajax({
+                        url: "../controlador/farmacia.controlador.php?accion=bcp",
+                        type: "POST",
+                    		data: {cod_producto:nombre_producto},
+                    		dataType: "json",
+                        success: function(data) {
+                          //alert(data);
+                          if(data!=""){
+                            var unir="";
+                            for (let i = 0; i < data.length; i++) {
+                              var usuario = data[i];
+
+                              unir+="<div>";
+                              unir+="<div id='u' style=' display: inline-block;display:none;'>"+(data[i].cod_generico)+"</div> ";
+                              unir+="<div id='u' style=' display: inline-block;'>"+(data[i].codigo)+"</div> ";
+                              unir+="<div id='u' style=' display: inline-block;'>"+(data[i].nombre)+"</div> ";
+                              unir+="<div id='ap' style=' display: inline-block;'> "+(data[i].nombre_forma)+"</div> ";
+                              unir+="<div id='ap' style=' display: inline-block;display:none;'> "+(data[i].cantidad_total)+"</div> ";
+                              unir+="<div id='ap' style=' display: inline-block;display:none;'> "+(data[i].stock_producto)+"</div> ";
+                              unir+="<div id='am' style=' display: inline-block;'> "+(data[i].concentracion)+"</div></div>";
+
+                            }
+
+                            visualizarProducto1(unir);
+                            $('#resultadoProducto1 div').on('click', function() {
+                                    //obtenemos los datos del usuario div resultado
+                              var cod_producto = $(this).children().eq(0).text();
+                              var codigos = $(this).children().eq(1).text();
+                              var nombre = $(this).children().eq(2).text();
+                              var nombre_forma = $(this).children().eq(3).text();
+                              var total = $(this).children().eq(4).text();
+                              var estado = $(this).children().eq(5).text();
+                              var concentracion = $(this).children().eq(6).text();
+                                //dentro de los id de la vista mostramos los datos que estan en el div resultado
+                                if(nombre != ""){
+
+                                  document.getElementById("nombre_producto1").value = (nombre);
+                                  document.getElementById("cod_producto1").value = cod_producto;
+                                  document.getElementById("codigos1").value=codigos;
+                                  document.getElementById("total_stock1").value=total;
+                                  var es = document.getElementById("stock_es1");
+                                  if(estado.trim() == 'si'){
+                                    es.textContent ='Stock bajo';
+                                    es.style.backgroundColor = 'red';
+                                  }else{
+                                    es.textContent ='Stock adecuado';
+                                    es.style.backgroundColor = 'green';
+                                  }
+
+                                  $('#resultadoProducto1').html(""); //para vaciar
+                                }
+                            });
+                            document.getElementById("cod_producto1").value='';
+                          }else{
+                            $('#resultadoProducto1').html("<div class='alert alert-light' role='alert'>No se encontro resultados</div>");
+                          }
+
+                    		},error: function(data){
+                          $('#resultadoProducto1').html("<div class='alert alert-light' role='alert'>Ocurrio un error inesperado</div>");
+                          document.getElementById("cod_producto1").value='';
+                        }
+                    	});
+                    }else{
+                      $('#resultadoProducto1').html("");
+                      document.getElementById("cod_producto1").value='';
+                    }
+                  }
+
+
+                    function visualizarProducto1(unir){
+
+                    $('#resultadoProducto1').html(unir);
+                    //colocamos un color de css
+                    $('#resultadoProducto1').css({
+                     'cursor': 'pointer',
+                     'font-size':'15px'
+                     });
+            }
+
+    function ActualizarSolicitud(fila,codi,codigo){
+      alert(codi+"  "+codigo);
+      document.getElementById("cod_solicitado1").value=codi;
+      document.getElementById("codigos1").value=codigo;
+      document.getElementById("fila").value=fila;
+
+      $.ajax({
+          url: "../controlador/farmacia.controlador.php?accion=soli",
+          type: "POST",
+          data: {cod_solicitado:codi},
+          dataType: "json",
+          success: function(data) {
+            for (let i = 0; i < data.length; i++) {
+              var usuario = data[i];
+              document.getElementById("cod_producto1").value=data[i].cod_producto;
+              document.getElementById("total_stock1").value=data[i].cantidad_total;
+              document.getElementById("cantidadRestado1").value=data[i].cantidadRestado;
+              document.getElementById("nombre_producto1").value=data[i].nombre;
+              document.getElementById("cantidad1").value=data[i].cantidad_solicitada;
+              document.getElementById("codigos_entrada1").value=data[i].codigos_entrada;
+              var estado=data[i].stock_producto;
+              var es = document.getElementById("stock_es1");
+
+              if(estado.trim() == 'si'){
+                es.textContent ='Stock bajo';
+                es.style.backgroundColor = 'red';
+              }else{
+                es.textContent ='Stock adecuado';
+                es.style.backgroundColor = 'green';
+              }
+              }
+          }
+      });
+    }
+
+    function agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,disabled){
+
+      var separar = data.split(',');
+      var fila = verificarFilas();
+      document.getElementById("cod_salida").value=separar[0];
+      var codi = separar[1];
+      let tbody = document.getElementById('tablaProductos').getElementsByTagName('tbody')[0];
+      let nuevaFila = tbody.insertRow();
+      let codigo = nuevaFila.insertCell(0);
+      let celdaProducto = nuevaFila.insertCell(1);
+      let celdaCantidad = nuevaFila.insertCell(2);
+      let celdaAcciones = nuevaFila.insertCell(3);
+      codigo.innerHTML = codigos;
+      celdaProducto.innerHTML =nombre_producto;
+      celdaCantidad.innerHTML =cantidad;
+      celdaAcciones.innerHTML = `<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+      <button type='button' class='btn btn-info' title='Editar' ${disabled} onclick='ActualizarSolicitud(${fila},${codi},"${codigos}")' data-bs-toggle='modal' data-bs-target='#ModalEditar'>
+        <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
+      </button>
+
+    </div>`;
+/*<button type='button' class='btn btn-danger' onclick='eliminarFila(this)'>Eliminar</button>*/
+    }
+
+    //function para guardar los cambios del producto
+    function editarProductoSolicitado(){
+      var cod_producto1 = document.getElementById("cod_producto1").value;
+      var cod_solicitado1 = document.getElementById("cod_solicitado1").value;
+      var codigos1 = document.getElementById("codigos1").value;
+      var cantidadRestado1 = document.getElementById("cantidadRestado1").value;
+      var codigos_entrada1 = document.getElementById("codigos_entrada1").value;
+      var nombre_producto1 = document.getElementById("nombre_producto1").value;
+      var total_stock1 = parseInt(document.getElementById("total_stock1").value);
+      var cantidad1 = parseInt(document.getElementById("cantidad1").value);
+      var fila =document.getElementById("fila").value;
+      alert(cantidad1+"    "+total_stock1);
+      if(cantidad1>=total_stock1){
+        cambie_Cantidad();
+        return;
+      }
+      if(total_stock1==0){
+        StockBajo();
+        return;
+      }
+      if(cantidad1== "" || cod_producto1 == ''){
+        Vacio();
+        return;
+      }
+      var datos = new FormData(); // Crear un objeto FormData vacío
+      datos.append("cod_producto1",cod_producto1);
+      datos.append("cod_solicitado1",cod_solicitado1);
+      datos.append("cantidad1",cantidad1);
+        $.ajax({
+          url: "../controlador/farmacia.controlador.php?accion=fips",
+          type: "POST",
+          data: datos,
+          contentType: false, // Deshabilitar la codificación de tipo MIME
+          processData: false, // Deshabilitar la codificación de datos
+          success: function(data) {
+          alert(data+"dasdas");
+            if(data == 'fecha_vencido'){
+              vencido();
+            }else if(data == 'error'){
+              Error1();
+            }else{
+              Correcto();
+              vaciarCamposDeProductoSolicitado();
+              actualizarLaFila(fila,codigos1,nombre_producto1,cantidad1,cod_solicitado1);
+            }
+            //IRalLink(cod_salida);
+          }
+        });
+
+    }
+    function actualizarLaFila(filaIndex,codigos1,nombre_producto1,cantidad1,cod_solicitado1) {
+            var tabla = document.getElementById('tablaProductos');
+            var fila = tabla.rows[filaIndex];
+            fila.cells[0].innerHTML = codigos1;
+            fila.cells[1].innerHTML = nombre_producto1;
+            fila.cells[2].innerHTML = cantidad1;
+            fila.cells[3].innerHTML =  `<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+            <button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSolicitud(${filaIndex},${cod_solicitado1},"${codigos1}")' data-bs-toggle='modal' data-bs-target='#ModalEditar'>
+              <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
+            </button>
+
+          </div>`;
+    }
+    function vaciarCamposDeProductoSolicitado(){
+      document.getElementById("cod_producto1").value='';
+      document.getElementById("cod_solicitado1").value='';
+      document.getElementById("codigos1").value='';
+      document.getElementById("cantidadRestado1").value='';
+      document.getElementById("codigos_entrada1").value='';
+      document.getElementById("nombre_producto1").value='';
+      document.getElementById("total_stock1").value='';
+      document.getElementById("cantidad1").value='';
+      document.getElementById("fila").value='';
+      $('#ModalEditar').modal('hide');
+    }
+
+    function verificarFilas() {
+      var tabla = document.getElementById('tablaProductos');
+      var numeroDeFilas = tabla.rows.length;
+  // Restar 1 para excluir la fila de encabezado
+      if(numeroDeFilas===1){//es encabezado
+        return 1;
+      }else if (numeroDeFilas > 1) {//si es mayor a uno le sumamos una fila mas al insertar
+        return (numeroDeFilas);
+      }
+    }
+
+    function Entregar(){
+      var numFilas = verificarFilas();
+      if(numFilas===1){
+        Info1();
+        return;
+      }
+      var cod_salida = document.getElementById("cod_salida").value;
+      if(cod_salida==''){
+        vacio();
+        return;
+      }
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta seguro que quiere realizar la entrega.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+        var datos = new FormData(); // Crear un objeto FormData vacío
+        datos.append("cod_salida",cod_salida);
+          $.ajax({
+            url: "../controlador/farmacia.controlador.php?accion=actualizarEntrega",
+            type: "POST",
+            data: datos,
+            contentType: false, // Deshabilitar la codificación de tipo MIME
+            processData: false, // Deshabilitar la codificación de datos
+            success: function(data) {
+            //alert(data+"dasdas");
+              if(data == 'correcto'){
+                Correcto();
+                $('#ModalRegistro').modal('hide');
+              }else if(data == 'error'){
+                Error1();
+              }
+            }
+          });
+        }
+      });
+
+    }
+
+  function Info1(){
+    Swal.fire({
+     icon: 'info',
+     title: '¡Información!',
+     text: '¡No se tiene ningun producto agregado para entregar al paciente o cliente!',
+     showConfirmButton: false,
+     timer: 3000
+   });
+  }
+  function BuscarDatosProductosSolicitados(cod_salida,entregados){
+    var disabled='';
+    if(entregados == 'si'){
+      disabled='disabled';
+    }
+    vaciarTabla();
+    $.ajax({
+        url: "../controlador/farmacia.controlador.php?accion=bfps",
+        type: "POST",
+        data: {cod_salida:cod_salida},
+        dataType: "json",
+        success: function(data) {
+          for (let i = 0; i < data.length; i++) {
+            var ps = data[i];
+            var dataa = ps.cod_salida+","+ps.cod_solicitado;
+            agragarFila(ps.codigo,ps.nombre,ps.cantidad_solicitada,ps.cod_salida,dataa,disabled);
+          }
+        }
+    });
+  }
+  function vaciarTabla() {
+      const tabla = document.getElementById('tablaProductos').getElementsByTagName('tbody')[0];
+      tabla.innerHTML = ''; // Vacía todo el contenido del tbody
+  }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

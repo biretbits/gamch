@@ -10,8 +10,6 @@ $ins->StarSession();
 
 
 ?>
-
-
 <?php
     require_once "librerias/footeruni.php";
 ?>

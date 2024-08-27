@@ -225,15 +225,19 @@ class Farmacia
  }
 //funcion para seleccionar de tabla salida
  public function SeleccionarSalida($inicioList=false,$listarDeCuanto=false,$buscar='',$fechai=false,$fechaf=false){
-     $sql="select *from salida as s inner join producto as p where s.cod_generico=p.cod_generico";
-     if($buscar !=''){
-       $sql.=" and (p.nombre LIKE '%$buscar%' or p.codigo LIKE '%$buscar%')";
+     $sql="select *from salida ";
+     $si = "no";
+     if($buscar !='' && $si == 'no'){
+       $sql.=" where (lower(nombre_receta) LIKE '%$buscar%'";
+       $si = 'si';
      }
-     if($fechai!=false &&$fechaf!=false){
-       $sql.=" and (s.fecha >= '$fechai' and s.fecha <= '$fechaf') ";
+     if($fechai!=false &&$fechaf!=false && $si == 'no'){
+       $sql.=" where (DATE(fecha) >= '$fechai' and DATE(fecha <= '$fechaf')) ";
+     }else if($fechai!=false &&$fechaf!=false && $si == 'si'){
+       $sql.="  and (DATE(fecha) >= '$fechai' and DATE(fecha <= '$fechaf')) ";
      }
      if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
-       $sql.=" ORDER BY s.cod_salidad DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
+       $sql.=" ORDER BY cod_salida DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
      }
      //echo $sql;
      $resul = $this->con->query($sql);
@@ -328,24 +332,20 @@ class Farmacia
      $this->con->query($sql);
    }
 
-   public function insertarNuevoRegistroSalida($cod_producto,$cantidad,$cod_salida,$id_paciente,$codigos,$usuario,$fechaActual,$cat_res,$hora){
+   public function insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$cod_salida){
      $select = '';
-     if(is_numeric($cod_salida)){//actualizar
-       $select="update salida set cantidad_salida=$cantidad,codigos_entrada='$codigos',cantidadRestado='$cat_res',cod_generico=$cod_producto,
-       cod_usuario=$usuario,cod_paciente=$id_paciente where cod_salidad = $cod_salida";
-     }else{//insertar
-       $select="insert into salida(cantidad_salida,codigos_entrada,cantidadRestado,cod_generico,cod_usuario,cod_paciente,fecha,hora)
-       values($cantidad,'$codigos','$cat_res',$cod_producto,$usuario,$id_paciente,'$fechaActual','$hora')";
-    }
-    //echo $select;
-     $resul = $this->con->query($select);
-     // Retornar el resultado
-     return $resul;
+       $select="insert into productosolicitado(cantidad_solicitada,codigos_entrada,cantidadRestado,fechaHora,cod_producto,cod_salida)
+       values($cantidad,'$codigos','$cat_res',NOW(),$cod_producto,$cod_salida)";
+       $resul = $this->con->query($select);
+       if($resul!=''){
+         $ultimoId = $this->con->insert_id;
+         return $ultimoId;
+       }
      mysqli_close($this->con);
    }
 
-   public function actualizar_datos_entrada($cod_salida){
-     $resultado = $this->SeleccionarSalidaID($cod_salida);
+   public function actualizar_datos_entrada($cod_solicitado){
+     $resultado = $this->seleccionarProductoSolicitado($cod_solicitado);
      $fila = mysqli_fetch_array($resultado);
      $codigos = $fila["codigos_entrada"];
      $cantidad_resta = $fila["cantidadRestado"];
@@ -376,22 +376,29 @@ class Farmacia
      return $c;
  }
 
-   public function SeleccionarSalidaID($cod_salida){
-     $select="select *from salida where cod_salidad = $cod_salida";
+   public function SeleccionarSalidaID($cod_solicitado){
+     $select="select *from productoSolicitado where cod_solicitado = $cod_solicitado";
+     $resul = $this->con->query($select);
+     // Retornar el resultado
+     return $resul;
+   }
+
+   function seleccionarProductoSolicitado($cod_solicitado){
+     $select="select *from productoSolicitado where cod_solicitado = $cod_solicitado";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
    }
 
    public function actualizarCantidadEntradaDesdeSalida($nueva_cantidad,$cod_entrada){
-    $re = $this->detectarMayor($cod_entrada);
+    $re = $this->detectarMayor($cod_entrada);//esta funcion permite saver si el dato en ese codigo es mayor si es mayor se colocara el datos del campo de apoyo
     $c = $re[0];
     $cantOLD = $re[1];
     //echo $c."   ".$cantOLD;
-    if($c == 'si'){
+    if($c == 'si'){//si es mayor solo copiamos el dato de respando cantidad
       //echo "lleggooooooooo";
       $sql = "update entrada set cantidad = $cantOLD where cod_entrada=".$cod_entrada;
-    }else{
+    }else{//si no es mayor solo sumamos el valor
       $sql = "update entrada set cantidad = (cantidad+$nueva_cantidad) where cod_entrada=".$cod_entrada;
     }
     $this->con->query($sql);
@@ -412,8 +419,8 @@ class Farmacia
      return array($c,$cantOLD);
    }
 
-   public function seleccionarCantEntrada($cod_salida){
-     $resultado = $this->SeleccionarSalidaID($cod_salida);
+   public function seleccionarCantEntrada($cod_solicitado){
+     $resultado = $this->SeleccionarSalidaID($cod_solicitado);
      $fila = mysqli_fetch_array($resultado);
      $codigos = $fila["codigos_entrada"];
      $cantidad_resta = $fila["cantidadRestado"];
@@ -435,6 +442,57 @@ class Farmacia
      return $resul;
    }
 
+   function InsertarENsalida($cod_salida,$nombre_receta,$usuario,$id_paciente){
+     $select = '';
+     if(is_numeric($cod_salida)){//actualizar
+       $select="update salida set nombre_receta=$nombre_receta,cod_usuario=$usuario,cod_paciente=$id_paciente where cod_salidad = $cod_salida";
+       $resul = $this->con->query($select);
+       return $cod_salida;
+     }else{//insertar
+       $select="insert into salida(nombre_receta,cod_usuario,cod_paciente,fechaHora,estado)values('$nombre_receta',
+       $usuario,$id_paciente,now(),'activo')";
+       $resul = $this->con->query($select);
+       if($resul!=''){
+         $ultimoId = $this->con->insert_id;
+         return $ultimoId;
+       }
+    }
+
+   }
+
+   function buscarSolicitado($cod_solicitado){
+     $select="select *from productosolicitado as ps inner join producto as p on ps.cod_producto = p.cod_generico
+     where ps.cod_solicitado=$cod_solicitado";
+     $resul = $this->con->query($select);
+     // Retornar el resultado
+     return $resul;
+   }
+   function actualizarProductosSolicitados($ar,$codigosNEW,$cat_resNEW){
+     $cod_solicitado = $ar['cod_solicitado1'];
+     $cod_producto = $ar["cod_producto1"];
+     $cantidad = $ar["cantidad1"];
+     $sql = "update productoSolicitado set cantidad_solicitada=$cantidad,codigos_entrada='$codigosNEW',
+     cantidadRestado='$cat_resNEW',cod_producto=$cod_producto where cod_solicitado = $cod_solicitado";
+     $resul = $this->con->query($sql);
+     // Retornar el resultado
+     return $resul;
+   }
+
+   public function ActualizarEntregaDePaciente($cod_salida){
+     $select="update salida set entregado = 'si' where cod_salida=$cod_salida";
+     $resul = $this->con->query($select);
+     // Retornar el resultado
+     return $resul;
+    mysqli_close($this->con);
+   }
+
+   public function buscarDatosProductoS($cod_salida){
+     $select="select *from productosolicitado as ps inner join producto as p on ps.cod_producto=p.cod_generico where cod_salida=$cod_salida";
+     $resul = $this->con->query($select);
+     // Retornar el resultado
+     return $resul;
+     mysqli_close($this->con);
+   }
 }
 
 

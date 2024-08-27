@@ -1039,23 +1039,14 @@ class FarmaciaControlador{
         if($resul !=""){
           while ($fi = mysqli_fetch_array($resul)) {
           // Añadir cada fila al array con una estructura correcta
-           $entry = [
-                  "cod_salida" => $fi["cod_salidad"],
-                  "cantidad_salida" => $fi["cantidad_salida"],
-                  "cod_generico" => $fi["cod_generico"],
-                  "cod_paciente" => $u->selectDatosUsuario($fi["cod_paciente"]),
+          $entry = [
+                  "cod_salida" => $fi["cod_salida"],
+                  "nombre_receta"=>$fi["nombre_receta"],
+                  "entregado" => $fi["entregado"],
                   "cod_usuario" => $u->selectDatosUsuario($fi["cod_usuario"]),
-                  "fecha" => $fi["fecha"],
-                  "estado" => $fi["estado"],
-                  "codigo" => $fi["codigo"],
-                    "nombre" => $fi["nombre"],
-                    "enfermedad" => $fi["enfermedad"],
-                    "vitrina" => $fi["vitrina"],
-                    "stockmin" => $fi["stockmin"],
-                    "stockmax" => $fi["stockmax"],
-                    "cod_forma" => $fi["cod_forma"],
-                    "stock_producto"=> $fi['stock_producto'],
-                    "cantidad_total"=>$fi["cantidad_total"],
+                  "cod_paciente" => $u->selectDatosUsuario($fi["cod_paciente"]),
+                  "fechaHora"=>$fi["fechaHora"],
+                  "estado"=> $fi["estado"]
                   ];
                   $ar[] = $entry; // Agregar la entrada al array principal
               }
@@ -1087,39 +1078,49 @@ class FarmaciaControlador{
       }
     }
 
-   public function InsertarActualizarSalida($cod_producto,$cantidad,$cod_salida,$id_paciente){
+   public function InsertarActualizarSalida($cod_producto,$cantidad,$cod_salida,$id_paciente,$actualizar,$nombre_receta){
      $fa =new Farmacia();
      $fechaActual = date('Y-m-d');
      $hora = date('H:i:s');
-     $cc=0;
+     $cc=0;$usuario=$_SESSION["cod_usuario"];
+     $re=$fa->SeleccionarSalidaID($cod_salida);//verificamos si ya se inserto
+     $idSalida='';
+     if($re!=''){//si el cod salida ya existe entoces ya no insertamos
+       if(mysqli_num_rows($re)>0){//ya esta insertado, pero el usuario puede tambien querer actualizar
+         if($actualizar==1){//si es uno se quiere actualizar
+           $idSalida=$fa->InsertarENsalida($cod_salida,$nombre_receta,$usuario,$id_paciente);
+         }else{
+           $idSalida=$cod_salida;
+         }
+       }
+     }else{
+       $idSalida=$fa->InsertarENsalida($cod_salida,$nombre_receta,$usuario,$id_paciente);
+     }
      //echo "cod_salida  ".$cod_salida;
-     if(is_numeric($cod_salida)){//si existe el cod_salida esta queriendo editar
-       $cc = $fa->actualizar_datos_entrada($cod_salida);
-       if($cc==0){
-         $re = $fa->seleccionarCantEntrada($cod_salida);
+     /*if(is_numeric($cod_solicitado)){//si existe el cod_salida esta queriendo editar
+       $cc = $fa->actualizar_datos_entrada($cod_solicitado);//verificamos el vencimiento de cada poucto que se solicito antes de editar
+       if($cc==0){//si es igual a cero se puede editar
+         $re = $fa->seleccionarCantEntrada($cod_solicitado);//seleccionamos las cantidades entradas y restados
          $codigos = $re[0];
          $cantiEntra = $re[1];
-         $fa->SumasActualizar($codigos,$cantiEntra);
+         $fa->SumasActualizar($codigos,$cantiEntra);//si cumple todo entonces se podra actualizar
        }
-     }
-     if($cc == 0){
-       $resultado = $fa->entradaTodo($fechaActual,$cod_producto);//seleccionar todas las entradas pero desde una fecha y de un producto
+     }*/
+      $resultado = $fa->entradaTodo($fechaActual,$cod_producto);//seleccionar todas las entradas pero desde una fecha y de un producto
        $retorno = $this->disminuir_stock($resultado,$fa,$cantidad);//funcion para dsminuir la cantidad
        $codigos = $retorno[0];//codigos separado por comas
        $cat_res = $retorno[1];//cantidades restado separado por comas
        $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
        $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
-       $usuario=$_SESSION["cod_usuario"];
+       $cod_solicitado='';
+       $idsolicitado=$fa->insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$idSalida);
 
-       $resul=$fa->insertarNuevoRegistroSalida($cod_producto,$cantidad,$cod_salida,$id_paciente,$codigos,$usuario,$fechaActual,$cat_res,$hora);
-       if($resul!=''){
-         echo "correcto";
+       if(is_numeric($idSalida) && is_numeric($idsolicitado)){
+         echo $idSalida.",".$idsolicitado;
        }else{
          echo "error";
        }
-     }else{
-       echo "fecha_vencido";
-     }
+
    }
 
    function disminuir_stock($r, $f, $cantidad) {
@@ -1280,10 +1281,80 @@ class FarmaciaControlador{
 
       $res = $fa->SeleccionarProducto('','',$buscar,$fechai,$fechaf,$estadoProducto);
       $resul = $this->UniendoProducto($res,$fa);
-      
+
       require("../vista/farmacia/ReporteEntrada.php");
     }
 
+    function SeleccionarProductoSolicitadoPORid($cod_solicitado){
+      $fa =new Farmacia();
+      $re = $fa->buscarSolicitado($cod_solicitado);
+      $datos = array();
+      if ($re->num_rows > 0) {
+     // Recoger los resultados en un array
+       while($row = $re->fetch_assoc()) {
+        $datos[] = $row;
+      }
+          echo json_encode($datos);
+      } else {
+          echo json_encode([]);
+      }
+    }
+
+    public function ActualizarProductoSolicitado($ar){
+      $cod_solicitado = $ar['cod_solicitado1'];
+      $cod_producto = $ar["cod_producto1"];
+      $cantidad = $ar["cantidad1"];
+      $fa =new Farmacia();
+      $cc = $fa->actualizar_datos_entrada($cod_solicitado);//verificamos el vencimiento de cada producto que se solicito antes de editar
+      //en este paso lo que se hace es solo sumar los que se quito al valor que se tenia para empezar a restar de nuevo
+      if($cc==0){//si es igual a cero se puede editar
+        $re = $fa->seleccionarCantEntrada($cod_solicitado);//seleccionamos las cantidades entradas y restados
+        $codigos = $re[0];
+        $cantiEntra = $re[1];
+        $fa->SumasActualizar($codigos,$cantiEntra);//si cumple todo entonces se podra actualizar
+
+        $fechaActual = date('Y-m-d');
+        $resultado = $fa->entradaTodo($fechaActual,$cod_producto);//seleccionar todas las entradas pero desde una fecha y de un producto
+        $retorno = $this->disminuir_stock($resultado,$fa,$cantidad);//funcion para dsminuir la cantidad
+        $codigosNEW = $retorno[0];//codigos separado por comas es el nuevo
+        $cat_resNEW = $retorno[1];//cantidades restado separado por comas el nuevo
+        $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
+        $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
+        $ress = $fa->actualizarProductosSolicitados($ar,$codigosNEW,$cat_resNEW);//funcion para poner los nuevos datos
+        if($ress != ''){
+          echo "correcto";
+        }else{
+          echo "error";
+        }
+      }else{//producto vencido no se puede eliminar
+          echo "fecha_vencido";
+      }
+    }
+
+    public function ActualizarEntregaApaciente($cod_salida){
+      $fa =new Farmacia();
+      $resul = $fa->ActualizarEntregaDePaciente($cod_salida);
+      if($resul!=''){
+        echo "correcto";
+      }else{
+        echo "error";
+      }
+    }
+
+    public function BuscarDatospSolicitado($cod_salida){
+      $fa =new Farmacia();
+      $re = $fa->buscarDatosProductoS($cod_salida);
+      $datos = array();
+      if ($re->num_rows > 0) {
+     // Recoger los resultados en un array
+       while($row = $re->fetch_assoc()) {
+        $datos[] = $row;
+      }
+          echo json_encode($datos);
+      } else {
+          echo json_encode([]);
+      }
+    }
   }
 
   $f = new FarmaciaControlador();
@@ -1339,7 +1410,8 @@ class FarmaciaControlador{
     $f->EliminarEF($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_entrada"],$_POST["fechai"],$_POST["fechaf"],$_POST['estadoProducto']);
 	}
   if(isset($_GET["accion"]) && $_GET['accion']=='resf'){
-    $f->InsertarActualizarSalida($_POST["cod_producto"],$_POST["cantidad"],$_POST["cod_salida"],$_POST["id_paciente"]);
+    $f->InsertarActualizarSalida($_POST["cod_producto"],$_POST["cantidad"],$_POST["cod_salida"],$_POST["id_paciente"],
+    $_POST["actualizar"],$_POST["nombre_receta"]);
   }
 
   if(isset($_GET["accion"]) && $_GET["accion"]=="buf"){
@@ -1362,5 +1434,21 @@ class FarmaciaControlador{
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="rpng"){
     $f->ReporteProductoEntrada($_POST['buscar'],$_POST["fechai"],$_POST["fechaf"],$_POST["estadoProducto"]);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="soli"){
+    $f->SeleccionarProductoSolicitadoPORid($_POST['cod_solicitado']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="fips"){
+    $ar = array(
+      "cod_producto1" => $_POST["cod_producto1"],
+      "cod_solicitado1" => $_POST["cod_solicitado1"],
+      "cantidad1" => $_POST["cantidad1"]);
+    $f->ActualizarProductoSolicitado($ar);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarEntrega"){
+    $f->ActualizarEntregaApaciente($_POST['cod_salida']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="bfps"){
+    $f->BuscarDatospSolicitado($_POST['cod_salida']);
   }
 ?>

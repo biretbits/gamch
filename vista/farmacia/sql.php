@@ -21,81 +21,32 @@ function select_datos_usuario($id){
   mysqli_close($cnmysql);
 	return $da;
 }
-function select_registro_diario(){
-	if(!isset($_SESSION)){
-		session_start();
-	}
-  $cnmysql=conec();
-	mysqli_set_charset($cnmysql,"utf8");
-  $fecha_actual = date('Y-m-d');
-	$select="select *from registro_diario where fecha_rd>='".$fecha_actual."' and  fecha_rd<='".$fecha_actual."'";
-	$da=$cnmysql->query($select);
-	//$numf=mysqli_num_rows($da);
-  mysqli_close($cnmysql);
-	return $da;
-}
-//funcion para seleccionar los sericios que se date_default_timezone_get
-function selecionarServicios(){
+
+function seleccionarIDSalida(){
   if(!isset($_SESSION)){
 		session_start();
 	}
   $cnmysql=conec();
 	mysqli_set_charset($cnmysql,"utf8");
-	$select="select *from servicio";
+	$select="select max(cod_salida)from salida";
 	$da=$cnmysql->query($select);
 	//$numf=mysqli_num_rows($da);
   mysqli_close($cnmysql);
 	return $da;
+  
 }
-function selecion($nombre){
+function seleccionarIDproductoObtenido(){
   if(!isset($_SESSION)){
 		session_start();
 	}
   $cnmysql=conec();
 	mysqli_set_charset($cnmysql,"utf8");
-	$select="select *from nombre_generico where nombre='".$nombre."'";
+	$select="select *from usuario where cod_usuario=$id";
 	$da=$cnmysql->query($select);
 	//$numf=mysqli_num_rows($da);
   mysqli_close($cnmysql);
 	return $da;
-}
-function selecion1($nombre){
-  if(!isset($_SESSION)){
-		session_start();
-	}
-  $cnmysql=conec();
-	mysqli_set_charset($cnmysql,"utf8");
-	$select="select *from forma_presentacion where nombre_forma='".$nombre."'";
-	$da=$cnmysql->query($select);
-	//$numf=mysqli_num_rows($da);
-  mysqli_close($cnmysql);
-	return $da;
+
 }
 
-
-function selecion2($nombre){
-  if(!isset($_SESSION)){
-		session_start();
-	}
-  $cnmysql=conec();
-	mysqli_set_charset($cnmysql,"utf8");
-	$select="select *from conc_uni_med where concentracion='".$nombre."'";
-	$da=$cnmysql->query($select);
-	//$numf=mysqli_num_rows($da);
-  mysqli_close($cnmysql);
-	return $da;
-}
-
-function selecioness(){
-  if(!isset($_SESSION)){
-		session_start();
-	}
-  $cnmysql=conec();
-	mysqli_set_charset($cnmysql,"utf8");
-	$select="select *from p";
-	$da=$cnmysql->query($select);
-	//$numf=mysqli_num_rows($da);
-  mysqli_close($cnmysql);
-	return $da;
-}
  ?>

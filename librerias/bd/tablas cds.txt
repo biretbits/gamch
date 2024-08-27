@@ -102,3 +102,52 @@ cod_usuario       int  mul
 cod_paciente      int  mul
 fecha             date
 estado            char
+
+create table salida(
+  cod_salida int not null auto_increment primary key,
+  nombre_receta char(200),
+  entregado char(15) default 'no',
+  cod_usuario int,
+  cod_paciente int,
+  fechaHora datetime,
+  estado char(10)default 'activo',
+  foreign key(cod_usuario)references usuario(cod_usuario)on delete restrict on update restrict,
+  foreign key(cod_paciente)references usuario(cod_usuario)on delete restrict on update restrict);
+
+   create table productoSolicitado(
+  cod_solicitado int not null auto_increment primary key,
+  cantidad_solicitada int,
+  codigos_entrada text,
+  cantidadRestado text,
+  fechaHora datetime,
+  cod_producto int,
+  cod_salida int,
+  foreign key(cod_producto)references producto(cod_generico)on delete restrict on update restrict,
+  foreign key(cod_salida)references salida(cod_salida)on delete restrict on update restrict);
+
+    cod_entrada       | int(11)  | NO   | PRI | NULL    | auto_increment |
+   | cantidad          | int(11)  | YES  |     | NULL    |                |
+   | respaldo_cantidad | int(11)  | YES  |     | NULL    |                |
+   | manipulado        | char(3)  | YES  |     | no      |                |
+   | vencimiento       | date     | YES  |     | NULL    |                |
+   | fecha             | date     | YES  |     | NULL    |                |
+   | hora              | time     | YES  |     | NULL    |                |
+   | cod_usuario       | int(11)  | YES  | MUL | NULL    |                |
+   | cod_generico      | int(11)  | YES  | MUL | NULL    |                |
+   | estado_producto   | char(50) | YES  |     | activo  |                |
+   | estado            | char(10) | YES  |     | activo  |
+
+   create table entrada(
+   cod_entrada int not null auto_increment primary key,
+   cantidad int,
+   respaldo_cantidad int,
+   manipulado char(3),
+   vencimiento date,
+   fecha date,
+   hora time,
+   cod_usuario int,
+   cod_generico int,
+   estado_producto char(50) default 'activo',
+   estado char(10) default 'activo',
+   foreign key(cod_usuario)references usuario(cod_usuario)on delete restrict on update restrict,
+   foreign key(cod_generico)references producto(cod_generico)on delete restrict on update restrict);
