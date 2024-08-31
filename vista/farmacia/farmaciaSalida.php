@@ -58,7 +58,7 @@
                         <!-- espacio vacío para mantener el diseño intacto -->
                       </div>
                       <div class="col mb-2">
-                        <input type="text" name="buscar" id='buscar'class="form-control" placeholder="Buscar....." onkeyup="Buscar(1)">
+                        <input type="text" name="buscar" id='buscar'class="form-control" placeholder="Buscar por /receta/nombre y apellidos de paciente" onkeyup="Buscar(1)">
                       </div>
                     </div>
                     </div>
@@ -79,11 +79,11 @@
                           <div class="card shadow-lg">
                            <div class="card-body">
                              <form>
-                               <input type="text" name="cod_producto"id='cod_producto' value="">
-                               <input type="text" name="cod_salida" id='cod_salida' value="">
-                               <input type="text" name="usuario_id" id='usuario_id' value="">
-                               <input type="text" name="codigos" id='codigos'value="">
-                               <input type="text" name="actualizar" id='actualizar' value="">
+                               <input type="hidden" name="cod_producto"id='cod_producto' value="">
+                               <input type="hidden" name="cod_salida" id='cod_salida' value="">
+                               <input type="hidden" name="usuario_id" id='usuario_id' value="">
+                               <input type="hidden" name="codigos" id='codigos'value="">
+                               <input type="hidden" name="actualizar" id='actualizar' value="">
                                <div class="mb-3">
                                  <label for="nombre_receta" class="form-label">Nombre receta</label>
                                  <input type="text" class="form-control" id="nombre_receta" placeholder="Nombre de la receta" autocomplete="off">
@@ -110,7 +110,7 @@
                                  <input type="number" class="form-control" id="cantidad"  min='1' value='1' placeholder="cantidad">
                                </div>
                                <div class="modal-footer">
-                                 <button title='Guardar'type="button" id='btnr'class="btn btn-primary" onclick="registrar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'> Agregar producto</button>
+                                 <button title='Agrega y Guarda el producto'type="button" id='btnr'class="btn btn-primary" onclick="registrar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'> Agregar producto</button>
                                </div>
                                <div class="table-responsive">
                                 <table class="table" id="tablaProductos">
@@ -195,12 +195,12 @@
                              <div class="card shadow-lg">
                               <div class="card-body">
                                 <form>
-                                  <input type="text" name="cod_producto1"id='cod_producto1' value="">
-                                  <input type="text" name="cod_solicitado1" id='cod_solicitado1' value="">
-                                  <input type="text" name="codigos1" id='codigos1'value="">
-                                  <input type="text" name="cantidadRestado1" id='cantidadRestado1' value="">
-                                  <input type="text" name="codigos_entrada1" id='codigos_entrada1' value="">
-                                  <input type="text" name="fila" id='fila' value="">
+                                  <input type="hidden" name="cod_producto1"id='cod_producto1' value="">
+                                  <input type="hidden" name="cod_solicitado1" id='cod_solicitado1' value="">
+                                  <input type="hidden" name="codigos1" id='codigos1'value="">
+                                  <input type="hidden" name="cantidadRestado1" id='cantidadRestado1' value="">
+                                  <input type="hidden" name="codigos_entrada1" id='codigos_entrada1' value="">
+                                  <input type="hidden" name="fila" id='fila' value="">
                                   <div class="mb-3">
                                     <label for="nombre_producto1" class="form-label">Producto farmaceutico</label>
                                     <input type="text" class="form-control" id="nombre_producto1" placeholder="Busque el producto" onkeyup="buscarProductoNuevo1()" autocomplete="off">
@@ -284,7 +284,7 @@
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                                 //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
                                   echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                                  echo "<button type='button' class='btn btn-danger' title='Eliminar' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "</div>";
                                 echo "</td>";
 
@@ -467,7 +467,27 @@ function Buscar(page){
       Vacio();
       return;
     }
+
+    var obt_lis = document.getElementById("selectList").value;
+    var listarDeCuanto = verificarList(obt_lis);
+    var buscar = document.getElementById("buscar").value;
+    var page = document.getElementById("paginas").value;
+    if(page ==''){
+        page=1;
+    }
+    var fechai=document.getElementById("fechai").value;
+    var fechaf=document.getElementById("fechaf").value;
+          //alert(buscar+"   "+fechai);
+          //ponerFechactualAlModalDeReporte(listarDeCuanto,buscar,page,fecha);
     var datos = new FormData(); // Crear un objeto FormData vacío
+    var datos1 = new FormData(); // Crear un objeto FormData vacío
+
+    datos1.append('pagina', page);
+    datos1.append('listarDeCuanto',listarDeCuanto);
+    datos1.append("buscar",buscar);
+    datos1.append("fechai",fechai);
+    datos1.append("fechaf",fechaf);
+
     datos.append("cod_producto",cod_producto);
     datos.append("cantidad",cantidad);
     datos.append("cod_salida",cod_salida);
@@ -498,6 +518,16 @@ function Buscar(page){
             var es = document.getElementById("stock_es");
             es.textContent ='';
             es.style.backgroundColor = 'white';
+            $.ajax({
+              url: "../controlador/farmacia.controlador.php?accion=actualizarTabla",
+              type: "POST",
+              data: datos1,
+              contentType: false, // Deshabilitar la codificación de tipo MIME
+              processData: false, // Deshabilitar la codificación de datos
+              success: function(resul) {
+                $("#verDatos").html(resul);
+              }
+            });
           }
           //IRalLink(cod_salida);
         }
@@ -610,6 +640,9 @@ function Buscar(page){
       document.getElementById("cantidad").value='';
       document.getElementById("btnr").disabled=false;
       document.getElementById("btne").disabled=false;
+      document.getElementById("nombre_receta").disabled=false;
+      document.getElementById("cod_paciente").disabled=false;
+      vaciarTabla();
     }else{
       BuscarDatosProductosSolicitados(cod_salida,entregado);
     }
@@ -783,12 +816,11 @@ function Buscar(page){
       }
       function eliminar(cod_salida){
         var obt_lis = document.getElementById("selectList").value;
-
         var listarDeCuanto = verificarList(obt_lis);
         var buscar = document.getElementById("buscar").value;
         var page = document.getElementById("paginas").value;
         if(page ==''){
-          page=5;
+          page=1;
         }
         var fechai=document.getElementById("fechai").value;
         var fechaf=document.getElementById("fechaf").value;
@@ -801,6 +833,8 @@ function Buscar(page){
         datos.append("buscar",buscar);
         datos.append("fechai",fechai);
         datos.append("fechaf",fechaf);
+        //alert(cod_salida+"  "+page+"   "+listarDeCuanto+"   "+buscar+"    "+fechai+"     "+fechaf);
+        //return ;
         Swal.fire({
           title: '¿Estás seguro?',
           text: "Tenga en cuenta que no podrás revertir esto, se eliminara por completo .",
@@ -819,6 +853,7 @@ function Buscar(page){
              contentType: false, // Deshabilitar la codificación de tipo MIME
              processData: false, // Deshabilitar la codificación de datos
             success: function(data) {
+              //alert(data);
               if(data=='error'){
                 Error1();
               }else if(data == 'fecha_vencido'){
@@ -972,7 +1007,7 @@ function Buscar(page){
       <button type='button' class='btn btn-info' title='Editar' ${disabled} onclick='ActualizarSolicitud(${fila},${codi},"${codigos}")' data-bs-toggle='modal' data-bs-target='#ModalEditar'>
         <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
       </button>
-
+      <button type='button' class='btn btn-danger'title='Eliminar Producto' ${disabled} onclick='eliminarFila(${fila},${codi})'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>
     </div>`;
 /*<button type='button' class='btn btn-danger' onclick='eliminarFila(this)'>Eliminar</button>*/
     }
@@ -988,7 +1023,7 @@ function Buscar(page){
       var total_stock1 = parseInt(document.getElementById("total_stock1").value);
       var cantidad1 = parseInt(document.getElementById("cantidad1").value);
       var fila =document.getElementById("fila").value;
-      alert(cantidad1+"    "+total_stock1);
+      //alert(cantidad1+"    "+total_stock1);
       if(cantidad1>=total_stock1){
         cambie_Cantidad();
         return;
@@ -1012,7 +1047,7 @@ function Buscar(page){
           contentType: false, // Deshabilitar la codificación de tipo MIME
           processData: false, // Deshabilitar la codificación de datos
           success: function(data) {
-          alert(data+"dasdas");
+          //alert(data+"dasdas");
             if(data == 'fecha_vencido'){
               vencido();
             }else if(data == 'error'){
@@ -1038,6 +1073,7 @@ function Buscar(page){
               <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
             </button>
 
+            <button type='button' title='Eliminar Producto' class='btn btn-danger' onclick='eliminarFila(${filaIndex},${cod_solicitado1})'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>
           </div>`;
     }
     function vaciarCamposDeProductoSolicitado(){
@@ -1086,21 +1122,37 @@ function Buscar(page){
         cancelButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
-        var datos = new FormData(); // Crear un objeto FormData vacío
-        datos.append("cod_salida",cod_salida);
+          var obt_lis = document.getElementById("selectList").value;
+          var listarDeCuanto = verificarList(obt_lis);
+          var buscar = document.getElementById("buscar").value;
+          var page = document.getElementById("paginas").value;
+          if(page ==''){
+              page=1;
+          }
+          var fechai=document.getElementById("fechai").value;
+          var fechaf=document.getElementById("fechaf").value;
+          var datos1 = new FormData(); // Crear un objeto FormData vacío
+
+          datos1.append('pagina', page);
+          datos1.append('listarDeCuanto',listarDeCuanto);
+          datos1.append("buscar",buscar);
+          datos1.append("fechai",fechai);
+          datos1.append("fechaf",fechaf);
+          datos1.append("cod_salida",cod_salida);
           $.ajax({
             url: "../controlador/farmacia.controlador.php?accion=actualizarEntrega",
             type: "POST",
-            data: datos,
+            data: datos1,
             contentType: false, // Deshabilitar la codificación de tipo MIME
             processData: false, // Deshabilitar la codificación de datos
             success: function(data) {
             //alert(data+"dasdas");
-              if(data == 'correcto'){
+              if(data == 'error'){
+                Error1();
+              }else {
                 Correcto();
                 $('#ModalRegistro').modal('hide');
-              }else if(data == 'error'){
-                Error1();
+                $("#verDatos").html(data);
               }
             }
           });
@@ -1135,12 +1187,64 @@ function Buscar(page){
             var dataa = ps.cod_salida+","+ps.cod_solicitado;
             agragarFila(ps.codigo,ps.nombre,ps.cantidad_solicitada,ps.cod_salida,dataa,disabled);
           }
+          if(data.length >0){
+            document.getElementById("nombre_receta").disabled=true;
+            document.getElementById("cod_paciente").disabled=true;
+          }
         }
     });
+
   }
   function vaciarTabla() {
       const tabla = document.getElementById('tablaProductos').getElementsByTagName('tbody')[0];
       tabla.innerHTML = ''; // Vacía todo el contenido del tbody
+  }
+
+  function eliminarFila(fila,cod_solicitado){
+    var datos = new FormData(); // Crear un objeto FormData vacío
+    datos.append("cod_solicitado",cod_solicitado);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Tenga en cuenta que no podrás revertir esto, se eliminara por completo .",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+      $.ajax({
+         url: "../controlador/farmacia.controlador.php?accion=DelFps",
+         type: "POST",
+         data: datos,
+         contentType: false, // Deshabilitar la codificación de tipo MIME
+         processData: false, // Deshabilitar la codificación de datos
+        success: function(data) {
+          //alert(data);
+          if(data=='error'){
+            Error1();
+          }else if(data == 'fecha_vencido'){
+            vencido();
+          }else{
+            Correcto();
+            eliminarFilaTabla(fila);
+          }
+         }
+       });
+     }
+   });
+  }
+
+  function eliminarFilaTabla(index){
+    var tabla = document.getElementById('tablaProductos');
+    tabla.deleteRow(index);
+    var filas = verificarFilas();
+    if(filas == 1){
+
+      document.getElementById("nombre_receta").disabled=false;
+      document.getElementById("cod_paciente").disabled=false;
+    }
   }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

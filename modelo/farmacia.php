@@ -139,7 +139,6 @@ class Farmacia
     }else{
       return $resul;
     }
-    return $resul;
     mysqli_close($this->con);
  }
 
@@ -225,24 +224,29 @@ class Farmacia
  }
 //funcion para seleccionar de tabla salida
  public function SeleccionarSalida($inicioList=false,$listarDeCuanto=false,$buscar='',$fechai=false,$fechaf=false){
-     $sql="select *from salida ";
+     $sql="select *from salida as s inner join usuario as u on s.cod_paciente=u.cod_usuario ";
      $si = "no";
+     $buscar = strtolower($buscar);
      if($buscar !='' && $si == 'no'){
-       $sql.=" where (lower(nombre_receta) LIKE '%$buscar%'";
+       $sql.=" where (lower(s.nombre_receta) LIKE '%$buscar%' or lower(u.nombre_usuario) LIKE '%$buscar%'
+       or lower(u.ap_usuario) LIKE '%$buscar%' or lower(u.am_usuario) LIKE '%$buscar%')";
        $si = 'si';
      }
      if($fechai!=false &&$fechaf!=false && $si == 'no'){
-       $sql.=" where (DATE(fecha) >= '$fechai' and DATE(fecha <= '$fechaf')) ";
+       $sql.=" where (DATE(s.fechaHora) >= '$fechai' and DATE(s.fechaHora) <= '$fechaf') ";
      }else if($fechai!=false &&$fechaf!=false && $si == 'si'){
-       $sql.="  and (DATE(fecha) >= '$fechai' and DATE(fecha <= '$fechaf')) ";
+       $sql.="  and (DATE(s.fechaHora) >= '$fechai' and DATE(s.fechaHora) <= '$fechaf') ";
      }
      if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
-       $sql.=" ORDER BY cod_salida DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
+       $sql.=" ORDER BY s.cod_salida DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
      }
      //echo $sql;
      $resul = $this->con->query($sql);
-     // Retornar el resultado
-     return $resul;
+     if($resul===false){
+       return $this->con->error;
+     }else{
+       return $resul;
+     }
      mysqli_close($this->con);
 
  }
@@ -376,8 +380,8 @@ class Farmacia
      return $c;
  }
 
-   public function SeleccionarSalidaID($cod_solicitado){
-     $select="select *from productoSolicitado where cod_solicitado = $cod_solicitado";
+   public function SeleccionarSalidaID($cod_salida){
+     $select="select *from salida where cod_salida = $cod_salida";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
@@ -420,7 +424,7 @@ class Farmacia
    }
 
    public function seleccionarCantEntrada($cod_solicitado){
-     $resultado = $this->SeleccionarSalidaID($cod_solicitado);
+     $resultado = $this->seleccionarProductoSolicitadoID($cod_solicitado);
      $fila = mysqli_fetch_array($resultado);
      $codigos = $fila["codigos_entrada"];
      $cantidad_resta = $fila["cantidadRestado"];
@@ -436,7 +440,14 @@ class Farmacia
    }
 
    public function eliminarRegistro($cod_salida){
-     $select="delete from salida where cod_salidad = $cod_salida";
+     $select="delete from salida where cod_salida = $cod_salida";
+     $resul = $this->con->query($select);
+     // Retornar el resultado
+     return $resul;
+   }
+
+   function seleccionarProductoSolicitadoID($cod_solicitado){
+     $select="select *from productosolicitado where cod_solicitado=$cod_solicitado";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
@@ -488,6 +499,22 @@ class Farmacia
 
    public function buscarDatosProductoS($cod_salida){
      $select="select *from productosolicitado as ps inner join producto as p on ps.cod_producto=p.cod_generico where cod_salida=$cod_salida";
+     $resul = $this->con->query($select);
+     // Retornar el resultado
+     return $resul;
+     mysqli_close($this->con);
+   }
+
+   public function deleteProductoSolicitado($cod_solicitado){
+     $select="delete from productoSolicitado where cod_solicitado=$cod_solicitado";
+     $resul = $this->con->query($select);
+     // Retornar el resultado
+     return $resul;
+     mysqli_close($this->con);
+   }
+
+   public function SeleccionarCodigosSolicitados($cod_salida){
+     $select="select * from productoSolicitado where cod_salida=$cod_salida";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;

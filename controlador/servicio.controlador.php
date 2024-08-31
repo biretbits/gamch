@@ -234,6 +234,7 @@ echo "</div>
               </div>
             </div>  </div>";
       }
+
   function GenerarReporteFecha($fechai,$fechaf){
     $s=new Servicio();
     $re=new RegistroDiario();
@@ -242,6 +243,313 @@ echo "</div>
     $regDiario =$re->seleccionarRegistrosDiario($fechai,$fechaf);
     require("../vista/servicio/ReporteServicioFecha.php");
   }
+
+  function VisualizarServiciosContandoPorSexo(){
+    $s=new Servicio();
+    $re=new RegistroDiario();
+    $servicios = $s->Selecionar_servicios();
+    $servicios1 = $s->Selecionar_servicios();
+
+    $servicios2 = $s->Selecionar_servicios();
+    $servicios3 = $s->Selecionar_servicios();
+    $fechai = '';$fechaf='';
+    $regDiario =$re->seleccionarRegistrosDiarioPorSexo('masculino',$fechai,$fechaf);
+    $regDiario1 =$re->seleccionarRegistrosDiarioPorSexo('femenino',$fechai,$fechaf);
+    require("../vista/servicio/ServiciosFechaSexo.php");
+  }
+
+  function BuscarPORfechaServicioSexo($fechai,$fechaf){
+    //echo "fechai ".$fechai." fechaf ".$fechaf;
+    $s=new Servicio();
+    $re=new RegistroDiario();
+    $servicios = $s->Selecionar_servicios();
+    $servicios1 = $s->Selecionar_servicios();
+
+    $servicios2 = $s->Selecionar_servicios();
+    $servicios3 = $s->Selecionar_servicios();
+    $regDiario =$re->seleccionarRegistrosDiarioPorSexo('masculino',$fechai,$fechaf);
+    $regDiario1 =$re->seleccionarRegistrosDiarioPorSexo('femenino',$fechai,$fechaf);
+    echo "<h6 align='center'><b>CANTIDAD DE PACIENTES MASCULINOS ATENDIDOS</b></h6>";
+        $ser = array();
+        while($fi=mysqli_fetch_array($servicios))
+        {
+          $ser[$fi['cod_servicio']]=array('contar' =>0 ,'nombre_servicio'=> $fi['nombre_servicio']);
+        }
+        while($fi=mysqli_fetch_array($regDiario)){
+          $ser[$fi['servicio_rd']]['contar']+=1;
+        }
+      $suma = 0;
+          echo "<div class='row'>
+                <div class='col'>
+                  <div class='table-responsive'>
+                    <table class='table'>
+                      <thead style='font-size:12px'>
+                        <tr>
+                          <th>N°</th>
+                          <th>Servicio</th>
+                          <th>Pacientes</th>
+                        </tr>
+                      </thead>
+                      <tbody>";
+                      $k = 1;
+                      while($fi=mysqli_fetch_array($servicios1)){
+                        echo "<tr>";
+                        echo "<td>".$k."</td>";
+
+                        echo "<td>".$ser[$fi['cod_servicio']]['nombre_servicio']."</td>";
+                        echo "<td>".$ser[$fi['cod_servicio']]['contar']."</td>";
+                        $suma+=$ser[$fi['cod_servicio']]['contar'];
+                        echo "</tr>";
+                        $k+=1;
+                      }
+                      echo "<tr>";
+                      echo "<td align='center' colspan='2'>Total Pacientes</td>";
+                        echo "<td >".$suma."</td>";
+                      echo "</tr>";
+              echo "  </tbody>
+                </table>
+              </div>
+            </div>  </div>";
+
+     echo "<h6 align='center'><b>CANTIDAD DE PACIENTES FEMENINOS ATENDIDOS</b></h6>";
+         $ser = array();
+         while($fi=mysqli_fetch_array($servicios2))
+         {
+           $ser[$fi['cod_servicio']]=array('contar' =>0 ,'nombre_servicio'=> $fi['nombre_servicio']);
+         }
+         while($fi=mysqli_fetch_array($regDiario1)){
+           $ser[$fi['servicio_rd']]['contar']+=1;
+         }
+      ?>
+       <?php
+       $suma = 0;
+           echo "<div class='row'>
+                 <div class='col'>
+                   <div class='table-responsive'>
+                     <table class='table'>
+                       <thead style='font-size:12px'>
+                         <tr>
+                           <th>N°</th>
+                           <th>Servicio</th>
+                           <th>Pacientes</th>
+                         </tr>
+                       </thead>
+                       <tbody>";
+                       $k = 1;
+                       while($fi=mysqli_fetch_array($servicios3)){
+                         echo "<tr>";
+                         echo "<td>".$k."</td>";
+
+                         echo "<td>".$ser[$fi['cod_servicio']]['nombre_servicio']."</td>";
+                         echo "<td>".$ser[$fi['cod_servicio']]['contar']."</td>";
+                         $suma+=$ser[$fi['cod_servicio']]['contar'];
+                         echo "</tr>";
+                         $k+=1;
+                       }
+                       echo "<tr>";
+                       echo "<td align='center' colspan='2'>Total Pacientes</td>";
+                         echo "<td >".$suma."</td>";
+                       echo "</tr>";
+               echo "  </tbody>
+                 </table>
+               </div>
+             </div>  </div>";
+
+    }
+
+      function GenerarReporteFechaSexo($fechai,$fechaf){
+        $s=new Servicio();
+        $re=new RegistroDiario();
+        $servicios = $s->Selecionar_servicios();
+        $servicios1 = $s->Selecionar_servicios();
+
+        $servicios2 = $s->Selecionar_servicios();
+        $servicios3 = $s->Selecionar_servicios();
+        $regDiario =$re->seleccionarRegistrosDiarioPorSexo('masculino',$fechai,$fechaf);
+        $regDiario1 =$re->seleccionarRegistrosDiarioPorSexo('femenino',$fechai,$fechaf);
+
+        require("../vista/servicio/ReporteServicioFechaSexo.php");
+      }
+
+      function BuscarPorFechasEdades(){
+        $s=new Servicio();
+        $re=new RegistroDiario();
+        $servicios = $s->Selecionar_servicios();
+        $servicios1 = $s->Selecionar_servicios();
+        $fechai='';$fechaf='';$edadi=0;$edadf=140;
+        $regDiario =$re->seleccionarRegistrosDiarioPorEdad($edadi,$edadf,$fechai,$fechaf);
+        if(mysqli_num_rows($regDiario)>0)
+        {
+          $v = $this->contarServicioEdades($edadi,$edadf);
+          $re = $this->RellenarDeDatos($v,$regDiario);
+          mysqli_data_seek($regDiario, 0);
+          $edades = $this->SoloEdades($regDiario);
+        }
+        require("../vista/servicio/ServiciosFechaEdades.php");
+      }
+
+      function SoloEdades($regDiario){
+        $eda = array();
+        while($fil = mysqli_fetch_array($regDiario)){
+          $eda[]=$fil["edad_usuario"];
+        }
+        $eda = array_unique($eda);
+        return $eda;
+      }
+
+      function RellenarDeDatos($v,$regDiario){
+        $s=new Servicio();
+        while($fil = mysqli_fetch_array($regDiario)){
+            $v[$fil["edad_usuario"]][$fil["servicio_rd"]]=$v[$fil["edad_usuario"]][$fil["servicio_rd"]]+1;
+            //echo $v[$fil["edad_usuario"]][$fil["servicio_rd"]]."    ".$fil["edad_usuario"]."  ".$fil["servicio_rd"]."<br>";
+        }
+        return $v;
+      }
+
+      function contarServicioEdades($edad1,$edad2){
+        $s=new Servicio();
+        $v = array();
+        //echo $edad1."     ".$edad2;
+        for ($i = $edad1; $i <= $edad2; $i++) {
+        // Inicializa el array para la edad actual
+          $v[$i] = array();
+          // Recorre los servicios
+          $servicios = $s->Selecionar_servicios();
+          while ($f = mysqli_fetch_array($servicios)) {
+              // Inicializa el contador para cada servicio en 0
+              $v[$i][$f["cod_servicio"]] = 0;
+          }
+          // Reinicia el puntero interno del resultado de la consulta
+        }
+        return $v;
+      }
+
+    public function GenerarReporteDeEdades($fechai,$fechaf,$graficos,$edades){
+      require("../vista/servicio/ReporteServicioFechaEdades.php");
+    }
+
+    public function BuscarDatosServiciosPorEdad($fechai,$fechaf,$edadi,$edadf){
+      $s=new Servicio();
+      $re=new RegistroDiario();
+      $servicios = $s->Selecionar_servicios();
+      $servicios1 = $s->Selecionar_servicios();
+      $fechai=$fechai;$fechaf=$fechaf;$edadi=$edadi;$edadf=$edadf;
+      if($edadi>$edadf){
+        $aux=$edadi;
+        $edadi=$edadf;
+        $edadf=$aux;
+      }
+      $regDiario =$re->seleccionarRegistrosDiarioPorEdad($edadi,$edadf,$fechai,$fechaf);
+      if(mysqli_num_rows($regDiario)>0)
+      {
+        $v = $this->contarServicioEdades($edadi,$edadf);
+        $re = $this->RellenarDeDatos($v,$regDiario);
+        mysqli_data_seek($regDiario, 0);
+        $edades = $this->SoloEdades($regDiario);
+      }
+
+      echo "<div class='row'>";
+      if(mysqli_num_rows($regDiario)>0){
+        foreach($edades as $e){
+            echo "<textarea  name='graficosI".$e."' id='graficosI".$e."' hidden></textarea >";
+        }
+
+            function generateRandomColor() {
+              $r = rand(0, 255);
+              $g = rand(0, 255);
+              $b = rand(0, 255);
+              return rgbToHex($r, $g, $b);
+          }
+
+          function rgbToHex($r, $g, $b) {
+              return sprintf("#%02x%02x%02x", $r, $g, $b);
+          }
+          $c= 0;
+          foreach($edades as $e){
+            echo "<div class='col-12 col-sm-6 col-lg-6 mb-6'>";
+            echo "<center><b>CANTIDAD DE PACIENTES DE $e AÑOS ATENDIDOS</b>";
+            echo "<canvas id='grafica".$e."'></canvas>";
+            echo "</center>
+            </div>";
+          }
+          $labeles = '';
+          $labeles.="var labels = [";
+          mysqli_data_seek($servicios, 0);
+          $filass = mysqli_num_rows($servicios);
+          $i = 0;
+          mysqli_data_seek($servicios, 0);
+          while($f = mysqli_fetch_array($servicios)){
+            if($filass-1 == $i){
+              $labeles.="'".$f["nombre_servicio"]."'";
+          }else{
+              $labeles.="'".$f["nombre_servicio"]."',";
+            }
+            $i=$i+1;
+          }
+          $labeles.="];";
+          echo "<script>";
+          echo $labeles;
+
+          foreach($edades as $e)
+          {
+            $numColors = $filass;
+            $colors = [];
+            for ($i = 0; $i < $numColors; $i++) {
+                $colors[] = generateRandomColor();
+            }
+            echo "var colors = [";
+            $i = 0;
+            foreach ($colors as $color) {
+                if($filass-1 == $i){
+                  echo "'$color'";
+                }else {
+                  echo "'$color',";
+                }
+                $i=$i+1;
+            }
+            echo "];"; // Asegúrate de que los colores coincidan con los datasets
+            echo "
+            var data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Cantidad de pacientes por servicio',
+                    data: [";
+                    mysqli_data_seek($servicios, 0);
+                    $i = 0;
+                    while($fii =mysqli_fetch_array($servicios)){
+                      if($filass-1 == $i){
+                        echo $re[$e][$fii["cod_servicio"]];
+                      }else{
+                        echo $re[$e][$fii["cod_servicio"]].",";
+                      }
+                      $i=$i+1;
+                    }
+                    echo "],
+                    backgroundColor: colors
+                }]
+            };";
+            echo "
+            var Options = {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    }
+                },
+                responsive: true
+            };";
+            echo "var pieChartCanvas = document.getElementById('grafica".$e."').getContext('2d');
+            var pieChart = new Chart(pieChartCanvas, {
+                type: 'bar',
+                data: data,
+                options: Options,
+            });";
+          }
+          echo "</script>";
+        }else{
+          echo "<center>No se encontro resultados</center>";
+        }
+        echo "</div>";
+    }
 }
 $se =new ServicioControlador();
 
@@ -267,4 +575,36 @@ if(isset($_GET["accion"]) && $_GET["accion"]=="bfs"){
 }
 if(isset($_GET["accion"]) && $_GET["accion"]=="gfrs"){
   $se->GenerarReporteFecha($_POST['fechai'],$_POST['fechaf']);
+}
+if(isset($_GET["accion"]) && $_GET["accion"]=="rtsx"){
+  $se->VisualizarServiciosContandoPorSexo();
+}
+if(isset($_GET["accion"]) && $_GET["accion"]=="bfsx"){
+  $se->BuscarPORfechaServicioSexo($_POST['fechai'],$_POST['fechaf']);
+}
+if(isset($_GET["accion"]) && $_GET["accion"]=="gfrsx"){
+  $se->GenerarReporteFechaSexo($_POST['fechai'],$_POST['fechaf']);
+}
+if(isset($_GET["accion"]) && $_GET["accion"]=="rGE"){
+  $se->BuscarPorFechasEdades();
+}
+if(isset($_GET["accion"]) && $_GET["accion"]=="gfred"){
+  $graficos = array();
+  for($i=0;$i<140;$i++){
+    $campo = 'imagen' . $i;
+   if (isset($_POST[$campo])) {
+       $graficos[] = $_POST[$campo];
+   }
+  }
+  $edades = array();
+  for($i=0;$i<140;$i++){
+    $campo = $i;
+   if (isset($_POST[$campo])) {
+       $edades[] = $_POST[$campo];
+   }
+  }
+  $se->GenerarReporteDeEdades($_POST['fechai'],$_POST['fechaf'],$graficos,$edades);
+}
+if(isset($_GET["accion"]) && $_GET["accion"]=="bfep"){
+  $se->BuscarDatosServiciosPorEdad($_POST['fechai'],$_POST['fechaf'],$_POST['edadi'],$_POST['edadf']);
 }

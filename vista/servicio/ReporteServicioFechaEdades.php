@@ -1,4 +1,5 @@
 <?php
+//PARA MOSTRAR IMAGENES extension=gd SE DEBE HABILITAR ESTO extension=gd Y ESO SE DEBE REALIZAR EN XAMPP SI SE ESTA TRABAJANDO CON XAMMP PARA PPHP
 ob_end_clean();
 // Iniciar el almacenamiento en búfer de salida
 ob_start();
@@ -13,6 +14,10 @@ header('Content-Disposition: inline; filename="reporte.pdf"');
   include("../librerias/globales.php");
  //echo $fechai."fi   ".$fechaf."ff   ".$buscar."b   ".$pagina."p   ".$listarDeCuanto."ldc" ; ?>
 <style media="screen">
+.col{
+       width:49%;
+       display: inline-block;
+     }
 table {
     border-collapse: collapse;
     width: 100%;
@@ -101,7 +106,6 @@ td,th{
       background-color:red;
 
     }
-
      .linea{
        display: inline-block;
      }
@@ -117,7 +121,6 @@ td,th{
     </style>
   </head>
   <body>
-
 <?php
 if($fechai > $fechaf){
   $aux = $fechai;
@@ -128,7 +131,7 @@ if($fechai > $fechaf){
     <div class="">
           <div   style='width:100%;' align='center'>
 
-            <font class="subtitulo"><b>PACIENTES ATENDIDOS</b></font><br>
+            <font class="subtitulo"><b>PACIENTES ATENDIDOS POR EDADES</b></font><br>
 
             <font class="subtitulo3">Llallagua , <?php
             list($año1, $mes1, $dia1) = explode('-', $fechai);
@@ -144,58 +147,42 @@ if($fechai > $fechaf){
           </div>
           <br>
       </div>
-        <div style="clear:both;"></div>
-        <table>
-            <thead>
-              <tr>
-                <th>N°</th>
-                <th>Servicio</th>
-                <th>Pacientes atendidos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              $ser = array();
-              while($fi=mysqli_fetch_array($servicios))
-              {
-                $ser[$fi['cod_servicio']]=array('contar' =>0 ,'nombre_servicio'=> $fi['nombre_servicio']);
-              }
-              while($fi=mysqli_fetch_array($regDiario)){
-                $ser[$fi['servicio_rd']]['contar']+=1;
-              }
-              $suma = 0;
-              if (mysqli_num_rows($servicios) > 0) {
-                  $k = 1;
-                  while($fi=mysqli_fetch_array($servicios1)){
-                    echo "<tr>";
-                    echo "<td>".$k."</td>";
-
-                    echo "<td>".$ser[$fi['cod_servicio']]['nombre_servicio']."</td>";
-                    echo "<td>".$ser[$fi['cod_servicio']]['contar']."</td>";
-                    $suma+=$ser[$fi['cod_servicio']]['contar'];
-                    echo "</tr>";
-                    $k+=1;
-                  }
-                  echo "<tr>";
-                 echo "<td align='center' colspan='2'>Total Pacientes</td>"; // Asegúrate de que el número de columnas coincida con la tabla
-                 echo "<td>".$suma."</td>";
-                 echo "</tr>";
-                }else{
-                  echo "<tr>";
-                  echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
-                  echo "</tr>";
-                }
-                 ?>
-            </tbody>
-        </table>
+        <br><br>
   <style media="screen">
     /*eliminando borde izquierdo dercho y de abajo*/
     #bor{
       border-bottom: none;border-right: none; border-left: none;
     }
   </style>
+<div style="clear:both;"></div>
+  <?php
 
+      for($i = 0;$i<count($graficos);$i++){
+        echo "<div class='col'>";
+        echo "<p>CANTIDAD DE PACIENTES DE ".$edades[$i]." AÑOS</p>";
+        $img = $graficos[$i];
+        $img = str_replace('data:image/png;base64,', '', $img);
+        $fileData = base64_decode($img);
+        echo "<img  width='340' height='200' src='data:image/png;base64,".base64_encode($fileData)."' alt='Imagen'>";
+        echo "</div>";
+      }
+      ?>
+<style media="screen">
+/* Estilo para la fila */
+.row {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las columnas se envuelvan a la siguiente fila */
+}
 
+/* Estilo para las columnas */
+.column {
+    flex: 1 1 50%; /* Cada columna ocupa el 50% del ancho de la fila */
+    padding: 10px;
+    border: 1px solid #ccc; /* Solo para visualización */
+    box-sizing: border-box; /* Incluir padding y border en el ancho total */
+}
+
+</style>
 
 
   </body>

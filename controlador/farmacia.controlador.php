@@ -851,7 +851,7 @@ class FarmaciaControlador{
     public function VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
       $fa =new Farmacia();
       $listarDeCuanto = $listarDeCuanto;$pagina = $pagina;$buscar = $buscar;$fechai=$fechai;$fechaf=$fechaf;
-      if($fechai =='' or $fechaf == '')
+      if($fechai =='' && $fechaf == '')
       {
         $fechai=false;$fechaf=false;
       }else{
@@ -886,23 +886,23 @@ class FarmaciaControlador{
               <thead style='font-size:12px'>
                 <tr>
                   <th>N°</th>
-                  <th>Codigo</th>
-                  <th>Nombre Generico</th>
+                  <th>Nombre Receta</th>
                   <th>Paciente</th>
                   <th>Encargado Farmacia</th>
-                  <th>Cantidad Obtenida</th>
                   <th>Fecha</th>
+                  <th>Entregado</th>
                   <th>Acción</th>
                 </tr>
               </thead>
               <tbody>";
-          if ($resul && count($resul) > 0) {
+
+          //echo "<br><br><br><br><br>".count($resul);
+        if ($resul && count($resul) > 0) {
             $i = $inicioList;
             foreach ($resul as $fi){
                 echo "<tr>";
                   echo "<td>".($i+1)."</td>";
-                  echo "<td>".$fi['codigo']."</td>";
-                  echo "<td>".$fi['nombre']."</td>";
+                  echo "<td>".$fi['nombre_receta']."</td>";
 
                   $paciente = $fi['cod_paciente'];
                   $cod_paciente = '';
@@ -922,14 +922,17 @@ class FarmaciaControlador{
                   }
                   echo "</td>";
 
-                  echo "<td>".$fi['cantidad_salida']."</td>";
-                  echo "<td>".$fi['fecha']."</td>";
-
+                  echo "<td>".$fi['fechaHora']."</td>";
+                  if($fi["entregado"] == 'si'){
+                    echo "<td  style='color:green;background-color:#dbffaf;text-align:center'>Entregado</td>";
+                  }else{
+                    echo "<td  style='color:red;background-color:#faa3aA;text-align:center'>No entregado</td>";
+                  }
                   echo "<td>";
                     echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
-                    echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$fi['cantidad_salida'].",\"".$datos_paciente."\",\"".$fi['nombre']."\",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'].")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                    echo "<button type='button' class='btn btn-danger' title='Eliminar' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                    echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                    echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                     echo "</div>";
                   echo "</td>";
 
@@ -941,8 +944,7 @@ class FarmaciaControlador{
               echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
               echo "</tr>";
             }
-            echo "
-            </tbody>
+          echo"</tbody>
           </table>
           </div>
         </div>
@@ -1030,6 +1032,7 @@ class FarmaciaControlador{
         </div>";
 
       }
+
       }
     }
 
@@ -1085,10 +1088,12 @@ class FarmaciaControlador{
      $cc=0;$usuario=$_SESSION["cod_usuario"];
      $re=$fa->SeleccionarSalidaID($cod_salida);//verificamos si ya se inserto
      $idSalida='';
+    // echo $actualizar."  ccc ".$cod_salida;
      if($re!=''){//si el cod salida ya existe entoces ya no insertamos
        if(mysqli_num_rows($re)>0){//ya esta insertado, pero el usuario puede tambien querer actualizar
          if($actualizar==1){//si es uno se quiere actualizar
            $idSalida=$fa->InsertarENsalida($cod_salida,$nombre_receta,$usuario,$id_paciente);
+          // echo "llego".$idSalida;
          }else{
            $idSalida=$cod_salida;
          }
@@ -1096,6 +1101,7 @@ class FarmaciaControlador{
      }else{
        $idSalida=$fa->InsertarENsalida($cod_salida,$nombre_receta,$usuario,$id_paciente);
      }
+     if(is_numeric($idSalida)){
      //echo "cod_salida  ".$cod_salida;
      /*if(is_numeric($cod_solicitado)){//si existe el cod_salida esta queriendo editar
        $cc = $fa->actualizar_datos_entrada($cod_solicitado);//verificamos el vencimiento de cada poucto que se solicito antes de editar
@@ -1120,6 +1126,9 @@ class FarmaciaControlador{
        }else{
          echo "error";
        }
+     }else{
+       echo "error";
+     }
 
    }
 
@@ -1218,28 +1227,50 @@ class FarmaciaControlador{
     public function EliminarSalida($cod_salida,$pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
       $fa =new Farmacia();
       $cc=0;$fechaActual = date('Y-m-d');
-      if(is_numeric($cod_salida)){//si existe el cod_salida esta queriendo editar
-        $cc = $fa->actualizar_datos_entrada($cod_salida);//slo verificamos si esta vencido o no
+      $resultado = $fa->SeleccionarCodigosSolicitados($cod_salida);
+      $vencimiento="no";
+      if($resultado && mysqli_num_rows($resultado)>0)
+      {
+        echo "entro";
+        while($fi = mysqli_fetch_array($resultado)){
+          $cc = 0;
+          $cc = $fa->actualizar_datos_entrada($fi["cod_solicitado"]);//slo verificamos si esta vencido o no
+          if($cc == 1){
+            $vencimiento='si';
+            break;
+          }
+        }
       }
-      if($cc == 0){//no esta vencido el producto se puede eliminar
-        $re = $fa->seleccionarCantEntrada($cod_salida);
-        $codigos = $re[0];
-        $cantiEntra = $re[1];
-        $fa->SumasActualizar($codigos,$cantiEntra);
-        $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
-        $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
+      if($vencimiento == 'no'){
+        $resulta = $fa->SeleccionarCodigosSolicitados($cod_salida);
+        if($resulta && mysqli_num_rows($resulta)>0)
+        {
+          while($f=mysqli_fetch_array($resulta)){
+            $this->actualizarCuandoEliminaSalida($f["cod_solicitado"]);
+            $resulDel=$fa->deleteProductoSolicitado($f["cod_solicitado"]);
+          }
+        }
         $resul = $fa->eliminarRegistro($cod_salida);
-        //$resul = 'correcto';
         if($resul!=''){
           $this->VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
         }else{
           echo "error";
         }
-      }else{//producto vencido no se puede eliminar
-          echo "fecha_vencido";
+      }else{
+        echo "fecha_vencido";
       }
     }
+    function actualizarCuandoEliminaSalida($cod_solicitado){
+      $fa =new Farmacia();
+      $re = $fa->seleccionarCantEntrada($cod_solicitado);//seleccionamos las cantidades entradas y restados
+      $codigos = $re[0];
+      $cantiEntra = $re[1];
+      $fa->SumasActualizar($codigos,$cantiEntra);//si cumple todo entonces se podra actualizar en tabla entrada
 
+      $fechaActual = date('Y-m-d');
+      $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
+      $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
+    }
     function ReporteConcentracionUnidadMedida($buscar){
       $fa =new Farmacia();
       $fechaActual = date('Y-m-d');
@@ -1331,11 +1362,11 @@ class FarmaciaControlador{
       }
     }
 
-    public function ActualizarEntregaApaciente($cod_salida){
+    public function ActualizarEntregaApaciente($cod_salida,$pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
       $fa =new Farmacia();
       $resul = $fa->ActualizarEntregaDePaciente($cod_salida);
       if($resul!=''){
-        echo "correcto";
+         $this->VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
       }else{
         echo "error";
       }
@@ -1354,6 +1385,45 @@ class FarmaciaControlador{
       } else {
           echo json_encode([]);
       }
+    }
+
+    public function DeleteFilaProductoSolicitado($cod_solicitado){
+      $fa =new Farmacia();
+      $vencimiento=$this->actualizarDatosDEentradaParaEliminar($cod_solicitado);
+      if($vencimiento==1){
+        echo "fecha_vencido";
+      }else{
+        $resul=$fa->deleteProductoSolicitado($cod_solicitado);
+        if($resul!=''){
+          echo "correcto";
+        }else{
+          echo "error";
+        }
+      }
+    }
+    //esta funcion permite volver a su forma original normal las entradas
+    function actualizarDatosDEentradaParaEliminar($cod_solicitado){
+      $fa =new Farmacia();
+      $cc=0;
+      $cc = $fa->actualizar_datos_entrada($cod_solicitado);//verificamos el vencimiento de cada producto que se solicito antes de editar
+      //en este paso lo que se hace es solo sumar los que se quito al valor que se tenia para empezar a restar de nuevo
+      if($cc==0){//si es igual a cero se puede editar
+        $re = $fa->seleccionarCantEntrada($cod_solicitado);//seleccionamos las cantidades entradas y restados
+        $codigos = $re[0];
+        $cantiEntra = $re[1];
+        $fa->SumasActualizar($codigos,$cantiEntra);//si cumple todo entonces se podra actualizar en tabla entrada
+
+        $fechaActual = date('Y-m-d');
+        $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
+        $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
+        return $cc;
+      }
+      else{
+        return $cc;
+      }
+    }
+    public function MostrarLatabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
+        $this->VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
     }
   }
 
@@ -1446,9 +1516,15 @@ class FarmaciaControlador{
     $f->ActualizarProductoSolicitado($ar);
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarEntrega"){
-    $f->ActualizarEntregaApaciente($_POST['cod_salida']);
+    $f->ActualizarEntregaApaciente($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="bfps"){
     $f->BuscarDatospSolicitado($_POST['cod_salida']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="DelFps"){
+    $f->DeleteFilaProductoSolicitado($_POST['cod_solicitado']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarTabla"){
+    $f->MostrarLatabla($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
   }
 ?>

@@ -83,8 +83,8 @@
                           <div class="card shadow-lg">
                            <div class="card-body">
                              <form>
-                               <input type="text" name="cod_producto"id='cod_producto' value="">
-                               <input type="text" name="cod_entrada" id='cod_entrada' value="">
+                               <input type="hidden" name="cod_producto"id='cod_producto' value="">
+                               <input type="hidden" name="cod_entrada" id='cod_entrada' value="">
                                <div class="mb-3">
                                  <label for="cod_producto" class="form-label">Producto farmaceutico</label>
                                  <input type="text" class="form-control" id="nombre_producto" placeholder="Busque el producto" onkeyup="buscarProductoNuevo()" autocomplete="off">

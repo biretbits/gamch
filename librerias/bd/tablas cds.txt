@@ -151,3 +151,23 @@ create table salida(
    estado char(10) default 'activo',
    foreign key(cod_usuario)references usuario(cod_usuario)on delete restrict on update restrict,
    foreign key(cod_generico)references producto(cod_generico)on delete restrict on update restrict);
+
+
+create table tipoRespuesta(
+cod_tipo int not null auto_increment primary key,
+respuesta char(20)
+);
+create table consultas(
+cod_cons int not null auto_increment primary key,
+consulta text,
+respuesta_consulta text,
+cod_tipo int,
+foreign key(cod_tipo)references tipoRespuesta(cod_tipo)on delete restrict on update restrict
+);
+
+create table respuesta(
+cod_resp int not null auto_increment primary key,
+subconsulta text,
+subrespuesta text,
+cod_cons int,
+foreign key(cod_cons)references consultas(cod_cons)on delete restrict on update restrict);

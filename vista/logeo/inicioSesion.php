@@ -10,7 +10,8 @@
                     <center>
                     <img src="../imagenes/acceso.png"class="img-circle"  height='100' width='110'/>
 					</center>
-						<form method="POST">
+          <br>
+            <form method="POST">
 
 							<div class='input-group'>
 								<input class="form-control" style="color:black" type="text"  id="usuario" name ="usuario" placeholder=" Nombre usuario" >
@@ -145,20 +146,6 @@
     background: url(../imagenes/bosque.jpg) no-repeat center center fixed;
     background-size: cover;
   }
-
-.modal-content{
-    background-color: rgba(200,220,200,0.9);
-    opacity: .85;
-    padding: 0 20px;
-    box-shadow: 0px 0px 3px green;
-}
-
-.input-group input{
-    height: 42px;
-    font-size: 18px;
-    border:0;
-    border-radius: 5px;
-}
 
 </style>
 

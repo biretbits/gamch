@@ -237,7 +237,7 @@ function registroServicio(){
     contentType: false, // Deshabilitar la codificación de tipo MIME
     processData: false, // Deshabilitar la codificación de datos
     success: function(data) {
-    //  alert(data+"dasdas");
+    //alert(data+"dasdas");
       data=$.trim(data);
       if(data == "correcto"){
         Swal.fire({
@@ -245,16 +245,18 @@ function registroServicio(){
          title: '¡Correcto!',
          text: '¡Registro Correcto!',
          showConfirmButton: false,
-         timer: 1500
+         timer: 2000
        });
-       redireccionar();
+       setTimeout(() => {
+          redireccionar();
+      }, 1500);
       }else {
         Swal.fire({
          icon: 'error',
          title: '¡Error!',
          text: '¡Ocurrio un problema!',
          showConfirmButton: false,
-         timer: 1500
+         timer: 2000
        });
       }
     }

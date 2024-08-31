@@ -191,5 +191,68 @@ public function seleccionarServicios(){
     mysqli_close($this->con);
   }
 
+  public function seleccionarRegistrosDiarioPorSexo($tiposexo,$fechai,$fechaf){
+    $sql = '';
+    $sql = "select *from usuario as u inner join registro_diario as r where r.paciente_rd=u.cod_usuario ";
+    if($tiposexo!=''){
+      if($tiposexo == 'masculino'){
+          $sql.=" and u.sexo_usuario = 'masculino' ";
+      }else if($tiposexo == 'femenino'){
+        $sql.=" and u.sexo_usuario = 'femenino' ";
+      }
+    }
+    $sql.="and u.sexo_usuario IS NOT NULL and u.sexo_usuario!='' and u.tipo_usuario='paciente' ";
+    if($fechai != '' and $fechaf!=''){
+      if ($fechai > $fechaf) {
+          $aux = $fechai;
+          $fechai=$fechaf;
+          $fechaf=$aux;
+      } elseif ($fechai < $fechaf) {
+
+      }
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechaf."')";
+    }else if($fechai !=''&&$fechaf==''){
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechai."')";
+    }else if($fechai ==''&&$fechaf!=''){
+      $sql.=" and (r.fecha_rd >= '".$fechaf."' and r.fecha_rd <= '".$fechaf."')";
+    }else{
+      $fechai=date('Y-m-d');
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechai."')";
+    }
+    //echo $sql;
+    $resul = $this->con->query($sql);
+    return $resul;
+    mysqli_close($this->con);
+  }
+
+  public function seleccionarRegistrosDiarioPorEdad($edadi=false,$edadf=false,$fechai,$fechaf){
+    $sql = '';
+    $sql = "select *from usuario as u inner join registro_diario as r where r.paciente_rd=u.cod_usuario ";
+  //  echo $edadi."    ".$edadf;
+    $sql.="and u.edad_usuario IS NOT NULL and (u.edad_usuario >= $edadi and u.edad_usuario<=$edadf)";
+    if($fechai != '' and $fechaf!=''){
+      if ($fechai > $fechaf) {
+          $aux = $fechai;
+          $fechai=$fechaf;
+          $fechaf=$aux;
+      } elseif ($fechai < $fechaf) {
+
+      }
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechaf."')";
+    }else if($fechai !=''&&$fechaf==''){
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechai."')";
+    }else if($fechai ==''&&$fechaf!=''){
+      $sql.=" and (r.fecha_rd >= '".$fechaf."' and r.fecha_rd <= '".$fechaf."')";
+    }else{
+      $fechai=date('Y-m-d');
+      $sql.=" and (r.fecha_rd >= '".$fechai."' and r.fecha_rd <= '".$fechai."')";
+    }
+    $sql.=" order by u.edad_usuario asc";
+    //echo "<br><br><br><br><br><br><br><br><br>".$sql;
+
+    $resul = $this->con->query($sql);
+    return $resul;
+    mysqli_close($this->con);
+  }
 }
  ?>
