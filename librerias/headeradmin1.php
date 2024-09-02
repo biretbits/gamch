@@ -87,7 +87,7 @@ html, body {
       line-height: 40px;
       border-radius: 50%;
       font-size: 18px;
-      background: red;
+      background: lime
   }
 
   .wrapper .form .inbox .msg-header {
@@ -229,6 +229,21 @@ html, body {
                         <a class='nav-link btn btn-outline-warning' href='../controlador/chat.controlador.php?accion=tcb'><img src='../imagenes/robot.png'style='height: 25px;width: 25px;'></a>
                     </li>";
 
+                    echo "<li class='nav-item dropdown' title='Base de datos'>
+                      <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                          <img src='../imagenes/bd.png'style='height: 25px;width: 25px;'>
+                      </a>
+                      <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                          <li class='nav-item ' title='Exportar base de datos' style='color:green'>
+                            <a class='nav-link text-info btn btn-outline-warning' href='#'>Exportar</a>
+                          </li>
+                          <li><hr class='dropdown-divider'></li>
+                          <li class='nav-item ' title='Importar base de datos' style='color:green'>
+                            <a class='nav-link text-primary btn btn-outline-danger' href='../controlador/logeo.controlador.php?accion=salir'>Importar</a>
+                          </li>
+                      </ul>
+                      </li>";
+
                 }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "admision"){
                   echo "
                     <li class='nav-item' title='Registro diario'>
@@ -315,8 +330,7 @@ html, body {
 
 ?>
 
-<!-- Modal del Chatbot -->
-<div id="chatbotContainer" class="chatbot-container d-none">
+<!-- Modal del Chatbot --><div id="chatbotContainer" class="chatbot-container d-none">
       <div class="chatbot-header">
           <h5>Chatbot</h5>
           <button type="button" class="btn-close" id="closeChatbot"></button>
@@ -326,7 +340,7 @@ html, body {
               <div class="form">
                   <div class="bot-inbox inbox">
                       <div class="icon">
-                          <i class="fas fa-user"></i>
+                          <img src='../imagenes/robot.png'style='height: 25px;width: 25px; transform: translateY(-5px);'>
                       </div>
                       <div class="msg-header">
                           <p>Hola, Bienvenido</p>
@@ -340,6 +354,7 @@ html, body {
           <button id="send-btn" width='20px' height='20px'class='btn btn-primary' onclick="enviar()" style='background:Teal'>Enviar</button>
       </div>
   </div>
+
 
 <script type="text/javascript">
 function checkEnter(event) {
@@ -378,7 +393,7 @@ function enviar(){
       processData:false,
       success: function(result) {
       //  alert(result);
-          var replay = '<div class="bot-inbox inbox"><div class="icon"><i class="fas fa-user"></i></div><div class="msg-header"><p>' + result + '</p></div></div>';
+          var replay = '<div class="bot-inbox inbox"><div class="icon"><img src="../imagenes/robot.png"style="height: 25px;width: 25px; transform: translateY(-5px);"></div><div class="msg-header"><p>' + result + '</p></div></div>';
           $(".form").append(replay);
               // cuando el chat baja, la barra de desplazamiento llega automáticamente al final
               $(".form").scrollTop($(".form")[0].scrollHeight);

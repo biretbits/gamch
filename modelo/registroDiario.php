@@ -101,10 +101,8 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
       $resul = $this->con->query($sql);
 
       if($resul =! ""){
-       $sql = 'select max(cod_usuario) as c from usuario;';
-       $resul2 = $this->con->query($sql);
-       $fi=mysqli_fetch_array($resul2);
-       $cod_usuario = $fi["c"];
+        $ultimo_id = $this->con->insert_id;
+       $cod_usuario = $ultimo_id;
      }
   }
 
@@ -116,7 +114,6 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    fecha_retorno_historia_rd,pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('$fechaActual','$horaActual',
    '$servicio','$signos_sintomas','no','$fechaderetornodeHistoria',$personalatencion,$respadmision,$cod_usuario,1,'activo');";
    $resu = $this->con->query($sql);#ejecutamos y ya existe esta fila con el campo no
-
    $sql_consu = "select *from historial where paciente_rd = $cod_usuario";#buscamos si el usuario tiene historial registrado si o no
    $res = $this->con->query($sql_consu);
    $si = "no";#luego realizamos esta consulta
