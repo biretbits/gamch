@@ -107,7 +107,7 @@ class Historial
 
   public function buscarBDpacienteResponsablesql($nombre){
     $nombre = strtolower($nombre);
-    $lis = "SELECT * FROM usuario WHERE tipo_usuario = 'paciente' or tipo_usuario = 'responsable' AND (LOWER(nombre_usuario) LIKE '%$nombre%' OR LOWER(ap_usuario) LIKE '%$nombre%' or LOWER(am_usuario) like '%$nombre%') LIMIT 5 OFFSET 0;";
+    $lis = "SELECT * FROM usuario WHERE tipo_usuario = 'paciente' AND (LOWER(nombre_usuario) LIKE '%$nombre%' OR LOWER(ap_usuario) LIKE '%$nombre%' or LOWER(am_usuario) like '%$nombre%') LIMIT 5 OFFSET 0;";
     $resul = $this->con->query($lis);
     return $resul;
     mysqli_close($this->con);
@@ -178,15 +178,13 @@ class Historial
       $resul = $this->con->query($sql);
     }else{
       $sql = "insert into usuario(nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,sexo_usuario,ocupacion_usuario,direccion_usuario,
-      telefono_usuario,comunidad_usuario,ci_usuario,nro_seguro_usuario,nro_car_form_usuario)values('$Nombre_responsable','$ap_responsable',
+      telefono_usuario,comunidad_usuario,ci_usuario,nro_seguro_usuario,nro_car_form_usuario,tipo_usuario)values('$Nombre_responsable','$ap_responsable',
       '$am_responsable','$fecha_nacimiento_responsable',0,'$sexo_responsable','$ocupacion_responsable','$direccion_responsable',
-      $telefono_resposable,'$comunidad_responsable',$ci,'$n_seguro','$n_carp_fam');";
+      $telefono_resposable,'$comunidad_responsable',$ci,'$n_seguro','$n_carp_fam','paciente');";
       $resul = $this->con->query($sql);
       if($resul =! ""){
-        $sql = 'select max(cod_usuario) as c from usuario;';
-        $resul = $this->con->query($sql);
-        $fi=mysqli_fetch_array($resul);
-        $cod_usuario = $fi["c"];
+        $ultimo_id = $this->con->insert_id;
+        $cod_usuario = $ultimo_id;
       }
     }
     //actualizar los datos del paciente pero solo algunos datospaciente

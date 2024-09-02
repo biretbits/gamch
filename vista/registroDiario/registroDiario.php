@@ -25,7 +25,7 @@
               <input type="hidden" name="cd_medico" id="cd_medico" value="">
               <div class="col-md-4 mb-3">
                 <label for="Nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre" onkeyup="buscarExitepaciente()">
+                <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre" onkeyup="buscarExitepaciente()" autocomplete="off">
                 <div id="resultado" align='left' class='alert alert-light mb-0 py-0 border-0'>
                 </div>
               </div>
@@ -72,13 +72,13 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="personal que brinda la atencion" class="form-label">personal que brinda la atencion</label>
-                <input type="text" class="form-control" id="personalatencion" placeholder="personal que brinda la atencion" onkeyup= "atencionMedico()">
+                <input type="text" class="form-control" id="personalatencion" placeholder="personal que brinda la atencion" onkeyup= "atencionMedico()" autocomplete="off">
                 <div id="resultadomedico" align='left' class='alert alert-light mb-0 py-0 border-0'>
               </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="resp. admision" class="form-label">resp. admision</label>
-                <input type="text" class="form-control" id="respadmision" placeholder="responsable de Admision" onkeyup="buscarResponsableAdmision()">
+                <input type="text" class="form-control" id="respadmision" placeholder="responsable de Admision" onkeyup="buscarResponsableAdmision()" autocomplete="off">
                 <div id="resultadoadmision" align='left' class='alert alert-light mb-0 py-0 border-0'>
                 </div>
               </div>
@@ -152,22 +152,40 @@ transform: translateY(-5px);
 
               //dentro de los id de la vista mostramos los datos que estan en el div resultado
               if(nombre != ""){
-                document.getElementById("nombre").disabled = true;
                 document.getElementById("nombre").value = nombre;
-                document.getElementById("ap_usuario").disabled = true;
+                if(nombre != ''){
+                  document.getElementById("nombre").disabled = true;
+                }
                 document.getElementById("ap_usuario").value = ap;
-                document.getElementById("am_usuario").disabled = true;
+                if(ap != ''){
+                  document.getElementById("ap_usuario").disabled = true;
+                }
                 document.getElementById("am_usuario").value = am;
-                document.getElementById("fecha_nacimiento").disabled = true;
+                if(am!=''){
+                  document.getElementById("am_usuario").disabled = true;
+                }
                 var fecha = new Date(fn); // Puedes modificar esta fecha según tus necesidades
 
                 // Formatear la fecha como una cadena para asignarla al campo de tipo date
                 var fechaFormateada = fecha.toISOString().split('T')[0];
                 document.getElementById("fecha_nacimiento").value = fechaFormateada;
-                document.getElementById("edad").disabled = true;
+                if(fechaFormateada == null || fechaFormateada=='0000-00-00'){
+                  document.getElementById("fecha_nacimiento").disabled = false;
+                }else{
+                  document.getElementById("fecha_nacimiento").disabled = true;
+                }
                 document.getElementById("edad").value = ed;
-                document.getElementById("direccion_usuario").disabled = true;
+                if(ed == 0){
+                  document.getElementById("edad").disabled = false;
+                }else{
+                  document.getElementById("edad").disabled = true;
+                }
                 document.getElementById("direccion_usuario").value = d;
+                if(d == ''){
+                  document.getElementById("direccion_usuario").disabled = false;
+                }else {
+                  document.getElementById("direccion_usuario").disabled = true;
+                }
                 document.getElementById("cod_usuario").disabled = true;
                 document.getElementById("cod_usuario").value = c;
                 $('#resultado').html(""); //para vaciar

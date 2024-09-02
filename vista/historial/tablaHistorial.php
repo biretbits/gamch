@@ -117,8 +117,12 @@
                   <input type="date" class="form-control" id="fecha_nacimiento_responsable" placeholder="Fecha de Nacimiento">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Sexo</label>
-                  <input type="text" class="form-control" id="sexo_responsable" placeholder="Sexo">
+                  <label class="form-label">Sexo</label>
+                  <select class="form-control" id="sexo_responsable">
+                    <option value="">Seleccione sexo</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                  </select>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Ocupacion del Responsable</label>
@@ -170,7 +174,11 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Sexo</label>
-                  <input type="text" class="form-control" id="sexo" placeholder="Sexo"value="<?php $m = (isset($sexo_paciente1) && is_string($sexo_paciente1))? $sexo_paciente1: ""; echo $m; ?>">
+                  <select class="form-control" id="sexo">
+                    <option value="">Seleccione sexo</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                  </select>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Ocupacion</label>
@@ -524,7 +532,7 @@ function ActualizarHistorial(cod_his,cod_rd,paciente_rd,Nombre_responsable,ap_re
 fecha_nac,sexo_usuario,ocupacion_responsable,direccion_responsable,telefono_resposable,comunidad_responsable,ci_resp
 ,nro_seguro_resp,nro_car_form_resp,zona_his,fecha_nac_paciente,sexo_paciente,ocupacion_paciente,estado_civil_paciente,
 escolaridad_paciente,fecha_de_consulta){
-  alert(estado_civil_paciente+"   "+escolaridad_paciente);
+  //alert(estado_civil_paciente+"   "+escolaridad_paciente);
   document.getElementById("cod_historial").value=cod_his;
   document.getElementById("cod_rd").value=cod_rd;
   document.getElementById("paciente_rd").value=paciente_rd;
@@ -591,7 +599,6 @@ var ci =document.getElementById("ci").value;
 var n_seguro =document.getElementById("n_seguro").value;
 var n_carp_fam =document.getElementById("n_carp_fam").value;
 var zona_his =document.getElementById("zona_his").value;
-
 //identificacion del pacient
 var cod_usuario = document.getElementById("cod_usuario").value;
 var paciente_rd = document.getElementById("paciente_rd").value;
@@ -603,7 +610,8 @@ var fecha_de_consulta = document.getElementById("fecha_de_consulta").value;
 var estado_civil = document.getElementById("estado_civil").value;
 var escolaridad = document.getElementById("escolaridad").value;
 
-if(Nombre_responsable==""||ap_responsable==""||am_responsable==""||fecha_nacimiento_responsable==""||sexo_responsable==""||ocupacion_responsable==""
+if(Nombre_responsable==""||ap_responsable==""||am_responsable==""||fecha_nacimiento_responsable==""||sexo_responsable==""
+||ocupacion_responsable==""
 ||direccion_responsable==""||comunidad_responsable==""||ci==""||fecha_nacimiento==""
 ||sexo==""||ocupacion==""||fecha_de_consulta==""||estado_civil==""||escolaridad==""){
   ingreseNPdatos();
@@ -641,9 +649,9 @@ $.ajax({
   contentType: false, // Deshabilitar la codificación de tipo MIME
   processData: false, // Deshabilitar la codificación de datos
   success: function(data) {
-   alert(data+"dasdas");
+//   alert(data+"dasdas");
     data=$.trim(data);
-    alert(data);
+  //  alert(data);
     if(data == "correcto"){
 
       //if(accion == 1){
@@ -712,7 +720,7 @@ function vaciarDESPUESdeUNtiempo(){
     vaciarDESPUESdeUNtiempo();
     var nombre = document.getElementById("Nombre_responsable").value;
     if(nombre != ""){
-      alert(nombre);
+      //alert(nombre);
       $.ajax({
     		url: "../controlador/historial.controlador.php?accion=rbph",
     		type: "POST",

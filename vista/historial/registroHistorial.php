@@ -50,7 +50,11 @@ $fi = mysqli_fetch_array($re);
               </div>
               <div class="col-md-4 mb-3">
                 <label  class="form-label">Sexo</label>
-                <input type="text" class="form-control" id="sexo_responsable" placeholder="Sexo">
+                <select class="form-control" id="sexo_responsable">
+                  <option value="">Seleccione sexo</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="femenino">Femenino</option>
+                </select>
               </div>
               <div class="col-md-4 mb-3">
                 <label  class="form-label">Ocupacion del Responsable</label>
@@ -102,7 +106,11 @@ $fi = mysqli_fetch_array($re);
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label">Sexo</label>
-                <input type="text" class="form-control" id="sexo" placeholder="Sexo">
+                <select class="form-control" id="sexo">
+                  <option value="">Seleccione sexo</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="femenino">Femenino</option>
+                </select>
               </div>
               <div class="col-md-4 mb-3">
                 <label class="form-label">Ocupacion</label>
@@ -281,7 +289,7 @@ function vaciarDESPUESdeUNtiempo(){
     vaciarDESPUESdeUNtiempo();
     var nombre = document.getElementById("Nombre_responsable").value;
     if(nombre != ""){
-      alert(nombre);
+    //  alert(nombre);
       $.ajax({
     		url: "../controlador/historial.controlador.php?accion=rbph",
     		type: "POST",
