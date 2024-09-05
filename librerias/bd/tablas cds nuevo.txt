@@ -45,7 +45,7 @@ estado char(10)
 
 
 CREATE TABLE registro_diario (
-   cod_rd INT(11) NOT NULL AUTO_INCREMENT,
+   cod_rd INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
    fecha_rd DATE DEFAULT NULL,
    hora_rd TIME DEFAULT NULL,
    servicio_rd int DEFAULT NULL,
@@ -57,7 +57,6 @@ CREATE TABLE registro_diario (
    paciente_rd int,
    cod_cds INT(11) NOT NULL,
    estado CHAR(15) DEFAULT NULL,
-   PRIMARY KEY (cod_rd, paciente_rd,cod_cds),
    foreign key(servicio_rd)references servicio(cod_servicio)on delete restrict on update restrict,
    FOREIGN KEY (pe_brinda_atencion_rd) REFERENCES usuario(cod_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
    FOREIGN KEY (resp_admision_rd) REFERENCES usuario(cod_usuario) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -67,7 +66,7 @@ CREATE TABLE registro_diario (
 
 
 create table historial(
-cod_his int auto_increment,
+cod_his int auto_increment PRIMARY KEY,
 zona_his char(70),
 cod_rd int,
 paciente_rd int,
@@ -77,8 +76,9 @@ archivo char(100),
 fecha date,
 hora time,
 estado char(20),
-primary key(cod_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his),
-foreign key(cod_rd,paciente_rd,cod_cds)references registro_diario(cod_rd,paciente_rd,cod_cds)on delete restrict on update restrict,
+foreign key(cod_rd)references registro_diario(cod_rd)on delete restrict on update restrict,
+foreign key(paciente_rd)references usuario(cod_usuario)on delete restrict on update restrict,
+FOREIGN KEY (cod_cds) REFERENCES centro_de_salud(cod_cds) ON DELETE RESTRICT ON UPDATE RESTRICT,
 foreign key(cod_responsable_familia_his)references usuario(cod_usuario)on delete restrict on update restrict
 );
 

@@ -3,8 +3,10 @@ require_once '../modelo/historial.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
-if(isset($_SESSION["tipo_usuario"])==""){
-    $ins->Redireccionar_inicio();
+$abi = $ins->verificarSession();
+if($abi!='' and $abi=='cerrar'){
+  $ins->Destroy();
+  $ins->Redireccionar_inicio();
 }
 class HistorialControlador{
 	public function verTablaHistorial($paciente_rd,$cod_rd){
@@ -311,6 +313,8 @@ echo "<div class='row'>
 }
 
   $hc = new HistorialControlador();
+if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
+{
   if(isset($_GET["accion"]) && $_GET["accion"]=="vht"){
 		$hc->verTablaHistorial($_POST["paciente_rd"],$_POST["cod_rd"]);
 	}
@@ -351,5 +355,7 @@ echo "<div class='row'>
   if(isset($_GET["accion"]) && $_GET["accion"]=="aht"){
     $hc->actualizarDatosHistorial($_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_his"],$_POST["listarDeCuanto"],$_POST["pagina"],$_POST["fecha"]);
   }
-
+}else{
+  $ins->Redireccionar_inicio();
+}
 ?>

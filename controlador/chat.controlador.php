@@ -3,132 +3,13 @@ require_once '../modelo/chat.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
+$abi = $ins->verificarSession();
+if($abi!='' and $abi=='cerrar'){
+  $ins->Destroy();
+  $ins->Redireccionar_inicio();
+}
+
 class ChatControlador{
-
-	public function MensajeUsuario($mensaje){
-    $ch = new Chat();
-    $resul = $ch->BuscarRespuesta();
-		if($resul!=''){
-      if(mysqli_num_rows($resul)>0){
-				$vv = $this->GuardarEnArray($resul);
-				$vecConsulta = $vv["consultas"];
-				$vecRespuesta = $vv["respuestas"];
-				//aplicando el coseno de similitud
-				$totalConsulta = count($vecConsulta);
-				$terminos = $this->SepararEnTerminos($vecConsulta);
-				$terminoUsuario = $this->preprocess($mensaje);
-				$df = $this->calcularELdf($terminos,$terminoUsuario);
-				$tfidConsulta = $this->calcualarTFI($terminos,$df,$totalConsulta);
-				$tfidUsuario = $this->calcularTFIusuario($terminoUsuario,$df,$totalConsulta);
-				$resultadoCos = $this->CalcularCoseno($tfidConsulta,$tfidUsuario);
-				$maxSimilar = max($resultadoCos);
-				$posicion = array_search($maxSimilar, $resultadoCos);
-				/*echo "La pregunta del usuario es más similar al documento: \n";
-				echo $vecConsulta[$posicion] . "\n";
-				echo "Con una similitud de coseno de: " . $vecRespuesta[$posicion] . "\n";
-				*/
-				echo $vecRespuesta[$posicion];
-      }else{
-        echo "Lo siento no tengo una respuesta para su consulta";
-      }
-    }else{
-      echo "Lo siento no tengo una respuesta para su consulta";
-    }
-  }
-
-	function GuardarEnArray($resul){
-		$vec = array();
-		$vecId = array();
-		while($fi = mysqli_fetch_array($resul)){
-			$vec[]=$fi["consulta"];
-			$vecRes[]=$fi["respuesta_consulta"];
-		}
-		return array('consultas' => $vec, 'respuestas' => $vecRes);
-	}
-
-// Preprocesar los documentos y la pregunta (convertir a minúsculas y dividir en palabras) y se hace un conteo de cada palabra cuantas veces aparece
-function preprocess($text) {
-    return array_count_values(explode(" ", strtolower($this->removeAccents($text))));
-}
-
-function SepararEnTerminos($documents){
-	$terms = [];
-	foreach ($documents as $doc) {
-	    $terms[] = $this->preprocess($doc);
-	}
-	return $terms;
-}
-
-// Calcular el DF (Document Frequency)
-function calcularELdf($terms,$userTerms){
-	$df = [];
-	foreach ($terms as $termCount) {
-	    foreach ($termCount as $term => $count) {
-	        if (isset($df[$term])) {
-	            $df[$term] += 1;
-	        } else {
-	            $df[$term] = 1;
-	        }
-	    }
-	}
-	foreach ($userTerms as $term => $count) {
-	    if (!isset($df[$term])) {
-	        $df[$term] = 1;
-	    }
-	}
-	return $df;
-}
-
-// Calcular TF-IDF para cada documento y para la pregunta del usuario
-function calculateTfidf($termCount, $df, $totalDocuments) {
-    $tfidf = [];
-    foreach ($termCount as $term => $tf) {
-        $idf = log($totalDocuments / $df[$term]);
-        $tfidf[$term] = $tf * $idf;
-    }
-    return $tfidf;
-}
-
-function calcualarTFI($terms,$df,$totalDocuments){
-	$tfidfDocuments = [];
-	foreach ($terms as $termCount) {
-	    $tfidfDocuments[] = $this->calculateTfidf($termCount, $df, $totalDocuments);
-	}
-	return $tfidfDocuments;
-}
-function calcularTFIusuario($userTerms,$df,$totalDocuments){
-	$tfidfUser = $this->calculateTfidf($userTerms, $df, $totalDocuments);
-	return $tfidfUser;
-}
-function CalcularCoseno($tfidfDocuments,$tfidfUser){
-	$similarities = [];
-	foreach ($tfidfDocuments as $index => $tfidfDoc) {
-	    $similarities[$index] = $this->cosineSimilarity($tfidfUser, $tfidfDoc);
-	}
-	return $similarities;
-}
-// Función para calcular la similitud de coseno entre dos vectores
-function cosineSimilarity($vectorA, $vectorB) {
-    $dotProduct = 0;
-    $magnitudeA = 0;
-    $magnitudeB = 0;
-
-    foreach ($vectorA as $term => $weightA) {
-        $weightB = isset($vectorB[$term]) ? $vectorB[$term] : 0;
-        $dotProduct += $weightA * $weightB;
-        $magnitudeA += $weightA * $weightA;
-    }
-
-    foreach ($vectorB as $weightB) {
-        $magnitudeB += $weightB * $weightB;
-    }
-
-    if ($magnitudeA == 0 || $magnitudeB == 0) {
-        return 0;
-    }
-
-    return $dotProduct / (sqrt($magnitudeA) * sqrt($magnitudeB));
-}
 
   public function VisualizarTablaChat(){
     $ch = new Chat();
@@ -317,23 +198,31 @@ function cosineSimilarity($vectorA, $vectorB) {
 		$resul = $ch->SeleccionarChat($buscar,false,false);
 		require("../vista/chat/ReporteChat.php");
 	}
+
 }
 
 
 	$uc=new  ChatControlador();
-	if(isset($_GET["accion"]) && $_GET["accion"]=="msu"){
-		$uc->MensajeUsuario($_POST["mensaje"]);
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="tcb"){
-		$uc->VisualizarTablaChat();
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="bcmt"){
-		$uc->buscarYvisualizarTabla($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rcpma"){
-		$uc->EditarRegistrar($_POST["cod_conc"],$_POST["consulta"],$_POST["respuesta"]);
-	}
-	if(isset($_GET["accion"]) && $_GET["accion"]=="rch"){
-		$uc->ReporteBuscarChat($_POST['buscar']);
-	}
+
+
+if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admin"){
+  if(isset($_GET["accion"]) && $_GET["accion"]=="msu"){
+    $uc->MensajeUsuario($_POST["mensaje"]);
+  }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="tcb"){
+        $uc->VisualizarTablaChat();
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bcmt"){
+
+        $uc->buscarYvisualizarTabla($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rcpma"){
+      $uc->EditarRegistrar($_POST["cod_conc"],$_POST["consulta"],$_POST["respuesta"]);
+    }
+  	if(isset($_GET["accion"]) && $_GET["accion"]=="rch"){
+      $uc->ReporteBuscarChat($_POST['buscar']);
+    }
+}else{
+    $ins->Redireccionar_inicio();
+}
 ?>

@@ -14,7 +14,6 @@ class Conexion{
 		$this->host="localhost";
 		$this->cnmysql=null;
 	}
-
 	public function Conectaras(){
 		try{
 			$cnmysql = mysqli_connect($this->host,$this->user,$this->pass,$this->database);
@@ -30,6 +29,15 @@ class Conexion{
 			}catch(Exception $e){
 				die($e->getMessage());
 			}
+	}
+	public function getDatabase() {
+		$arbd = array('database' => $this->database,
+	 	'contrasena' => $this->pass,
+		'root' => $this->user,
+		'localhost'=>$this->host,
+		'cnmysqli'=>$this->cnmysql);
+
+		return $arbd;
 	}
 }
 /*

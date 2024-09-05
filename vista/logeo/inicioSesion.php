@@ -75,7 +75,6 @@
     }
   }
 
-
   function VerificarDatos(){
     var usuario = document.getElementById("usuario").value;
     var contrasena = document.getElementById("contrasena").value;
@@ -83,6 +82,7 @@
       var datos=new  FormData();
       datos.append("usuario",usuario);
       datos.append("contrasena",contrasena);
+
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
@@ -92,7 +92,7 @@
         contentType:false,
         processData:false,
         success: function(r){
-        //  alert(r);
+        //alert(r);
           r=$.trim(r);
           if(r == "admin"){
             alertCorrecto();
@@ -102,6 +102,14 @@
             alertCorrecto();
           }else if(r == "farmacia"){
             alertCorrecto();
+          }else if(r == 'Falta_inicio_sesion_admin'){
+            Swal.fire({
+             icon: 'info',
+             title: '¡Información!',
+             text: '¡Espere a que inicie sesión el Administrador!',
+             showConfirmButton: false,
+             timer: 2000
+           });
           }else{
             Swal.fire({
              icon: 'error',

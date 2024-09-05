@@ -383,8 +383,10 @@ function Buscar(page){
             usado();
           }else if(data == 'correcto'){
             Correcto();
-          }else{
+          }else if(data == 'error'){
             Error1();
+          }else{
+            cod_entrada='';
           }
           IRalLink(cod_entrada);
         }

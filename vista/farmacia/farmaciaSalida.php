@@ -501,33 +501,43 @@ function Buscar(page){
         contentType: false, // Deshabilitar la codificación de tipo MIME
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-        alert(data+"dasdas");
+      //  alert(data+"dasdas");
           if(data == 'fecha_vencido'){
             vencido();
           }else if(data == 'error'){
             Error1();
           }else{
-            Correcto3();
-            agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,'');
-            document.getElementById("nombre_producto").value='';
-            document.getElementById("cod_producto").value='';
-            document.getElementById("cantidad").value='';
-            document.getElementById("total_stock").value='';
-            document.getElementById("nombre_receta").disabled=true;
-            document.getElementById("cod_paciente").disabled=true;
-            var es = document.getElementById("stock_es");
-            es.textContent ='';
-            es.style.backgroundColor = 'white';
-            $.ajax({
-              url: "../controlador/farmacia.controlador.php?accion=actualizarTabla",
-              type: "POST",
-              data: datos1,
-              contentType: false, // Deshabilitar la codificación de tipo MIME
-              processData: false, // Deshabilitar la codificación de datos
-              success: function(resul) {
-                $("#verDatos").html(resul);
-              }
-            });
+            var separar = data.split(',');
+            var fila = verificarFilas();
+            var codi1=parseInt(separar[0]);
+            var codi2 = parseInt(separar[1]);
+            var texto = separar[2];
+            if(typeof codi1=== 'number' && typeof codi2 == 'number' && texto == 'correctoEScORRECTO')
+            {
+              Correcto3();
+              agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,'');
+              document.getElementById("nombre_producto").value='';
+              document.getElementById("cod_producto").value='';
+              document.getElementById("cantidad").value='';
+              document.getElementById("total_stock").value='';
+              document.getElementById("nombre_receta").disabled=true;
+              document.getElementById("cod_paciente").disabled=true;
+              var es = document.getElementById("stock_es");
+              es.textContent ='';
+              es.style.backgroundColor = 'white';
+              $.ajax({
+                url: "../controlador/farmacia.controlador.php?accion=actualizarTabla",
+                type: "POST",
+                data: datos1,
+                contentType: false, // Deshabilitar la codificación de tipo MIME
+                processData: false, // Deshabilitar la codificación de datos
+                success: function(resul) {
+                  $("#verDatos").html(resul);
+                }
+              });
+            }else{
+              location.href="../controlador/farmacia.controlador.php?accion=vsf";
+            }
           }
           //IRalLink(cod_salida);
         }
@@ -1149,10 +1159,21 @@ function Buscar(page){
             //alert(data+"dasdas");
               if(data == 'error'){
                 Error1();
-              }else {
+              }else if(data == 'correcto'){
                 Correcto();
-                $('#ModalRegistro').modal('hide');
-                $("#verDatos").html(data);
+                $.ajax({
+                  url: "../controlador/farmacia.controlador.php?accion=actualizarTabla",
+                  type: "POST",
+                  data: datos1,
+                  contentType: false, // Deshabilitar la codificación de tipo MIME
+                  processData: false, // Deshabilitar la codificación de datos
+                  success: function(data) {
+                    $('#ModalRegistro').modal('hide');
+                    $("#verDatos").html(data);
+                  }
+                });
+              }else{
+                location.href="../controlador/farmacia.controlador.php?accion=vsf";
               }
             }
           });

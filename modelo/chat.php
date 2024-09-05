@@ -47,7 +47,7 @@ class Chat
     if(is_numeric($cod_conc)){
       $sql="update consultas set consulta = '$consulta', respuesta_consulta = '$respuesta' where cod_cons = $cod_conc";
     }else{
-      $sql = "insert into consultas(consulta,respuesta_consulta,cod_tipo)values('$consulta','$respuesta',1)";
+      $sql = "insert into consultas(consulta,respuesta_consulta)values('$consulta','$respuesta')";
     }
     $resul = $this->con->query($sql);
     return $resul;

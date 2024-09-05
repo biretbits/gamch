@@ -191,6 +191,17 @@ html, body {
       height: auto; /* Ajusta la altura del botón automáticamente */
       padding: 5px 10px; /* Ajusta el padding del botón para hacerlo más pequeño */
   }
+  /*para quitar botones de incremento y decreento de un campo de type number*/
+  input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Quitar spinners en Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 </style>
 <body  id="page-top">
   <button type="button" class="btn btn-primary" id="openChatbot">💬</button>
@@ -228,6 +239,10 @@ html, body {
                     <li class='nav-item' title='ChatBot'>
                         <a class='nav-link btn btn-outline-warning' href='../controlador/chat.controlador.php?accion=tcb'><img src='../imagenes/robot.png'style='height: 25px;width: 25px;'></a>
                     </li>";
+                    echo "
+                      <li class='nav-item' title='Configuracion del control de acceso'>
+                          <a class='nav-link btn btn-outline-warning' href='../controlador/usuario.controlador.php?accion=cca'><img src='../imagenes/control.png'style='height: 25px;width: 25px;'></a>
+                      </li>";
 
                     echo "<li class='nav-item dropdown' title='Base de datos'>
                       <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
@@ -235,11 +250,11 @@ html, body {
                       </a>
                       <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
                           <li class='nav-item ' title='Exportar base de datos' style='color:green'>
-                            <a class='nav-link text-info btn btn-outline-warning' href='#'>Exportar</a>
+                            <a class='nav-link text-info btn btn-outline-warning' href='../controlador/usuario.controlador.php?accion=exp'>Exportar</a>
                           </li>
                           <li><hr class='dropdown-divider'></li>
                           <li class='nav-item ' title='Importar base de datos' style='color:green'>
-                            <a class='nav-link text-primary btn btn-outline-danger' href='../controlador/logeo.controlador.php?accion=salir'>Importar</a>
+                            <a class='nav-link text-primary btn btn-outline-warning' href='#' data-bs-toggle='modal' data-bs-target='#exampleModal'>Importar</a>
                           </li>
                       </ul>
                       </li>";
@@ -330,6 +345,28 @@ html, body {
 
 ?>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Seleccione el archivo .sql para importar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="formFile" class="form-label">Selecciona su archivo</label>
+            <input class="form-control" type="file" id="formFile" accept=".sql">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="Importar(event)">Importar</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal del Chatbot --><div id="chatbotContainer" class="chatbot-container d-none">
       <div class="chatbot-header">
           <h5>Chatbot</h5>
@@ -385,7 +422,7 @@ function enviar(){
     //alert(va);
     $.ajax({
       cache: false, //important or else you might get wrong data returned to you
-      url: '../controlador/chat.controlador.php?accion=msu',
+      url: '../controlador/todo.controlador.php?accion=msu',
       datatype: "html",
       type: 'POST',
       data: datos,
@@ -428,4 +465,128 @@ function enviar(){
       });
   });
 
+    function validarArchivo() {
+      const filePath = document.getElementById('formFile').value;
+      // Obtener la extensión del archivo
+      if (filePath.split('.').pop().toLowerCase() != 'sql') {
+          return false;
+      }
+     return true;
+  }
+  function error(valor){
+    //Solo se permite archivos de tipo .sql
+    Swal.fire({
+     icon: 'error',
+     title: '¡Error!',
+     text: valor,
+     showConfirmButton: false,
+     timer: 2000
+   });
+  }
+
+  function correcto(valor){
+    //Solo se permite archivos de tipo .sql
+    Swal.fire({
+     icon: 'success',
+     title: '¡Correcto!',
+     text: valor,
+     showConfirmButton: false,
+     timer: 2000
+   });
+  }
+  function Importar(e){
+    e.preventDefault(); // Evitar la recarga de la página
+    var fileInput = document.getElementById('formFile');
+    var file = fileInput.files[0]; // Obtener el primer archivo seleccionado
+
+    if (!file) {
+        error('Por favor, selecciona un archivo.');
+        return;
+    }
+    var re = validarArchivo();
+    if(re == false){
+      error('Solo se permite archivos de tipo .sql');
+      return;
+    }
+    var formData = new FormData();
+    formData.append('file', file);
+        $.ajax({
+            url: '../controlador/usuario.controlador.php?accion=imp', // Archivo PHP que procesa la subida
+            type: 'POST',
+            data: formData,
+            contentType: false, // No establecer el tipo de contenido
+            processData: false, // No procesar los datos
+            success: function (response) {
+              //alert(response);
+              if(response == 'correcto'){
+                correcto("Se importo correctamente");
+              }else{
+                error(response);
+              }
+              setTimeout(function() {
+                $('#exampleModal').modal('hide');
+              }, 2000);
+
+
+                //alert('Archivo subido con éxito: ' + response);
+            },
+            error: function () {
+                error('Error al subir el archivo.');
+            }
+        });
+  }
+
+
+  function showNotification() {
+
+    var formData = new FormData();
+    formData.append('file', 'hola');
+        $.ajax({
+            url: '../controlador/todo.controlador.php?accion=validarAdmin', // Archivo PHP que procesa la subida
+            type: 'POST',
+            data: formData,
+            contentType: false, // No establecer el tipo de contenido
+            processData: false, // No procesar los datos
+            success: function (response) {
+              //alert("ssssss"+response);
+              if(response=='error'){
+                error("Revise hay un problema con el control de acceso");
+              }else if(response=='desactivo'){
+                Swal.fire({
+                    title: '¡Notificación!',
+                    text: 'El Administrador cerro el sistema, o cambio el control de acceso.',
+                    icon: 'success', // Puedes usar 'info', 'warning', 'error', o 'question'
+                    position: 'bottom-start', // Posiciona la alerta en la parte inferior izquierda
+                    toast: true, // Hace que la alerta se vea como un toast
+                    timer: 40000, // Duración en milisegundos
+                    showConfirmButton: false, // Oculta el botón de confirmación
+                    timerProgressBar: true, // Muestra una barra de progreso
+                });
+                setTimeout(function() {
+                  actualizarDato();
+                }, 4000);
+                clearInterval(intervalId);
+              }
+
+            }
+          });
+
+  }
+
+  // Usa setInterval para ejecutar la función cada 4000 milisegundos (4 segundos)
+  intervalId = setInterval(showNotification, 3000);
+  function actualizarDato(){
+    var formData = new FormData();
+    formData.append('si', 'no');
+    $.ajax({
+    url: '../controlador/todo.controlador.php?accion=acno',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (response) {
+        // No hacer nada con la respuesta
+    }
+    });
+  }
 </script>

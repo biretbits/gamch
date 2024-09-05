@@ -4,6 +4,15 @@ require_once '../modelo/registroDiario.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
+$abi = $ins->verificarSession();
+//echo "<br><br><br><br><br><br><br><br><br><br><br><br>".$abi;
+if($abi!='' and $abi=='cerrar'){
+  $ins->Destroy();
+  //$ins->Redireccionar_inicio();
+}
+if(isset($_SESSION["tipo_usuario"])==""){
+    $ins->Redireccionar_inicio();
+}
 /**
  *
  */
@@ -552,59 +561,67 @@ echo "</div>
     }
 }
 $se =new ServicioControlador();
-
-if(isset($_GET["accion"]) && $_GET["accion"] == "rse"){
-  $se->registroServicio($_POST["cod_servicio"],$_POST["servicio"],$_POST["descripcion"]);
-}
-
-if(isset($_GET["accion"]) && $_GET["accion"] == "rsr"){
-  $se->VerServicios();
-}
-if(isset($_GET["accion"]) && $_GET["accion"] == "bs"){
-  $se->VerServiciosTabla($_POST["paginacion"],$_POST["listarDeCuanto"],$_POST["id_servicio"]);
-}
-if(isset($_GET["accion"]) && $_GET["accion"] == "grser"){
-  echo $_POST["id_servicio"];
-  $se->GenerarReporte($_POST["id_servicio"]);
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="vTs"){
-  $se->VisualizarServiciosContando();
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="bfs"){
-  $se->BuscarPORfechaServicio($_POST['fechai'],$_POST['fechaf']);
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="gfrs"){
-  $se->GenerarReporteFecha($_POST['fechai'],$_POST['fechaf']);
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="rtsx"){
-  $se->VisualizarServiciosContandoPorSexo();
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="bfsx"){
-  $se->BuscarPORfechaServicioSexo($_POST['fechai'],$_POST['fechaf']);
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="gfrsx"){
-  $se->GenerarReporteFechaSexo($_POST['fechai'],$_POST['fechaf']);
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="rGE"){
-  $se->BuscarPorFechasEdades();
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="gfred"){
-  $graficos = array();
-  for($i=0;$i<140;$i++){
-    $campo = 'imagen' . $i;
-   if (isset($_POST[$campo])) {
-       $graficos[] = $_POST[$campo];
-   }
+if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admin")
+{
+  if(isset($_GET["accion"]) && $_GET["accion"] == "rse"){
+    $se->registroServicio($_POST["cod_servicio"],$_POST["servicio"],$_POST["descripcion"]);
   }
-  $edades = array();
-  for($i=0;$i<140;$i++){
-    $campo = $i;
-   if (isset($_POST[$campo])) {
-       $edades[] = $_POST[$campo];
-   }
+
+  if(isset($_GET["accion"]) && $_GET["accion"] == "rsr"){
+    $se->VerServicios();
   }
-  $se->GenerarReporteDeEdades($_POST['fechai'],$_POST['fechaf'],$graficos,$edades);
-}
-if(isset($_GET["accion"]) && $_GET["accion"]=="bfep"){
-  $se->BuscarDatosServiciosPorEdad($_POST['fechai'],$_POST['fechaf'],$_POST['edadi'],$_POST['edadf']);
+  if(isset($_GET["accion"]) && $_GET["accion"] == "bs"){
+    $se->VerServiciosTabla($_POST["paginacion"],$_POST["listarDeCuanto"],$_POST["id_servicio"]);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"] == "grser"){
+    echo $_POST["id_servicio"];
+    $se->GenerarReporte($_POST["id_servicio"]);
+  }
+}else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admision")
+{
+  //echo "<br><br><br><br><br>holllldafds".$_SESSION["tipo_usuario"];
+  if(isset($_GET["accion"]) && $_GET["accion"]=="vTs"){
+    $se->VisualizarServiciosContando();
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="bfs"){
+    $se->BuscarPORfechaServicio($_POST['fechai'],$_POST['fechaf']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="gfrs"){
+    $se->GenerarReporteFecha($_POST['fechai'],$_POST['fechaf']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="rtsx"){
+    $se->VisualizarServiciosContandoPorSexo();
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="bfsx"){
+    $se->BuscarPORfechaServicioSexo($_POST['fechai'],$_POST['fechaf']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="gfrsx"){
+    $se->GenerarReporteFechaSexo($_POST['fechai'],$_POST['fechaf']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="rGE"){
+    $se->BuscarPorFechasEdades();
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="gfred"){
+    $graficos = array();
+    for($i=0;$i<140;$i++){
+      $campo = 'imagen' . $i;
+     if (isset($_POST[$campo])) {
+         $graficos[] = $_POST[$campo];
+     }
+    }
+    $edades = array();
+    for($i=0;$i<140;$i++){
+      $campo = $i;
+     if (isset($_POST[$campo])) {
+         $edades[] = $_POST[$campo];
+     }
+    }
+    $se->GenerarReporteDeEdades($_POST['fechai'],$_POST['fechaf'],$graficos,$edades);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="bfep"){
+    $se->BuscarDatosServiciosPorEdad($_POST['fechai'],$_POST['fechaf'],$_POST['edadi'],$_POST['edadf']);
+  }
+}else{
+    //echo "<br><br><br><br><br>llllellglglglglglgllglg";
+    $ins->Redireccionar_inicio();
 }

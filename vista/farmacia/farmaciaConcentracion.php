@@ -344,8 +344,10 @@ function Buscar(page){
           //alert(data+"dasdas");
           if(data == 'correcto'){
             Correcto();
-          }else{
+          }else if(data=='error'){
             Error1();
+          }else{
+            cod_generico='';
           }
           IRalLink(cod_generico);
         }

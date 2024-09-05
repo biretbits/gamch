@@ -4,9 +4,12 @@ require_once '../modelo/servicio.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
-if(isset($_SESSION["tipo_usuario"])==""){
-    $ins->Redireccionar_inicio();
+$abi = $ins->verificarSession();
+if($abi!='' and $abi=='cerrar'){
+  $ins->Destroy();
+  $ins->Redireccionar_inicio();
 }
+
 class RegistroDiarioControlador{
 
 	public function visualizarTablaRegistroDiario(){
@@ -406,7 +409,8 @@ echo "<div class='row'>
 }
 
 	$rd=new  RegistroDiarioControlador();
-
+if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
+{
 	if(isset($_GET["accion"]) && $_GET["accion"]=="vtd"){
 		$rd->visualizarTablaRegistroDiario();
 	}
@@ -474,6 +478,8 @@ echo "<div class='row'>
     if(isset($_GET["accion"]) && $_GET["accion"]=="rpd"){
   		$rd->reportesRegistroDiario();
   	}
-  
+}else{
+  $ins->Redireccionar_inicio();
+}
 
 ?>

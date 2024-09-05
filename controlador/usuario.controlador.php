@@ -7,6 +7,12 @@ $ins->StarSession();
 if(isset($_SESSION["tipo_usuario"])==""){
     $ins->Redireccionar_inicio();
 }
+$abi = $ins->verificarSession();
+//echo "<br><br><br><br><br><br><br><br><br><br><br><br>".$abi;
+if($abi!='' and $abi=='cerrar'){
+  $ins->Destroy();
+  //$ins->Redireccionar_inicio();
+}
 class UsuarioControlador{
 
 	public function visualizarprueba($contrasena){
@@ -276,12 +282,111 @@ class UsuarioControlador{
       echo "error";
     }
   }
+  public function ExportarBD() {
+      $u = new Usuario();
+      $tablas = $u->showTables();  // Asumiendo que esta función retorna una lista de nombres de tablas.
+      $backupArchivo = 'cds_' . date("Y-m-d-H-i-s") . '.sql';
+      $handle = fopen($backupArchivo, 'w+');
+      $this->exportarDatos($tablas, $handle, $u);
+      header('Content-Description: File Transfer');
+      header('Content-Type: application/octet-stream');
+      header('Content-Disposition: attachment; filename=' . basename($backupArchivo));
+      header('Content-Length: ' . filesize($backupArchivo));
+      readfile($backupArchivo);
+      // Eliminar el archivo del servidor
+      unlink($backupArchivo);
+      exit;
+  }
+  function exportarDatos($tables, $handle, $u) {
+      // Agregar configuraciones iniciales
+      fwrite($handle, "-- MariaDB dump\n");
+      fwrite($handle, "-- Host: localhost    Database: cds\n");
+      fwrite($handle, "-- Server version 10.4.32-MariaDB\n\n");
 
+      fwrite($handle, "/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;\n");
+      fwrite($handle, "/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;\n");
+      fwrite($handle, "/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;\n");
+      fwrite($handle, "/*!40101 SET NAMES utf8mb4 */;\n");
+      fwrite($handle, "/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;\n");
+      fwrite($handle, "/*!40103 SET TIME_ZONE='+00:00' */;\n");
+      fwrite($handle, "/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n");
+      fwrite($handle, "/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n");
+      fwrite($handle, "/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n");
+      fwrite($handle, "/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;\n\n");
+
+      foreach ($tables as $table) {
+          fwrite($handle, "DROP TABLE IF EXISTS `$table`;\n");
+
+          $createTableQuery = $u->CrearTabla($table)->fetch_row();
+          fwrite($handle, $createTableQuery[1] . ";\n");
+
+          fwrite($handle, "\n-- Dumping data for table `$table`\n\n");
+          fwrite($handle, "LOCK TABLES `$table` WRITE;\n");
+          fwrite($handle, "/*!40000 ALTER TABLE `$table` DISABLE KEYS */;\n");
+
+          $result = $u->seleccionarTablas($table);
+          $numFields = $result->field_count;
+
+          while ($row = $result->fetch_row()) {
+              $return = "INSERT INTO `$table` VALUES(";
+              for ($i = 0; $i < $numFields; $i++) {
+                  $row[$i] = addslashes($row[$i]);
+                  if (isset($row[$i])) {
+                      $return .= '"' . $row[$i] . '"';
+                  } else {
+                      $return .= '""';
+                  }
+                  if ($i < ($numFields - 1)) {
+                      $return .= ',';
+                  }
+              }
+              $return .= ");\n";
+              fwrite($handle, $return);
+          }
+
+          fwrite($handle, "/*!40000 ALTER TABLE `$table` ENABLE KEYS */;\n");
+          fwrite($handle, "UNLOCK TABLES;\n\n");
+      }
+
+      // Restaurar configuraciones finales
+      fwrite($handle, "\n/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;\n");
+      fwrite($handle, "/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;\n");
+      fwrite($handle, "/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;\n");
+      fwrite($handle, "/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;\n");
+      fwrite($handle, "/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;\n");
+      fwrite($handle, "/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;\n");
+      fwrite($handle, "/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;\n");
+      fwrite($handle, "/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;\n");
+      fclose($handle);
+  }
+
+  public function ImportarBD($ruta){
+    $u = new Usuario();
+    echo $u->ImportarYcrearBd($ruta);
+  }
+
+  public function ConfigurarElcontrolDeAcceso(){
+    $u = new Usuario();
+    $resul = $u->seleccionarAdminInicioSesion();
+    require("../vista/admin/ConfigurarControlDeAcceso.php");
+  }
+
+  public function CambiarControl($control){
+    $u = new Usuario();
+    $resul = $u->CambiarElControlAcceso($control);
+    if($resul!=''){
+      echo "correcto";
+    }else{
+      echo "error";
+    }
+  }
 
 }
 
 
 	$uc=new  UsuarioControlador();
+if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admin')
+{
 	if(isset($_GET["accion"]) && $_GET["accion"]=="vr"){
 		$uc->visualizarRegistro();
 	}
@@ -344,5 +449,45 @@ class UsuarioControlador{
   if(isset($_GET["accion"]) && $_GET["accion"] == "fm2"){
     $uc->visualizarTablaUsuarios($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
   }
+  //exportar base de datos
+  if(isset($_GET["accion"]) && $_GET["accion"] == "exp"){
+    $uc->ExportarBD();
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"] == "imp"){
+    if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+         // Obtener información del archivo
+         $fileTmpPath = $_FILES["file"]["tmp_name"];
+         $fileName = $_FILES["file"]["name"];
+         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+         // Validar la extensión del archivo
+         if ($fileExtension === 'sql') {
+             // Especifica el directorio de destino para el archivo subido
+             $uploadDir = '../librerias/temp/';
+             $destination = $uploadDir . basename($fileName);
+             //echo ($destination);
+             // Mover el archivo al directorio de destino
+             if (move_uploaded_file($fileTmpPath, $destination)) {
+                 // Aquí puedes llamar a la función ImportarBD con la ruta del archivo
+                 // Suponiendo que ImportarBD espera la ruta del archivo
+                $uc->ImportarBD($destination);
+             } else {
+                 echo "Error al mover el archivo.";
+             }
+         } else {
+             echo "Extensión de archivo no permitida. Solo se permiten archivos .sql.";
+         }
+     } else {
+         echo "Error al subir el archivo.";
+     }
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="cca"){
+    $uc->ConfigurarElcontrolDeAcceso();
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="cambiarCOnfig"){
+    $uc->CambiarControl($_POST['control']);
+  }
+}else{
+  $ins->Redireccionar_inicio();
+}
 
 ?>

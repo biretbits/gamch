@@ -50,7 +50,7 @@
         <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal"
         data-bs-target="#ModalRegistro"
         onclick="ActualizarHistorial('',<?php echo $cod_rd; ?>,<?php echo $paciente_rd; ?>,'','','','',
-        '','','','',0,'',0
+        '','','','','','',''
         ,'','','<?php echo $zona_his1; ?>','<?php echo $fecha_nac_paciente1; ?>','<?php echo $sexo_paciente1; ?>'
         ,'<?php echo $ocupacion_paciente1;?>','<?php echo $estado_civil_paciente1; ?>',
         '<?php echo $escolaridad_paciente1; ?>','')">
@@ -122,6 +122,7 @@
                     <option value="">Seleccione sexo</option>
                     <option value="masculino">Masculino</option>
                     <option value="femenino">Femenino</option>
+                    <option value="otro">Otro</option>
                   </select>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -178,6 +179,8 @@
                     <option value="">Seleccione sexo</option>
                     <option value="masculino">Masculino</option>
                     <option value="femenino">Femenino</option>
+                    <option value="otro">Otro</option>
+                  
                   </select>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -192,6 +195,7 @@
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Estado Civil</label>
                   <select class="form-select" id="estado_civil" >
+                    <option value=''>Seleccione</option>
                     <?php
                     $ara = ['soltero(a)','casado(a)','divorciado(a)','union estable'];
                       if(isset($estado_civil_paciente1) && is_string($estado_civil_paciente1)){
@@ -203,7 +207,7 @@
                           }
                         }
                       }else{
-                        echo "<option value=''>seleccione</option>
+                        echo "
                           <option value='soltero(a)'>soltero(a)</option>
                           <option value='casado(a)'>casado(a)</option>
                           <option value='divorciado(a)'>divorciado(a)</option>
@@ -215,8 +219,9 @@
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Escolaridad</label>
                   <select class="form-select" id="escolaridad" >
-                    <?php $are = ['Educación Inicial','Educación Primaria','Educación Secundaria','Educación Superior'];
-                          $ares = ['Inicial','Primaria','Secundaria','Superior'];
+                    <option value=''>Seleccione</option>
+                    <?php $are = ['Educación Primaria sin concluir','Educación Primaria concluido','Educación Secundaria sin concluir','Educación Secundaria concluido','Educación Superior'];
+                          $ares = ['No Primaria','Primaria','No Secundaria','Secundaria','Superior'];
                       if(isset($escolaridad_paciente1) && is_string($escolaridad_paciente1)){
 
                         for($i = 0;$i<count($are);$i++){
@@ -227,10 +232,11 @@
                           }
                         }
                       }else{
-                        echo "<option value=''>seleccione</option>
-                        <option value='Inicial'>Educación Inicial</option>
-                        <option value='Primaria'>Educación Primaria</option>
-                        <option value='Secundaria'>Educación Secundaria</option>
+                        echo "
+                        <option value='No Primaria'>Educación Primaria sin concluir</option>
+                        <option value='Primaria'>Educación Primaria concluido</option>
+                        <option value='No Secundaria'>Educación Secundaria sin concluir</option>
+                        <option value='Secundaria'>Educación Secundaria concluido</option>
                         <option value='Superior'>Educación Superior</option>";
                       }
 

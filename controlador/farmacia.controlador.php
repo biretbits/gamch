@@ -4,6 +4,11 @@ require_once '../modelo/usuario.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
+$abi = $ins->verificarSession();
+if($abi!='' and $abi=='cerrar'){
+  $ins->Destroy();
+  $ins->Redireccionar_inicio();
+}
 if(isset($_SESSION["tipo_usuario"])==""){
     $ins->Redireccionar_inicio();
 }
@@ -1122,7 +1127,7 @@ class FarmaciaControlador{
        $idsolicitado=$fa->insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$idSalida);
 
        if(is_numeric($idSalida) && is_numeric($idsolicitado)){
-         echo $idSalida.",".$idsolicitado;
+         echo $idSalida.",".$idsolicitado.",correctoEScORRECTO";
        }else{
          echo "error";
        }
@@ -1366,10 +1371,14 @@ class FarmaciaControlador{
       $fa =new Farmacia();
       $resul = $fa->ActualizarEntregaDePaciente($cod_salida);
       if($resul!=''){
-         $this->VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
+        echo "correcto";
       }else{
         echo "error";
       }
+    }
+
+    public function actualizarTablaSalida($cod_salida,$pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
+      $this->VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
     }
 
     public function BuscarDatospSolicitado($cod_salida){
@@ -1517,6 +1526,9 @@ class FarmaciaControlador{
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarEntrega"){
     $f->ActualizarEntregaApaciente($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarTabla"){
+    $f->actualizarTablaSalida($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="bfps"){
     $f->BuscarDatospSolicitado($_POST['cod_salida']);

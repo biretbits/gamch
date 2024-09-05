@@ -344,8 +344,10 @@ function Buscar(page){
           //alert(data+"dasdas");
           if(data == 'correcto'){
             Correcto();
-          }else{
+          }else if(data=='error'){
             Error1();
+          }else{//esto es cuando no llega ni error ni correcto u otro si no que esta viniendo despues de que el admin cerro su session
+            cod_generico='';
           }
           IRalLink(cod_generico);
         }
