@@ -82,7 +82,7 @@
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">Registro o Actualización de producto farmaceutico</h6>
+        <h6 class="modal-title" id="miModalRegistro">Registro o Actualización del historial del paciente</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -369,6 +369,7 @@
                   \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
                   ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\")'>
                   <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                    echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
                     //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                 echo "</div>";
               echo "</td>";
@@ -941,6 +942,31 @@ function GenerarReporte(){
          paciente_rd:paciente_rd,
          cod_historial:cod_his,
          cod_rd:cod_rd
+     };
+     for (var key in datos) {
+         if (datos.hasOwnProperty(key)) {
+             var input = document.createElement('input');
+             input.type = 'hidden';
+             input.name = key;
+             input.value = datos[key];
+             form.appendChild(input);
+         }
+     }
+   // Agregar el formulario al cuerpo del documento y enviarlo
+   document.body.appendChild(form);
+   form.submit();
+}
+function imprimir(cod_his){
+  var paciente_rd=document.getElementById("paciente_rd").value;
+  var cod_rd=document.getElementById("cod_rd").value;
+    var form = document.createElement('form');
+     form.method = 'post';
+     form.action = '../controlador/historial.controlador.php?accion=ihu'; // Coloca la URL de destino correcta
+     // Agregar campos ocultos para cada dato
+     var datos = {
+         paciente_rd:paciente_rd,
+         cod_historial:cod_his,
+         cod_rd:cod_rd,
      };
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {

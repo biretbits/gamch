@@ -452,8 +452,42 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
           }
 
     if(isset($_GET["accion"]) && $_GET["accion"]=="fa"){
-        $rd->visualizarFormPaciente($_POST["cod_rd"],$_POST["paciente_rd"],$_POST["buscar"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["fecha"]);
-    	}
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+         // Guardar los datos en la sesión en lugar de pasarlos por la URL
+           $_SESSION["cod_rd"]=$_POST["cod_rd"];
+           $_SESSION["paciente_rd"]=$_POST["paciente_rd"];
+           $_SESSION["buscar"]=$_POST["buscar"];
+           $_SESSION["pagina"]=$_POST["pagina"];
+           $_SESSION["listarDeCuanto"]=$_POST["listarDeCuanto"];
+           $_SESSION["fecha"]=$_POST["fecha"];
+
+           // Redirigir a la misma página sin pasar datos sensibles en la URL
+           header("Location: registroDiario.controlador.php?accion=fa");
+           exit();
+       }
+
+       // Recuperar los datos desde la sesión cuando se llega mediante GET
+       if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+           if (isset($_SESSION["cod_rd"])&&
+                isset($_SESSION["paciente_rd"])&&
+                isset($_SESSION["buscar"])&&
+                isset($_SESSION["pagina"])&&
+                isset($_SESSION["listarDeCuanto"])&&
+                isset($_SESSION["fecha"])) {
+               // Usar los datos almacenados en la sesión
+               $cod_rd=$_SESSION["cod_rd"];
+                $paciente_rd=$_SESSION["paciente_rd"];
+                $buscar=$_SESSION["buscar"];
+                $pagina=$_SESSION["pagina"];
+                $listarDeCuanto=$_SESSION["listarDeCuanto"];
+                $fecha=$_SESSION["fecha"];
+               // Llamar a la función que genera el reporte
+               $rd->visualizarFormPaciente($cod_rd,$paciente_rd,$buscar,$pagina,$listarDeCuanto,$fecha);
+           } else {
+               echo "Error: No hay datos para redireccionarles al formulario que esta solicitando.";
+           }
+       }
+      }
       if(isset($_GET["accion"]) && $_GET["accion"]=="rNpA"){
           		$rd->insertarActualizacionPaciente(
                 $_POST["cod_rd"],

@@ -12,7 +12,7 @@
   }
   #subtitulos{
     font-size: 12px;
-    background-color: #f8f9f9;
+    background-color: lightgray;
     font-weight: bold;
   }
   #datos{
@@ -30,18 +30,16 @@
   }
 
   #table1 {
-      position: relative;
-      width: 100%;
-      margin-top: 15px;
-      margin-left: 25px;
-      margin-bottom: 30px;
-  }
-  #tabla2 {
-      position: absolute;
-      margin-left: 60px;
-      width:26%;
-      top: 65%; /* Mueve la tabla desde la parte superior del contenedor */
-  }
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Espacio debajo de la primera tabla */
+}
+
+#tabla2 {
+    width: 50%;
+    margin-top: 24%;
+    border-collapse: collapse; /* Ajusta este valor para que la segunda tabla baje */
+}
 </style>
 <div class="container main-content">
 <div class="container">
@@ -68,7 +66,7 @@
 <?php
   if ($resul && count($resul) > 0){
       $i = 0;
-    foreach ($resul as $fi)
+    foreach ($resul as $fi){
           $datosResponsable = $fi['datos_responsable_familia'];
           $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
           $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
@@ -228,7 +226,7 @@
   <div class="row" id='cuadro'>
 
   </div><!--fin del segundo row-->
-  <?php } ?>
+<?php }} ?>
   </div>
 </div>
 

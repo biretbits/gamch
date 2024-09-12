@@ -37,7 +37,7 @@ header('Content-Disposition: inline; filename="reporte.pdf"');
 }
 #subtitulos{
   font-size: 12px;
-  background-color: #f8f9f9;
+  background-color: lightgray;
   font-weight: bold;
 }
 #datos{

@@ -391,6 +391,7 @@ function BuscarRegistrosDiarios(page){
       form.submit();
    }
    function editarpaciente(cod_rd,paciente,buscar,pagina,listarDeCuanto,fecha){
+
      var form = document.createElement('form');
       form.method = 'post';
       form.action = '../controlador/registroDiario.controlador.php?accion=fa'; // Coloca la URL de destino correcta

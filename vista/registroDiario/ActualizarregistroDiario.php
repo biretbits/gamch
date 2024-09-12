@@ -51,7 +51,7 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
-                <input type="date" class="form-control" id="fecha_nacimiento" placeholder="Ingresa tu Fecha de Nacimiento"
+                <input type="date" class="form-control" id="fecha_nacimiento" placeholder="Ingresa tu Fecha de Nacimiento" onchange="calcularEdad()"
                 value="<?php $msg = (isset($fe["fecha_nac_usuario"]) && is_string($fe["fecha_nac_usuario"])) ? $fe["fecha_nac_usuario"]:""; echo $msg; ?>">
               </div>
               <div class="col-md-4 mb-3">
@@ -318,7 +318,22 @@ function buscarResponsableAdmision() {
         	var cd_atencion = document.getElementById("cd_medico").value;
         	var cd_admision = document.getElementById("cd_admision").value;
         	var fechaderetornodeHistoria = document.getElementById("fechaderetornodeHistoria").value;
+          const hoy = new Date();
+          const fechaNacimiento = new Date(document.getElementById("fecha_nacimiento").value);
+          if (!fechaNacimiento.getTime()) {
+              fECHAnOVALIDO();
+              return;
+          }
+          if (fechaNacimiento > hoy) {
+              fECHAnOVALIDO();
+              return;
+          }
 
+          // Mostrar el resultado
+          if(edad < 0){
+            fECHAnOVALIDO();
+            return;
+          }
          	if(nombre==""||ap_usuario==""||am_usuario==""||fecha_nacimiento==""||direccion_usuario==""
           ||signos_sintomas==""||historiaclinica==""){
         		ingreseNPdatos();
@@ -466,7 +481,45 @@ function buscarResponsableAdmision() {
          document.body.appendChild(form);
          form.submit();
         }
+        //funcion que permite calcular la edad del paciente en tiempo real cuando seleccione su fecha de nacimiento
+        function calcularEdad(){
+          const hoy = new Date();
+          // Obtener la fecha de nacimiento del usuario
+          const fechaNacimiento = new Date(document.getElementById("fecha_nacimiento").value);
 
+          if (!fechaNacimiento.getTime()) {
+              fECHAnOVALIDO();
+              return;
+          }
+          if (fechaNacimiento > hoy) {
+              fECHAnOVALIDO();
+              return;
+          }
+          // Calcular la diferencia en años
+          let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+          const mes = hoy.getMonth() - fechaNacimiento.getMonth();
+
+          // Ajustar la edad si la fecha de cumpleaños aún no ha pasado este año
+          if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+              edad--;
+          }
+          // Mostrar el resultado
+          if(edad <0){
+            fECHAnOVALIDO();
+            return;
+          }
+          document.getElementById('edad').value = edad;
+        }
+
+        function fECHAnOVALIDO(){
+          Swal.fire({
+           icon: 'info',
+           title: '¡Error!',
+           text: '¡Por favor, selecciona una fecha de nacimiento válida.!',
+           showConfirmButton: false,
+           timer: 2000
+         });
+        }
 </script>
 
 <?php require ("../librerias/footeruni.php"); ?>

@@ -153,133 +153,161 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
           </tr>
         </thead>
         <tbody>";
+              if ($resul && count($resul) > 0){
+                  $i = 0;
+                foreach ($resul as $fi){
+                    echo "<tr>";
+                      echo "<td>".($i+1)."</td>";
+                      echo "<td>".$fi['fecha']."</td>";
+                      echo "<td>".$fi['zona_his']."</td>";
+                      $datosResponsable = $fi['datos_responsable_familia'];
+                      echo "<td>";
+                      $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
+                      $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
+                      $ci_resp = '';$nro_seguro_resp='';$nro_car_form_resp='';
+                      foreach ($datosResponsable as $resFamiliar) {
+                        $cod_resp=$resFamiliar["cod_usuario"];
+                        $nombre_resp = $resFamiliar["nombre_usuario_re"];
+                        $ap_resp = $resFamiliar["ap_usuario_re"];
+                        $am_resp = $resFamiliar["am_usuario_re"];
+                        $fecha_nac = $resFamiliar["fn_usuario_re"];
+                        $sexo_resp = $resFamiliar["sexo_usuario"];
+                        $ocupacion_resp=$resFamiliar["ocupacion_usuario"];$direccion_responsable=$resFamiliar['direccion_usuario_re'];
+                        $telefono_resposable=$resFamiliar["telefono_usuario_re"];$comunidad_responsable=$resFamiliar["comunidad_usuario_re"];
+                        $ci_resp = $resFamiliar['ci_usuario'];$nro_seguro_resp= $resFamiliar['nro_seguro_usuario'];
+                        $nro_car_form_resp= $resFamiliar['nro_car_form_usuario'];
+                        echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
 
-    if ($resul && count($resul) > 0){
-        $i = 0;
-      foreach ($resul as $fi){
-          echo "<tr>";
-            echo "<td>".($i+1)."</td>";
-            echo "<td>".$fi['fecha']."</td>";
-            echo "<td>".$fi['zona_his']."</td>";
-            $datosResponsable = $fi['datos_responsable_familia'];
-            echo "<td>";
-            foreach ($datosResponsable as $resFamiliar) {
-              echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
-            }
-            echo "</td>";
+                      }
+                      echo "</td>";
 
-            $datospaciente = $fi['paciente_rd_nombre'];
-            echo "<td>";
-            foreach ($datospaciente as $datos) {
-              echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
-            }
-            echo "</td>";
+                      $datospaciente = $fi['paciente_rd_nombre'];
+                      echo "<td>";
+                      $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
+                      $estado_civil_paciente = '';$escolaridad_paciente = '';
+                      foreach ($datospaciente as $datos) {
+                        $fecha_nac_paciente=$datos["fn_usuario_re"];
+                        $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
+                        $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
+                        echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
+                      }
+                      echo "</td>";
 
-            echo "<td>";
-              echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                echo "<button type='button' class='btn btn-info' title='Editar'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                  //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                      echo "<td>";
+                        echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                          echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
+                          onclick='ActualizarHistorial(".$fi['cod_his'].",".$fi['cod_rd'].",".$fi['paciente_rd']."
+                          ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
+                          ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",
+                          \"".$comunidad_responsable."\",\"".$ci_resp."\",\"".$nro_seguro_resp."\",\"".$nro_car_form_resp."\"
+                          ,\"".$fi["zona_his"]."\",
+                          \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
+                          ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\")'>
+                          <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                            echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+                            //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                        echo "</div>";
+                      echo "</td>";
 
+                    echo "</tr>";
+                    $i++;
+                  }
+                }else{
+                  echo "<tr>";
+                  echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+                  echo "</tr>";
+                }
+
+                echo "</tbody>
+              </table>
+              </div>
+            </div>
+          </div>";
+
+          if($TotalPaginas!=0){
+            $adjacents=1;
+            $anterior = "&lsaquo; Anterior";
+            $siguiente = "Siguiente &rsaquo;";
+        echo "<div class='row'>
+              <div class='col'>";
+
+            echo "<div class='d-flex flex-wrap flex-sm-row justify-content-between'>";
+              echo '<ul class="pagination">';
+                echo "pagina &nbsp;".$pagina."&nbsp;con&nbsp;";
+                  $total=$inicioList+$pagina;
+                  if($TotalPaginas > $num_filas_total){
+                    $TotalPaginas = $num_filas_total;
+                  }
+                echo '<li class="page-item active"><a class=" href="#"> '.($TotalPaginas).' </a></li> ';
+                echo " &nbsp;de&nbsp;".$num_filas_total." registros";
+              echo '</ul>';
+
+              echo '<ul class="pagination d-flex flex-wrap">';
+
+              // previous label
+              if ($pagina != 1) {
+                echo "<li class='page-item'><a class='page-link'  onclick=\"BuscarRegistrosHistorial(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
+              }
+              if($pagina==1) {
+                echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
+              } else if($pagina==2) {
+                echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosHistorial(1)\" class='page-link'>$anterior</a></li>";
+              }else {
+                echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosHistorial($pagina-1)\">$anterior</a></li>";
+
+              }
+              // first label
+              if($pagina>($adjacents+1)) {
+                echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"BuscarRegistrosHistorial(1)\">1</a></li>";
+              }
+              // interval
+              if($pagina>($adjacents+2)) {
+                echo"<li class='page-item'><a class='page-link'>...</a></li>";
+              }
+
+              // pages
+
+              $pmin = ($pagina>$adjacents) ? ($pagina-$adjacents) : 1;
+              $pmax = ($pagina<($TotalPaginas-$adjacents)) ? ($pagina+$adjacents) : $TotalPaginas;
+              for($i=$pmin; $i<=$pmax; $i++) {
+                if($i==$pagina) {
+                  echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
+                }else if($i==1) {
+                  echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"BuscarRegistrosHistorial(1)\">$i</a></li>";
+                }else {
+                  echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosHistorial(".$i.")\" class='page-link'>$i</a></li>";
+                }
+              }
+
+              // interval
+
+              if($pagina<($TotalPaginas-$adjacents-1)) {
+                echo "<li class='page-item'><a class='page-link'>...</a></li>";
+              }
+              // last
+
+              if($pagina<($TotalPaginas-$adjacents)) {
+                echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarRegistrosHistorial($TotalPaginas)\">$TotalPaginas</a></li>";
+              }
+              // next
+
+              if($pagina<$TotalPaginas) {
+                echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosHistorial($pagina+1)\">$siguiente</a></li>";
+              }else {
+                echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
+              }
+              if ($pagina != $TotalPaginas) {
+                echo "<li class='page-item'><a class='page-link' onclick=\"BuscarRegistrosHistorial($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
+              }
+
+              echo "</ul>";
               echo "</div>";
-            echo "</td>";
 
-          echo "</tr>";
-          $i++;
-        }
-      }else{
-        echo "<tr>";
-        echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
-        echo "</tr>";
-      }
-      echo "</tbody>
-    </table>
-    </div>
-  </div>
-</div>
-<?php";
-if($TotalPaginas!=0){
-  $adjacents=1;
-  $anterior = "&lsaquo; Anterior";
-  $siguiente = "Siguiente &rsaquo;";
-echo "<div class='row'>
-    <div class='col'>";
+        echo "</div>
+            </div>";
 
-  echo "<div class='d-flex flex-wrap flex-sm-row justify-content-between'>";
-    echo '<ul class="pagination">';
-      echo "pagina &nbsp;".$pagina."&nbsp;con&nbsp;";
-        $total=$inicioList+$pagina;
-        if($TotalPaginas > $num_filas_total){
-          $TotalPaginas = $num_filas_total;
-        }
-      echo '<li class="page-item active"><a class=" href="#"> '.($TotalPaginas).' </a></li> ';
-      echo " &nbsp;de&nbsp;".$num_filas_total." registros";
-    echo '</ul>';
+          }
 
-    echo '<ul class="pagination d-flex flex-wrap">';
-
-    // previous label
-    if ($pagina != 1) {
-      echo "<li class='page-item'><a class='page-link'  onclick=\"BuscarRegistrosHistorial(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
-    }
-    if($pagina==1) {
-      echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
-    } else if($pagina==2) {
-      echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosHistorial(1)\" class='page-link'>$anterior</a></li>";
-    }else {
-      echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosHistorial($pagina-1)\">$anterior</a></li>";
-
-    }
-    // first label
-    if($pagina>($adjacents+1)) {
-      echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"BuscarRegistrosHistorial(1)\">1</a></li>";
-    }
-    // interval
-    if($pagina>($adjacents+2)) {
-      echo"<li class='page-item'><a class='page-link'>...</a></li>";
-    }
-
-    // pages
-
-    $pmin = ($pagina>$adjacents) ? ($pagina-$adjacents) : 1;
-    $pmax = ($pagina<($TotalPaginas-$adjacents)) ? ($pagina+$adjacents) : $TotalPaginas;
-    for($i=$pmin; $i<=$pmax; $i++) {
-      if($i==$pagina) {
-        echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
-      }else if($i==1) {
-        echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"BuscarRegistrosHistorial(1)\">$i</a></li>";
-      }else {
-        echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarRegistrosHistorial(".$i.")\" class='page-link'>$i</a></li>";
-      }
-    }
-
-    // interval
-
-    if($pagina<($TotalPaginas-$adjacents-1)) {
-      echo "<li class='page-item'><a class='page-link'>...</a></li>";
-    }
-    // last
-
-    if($pagina<($TotalPaginas-$adjacents)) {
-      echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarRegistrosHistorial($TotalPaginas)\">$TotalPaginas</a></li>";
-    }
-    // next
-
-    if($pagina<$TotalPaginas) {
-      echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarRegistrosHistorial($pagina+1)\">$siguiente</a></li>";
-    }else {
-      echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
-    }
-    if ($pagina != $TotalPaginas) {
-      echo "<li class='page-item'><a class='page-link' onclick=\"BuscarRegistrosHistorial($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
-    }
-
-    echo "</ul>";
-    echo "</div>";
-
-    echo "</div>
-  </div>";
-
-  }
   }
 
   public function actualizarDatosHistorial($paciente_rd,$cod_rd,$cod_his,$listarDeCuanto,$pagina,$fecha){
@@ -424,6 +452,35 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
   }
   if(isset($_GET["accion"]) && $_GET["accion"] == 'grnth'){
     $hc->ImprimirReporte($_POST["fecha1"],$_POST["fecha2"],$_POST["paciente_rd"],$_POST["cod_historial"],$_POST["cod_rd"]);
+  }
+
+  if(isset($_GET["accion"]) && $_GET["accion"] == 'ihu'){
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+       // Guardar los datos en la sesión en lugar de pasarlos por la URL
+
+       $_SESSION['paciente_rd'] = $_POST["paciente_rd"];
+       $_SESSION['cod_historial'] = $_POST["cod_historial"];
+       $_SESSION['cod_rd'] = $_POST["cod_rd"];
+
+       // Redirigir a la misma página sin pasar datos sensibles en la URL
+       header("Location: historial.controlador.php?accion=ihu");
+       exit();
+   }
+
+   // Recuperar los datos desde la sesión cuando se llega mediante GET
+   if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+       if (isset($_SESSION['fecha1']) && isset($_SESSION['fecha2']) && isset($_SESSION['paciente_rd']) && isset($_SESSION['cod_historial']) && isset($_SESSION['cod_rd'])) {
+           // Usar los datos almacenados en la sesión
+
+           $paciente_rd = $_SESSION['paciente_rd'];
+           $cod_historial = $_SESSION['cod_historial'];
+           $cod_rd = $_SESSION['cod_rd'];
+           // Llamar a la función que genera el reporte
+           $hc->visualizarGeneradorDeReporte(false,false,$paciente_rd, $cod_historial, $cod_rd);
+       } else {
+           echo "Error: No hay datos para redireccionarles al formulario que esta solicitando.";
+       }
+   }
   }
 }else{
   $ins->Redireccionar_inicio();

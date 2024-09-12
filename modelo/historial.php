@@ -171,6 +171,13 @@ class Historial
       if($comunidad_responsable != "" && $si == 'si'){
         $sql.= " ,comunidad_usuario = '$comunidad_responsable'";
       }
+      if($ocupacion_responsable != "" && $si == 'no'){
+        $sql.= " ocupacion_usuario = '$ocupacion_responsable'";
+        $si = 'si';
+      }else
+      if($ocupacion_responsable != "" && $si == 'si'){
+        $sql.= " ,ocupacion_usuario = '$ocupacion_responsable'";
+      }
 
       if($ci != "" && $si == 'no'){
         $sql.= " ci_usuario = '$ci'";
