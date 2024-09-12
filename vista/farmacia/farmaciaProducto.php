@@ -91,9 +91,22 @@
                                  <div id="resultadoProducto" align='left' class='alert alert-light mb-0 py-0 border-0'>
                                  </div>
                                </div>
+
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Nro de lote</label>
+                                 <input type="number" class="form-control" id="lote" name='lote' placeholder="Nro de lote">
+                               </div>
                                <div class="mb-3">
                                  <label for="name" class="form-label">Cantidad</label>
                                  <input type="number" class="form-control" id="cantidad" name='cantidad' min='1' value='1' placeholder="Cantidad">
+                               </div>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Costo Unitario</label>
+                                 <input type="number" class="form-control" id="unitario" name='unitario' placeholder="Costo unitario">
+                               </div>
+                               <div class="mb-3">
+                                 <label for="name" class="form-label">Costo Total</label>
+                                 <input type="number" class="form-control" id="total" name='total' placeholder="Costo Total">
                                </div>
                                <div class="mb-3">
                                  <label for="vencimiento" class="form-label">Vencimiento</label>

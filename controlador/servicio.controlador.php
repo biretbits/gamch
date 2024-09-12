@@ -620,6 +620,8 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admin")
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="bfep"){
     $se->BuscarDatosServiciosPorEdad($_POST['fechai'],$_POST['fechaf'],$_POST['edadi'],$_POST['edadf']);
+  }else{
+    $ins->Redireccionar_inicio();
   }
 }else{
     //echo "<br><br><br><br><br>llllellglglglglglgllglg";

@@ -310,13 +310,49 @@ echo "<div class='row'>
     }
     return $ar; // Devolver el array completo fuera del bucle
   }
+
+  public function visualizarGeneradorDeReporte($fecha1,$fecha2,$paciente_rd,$cod_his,$cod_rd){
+    $rdi =new Historial();
+    $res = $rdi->SelectHistorialTodo($paciente_rd,$fecha1,$fecha2,$cod_his);
+    $resul = $this->Uniendo($res,$rdi);
+    require("../vista/historial/HistorialGenerarReporte.php");
+  }
+  public function ImprimirReporte($fecha1,$fecha2,$paciente_rd,$cod_his,$cod_rd){
+    $rdi =new Historial();
+    $res = $rdi->SelectHistorialTodo($paciente_rd,$fecha1,$fecha2,$cod_his);
+    $resul = $this->Uniendo($res,$rdi);
+    require("../vista/historial/ReporteHistorial.php");
+  }
 }
 
   $hc = new HistorialControlador();
 if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
 {
   if(isset($_GET["accion"]) && $_GET["accion"]=="vht"){
-		$hc->verTablaHistorial($_POST["paciente_rd"],$_POST["cod_rd"]);
+
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+         // Guardar los datos en la sesión en lugar de pasarlos por la URL
+         $_SESSION['paciente_rd'] = $_POST["paciente_rd"];
+         $_SESSION['cod_rd'] = $_POST["cod_rd"];
+
+         // Redirigir a la misma página sin pasar datos sensibles en la URL
+         header("Location: historial.controlador.php?accion=vht");
+         exit();
+     }
+
+     // Recuperar los datos desde la sesión cuando se llega mediante GET
+     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+         if (isset($_SESSION['paciente_rd'])  && isset($_SESSION['cod_rd'])) {
+             // Usar los datos almacenados en la sesión
+             $paciente_rd = $_SESSION['paciente_rd'];
+             $cod_rd = $_SESSION['cod_rd'];
+
+             // Llamar a la función que genera el reporte
+             $hc->verTablaHistorial($paciente_rd,$cod_rd);
+         } else {
+             echo "Error: No hay datos para redireccionarles al formulario que esta solicitando.";
+         }
+     }
 	}
 
   if(isset($_GET["accion"]) && $_GET["accion"]=="rhRyP"){
@@ -354,6 +390,40 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="aht"){
     $hc->actualizarDatosHistorial($_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_his"],$_POST["listarDeCuanto"],$_POST["pagina"],$_POST["fecha"]);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"] == 'grh'){
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+       // Guardar los datos en la sesión en lugar de pasarlos por la URL
+       $_SESSION['fecha1'] = $_POST["fecha1"];
+       $_SESSION['fecha2'] = $_POST["fecha2"];
+       $_SESSION['paciente_rd'] = $_POST["paciente_rd"];
+       $_SESSION['cod_historial'] = $_POST["cod_historial"];
+       $_SESSION['cod_rd'] = $_POST["cod_rd"];
+
+       // Redirigir a la misma página sin pasar datos sensibles en la URL
+       header("Location: historial.controlador.php?accion=grh");
+       exit();
+   }
+
+   // Recuperar los datos desde la sesión cuando se llega mediante GET
+   if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+       if (isset($_SESSION['fecha1']) && isset($_SESSION['fecha2']) && isset($_SESSION['paciente_rd']) && isset($_SESSION['cod_historial']) && isset($_SESSION['cod_rd'])) {
+           // Usar los datos almacenados en la sesión
+           $fecha1 = $_SESSION['fecha1'];
+           $fecha2 = $_SESSION['fecha2'];
+           $paciente_rd = $_SESSION['paciente_rd'];
+           $cod_historial = $_SESSION['cod_historial'];
+           $cod_rd = $_SESSION['cod_rd'];
+
+           // Llamar a la función que genera el reporte
+           $hc->visualizarGeneradorDeReporte($fecha1, $fecha2, $paciente_rd, $cod_historial, $cod_rd);
+       } else {
+           echo "Error: No hay datos para redireccionarles al formulario que esta solicitando.";
+       }
+   }
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"] == 'grnth'){
+    $hc->ImprimirReporte($_POST["fecha1"],$_POST["fecha2"],$_POST["paciente_rd"],$_POST["cod_historial"],$_POST["cod_rd"]);
   }
 }else{
   $ins->Redireccionar_inicio();

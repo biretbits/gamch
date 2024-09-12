@@ -38,7 +38,6 @@
          background: linear-gradient(45deg, #f06, #4a90e2, #50e3c2, #f5a623);
          background-clip: text;
          color: transparent;
-         text-shadow: 1px 2px 4px rgba(50, 0, 100, 0.3);
          animation: textAnimation 3s infinite linear;
 
      }

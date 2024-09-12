@@ -39,6 +39,24 @@ class Historial
     return $resul;
     mysqli_close($this->con);
   }
+  public function SelectHistorialTodo($cod_paciente='',$fechai=false,$fechaf=false,$cod_his=false){
+    // Verificar si $buscar tiene contenido
+    $sql = " select *from historial where  ";
+    if(is_numeric($cod_paciente)){
+      $sql.=" paciente_rd = $cod_paciente ";
+    }
+    if($cod_his != false){
+      $sql.=" and cod_his = $cod_his ";
+   }
+   //fecha solo para
+   if($fechai != false && $fechaf != false){
+    $sql.=" and (fecha >= '$fechai' and  fecha <= '$fechaf') ";
+  }
+    $resul = $this->con->query($sql);
+    // Retornar el resultado
+    return $resul;
+    mysqli_close($this->con);
+  }
 
   public function selectDatosUsuarios($id){
     $lis = "select * from usuario where cod_usuario = $id";

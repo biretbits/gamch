@@ -180,7 +180,7 @@
                     <option value="masculino">Masculino</option>
                     <option value="femenino">Femenino</option>
                     <option value="otro">Otro</option>
-                  
+
                   </select>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -272,6 +272,7 @@
           <form class="form-inline" >
             <input type="hidden" name="pagina1" id='pagina1' value="">
             <div class="row mb-3">
+              <input type="text" name="cod_historial_repor" id='cod_historial_repor' value="">
               <label for="fecha1" class="form-label">Fecha inicio</label>
               <div class="input-group">
                 <input type="date" id="fecha1" name="fecha1" value="<?php echo $fechaActual; ?>" class="form-control">
@@ -355,7 +356,6 @@
                 $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
                 echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
               }
-              echo $estado_civil_paciente."  ".$escolaridad_paciente;
               echo "</td>";
 
               echo "<td>";
@@ -909,6 +909,37 @@ function accionHitorialVer(){
      // Agregar campos ocultos para cada dato
      var datos = {
          paciente_rd:paciente_rd,
+         cod_rd:cod_rd
+     };
+     for (var key in datos) {
+         if (datos.hasOwnProperty(key)) {
+             var input = document.createElement('input');
+             input.type = 'hidden';
+             input.name = key;
+             input.value = datos[key];
+             form.appendChild(input);
+         }
+     }
+   // Agregar el formulario al cuerpo del documento y enviarlo
+   document.body.appendChild(form);
+   form.submit();
+}
+
+function GenerarReporte(){
+  var fecha1=document.getElementById("fecha1").value;
+  var fecha2=document.getElementById("fecha2").value;
+  var paciente_rd=document.getElementById("paciente_rd").value;
+  var cod_rd=document.getElementById("cod_rd").value;
+  var cod_his = document.getElementById("cod_historial_repor").value;
+    var form = document.createElement('form');
+     form.method = 'post';
+     form.action = '../controlador/historial.controlador.php?accion=grh'; // Coloca la URL de destino correcta
+     // Agregar campos ocultos para cada dato
+     var datos = {
+         fecha1:fecha1,
+         fecha2:fecha2,
+         paciente_rd:paciente_rd,
+         cod_historial:cod_his,
          cod_rd:cod_rd
      };
      for (var key in datos) {
