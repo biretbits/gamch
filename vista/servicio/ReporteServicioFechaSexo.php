@@ -146,8 +146,8 @@ if($fechai > $fechaf){
         <div style="clear:both;"></div>
 
         <div align='center'>
-          
-          <font align='center'><b>PACIENTES MASCULINOS</b></font><br>
+
+          <font align='center'><b>CANTIDAD DE PACIENTES MASCULINOS ATENDIDOS</b></font><br>
         </div>
 
         <table>
@@ -197,7 +197,7 @@ if($fechai > $fechaf){
 
         <div align='center'>
             <br>
-          <font align='center'><b>PACIENTES FEMENINOS</b></font>
+          <font align='center'><b>CANTIDAD DE PACIENTES FEMENINOS ATENDIDOS</b></font>
           <br>
         </div>
         <table>
@@ -222,6 +222,54 @@ if($fechai > $fechaf){
               if (mysqli_num_rows($servicios3) > 0) {
                   $k = 1;
                   while($fi=mysqli_fetch_array($servicios3)){
+                    echo "<tr>";
+                    echo "<td>".$k."</td>";
+
+                    echo "<td>".$ser[$fi['cod_servicio']]['nombre_servicio']."</td>";
+                    echo "<td>".$ser[$fi['cod_servicio']]['contar']."</td>";
+                    $suma+=$ser[$fi['cod_servicio']]['contar'];
+                    echo "</tr>";
+                    $k+=1;
+                  }
+                  echo "<tr>";
+                 echo "<td align='center' colspan='2'>Total Pacientes</td>"; // Asegúrate de que el número de columnas coincida con la tabla
+                 echo "<td>".$suma."</td>";
+                 echo "</tr>";
+                }else{
+                  echo "<tr>";
+                  echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+                  echo "</tr>";
+                }
+                 ?>
+            </tbody>
+        </table>
+        <div align='center'>
+            <br>
+          <font align='center'><b>CANTIDAD DE PACIENTES DE SEXO NO BINARIO ATENDIDOS</b></font>
+          <br>
+        </div>
+        <table>
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>Servicio</th>
+                <th>Pacientes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $ser = array();
+              while($fi=mysqli_fetch_array($servicios5))
+              {
+                $ser[$fi['cod_servicio']]=array('contar' =>0 ,'nombre_servicio'=> $fi['nombre_servicio']);
+              }
+              while($fi=mysqli_fetch_array($regDiario2)){
+                $ser[$fi['servicio_rd']]['contar']+=1;
+              }
+              $suma = 0;
+              if (mysqli_num_rows($servicios4) > 0) {
+                  $k = 1;
+                  while($fi=mysqli_fetch_array($servicios4)){
                     echo "<tr>";
                     echo "<td>".$k."</td>";
 

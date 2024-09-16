@@ -93,10 +93,10 @@
           </div>
           <div class="card-body">
             <form>
-              <input type="text" name="paciente_rd" id="paciente_rd" value="<?php $m = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd: ""; echo $m; ?>">
-              <input type="text" name="cod_rd" id="cod_rd" value="<?php $m = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:"";echo $m;  ?>">
-              <input type="text" name="cod_usuario" id = "cod_usuario" value="">
-              <input type="text" name="cod_historial"id='cod_historial' value="">
+              <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $m = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd: ""; echo $m; ?>">
+              <input type="hidden" name="cod_rd" id="cod_rd" value="<?php $m = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:"";echo $m;  ?>">
+              <input type="hidden" name="cod_usuario" id = "cod_usuario" value="">
+              <input type="hidden" name="cod_historial"id='cod_historial' value="">
               <div class="row">
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Nombre de Responsable</label>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Fecha de Nacimiento del Responsable</label>
-                  <input type="date" class="form-control" id="fecha_nacimiento_responsable" placeholder="Fecha de Nacimiento">
+                  <input type="date" class="form-control" id="fecha_nacimiento_responsable" placeholder="Fecha de Nacimiento" onchange="calcularEdad()">
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Sexo</label>
@@ -171,7 +171,7 @@
               <div class="row">
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Fecha de Nacimiento</label>
-                  <input type="date" class="form-control" id="fecha_nacimiento"  placeholder="Ingresa tu Fecha de Nacimiento"value="<?php $m = (isset($fecha_nac_paciente1))? $fecha_nac_paciente1: ""; echo $m; ?>">
+                  <input type="date" class="form-control" id="fecha_nacimiento"  placeholder="Ingresa tu Fecha de Nacimiento"value="<?php $m = (isset($fecha_nac_paciente1))? $fecha_nac_paciente1: ""; echo $m; ?>" disabled>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Sexo</label>
@@ -980,6 +980,45 @@ function imprimir(cod_his){
    // Agregar el formulario al cuerpo del documento y enviarlo
    document.body.appendChild(form);
    form.submit();
+}
+
+function calcularEdad(){
+  const hoy = new Date();
+  // Obtener la fecha de nacimiento del usuario
+  const fechaNacimiento = new Date(document.getElementById("fecha_nacimiento_responsable").value);
+
+  if (!fechaNacimiento.getTime()) {
+      fECHAnOVALIDO();
+      return;
+  }
+  if (fechaNacimiento > hoy) {
+      fECHAnOVALIDO();
+      return;
+  }
+  // Calcular la diferencia en años
+  let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+  const mes = hoy.getMonth() - fechaNacimiento.getMonth();
+
+  // Ajustar la edad si la fecha de cumpleaños aún no ha pasado este año
+  if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+      edad--;
+  }
+  // Mostrar el resultado
+  if(edad <0){
+    fECHAnOVALIDO();
+    return;
+  }
+}
+
+function fECHAnOVALIDO(){
+  document.getElementById("fecha_nacimiento_responsable").value='';
+  Swal.fire({
+   icon: 'info',
+   title: '¡Error!',
+   text: '¡Por favor, selecciona una fecha de nacimiento válida.!',
+   showConfirmButton: false,
+   timer: 2000
+ });
 }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

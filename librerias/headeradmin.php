@@ -319,9 +319,6 @@ input[type=number] {
                     hola ".$name."
                 </a>
                 <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
-                    <li class='nav-item ' title='Cerrar sesión' style='color:green'>
-                      <a class='nav-link text-info btn btn-outline-warning' href='#'>Editar</a>
-                    </li>
                     <li><hr class='dropdown-divider'></li>
                     <li class='nav-item ' title='Cerrar sesión' style='color:green'>
                       <a class='nav-link text-primary btn btn-outline-danger' href='controlador/logeo.controlador.php?accion=salir'><img src='imagenes/apagar.ico'style='height: 25px;width: 25px;'></a>

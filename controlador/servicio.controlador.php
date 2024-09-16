@@ -74,7 +74,11 @@ class ServicioControlador
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                 echo "<button type='button' class='btn btn-info' title='Editar' onclick='Actualizar_servicio(".$fi['cod_servicio'].",\"".$fi['nombre_servicio']."\",\"".$fi['descripcion_servicio']."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                  //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                if($fi["estado"]=='activo'){
+                  echo "<button type='button' class='btn btn-danger' title='Desactivar Servicio' onclick='accionBtnActivar(\"desactivo\",".$fi["cod_servicio"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                }else{
+                  echo "<button type='button' class='btn btn-danger' title='Activar Servicio' onclick='accionBtnActivar(\"activo\",".$fi["cod_servicio"].")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
+                }
                 echo "</div>";
               echo "</td>";
 
@@ -261,9 +265,14 @@ echo "</div>
 
     $servicios2 = $s->Selecionar_servicios();
     $servicios3 = $s->Selecionar_servicios();
+
+    $servicios4 = $s->Selecionar_servicios();
+    $servicios5 = $s->Selecionar_servicios();
+
     $fechai = '';$fechaf='';
     $regDiario =$re->seleccionarRegistrosDiarioPorSexo('masculino',$fechai,$fechaf);
     $regDiario1 =$re->seleccionarRegistrosDiarioPorSexo('femenino',$fechai,$fechaf);
+    $regDiario2 =$re->seleccionarRegistrosDiarioPorSexo('otro',$fechai,$fechaf);
     require("../vista/servicio/ServiciosFechaSexo.php");
   }
 
@@ -374,9 +383,12 @@ echo "</div>
 
         $servicios2 = $s->Selecionar_servicios();
         $servicios3 = $s->Selecionar_servicios();
+
+        $servicios4 = $s->Selecionar_servicios();
+        $servicios5 = $s->Selecionar_servicios();
         $regDiario =$re->seleccionarRegistrosDiarioPorSexo('masculino',$fechai,$fechaf);
         $regDiario1 =$re->seleccionarRegistrosDiarioPorSexo('femenino',$fechai,$fechaf);
-
+        $regDiario2 =$re->seleccionarRegistrosDiarioPorSexo('otro',$fechai,$fechaf);
         require("../vista/servicio/ReporteServicioFechaSexo.php");
       }
 
@@ -559,6 +571,12 @@ echo "</div>
         }
         echo "</div>";
     }
+
+    public function actualizarServicio($accion,$cod_servicio,$listarDeCuanto,$id_servicio,$pagina){
+      $s=new Servicio();
+      $s->modificarServicioActivoODESACTIVO($accion,$cod_servicio);
+      $this->VerServiciosTabla($pagina,$listarDeCuanto,$id_servicio);
+    }
 }
 $se =new ServicioControlador();
 if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admin")
@@ -576,6 +594,9 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admin")
   if(isset($_GET["accion"]) && $_GET["accion"] == "grser"){
     echo $_POST["id_servicio"];
     $se->GenerarReporte($_POST["id_servicio"]);
+  }
+  if(isset($_GET["accion"]) && $_GET["accion"]=="acser"){
+    $se->actualizarServicio($_POST["accion"],$_POST["cod_servicio"],$_POST["listarDeCuanto"],$_POST["id_servicio"],$_POST["pagina"]);
   }
 }else if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admision")
 {
@@ -621,6 +642,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admin")
   if(isset($_GET["accion"]) && $_GET["accion"]=="bfep"){
     $se->BuscarDatosServiciosPorEdad($_POST['fechai'],$_POST['fechaf'],$_POST['edadi'],$_POST['edadf']);
   }
+
   if(!isset($_GET["accion"])){
     $ins->Redireccionar_inicio();
   }

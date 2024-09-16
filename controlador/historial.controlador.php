@@ -469,7 +469,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
 
    // Recuperar los datos desde la sesión cuando se llega mediante GET
    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-       if (isset($_SESSION['fecha1']) && isset($_SESSION['fecha2']) && isset($_SESSION['paciente_rd']) && isset($_SESSION['cod_historial']) && isset($_SESSION['cod_rd'])) {
+       if (isset($_SESSION['paciente_rd']) && isset($_SESSION['cod_historial']) && isset($_SESSION['cod_rd'])) {
            // Usar los datos almacenados en la sesión
 
            $paciente_rd = $_SESSION['paciente_rd'];

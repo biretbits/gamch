@@ -29,7 +29,7 @@ class Servicio
   }
 
   public function Selecionar_servicios(){
-    $sql = "select *from servicio";
+    $sql = "select *from servicio where estado='activo'";
     $resul = $this->con->query($sql);
     // Retornar el resultado
     return $resul;
@@ -49,6 +49,11 @@ class Servicio
     // Retornar el resultado
     return $resul;
     mysqli_close($this->con);
+  }
+
+  public function modificarServicioActivoODESACTIVO($accion,$cod_servicio){
+    $sql="update servicio set estado='$accion' where cod_servicio=$cod_servicio";
+    $resul = $this->con->query($sql);
   }
 
 }

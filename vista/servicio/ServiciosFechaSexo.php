@@ -9,7 +9,7 @@ $_SESSION["diario"] = $RegistroDiario;?>
 </style>
 <div class="container main-content">
 <div class="container">
-  
+
    <div class="row">
      <div class="col-auto mb-2" style="color:gray">
        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" onclick="GenerarReportesServicio()">
@@ -129,6 +129,55 @@ $_SESSION["diario"] = $RegistroDiario;?>
            </div>  </div>";
 
       ?>
+
+         <h6 align='center'><b>CANTIDAD DE PACIENTES DE SEXO NO BINARIO ATENDIDOS</b>
+
+       </h6>
+      <?php
+          $ser = array();
+          while($fi=mysqli_fetch_array($servicios4))
+          {
+            $ser[$fi['cod_servicio']]=array('contar' =>0 ,'nombre_servicio'=> $fi['nombre_servicio']);
+          }
+          while($fi=mysqli_fetch_array($regDiario2)){
+            $ser[$fi['servicio_rd']]['contar']+=1;
+          }
+       ?>
+        <?php
+        $suma = 0;
+            echo "<div class='row'>
+                  <div class='col'>
+                    <div class='table-responsive'>
+                      <table class='table'>
+                        <thead style='font-size:12px'>
+                          <tr>
+                            <th>N°</th>
+                            <th>Servicio</th>
+                            <th>Pacientes</th>
+                          </tr>
+                        </thead>
+                        <tbody>";
+                        $k = 1;
+                        while($fi=mysqli_fetch_array($servicios5)){
+                          echo "<tr>";
+                          echo "<td>".$k."</td>";
+
+                          echo "<td>".$ser[$fi['cod_servicio']]['nombre_servicio']."</td>";
+                          echo "<td>".$ser[$fi['cod_servicio']]['contar']."</td>";
+                          $suma+=$ser[$fi['cod_servicio']]['contar'];
+                          echo "</tr>";
+                          $k+=1;
+                        }
+                        echo "<tr>";
+                        echo "<td align='center' colspan='2'>Total Pacientes</td>";
+                          echo "<td >".$suma."</td>";
+                        echo "</tr>";
+                echo "  </tbody>
+                  </table>
+                </div>
+              </div>  </div>";
+
+         ?>
     </div><!--sd-->
     </div>
  </div>

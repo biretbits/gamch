@@ -127,7 +127,7 @@
           </form>
         </div>
         <div class="card-footer text-muted">
-          © 2024 Centro de Salud
+          © Centro de Salud
         </div>
       </div>
     </div>
@@ -512,6 +512,7 @@ function buscarResponsableAdmision() {
         }
 
         function fECHAnOVALIDO(){
+          document.getElementById("fecha_nacimiento").value='';
           Swal.fire({
            icon: 'info',
            title: '¡Error!',

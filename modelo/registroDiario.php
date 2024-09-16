@@ -156,7 +156,7 @@ public function selectServicio($id){
 }
 
 public function seleccionarServicios(){
-  $lis = "select *from servicio";
+  $lis = "select *from servicio where estado='activo'";
   $resul = $this->con->query($lis);
   return $resul;
   mysqli_close($this->con);

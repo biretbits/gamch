@@ -42,7 +42,7 @@
 }
 </style>
 <div class="container main-content">
-<div class="container">
+<div class="container p-2">
   <input type="hidden" name="fecha1" id='fecha1' value="<?php $m = (isset($fecha1) && is_string($fecha1))?$fecha1:'';echo $m; ?>">
   <input type="hidden" name="fecha2" id='fecha2' value="<?php $m = (isset($fecha2) && is_string($fecha2))?$fecha2:'';echo $m; ?>">
   <input type="hidden" name="paciente_rd" id='paciente_rd' value="<?php $m = (isset($paciente_rd) && ($paciente_rd)!='')?$paciente_rd:'';echo $m; ?>">

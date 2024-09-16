@@ -115,13 +115,21 @@ class LogeoControlador{
 	if(isset($_GET["accion"])&&$_GET["accion"]=="salir"){
 		$lc->Drop_usuario();
 	}
-	if(isset($_GET["accion"])&&$_GET["accion"]=="ix")
-	{
-		$lc->v_index();
-	}
 	if(isset($_GET["accion"])&&$_GET["accion"]=="vsx")
 	{
 		$lc->validar_usuario_si_existe($_POST['usuario']);
+	}
+	if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]!=''){
+		if(isset($_GET["accion"])&&$_GET["accion"]=="ix")
+		{
+			$abi = $ins->verificarSession();
+			//echo "<br><br><br><br><br><br><br><br><br><br><br><br>".$abi;
+			if($abi!='' and $abi=='cerrar'){
+			  $ins->Destroy();
+			  //$ins->Redireccionar_inicio();
+			}
+			$ins->Redireccionar_inicio();
+		}
 	}
 
 ?>

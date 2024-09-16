@@ -26,10 +26,13 @@ class sesionControlador{
 				while($fi = mysqli_fetch_array($seRe)){
 						$session_id = $fi['session_id'];
 	        	// Eliminar la sesión en la base de datos
-						$us->eliminarSession($session_id);
-	        	// Destruir la sesión en el servidor
-	        	session_id($session_id);
-	        	session_destroy();
+						if($fi["session_end"]=='abierto'){
+							$us->eliminarSession($session_id);
+							// Destruir la sesión en el servidor
+							session_id($session_id);
+							session_destroy();
+							
+						}
 					}
 				}
 			}

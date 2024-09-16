@@ -35,6 +35,7 @@
     <h4>Servicios</h4>
     <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
     <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
+    <input type="hidden" name="paginas" id='paginas' value="">
     <div class="row align-items-center">
       <label for="selectList" class="form-label col-auto mb-2">Page</label>
       <div class="col-auto mb-2">
@@ -109,7 +110,11 @@
                 echo "<td>";
                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                     echo "<button type='button' class='btn btn-info' title='Editar' onclick='Actualizar_servicio(".$fi['cod_servicio'].",\"".$fi['nombre_servicio']."\",\"".$fi['descripcion_servicio']."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                      //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                    if($fi["estado"]=='activo'){
+                      echo "<button type='button' class='btn btn-danger' title='Desactivar Servicio' onclick='accionBtnActivar(\"desactivo\",".$fi["cod_servicio"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                    }else{
+                      echo "<button type='button' class='btn btn-danger' title='Activar Servicio' onclick='accionBtnActivar(\"activo\",".$fi["cod_servicio"].")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
+                    }
                   echo "</div>";
                 echo "</td>";
 
@@ -280,6 +285,8 @@ function buscar(paginacion){
   var obt_lis = document.getElementById("selectList").value;
   var listarDeCuanto = verificarList(obt_lis);
   var id_servicio = document.getElementById("id_servicio").value;
+  pagina = document.getElementById("paginas").value=paginacion;
+
   var datos = new FormData(); // Crear un objeto FormData vacío
   datos.append("paginacion",paginacion);
   datos.append("listarDeCuanto",listarDeCuanto);
@@ -335,6 +342,33 @@ function GenerarReportesServicio(){
  // Agregar el formulario al cuerpo del documento y enviarlo
  document.body.appendChild(form);
  form.submit();
+}
+function accionBtnActivar(accion,cod_servicio){
+    var obt_lis = document.getElementById("selectList").value;
+    var listarDeCuanto = verificarList(obt_lis);
+    var id_servicio = document.getElementById("id_servicio").value;
+    var pagina = document.getElementById("paginas").value;
+    if(pagina == ''){
+      pagina=1;
+    }
+    var datos = new FormData(); // Crear un objeto FormData vacío
+    datos.append("accion",accion);
+    datos.append("cod_servicio",cod_servicio);
+    datos.append("listarDeCuanto",listarDeCuanto);
+    datos.append("id_servicio",id_servicio);
+    datos.append("pagina",pagina);
+     //alert(id_servicio);
+     $.ajax({
+       url: "../controlador/servicio.controlador.php?accion=acser",
+       type: "POST",
+       data: datos,
+       contentType: false, // Deshabilitar la codificación de tipo MIME
+       processData: false, // Deshabilitar la codificación de datos
+       success: function(data) {
+       //alert(data+"dasdas");
+         $("#verDatos").html(data);
+       }
+     });
 }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

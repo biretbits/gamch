@@ -173,7 +173,11 @@ td,th{
                       echo "<td>".$fi['historial_clinico_rd'];
                       echo "</td>";
                       echo "<td>".$fi['admision_nombre']."</td>";
-                      echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
+                      if($fi["fecha_retorno_historia_rd"] == '0000-00-00' || $fi["fecha_retorno_historia_rd"] == ''){
+                        echo "<td></td>";
+                      }else{
+                        echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
+                      }
                     echo "</tr>";
                     $i++;
                   }
