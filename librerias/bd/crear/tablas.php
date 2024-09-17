@@ -829,11 +829,11 @@ function crearTablaUsuario($conn){
          `estado_civil_usuario`, `escolaridad_usuario`, `autoidentificacion_usuario`, `nro_seguro_usuario`, `nro_car_form_usuario`,
          `sexo_usuario`, `tipo_usuario`, `contrasena_usuario`, `cod_cds`, `estado`)
       VALUES
-        ('1', '7308752', 'encargado', 'Noelia', 'Mamani', 'Nina', '0000-00-00', '0', '78451256', 'calle La paz entre linares', 'Licenciada en enfermeria', 'enfermera', '', '', '', '', '', '', '', '', 'encargado', '$encoded_password1', '1', 'activo'),
-        ('2', '75451256', 'admision', 'Sandra', 'Huanca', 'Nina', '0000-00-00', '0', '63258974', 'calle brasil', 'medico', 'Pediatra', '', '', '', '', '', '', '', '', 'admision', '$encoded_password2', '1', 'activo'),
-        ('3', '75451256', 'medico', 'Salome', 'mamani', 'romina', '0000-00-00', '0', '63258974', 'calle brasil', 'medico', 'Pediatra', '', '', '', '', '', '', '', '', 'medico', '$encoded_password3', '1', 'activo'),
-        ('4', '72354512', 'admin', 'Carlos', 'Mamani', 'Lopes', '0000-00-00', '0', '63247512', 'calle ecuador en tre la paz', 'Ingeniero informatico', 'computacion', '', '', '', '', '', '', '', '', 'admin', '$encoded_password4', '1', 'activo'),
-        ('5', '78451245', 'mario', 'mario', 'diaz', 'mamani', '0000-00-00', '0', '63214578', 'calle oruro', 'farmaceutico', 'ninguna', '', '', '', '', '', '', '', '', 'farmacia', '$encoded_password5', '1', 'activo');
+        ('1', '7308752', 'encargado', 'Noelia', 'Mamani', 'Nina', null, '0', '78451256', 'calle La paz entre linares', 'Licenciada en enfermeria', 'enfermera', '', '', '', '', '', '', '', '', 'encargado', '$encoded_password1', '1', 'activo'),
+        ('2', '75451256', 'admision', 'Sandra', 'Huanca', 'Nina', null, '0', '63258974', 'calle brasil', 'medico', 'Pediatra', '', '', '', '', '', '', '', '', 'admision', '$encoded_password2', '1', 'activo'),
+        ('3', '75451256', 'medico', 'Salome', 'mamani', 'romina', null, '0', '63258974', 'calle brasil', 'medico', 'Pediatra', '', '', '', '', '', '', '', '', 'medico', '$encoded_password3', '1', 'activo'),
+        ('4', '72354512', 'admin', 'Carlos', 'Mamani', 'Lopes', null, '0', '63247512', 'calle ecuador en tre la paz', 'Ingeniero informatico', 'computacion', '', '', '', '', '', '', '', '', 'admin', '$encoded_password4', '1', 'activo'),
+        ('5', '78451245', 'mario', 'mario', 'diaz', 'mamani', null, '0', '63214578', 'calle oruro', 'farmaceutico', 'ninguna', '', '', '', '', '', '', '', '', 'farmacia', '$encoded_password5', '1', 'activo');
   ";
 
   // Ejecutar la consulta
