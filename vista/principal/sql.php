@@ -1,6 +1,6 @@
 <?php
 function conec(){
-  $cnmysql = mysqli_connect("localhost","root","","cds");
+  $cnmysql = mysqli_connect("localhost","root","1234","cds");
   if($cnmysql){
   	//echo"correcto";
     $cnmysql->set_charset("utf8mb4");

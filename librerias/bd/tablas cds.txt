@@ -171,3 +171,15 @@ subconsulta text,
 subrespuesta text,
 cod_cons int,
 foreign key(cod_cons)references consultas(cod_cons)on delete restrict on update restrict);
+
+
+para poner un tipo de autentificacion con contraseña
+mysql -u root -p 
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234';
+FLUSH PRIVILEGES;
+
+
+use centro;
+CREATE USER 'centro'@'localhost' IDENTIFIED BY '123';
+GRANT ALL PRIVILEGES ON cds.* TO 'centro'@'localhost';
+FLUSH PRIVILEGES;

@@ -4,7 +4,7 @@ crearDataBase();
 function crearDataBase(){
   $servername = "localhost"; // Cambia esto si tu servidor MySQL está en otro lugar
   $username = "root"; // Cambia esto a tu nombre de usuario de MySQL
-  $password = ""; // Cambia esto a tu contraseña de MySQL
+  $password = "1234"; // Cambia esto a tu contraseña de MySQL
   $dbname = "cds";
   $con1 = mysqli_connect($servername,$username,$password);
   if($con1){
