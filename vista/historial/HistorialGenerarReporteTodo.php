@@ -2,6 +2,27 @@
 ?>
 
 <style>
+.imagen-tamano-carta {
+          width: 100%;  /* Tamaño de hoja carta en pantallas grandes */
+          height: auto; /* Tamaño de hoja carta en pantallas grandes */
+          object-fit: cover; /* Ajustar la imagen para cubrir todo el contenedor */
+      }
+
+      /* Media query para hacer que la imagen sea más pequeña en pantallas medianas */
+      @media (max-width: 992px) { /* Para dispositivos medianos (tabletas, pantallas más pequeñas) */
+          .imagen-tamano-carta {
+              width: 70%; /* Ajusta el ancho al 70% del contenedor */
+              height: auto; /* Mantiene la proporción */
+          }
+      }
+
+      /* Media query para hacer que la imagen se ajuste a pantallas pequeñas */
+      @media (max-width: 576px) { /* Para dispositivos pequeños (teléfonos móviles) */
+          .imagen-tamano-carta {
+              width: 100%; /* Ocupa todo el ancho del contenedor */
+              height: auto; /* Mantiene la proporción */
+          }
+      }
   #subRayar {
     text-decoration: underline; /* Subraya el texto */
     text-decoration-color: #000; /* Color de la línea (opcional) */
@@ -67,7 +88,13 @@
 <?php
   if ($resul && count($resul) > 0){
       $i = 0;
+    $tipoDocumento = '';
+    $descripcion = "";
+    $ruta = "";
+    $nombre_imagen = "";
     foreach ($resul as $fi){
+        $tipoDocumento = $fi['tipoDato'];
+        if($tipoDocumento == 1){
           $datosResponsable = $fi['datos_responsable_familia'];
           $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
           $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
@@ -227,7 +254,25 @@
   <div class="row" id='cuadro'>
 
   </div><!--fin del segundo row-->
-<?php }} ?>
+<?php
+}else if($tipoDocumento == 2){
+  $descripcion = $fi["descripcion"];
+  $ruta = $fi["ruta_imagen"];
+  $nombre_imagen = $fi["nombre_imagen"];
+
+  ?>
+  <div class="row">
+    <div class="col-12">
+      <h5 align='center'><?php echo $descripcion; ?></h5>
+    </div>
+    <div class="">
+      <img src="<?php echo $ruta.$nombre_imagen; ?>" alt="Descripción de la imagen" class="img-fluid d-block mx-auto imagen-tamano-carta">
+    </div>
+  </div>
+  <?php
+  }
+  }
+}?>
   </div>
 </div>
 
@@ -508,6 +553,7 @@ function GenerarNuevoReporte(){
   var paciente_rd=document.getElementById("paciente_rd").value;
   var cod_rd=document.getElementById("cod_rd").value;
   var cod_his = document.getElementById("cod_historial_repor").value;
+  var tipoDato = document.getElementById("tipoDato").value;
     var form = document.createElement('form');
      form.method = 'post';
      form.action = '../controlador/historial.controlador.php?accion=grnth'; // Coloca la URL de destino correcta
@@ -517,7 +563,8 @@ function GenerarNuevoReporte(){
          hoja2:hoja2,
          paciente_rd:paciente_rd,
          cod_historial:cod_his,
-         cod_rd:cod_rd
+         cod_rd:cod_rd,
+         tipoDato:tipoDato
      };
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {

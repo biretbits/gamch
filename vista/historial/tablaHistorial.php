@@ -53,7 +53,27 @@
         '','','','','','',''
         ,'','','<?php echo $zona_his1; ?>','<?php echo $fecha_nac_paciente1; ?>','<?php echo $sexo_paciente1; ?>'
         ,'<?php echo $ocupacion_paciente1;?>','<?php echo $estado_civil_paciente1; ?>',
-        '<?php echo $escolaridad_paciente1; ?>','')">
+        '<?php echo $escolaridad_paciente1; ?>','')" <?php if(count($resul)>0){ echo "disabled";}else{echo "enabled";} ?>>
+          <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-auto mb-2" title="Registro de Consulta">
+      <div class="col-auto mb-2" title="Registro de Consulta">
+        <button type="button" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal"
+        data-bs-target="#ModalRegistroMotivoConsulta"
+        <?php if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?>>
+          <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-auto mb-2" title="Registro de Documentos">
+      <div class="col-auto mb-2" title="Registro de Documentos">
+        <button type="button" class="d-sm-inline-block btn btn-sm btn-info shadow-sm" data-bs-toggle="modal"
+        data-bs-target="#ModalRegistroDocumentos"
+        onclick="registroActualizarDocumentos()" <?php if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?>>
           <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
         </button>
       </div>
@@ -78,6 +98,96 @@
   // Obtener la fecha actual en formato YYYY-MM-DD
     $fechaActual = date('Y-m-d');
   ?>
+  <!--Modal de registro de motivos de consultas-->
+  <div class="modal fade" id="ModalRegistroMotivoConsulta" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="miModalRegistro">Registro o Actualización de motivo de consulta</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Contenido del modal -->
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-header">
+
+          </div>
+          <div class="card-body">
+            <form>
+              <input type="hidden" name="cod_usuario" id = "cod_usuario" value="">
+              <input type="hidden" name="cod_historial_consulta"id='cod_historial_consulta' value="">
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">IMC</label>
+                  <input type="text" class="form-control" id="imc" placeholder="Ingrese IMC">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">Temperatura</label>
+                  <input type="text" class="form-control" id="temperatura" placeholder="Ingrese la temperatura">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">F.C.</label>
+                  <input type="text" class="form-control" id="fc" placeholder="Ingrese fc">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">P.A.</label>
+                  <input type="text" class="form-control" id="pa" placeholder="Ingrese el pa">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">F.R.</label>
+                  <input type="text" class="form-control" id="fr" placeholder="Ingrese el fr">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label  class="form-label">Motivo de consulta</label>
+                  <textarea class='form-control' id='motivo_consulta'></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label  class="form-label">Subjetivo</label>
+                  <textarea class='form-control' id='subjetivo'></textarea>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">Telefono del Responsable</label>
+                  <input type="number" class="form-control" id="telefono_resposable" placeholder="Telefono">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">Comunidad del Responsable</label>
+                  <input type="text" class="form-control" id="comunidad_responsable" placeholder="Comunidad">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">C.I.</label>
+                  <input type="number" class="form-control" id="ci" placeholder="ci">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">Numero de Seguro</label>
+                  <input type="text" class="form-control" id="n_seguro" placeholder="Numero de Seguro">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">Numero de Carp Fam</label>
+                  <input type="text" class="form-control" id="n_carp_fam" placeholder="Numero Carp Fam">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label  class="form-label">Zona his</label>
+                  <input type="text" class="form-control" id="zona_his" placeholder="zona his"value="<?php $m = (isset($zona_his1))? $zona_his1: ""; echo $m; ?>">
+                </div>
+              </div>
+              </div>
+            </form>
+          </div>
+
+        </div><!--car fin 2-->
+      </div><!--fin del modal-->
+      <div class="modal-footer">
+        <button title='Guardar'type="button" class="btn btn-primary" onclick="RegistroHistorial()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'></button>
+       <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
+      </div>
+      </div>
+
+    </div>
+
+
+  <!--end-->
   <div class="modal fade" id="ModalRegistro" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
@@ -258,6 +368,51 @@
 
     </div>
   </div>
+<!--modal de registro de documentos-->
+<div class="modal fade" id="ModalRegistroDocumentos" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="miModalRegistro">REGISTRO O ACTUALIZACIÓN DE RECIBOS DEL PACIENTE EN IMAGEN</h6>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <!-- Contenido del modal -->
+    <div class="modal-body">
+      <div class="card">
+        <div class="card-header">
+          RECIBOS DEL PACIENTE EN IMAGEN
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <canvas id="CanvasImagen" hidden></canvas>
+              <input type="hidden" name="cod_historialD" id='cod_historialD' value="">
+              <input type="hidden"id="nombreImagen" name="nombreImagen" value="">
+              <input type="hidden"id='ruta_imagen' name="ruta_imagen" value="">
+              <div class="col-12">
+                <label  class="form-label">Nombre del archivo imagen</label>
+                <input type="text" class="form-control" id="nombre_imagen" name='nombre_imagen' placeholder="nombre del archivo">
+              </div>
+              <div class="col-12">
+                <label  class="form-label">Imagen</label>
+                <input type="file" class="form-control" id="imagenSelect" name='imagenSelect' placeholder="Seleccione la imagen"  accept=".jpg, .jpeg, .png">
+              </div>
+              <div class="col-12">
+                <canvas id="imageSeleccionado" align='center' width="300" height="330"></canvas>
+              </div>
+            </div>
+          </form>
+        </div>
+        </div>
+    </div><!--fin del modal-->
+    <div class="modal-footer">
+      <button title='Guardar'type="button" class="btn btn-primary" onclick="RegistroImagen()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'></button>
+     <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
+    </div>
+    </div>
+
+  </div>
+</div>
 
 
   <div class="modal fade" id="ModalReportePorFecha" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
@@ -273,20 +428,14 @@
             <input type="hidden" name="pagina1" id='pagina1' value="">
             <div class="row mb-3">
               <input type="text" name="cod_historial_repor" id='cod_historial_repor' value="">
-              <label for="fecha1" class="form-label">Fecha inicio</label>
+              <label for="fecha1" class="form-label">Mostrar desde la pagina hasta la pagina</label>
               <div class="input-group">
-                <input type="date" id="fecha1" name="fecha1" value="<?php echo $fechaActual; ?>" class="form-control">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label for="fecha1" class="form-label">Fecha final</label>
-              <div class="input-group">
-                <input type="date" id="fecha2" name="fecha2" value="<?php echo $fechaActual; ?>" class="form-control">
+                <input type="text" id="hoja" name="hoja" value="<?php echo $minHoja."-".$maxHoja; ?>" class="form-control">
               </div>
             </div>
             <div class="for-control alert alert-light">
               Nota:
-              Seleccione de que fecha a que fecha quiere generar reporte
+              Seleccione desde que hoja del historial quiere ver para imprimir
             </div>
           </form>
         </div>
@@ -309,7 +458,7 @@
             <tr>
               <th>N°</th>
               <th>Fecha</th>
-              <th>Zona</th>
+              <th>Descripción</th>
               <th>Responsable Familiar</th>
               <th>Paciente</th>
               <th>Acción</th>
@@ -324,7 +473,7 @@
             echo "<tr>";
               echo "<td>".($i+1)."</td>";
               echo "<td>".$fi['fecha']."</td>";
-              echo "<td>".$fi['zona_his']."</td>";
+              echo "<td>".$fi['descripcion']."</td>";
               $datosResponsable = $fi['datos_responsable_familia'];
               echo "<td>";
               $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
@@ -360,6 +509,12 @@
 
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                  if($fi["nombre_imagen"]!=""){
+                     echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
+                     onclick='actualizarImagen(".$fi['cod_his']."
+                    ,\"".$fi["descripcion"]."\",\"".$fi["nombre_imagen"]."\",\"".$fi["ruta_imagen"]."\")'>
+                    <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                  }else{
                   echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
                   onclick='ActualizarHistorial(".$fi['cod_his'].",".$fi['cod_rd'].",".$fi['paciente_rd']."
                   ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
@@ -369,7 +524,8 @@
                   \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
                   ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\")'>
                   <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                    echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+                  }
+                    echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
                     //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                 echo "</div>";
               echo "</td>";
@@ -656,7 +812,7 @@ $.ajax({
   contentType: false, // Deshabilitar la codificación de tipo MIME
   processData: false, // Deshabilitar la codificación de datos
   success: function(data) {
-//   alert(data+"dasdas");
+  // alert(data+"dasdas");
     data=$.trim(data);
   //  alert(data);
     if(data == "correcto"){
@@ -926,22 +1082,49 @@ function accionHitorialVer(){
    form.submit();
 }
 
+function validarFormatoDeHoja(hoja){
+  var numero = /^[+-]?\d+$/;
+
+  var regex = /^[0-9]+-[0-9]+$/;
+  // Verificar si el valor cumple con el formato
+  if (regex.test(hoja)) {
+      return true; // La validación es correcta
+  } else{
+      if(numero.test(hoja)){
+        return true;
+      }else{
+        AlertaUniversal('info','información',"Formato inválido. Debe ser en el formato '1-2'.");
+        return false; // La validación es incorrecta
+      }
+  }
+}
+
 function GenerarReporte(){
-  var fecha1=document.getElementById("fecha1").value;
-  var fecha2=document.getElementById("fecha2").value;
+  var hoja = document.getElementById("hoja").value;
+  var resultado = validarFormatoDeHoja(hoja);
+  if(resultado == false){
+    return;
+  }
+  var sep = hoja.split("-");
+  var hoja1 = sep[0];
+  var hoja2 = sep[1];
+  if(hoja1 != '' && typeof hoja2 === 'undefined'){
+    hoja2=hoja1;
+  }
   var paciente_rd=document.getElementById("paciente_rd").value;
   var cod_rd=document.getElementById("cod_rd").value;
   var cod_his = document.getElementById("cod_historial_repor").value;
-    var form = document.createElement('form');
+  var form = document.createElement('form');
      form.method = 'post';
      form.action = '../controlador/historial.controlador.php?accion=grh'; // Coloca la URL de destino correcta
      // Agregar campos ocultos para cada dato
      var datos = {
-         fecha1:fecha1,
-         fecha2:fecha2,
+         hoja1:hoja1,
+         hoja2:hoja2,
          paciente_rd:paciente_rd,
          cod_historial:cod_his,
-         cod_rd:cod_rd
+         cod_rd:cod_rd,
+         tipoDato:0
      };
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {
@@ -956,7 +1139,7 @@ function GenerarReporte(){
    document.body.appendChild(form);
    form.submit();
 }
-function imprimir(cod_his){
+function imprimir(cod_his,tipoDato){
   var paciente_rd=document.getElementById("paciente_rd").value;
   var cod_rd=document.getElementById("cod_rd").value;
     var form = document.createElement('form');
@@ -967,6 +1150,7 @@ function imprimir(cod_his){
          paciente_rd:paciente_rd,
          cod_historial:cod_his,
          cod_rd:cod_rd,
+         tipoDato:tipoDato
      };
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {
@@ -1019,6 +1203,162 @@ function fECHAnOVALIDO(){
    showConfirmButton: false,
    timer: 2000
  });
+}
+function registroActualizarConsulta(numero){
+    verificarSihayDatos(numero);
+}
+
+function verificarSihayDatos(numero){
+  alert(numero);
+}
+document.getElementById('imagenSelect').addEventListener('change', function() {
+  const fileInput = document.getElementById('imagenSelect');
+  const file = fileInput.files[0]; // Primer archivo seleccionado
+
+  if (file) {
+      // Crear un FileReader para leer el archivo
+      const reader = new FileReader();
+      // Cuando la lectura se haya completado
+      reader.onload = function(event) {
+          // El resultado en base64
+          const base64String = event.target.result;
+          const img = new Image();
+          img.src = base64String;
+          img.onload = function() {
+              const canvas = document.getElementById('imageSeleccionado');
+              const ctx = canvas.getContext('2d');
+              // Limpiar el canvas antes de dibujar
+              ctx.clearRect(0, 0, 300, 330);
+              // Dibujar la imagen en el canvas
+              ctx.drawImage(img, 0, 0, 300, 330);
+          };
+      };
+
+      // Leer el archivo como Data URL (Base64)
+      reader.readAsDataURL(file);
+  } else {
+      alert('Por favor selecciona una imagen primero');
+  }
+});
+
+//alert universal
+function AlertaUniversal(tipo,title,texto){
+  Swal.fire({
+   icon: tipo,
+   title: title,
+   text: texto,
+   showConfirmButton: false,
+   timer: 2000
+ });
+}
+//funcion para validar el tipo de archivo que se puede guardar
+function validarArchivo(id) {
+  const filePath = document.getElementById(id).value;
+  // Obtener la extensión del archivo
+  if (filePath.split('.').pop().toLowerCase() == 'jpg'||filePath.split('.').pop().toLowerCase() == 'jpeg'||filePath.split('.').pop().toLowerCase() == 'png') {
+      return true;
+  }
+return false;
+}
+//funcion para registrar imagenes
+function RegistroImagen(){
+  const fileInput = document.getElementById('imagenSelect');
+  const file = fileInput.files[0]; // Primer archivo seleccionado
+  var cod_his = document.getElementById("cod_historialD").value;
+  var formData = new FormData();
+  if(file){
+    var res = validarArchivo('imagenSelect');
+    if(res == false){
+      AlertaUniversal('info','información',"Por favor, Seleccione un archivo valido");
+      return;
+    }
+  }else{
+    if(cod_his != ''){
+
+    }else{
+      AlertaUniversal('error','Vacio',"Por favor, Seleccione un archivo");
+      return;
+    }
+  }
+    var nombre_imagen = document.getElementById("nombre_imagen").value;
+    var paciente_rd = document.getElementById("paciente_rd").value;
+    var cod_rd = document.getElementById("cod_rd").value;
+    var nombreImagen = document.getElementById("nombreImagen").value;
+    var ruta_imagen = document.getElementById("ruta_imagen").value;
+    formData.append('file', file);
+    formData.append('nombre_imagen',nombre_imagen);
+    formData.append("paciente_rd",paciente_rd);
+    formData.append("cod_rd",cod_rd);
+    formData.append("cod_historial",cod_his);
+    formData.append("nombreImagen",nombreImagen);
+    formData.append("ruta_imagen",ruta_imagen);
+    $.ajax({
+      url: "../controlador/historial.controlador.php?accion=rhdoc",
+      type: "POST",
+      data: formData,
+      contentType: false, // Deshabilitar la codificación de tipo MIME
+      processData: false, // Deshabilitar la codificación de datos
+      success: function(data) {
+        //alert(data);
+        data=$.trim(data);
+        if(data == "correcto"){
+          alertCorrecto();
+          setTimeout(() => {
+            document.getElementById("imagenSelect").value='';
+            document.getElementById("nombre_imagen").value='';
+            $('#ModalRegistroDocumentos').modal('hide');
+            ActualizarResultados();
+          }, 2000);
+        }else if(data == 'error'){
+          AlertaUniversal('error','¡Error!',"Ocurrio un error al realizar la acción.");
+        }else{
+          AlertaUniversal('info','información',data);
+        }
+      }
+    });
+
+}
+
+function ActualizarResultados(){
+  var pagina = document.getElementById("paginas").value;
+  if(pagina==''){pagina=1;}
+  var paciente_rd = document.getElementById("paciente_rd").value;
+  var cod_rd = document.getElementById("cod_rd").value;
+  var obt_lis = document.getElementById("selectList").value;
+  var listarDeCuanto = verificarList(obt_lis);
+  var formData = new FormData();
+  formData.append('fecha', "null");
+  formData.append('pagina',pagina);
+  formData.append("paciente_rd",paciente_rd);
+  formData.append("cod_rd",cod_rd);
+  formData.append("listarDeCuanto",listarDeCuanto);
+  $.ajax({
+    url: "../controlador/historial.controlador.php?accion=bht",
+    type: "POST",
+    data: formData,
+    contentType: false, // Deshabilitar la codificación de tipo MIME
+    processData: false, // Deshabilitar la codificación de datos
+    success: function(data) {
+        //alert(data);
+      $("#verDatos").html(data);
+    }
+  });
+}
+function actualizarImagen(cod_his,descripcion,nombre_imagen,ruta_imagen){
+  document.getElementById("cod_historialD").value=cod_his;
+  document.getElementById("nombre_imagen").value=descripcion;
+  document.getElementById("nombreImagen").value=nombre_imagen;
+  document.getElementById("ruta_imagen").value=ruta_imagen;
+  const img = new Image();
+  img.src = ruta_imagen+nombre_imagen;
+  img.onload = function() {
+      const canvas = document.getElementById('imageSeleccionado');
+      const ctx = canvas.getContext('2d');
+      // Limpiar el canvas antes de dibujar
+      ctx.clearRect(0, 0, 300, 330);
+      // Dibujar la imagen en el canvas
+      ctx.drawImage(img, 0, 0, 300, 330);
+  };
 }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

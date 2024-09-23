@@ -4,7 +4,7 @@ crearDataBase();
 function crearDataBase(){
   $servername = "localhost"; // Cambia esto si tu servidor MySQL está en otro lugar
   $username = "root"; // Cambia esto a tu nombre de usuario de MySQL
-  $password = "1234"; // Cambia esto a tu contraseña de MySQL
+  $password = ""; // Cambia esto a tu contraseña de MySQL
   $dbname = "cds";
   $con1 = mysqli_connect($servername,$username,$password);
   if($con1){
@@ -419,9 +419,25 @@ function crearTablaHistorial($conn){
     `paciente_rd` int(11) DEFAULT NULL,
     `cod_cds` int(11) DEFAULT NULL,
     `cod_responsable_familia_his` int(11) DEFAULT NULL,
-    `archivo` char(100) DEFAULT NULL,
+    `descripcion` char(255),
+    `nombre_imagen` VARCHAR(255) default null,
+    `ruta_imagen` VARCHAR(255) default null,
+    `hoja` int DEFAULT 0,
+    `imc` char(50) DEFAULT '',
+    `temp` char(50) DEFAULT '',
+    `fc` char(50) DEFAULT '',
+    `pa` char(50) DEFAULT '',
+    `fr` char(50) DEFAULT '',
+    `motivo_consulta` mediumtext,
+    `subjetivo` mediumtext,
+    `objetivo` mediumtext,
+    `analisis` mediumtext,
+    `tratamiento` mediumtext,
+    `evaluacion_de_seguimiento` mediumtext,
+    `cod_responsable_medico` int DEFAULT NULL,
     `fecha` date DEFAULT NULL,
     `hora` time DEFAULT NULL,
+    `tipoDato` int DEFAULT 0,
     `estado` char(20) DEFAULT NULL,
     PRIMARY KEY (`cod_his`),
     KEY `cod_rd` (`cod_rd`),
@@ -431,7 +447,8 @@ function crearTablaHistorial($conn){
     CONSTRAINT `historial_ibfk_1` FOREIGN KEY (`cod_rd`) REFERENCES `registro_diario` (`cod_rd`),
     CONSTRAINT `historial_ibfk_2` FOREIGN KEY (`paciente_rd`) REFERENCES `usuario` (`cod_usuario`),
     CONSTRAINT `historial_ibfk_3` FOREIGN KEY (`cod_cds`) REFERENCES `centro_de_salud` (`cod_cds`),
-    CONSTRAINT `historial_ibfk_4` FOREIGN KEY (`cod_responsable_familia_his`) REFERENCES `usuario` (`cod_usuario`)
+    CONSTRAINT `historial_ibfk_4` FOREIGN KEY (`cod_responsable_familia_his`) REFERENCES `usuario` (`cod_usuario`),
+    CONSTRAINT `historial_ibfk_5` FOREIGN KEY (`cod_responsable_medico`) REFERENCES `usuario` (`cod_usuario`)
   ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
   ";
 
@@ -800,6 +817,8 @@ function crearTablaUsuario($conn){
       `nro_seguro_usuario` char(150) DEFAULT NULL,
       `nro_car_form_usuario` char(200) DEFAULT NULL,
       `sexo_usuario` char(20) DEFAULT NULL,
+      `peso_usuario` decimal(10,2) DEFAULT NULL,
+      `talla_usuario` decimal(10,2) DEFAULT NULL,
       `tipo_usuario` char(60) DEFAULT NULL,
       `contrasena_usuario` char(250) DEFAULT NULL,
       `cod_cds` int(11) DEFAULT NULL,

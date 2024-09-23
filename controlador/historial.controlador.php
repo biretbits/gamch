@@ -18,6 +18,8 @@ class HistorialControlador{
             //calculamos el registro inicial
     $inicioList = ($pagina - 1) * $listarDeCuanto;
     // Verificar si la consulta devuelve resultados
+    $minHoja = $rdi->seleccionarhojaMinimo($cod_rd,$paciente_rd);
+    $maxHoja = $rdi->seleccionarhojaMaximo($cod_rd,$paciente_rd);
     $res = $rdi->SelectPorBusquedaHistorial(false,false,false,$paciente_rd,false,false);
     $resul = $this->Uniendo($res,$rdi);
     $resul7 = $this->Uniendo($res,$rdi);
@@ -38,9 +40,14 @@ class HistorialControlador{
             "cod_cds" => $fi["cod_cds"],
             "cod_responsable_familia_his" => $fi["cod_responsable_familia_his"],
             "datos_responsable_familia" => $rdi->selectDatosUsuarios($fi["cod_responsable_familia_his"]),
-            "archivo" => $fi["archivo"],
+            "cod_rd" => $fi["cod_rd"],
+            "paciente_rd" => $fi["paciente_rd"],
+            "descripcion" => $fi["descripcion"],
+            "nombre_imagen" => $fi["nombre_imagen"],
+            "ruta_imagen" => $fi["ruta_imagen"],
             "fecha" => $fi["fecha"],
             "hora" => $fi["hora"],
+            "tipoDato" => $fi["tipoDato"],
             "estado_h" => $fi["estado"]
           ];
 
@@ -129,6 +136,9 @@ public function buscarBDpacienteResponsable($nombre){
 }
 
 public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod_rd){
+  if($fecha == null || $fecha == '' || $fecha == 'null'){
+    $fecha = false;
+  }
   $rdi =new Historial();
   $resultodoUsuarios = $rdi->SelectPorBusquedaHistorial(false,false,$fecha,$paciente_rd,false,false);
   $num_filas_total = mysqli_num_rows($resultodoUsuarios);
@@ -146,7 +156,7 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
           <tr>
             <th>N°</th>
             <th>Fecha</th>
-            <th>Zona</th>
+            <th>Descripción</th>
             <th>Responsable Familiar</th>
             <th>Paciente</th>
             <th>Acción</th>
@@ -159,7 +169,7 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
                     echo "<tr>";
                       echo "<td>".($i+1)."</td>";
                       echo "<td>".$fi['fecha']."</td>";
-                      echo "<td>".$fi['zona_his']."</td>";
+                      echo "<td>".$fi['descripcion']."</td>";
                       $datosResponsable = $fi['datos_responsable_familia'];
                       echo "<td>";
                       $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
@@ -195,17 +205,24 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
 
                       echo "<td>";
                         echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                          echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
-                          onclick='ActualizarHistorial(".$fi['cod_his'].",".$fi['cod_rd'].",".$fi['paciente_rd']."
-                          ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
-                          ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",
-                          \"".$comunidad_responsable."\",\"".$ci_resp."\",\"".$nro_seguro_resp."\",\"".$nro_car_form_resp."\"
-                          ,\"".$fi["zona_his"]."\",
-                          \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
-                          ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\")'>
+                        if($fi["nombre_imagen"]!=""){
+                           echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
+                           onclick='actualizarImagen(".$fi['cod_his']."
+                          ,\"".$fi["descripcion"]."\",\"".$fi["nombre_imagen"]."\",\"".$fi["ruta_imagen"]."\")'>
                           <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                            echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
-                            //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                        }else{
+                        echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
+                        onclick='ActualizarHistorial(".$fi['cod_his'].",".$fi['cod_rd'].",".$fi['paciente_rd']."
+                        ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
+                        ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",
+                        \"".$comunidad_responsable."\",\"".$ci_resp."\",\"".$nro_seguro_resp."\",\"".$nro_car_form_resp."\"
+                        ,\"".$fi["zona_his"]."\",
+                        \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
+                        ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\")'>
+                        <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                        }
+                        echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+                      //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                         echo "</div>";
                       echo "</td>";
 
@@ -332,6 +349,7 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
             "archivo" => $fi["archivo"],
             "fecha" => $fi["fecha"],
             "hora" => $fi["hora"],
+            "tipoDato" => $fi["tipoDato"],
             "estado_h" => $fi["estado"]
           ];
         $ar[] = $entry; // Agregar la entrada al array principal
@@ -339,13 +357,85 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
     return $ar; // Devolver el array completo fuera del bucle
   }
 
-  public function visualizarGeneradorDeReporte($fecha1,$fecha2,$paciente_rd,$cod_his,$cod_rd){
+  public function visualizarGeneradorDeReporte($hoja1,$hoja2,$paciente_rd,$cod_his,$cod_rd,$tipoDato){
     $rdi =new Historial();
-    $res = $rdi->SelectHistorialTodo($paciente_rd,$fecha1,$fecha2,$cod_his);
+    $res = $rdi->SelectHistorialTodo($paciente_rd,$hoja1,$hoja2,$cod_his);
     $resul = $this->Uniendo($res,$rdi);
-    require("../vista/historial/HistorialGenerarReporte.php");
+    if($tipoDato == 1){
+      require("../vista/historial/HistorialGenerarReporte.php");
+    }else if($tipoDato == 2){
+      require("../vista/historial/HistorialGenerarDocumento.php");
+    }else{
+      require("../vista/historial/HistorialGenerarReporteTodo.php");
+    }
   }
-  public function ImprimirReporte($fecha1,$fecha2,$paciente_rd,$cod_his,$cod_rd){
+  public function ImprimirReporte($hoja1,$hoja2,$paciente_rd,$cod_his,$cod_rd,$tipoDato){
+    $rdi =new Historial();
+    $res = $rdi->SelectHistorialTodo($paciente_rd,$hoja1,$hoja2,$cod_his);
+    $resul = $this->Uniendo($res,$rdi);
+    if($tipoDato == 1){
+      require("../vista/historial/ReporteHistorial.php");
+    }else if($tipoDato == 2){
+      require("../vista/historial/ReporteHistorialDocumento.php");
+    }else{
+      require("../vista/historial/ReporteHistorialTodo.php");
+    }
+  }
+
+  public function insertarDocumentos($nombreImagenformulario,$fileTmpPath,$uploadDir,$fileName,$nombre_imagen,$paciente_rd,$cod_rd,$cod_his){
+    $rdi =new Historial();
+    if($fileTmpPath ==''){
+      //echo $fileTmpPath."   ".$uploadDir."    ".$fileName;
+      $resul = $rdi->insertandoDocumentos($uploadDir,$fileName,$nombre_imagen,$paciente_rd,$cod_rd,$cod_his);
+      if($resul != ''){
+        echo "correcto";
+      }else{
+        echo "error";
+      }
+    }else{
+      if($cod_his != '' && $fileTmpPath !=''){//hay que eliminar
+        //eliminar el archivo antiguo
+        $ruta =  $uploadDir.$nombreImagenformulario;
+        if (file_exists($ruta)) {
+          unlink($ruta);
+        }
+
+      }
+      $nuevoNombre=$this->generarNombreUnico($uploadDir,$fileName);
+      //echo $uploadDir."    ".$nuevoNombre;
+      $destination = $uploadDir.$nuevoNombre;
+
+      if (move_uploaded_file($fileTmpPath, $destination)) {
+        $resul = $rdi->insertandoDocumentos($uploadDir,$fileName,$nombre_imagen,$paciente_rd,$cod_rd,$cod_his);
+        if($resul != ''){
+          echo "correcto";
+        }else{
+          echo "error";
+        }
+      } else {
+          echo "Error al mover el archivo.";
+      }
+    }
+  }
+  // Función para generar un nombre único basado en si el archivo ya existe
+  function generarNombreUnico($directorio, $nombreArchivo) {
+      $archivo = pathinfo($nombreArchivo);
+      $nombreBase = $archivo['filename']; // Nombre sin la extensión
+      $extension = isset($archivo['extension']) ? '.' . $archivo['extension'] : ''; // Extensión (si existe)
+
+      $nombreNuevo = $nombreBase . $extension;
+      $contador = 1;
+
+      // Verifica si el archivo existe y si es así, sigue incrementando el número
+      while (file_exists($directorio . '/' . $nombreNuevo)) {
+          $nombreNuevo = $nombreBase . '(' . $contador . ')' . $extension;
+          $contador++;
+      }
+
+      return $nombreNuevo; // Retorna el nombre de archivo único
+  }
+
+  public function ImprimirReporteDocumento($fecha1,$fecha2,$paciente_rd,$cod_his,$cod_rd){
     $rdi =new Historial();
     $res = $rdi->SelectHistorialTodo($paciente_rd,$fecha1,$fecha2,$cod_his);
     $resul = $this->Uniendo($res,$rdi);
@@ -422,12 +512,12 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
   if(isset($_GET["accion"]) && $_GET["accion"] == 'grh'){
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
        // Guardar los datos en la sesión en lugar de pasarlos por la URL
-       $_SESSION['fecha1'] = $_POST["fecha1"];
-       $_SESSION['fecha2'] = $_POST["fecha2"];
+       $_SESSION['hoja1'] = $_POST["hoja1"];
+       $_SESSION['hoja2'] = $_POST["hoja2"];
        $_SESSION['paciente_rd'] = $_POST["paciente_rd"];
        $_SESSION['cod_historial'] = $_POST["cod_historial"];
        $_SESSION['cod_rd'] = $_POST["cod_rd"];
-
+       $_SESSION["tipoDato"] = $_POST["tipoDato"];
        // Redirigir a la misma página sin pasar datos sensibles en la URL
        header("Location: historial.controlador.php?accion=grh");
        exit();
@@ -435,23 +525,24 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
 
    // Recuperar los datos desde la sesión cuando se llega mediante GET
    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-       if (isset($_SESSION['fecha1']) && isset($_SESSION['fecha2']) && isset($_SESSION['paciente_rd']) && isset($_SESSION['cod_historial']) && isset($_SESSION['cod_rd'])) {
+       if (isset($_SESSION['hoja1']) && isset($_SESSION['hoja2']) && isset($_SESSION['paciente_rd']) && isset($_SESSION['cod_historial']) && isset($_SESSION['cod_rd']) && isset($_SESSION['tipoDato'])) {
            // Usar los datos almacenados en la sesión
-           $fecha1 = $_SESSION['fecha1'];
-           $fecha2 = $_SESSION['fecha2'];
+           $hoja1 = $_SESSION['hoja1'];
+           $hoja2 = $_SESSION['hoja2'];
            $paciente_rd = $_SESSION['paciente_rd'];
            $cod_historial = $_SESSION['cod_historial'];
            $cod_rd = $_SESSION['cod_rd'];
+           $tipoDato = $_SESSION["tipoDato"];
 
            // Llamar a la función que genera el reporte
-           $hc->visualizarGeneradorDeReporte($fecha1, $fecha2, $paciente_rd, $cod_historial, $cod_rd);
+           $hc->visualizarGeneradorDeReporte($hoja1, $hoja2, $paciente_rd, $cod_historial, $cod_rd,$tipoDato);
        } else {
            echo "Error: No hay datos para redireccionarles al formulario que esta solicitando.";
        }
    }
   }
   if(isset($_GET["accion"]) && $_GET["accion"] == 'grnth'){
-    $hc->ImprimirReporte($_POST["fecha1"],$_POST["fecha2"],$_POST["paciente_rd"],$_POST["cod_historial"],$_POST["cod_rd"]);
+    $hc->ImprimirReporte($_POST["hoja1"],$_POST["hoja2"],$_POST["paciente_rd"],$_POST["cod_historial"],$_POST["cod_rd"],$_POST["tipoDato"]);
   }
 
   if(isset($_GET["accion"]) && $_GET["accion"] == 'ihu'){
@@ -461,6 +552,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
        $_SESSION['paciente_rd'] = $_POST["paciente_rd"];
        $_SESSION['cod_historial'] = $_POST["cod_historial"];
        $_SESSION['cod_rd'] = $_POST["cod_rd"];
+       $_SESSION['tipoDato'] = $_POST["tipoDato"];
 
        // Redirigir a la misma página sin pasar datos sensibles en la URL
        header("Location: historial.controlador.php?accion=ihu");
@@ -475,13 +567,34 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
            $paciente_rd = $_SESSION['paciente_rd'];
            $cod_historial = $_SESSION['cod_historial'];
            $cod_rd = $_SESSION['cod_rd'];
+           $tipoDato = $_SESSION['tipoDato'];
            // Llamar a la función que genera el reporte
-           $hc->visualizarGeneradorDeReporte(false,false,$paciente_rd, $cod_historial, $cod_rd);
+           $hc->visualizarGeneradorDeReporte(false,false,$paciente_rd, $cod_historial, $cod_rd,$tipoDato);
        } else {
            echo "Error: No hay datos para redireccionarles al formulario que esta solicitando.";
        }
    }
   }
+  if(isset($_GET["accion"]) && $_GET["accion"] == 'rhdoc'){
+    if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
+         // Obtener información del archivo
+         $fileTmpPath = $_FILES["file"]["tmp_name"];
+         $fileName = $_FILES["file"]["name"];
+         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+         // Validar la extensión del archivo
+            // Especifica el directorio de destino para el archivo subido
+             $uploadDir = '../librerias/temp/Documentos/otrasConsultas/';
+            $hc->insertarDocumentos($_POST["nombreImagen"],$fileTmpPath,$uploadDir,basename($fileName),$_POST["nombre_imagen"],$_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_historial"]);
+
+    } else {
+      if(isset($_POST["cod_historial"]) && $_POST["cod_historial"]!=''){
+        $hc->insertarDocumentos($_POST["nombreImagen"],'',$_POST["ruta_imagen"],$_POST["nombreImagen"],$_POST["nombre_imagen"],$_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_historial"]);
+      }else{
+        echo "Error al subir el archivo.";
+      }
+    }
+  }
+
 }else{
   $ins->Redireccionar_inicio();
 }

@@ -31,7 +31,7 @@ class Historial
     $sql.=" and (fecha >= '$fechai' and  fecha <= '$fechaf') ";
   }
     if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
-      $sql.=" ORDER BY cod_his DESC LIMIT $listarDeCuanto OFFSET $inicioList ";
+      $sql.=" ORDER BY cod_his ASC LIMIT $listarDeCuanto OFFSET $inicioList ";
     }
 
     $resul = $this->con->query($sql);
@@ -39,7 +39,7 @@ class Historial
     return $resul;
     mysqli_close($this->con);
   }
-  public function SelectHistorialTodo($cod_paciente='',$fechai=false,$fechaf=false,$cod_his=false){
+  public function SelectHistorialTodo($cod_paciente='',$hoja1=false,$hoja2=false,$cod_his=false){
     // Verificar si $buscar tiene contenido
     $sql = " select *from historial where  ";
     if(is_numeric($cod_paciente)){
@@ -49,8 +49,8 @@ class Historial
       $sql.=" and cod_his = $cod_his ";
    }
    //fecha solo para
-   if($fechai != false && $fechaf != false){
-    $sql.=" and (fecha >= '$fechai' and  fecha <= '$fechaf') ";
+   if($hoja1 != false && $hoja2 != false){
+    $sql.=" and (hoja >= '$hoja1' and  hoja <= '$hoja2') ";
   }
     $resul = $this->con->query($sql);
     // Retornar el resultado
@@ -223,10 +223,11 @@ class Historial
     $sql = '';
 
     if(is_numeric($cod_his)){//actualizar historial
-      $sql ="update historial set zona_his='$zona_his',cod_responsable_familia_his=$cod_usuario,archivo='' where cod_his=$cod_his";
+      $sql ="update historial set zona_his='$zona_his',cod_responsable_familia_his=$cod_usuario where cod_his=$cod_his";
     }else{
-      $sql = "insert into historial(zona_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his,archivo,fecha,hora,estado)values(
-      '$zona_his',$cod_rd,$paciente_rd,1,$cod_usuario,'','$fechaActual','$horaActual','activo')";
+      $maxiHoja = $this->seleccionarMaximo($cod_rd,$paciente_rd);
+       $sql = "insert into historial(zona_his,cod_rd,paciente_rd,cod_cds,cod_responsable_familia_his,descripcion,hoja,fecha,hora,tipoDato,estado)values(
+      '$zona_his',$cod_rd,$paciente_rd,1,$cod_usuario,'Datos del paciente y responsable de familia',$maxiHoja,'$fechaActual','$horaActual',1,'activo')";
     }
     $res = $this->con->query($sql);   // Retornar el resultado
 
@@ -245,6 +246,78 @@ class Historial
      return $resul;
      mysqli_close($this->con);
    }
+
+   public function insertandoDocumentos($uploadDir, $fileName, $nombre_imagen, $paciente_rd, $cod_rd, $cod_his) {
+     // Escapar las entradas
+     $select = "select *from historial where cod_rd=$cod_rd and paciente_rd=$paciente_rd";
+     $res = $this->con->query($select);
+     $fila = mysqli_fetch_array($res);
+
+    $zona_his = $this->con->real_escape_string($fila["zona_his"]);
+    $cod_cds = $this->con->real_escape_string($fila["cod_cds"]);
+    $cod_responsable_familia_his = $this->con->real_escape_string($fila["cod_responsable_familia_his"]);
+
+     $cod_paciente = $this->con->real_escape_string($paciente_rd);
+     $cod_rd = $this->con->real_escape_string($cod_rd);
+     $cod_his = $this->con->real_escape_string($cod_his);
+     $uploadDir = $this->con->real_escape_string($uploadDir);
+     $fileName = $this->con->real_escape_string($fileName);
+     $nombre_imagen = $this->con->real_escape_string($nombre_imagen);
+     $fecha = $this->con->real_escape_string(date('Y-m-d'));
+     $hora = $this->con->real_escape_string(date('H:i:s')); // Cambiado 'm' por 'i' para los minutos
+
+     // Verificación de datos (opcional: imprimir para debugging)
+     //echo $cod_paciente . "  " . $cod_rd . "   " . $cod_his . "   " . $uploadDir . "   " . $fileName . "    " . $nombre_imagen . "    " . $fecha . "   " . $hora;
+     // Construir la consulta de inserción con actualización en caso de duplicado
+     $maxi = $this->seleccionarMaximo($cod_rd,$paciente_rd);
+     $sql = "INSERT INTO historial (
+                 cod_his,zona_his,cod_rd, paciente_rd,cod_cds,cod_responsable_familia_his,descripcion, nombre_imagen, ruta_imagen,hoja,fecha, hora,tipoDato, estado
+             ) VALUES (
+                 '$cod_his','$zona_his', '$cod_rd', '$cod_paciente','$cod_cds','$cod_responsable_familia_his','$nombre_imagen', '$fileName', '$uploadDir','$maxi', '$fecha', '$hora','2','activo'
+             ) ON DUPLICATE KEY UPDATE
+                zona_his = VALUES(zona_his),
+                 cod_rd = VALUES(cod_rd),
+                 paciente_rd = VALUES(paciente_rd),
+                 cod_cds = VALUES(cod_cds),
+                 cod_responsable_familia_his = VALUES(cod_responsable_familia_his),
+                 descripcion = VALUES(descripcion),
+                 nombre_imagen = VALUES(nombre_imagen),
+                 ruta_imagen = VALUES(ruta_imagen),
+                 fecha = VALUES(fecha),
+                 hora = VALUES(hora),
+                 tipoDato =VALUES(tipoDato),
+                 estado = VALUES(estado)";
+
+     // Ejecutar la consulta
+     $resul = $this->con->query($sql);
+     return $resul;
+ }
+
+function seleccionarMaximo($cod_rd,$paciente_rd){
+  $sql = "select max(hoja) from historial where cod_rd=$cod_rd and paciente_rd = $paciente_rd";
+  $resul = $this->con->query($sql);
+  $f = mysqli_fetch_array($resul);
+  if($f["max(hoja)"]==0 ||$f["max(hoja)"]==NULL || $f["max(hoja)"]==null){
+    return 1;
+  }else{
+    return $f["max(hoja)"]+1;
+  }
+}
+
+function seleccionarhojaMinimo($cod_rd,$paciente_rd){
+  $sql = "select min(hoja) from historial where cod_rd=$cod_rd and paciente_rd = $paciente_rd";
+  $resul = $this->con->query($sql);
+  $f = mysqli_fetch_array($resul);
+  return $f["min(hoja)"];
+}
+
+
+function seleccionarhojaMaximo($cod_rd,$paciente_rd){
+  $sql = "select max(hoja) from historial where cod_rd=$cod_rd and paciente_rd = $paciente_rd";
+  $resul = $this->con->query($sql);
+  $f = mysqli_fetch_array($resul);
+  return $f["max(hoja)"];
+}
 }
 
 

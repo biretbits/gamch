@@ -12,7 +12,6 @@
 					</center>
           <br>
             <form method="POST">
-
 							<div class='input-group'>
 								<input class="form-control" style="color:black" type="text"  id="usuario" name ="usuario" placeholder=" Nombre usuario" >
 									<span class='input-group-addon' id='grupo_user'></span>
@@ -93,6 +92,7 @@
         processData:false,
         success: function(r){
         //alert(r);
+
           r=$.trim(r);
           if(r == "admin"){
             alertCorrecto();
