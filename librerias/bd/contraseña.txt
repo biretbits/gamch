@@ -1,1 +1,19 @@
 F@rmac1a
+ALTER TABLE producto ADD COLUMN cod_forma INT;
+ALTER TABLE producto ADD COLUMN cod_conc INT;
+
+
+ALTER TABLE producto
+ADD CONSTRAINT fk_forma_id
+FOREIGN KEY (cod_forma) REFERENCES forma_presentacion(cod_forma)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
+
+ALTER TABLE producto
+ADD CONSTRAINT fk_conc_id
+FOREIGN KEY (cod_conc) REFERENCES conc_uni_med(cod_conc)
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
+
+alter table producto add column estado char(10);

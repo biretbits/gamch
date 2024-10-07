@@ -1,0 +1,6 @@
+1- No se muestra la imagen con dompdf
+  configuracion para imagenes de tipo png
+  ir a php.ini y habilitar
+  ;extension=gd
+  quitar el ;
+  y al realizar este paso ya se mostraran o visualizaran las imagenes

@@ -8,7 +8,7 @@
     <input type="hidden" name="cod_rd" id='cod_rd' value="<?php $m = (isset($cod_rd) && ($cod_rd)!='')?$cod_rd:'';echo $m; ?>">
     <input type="hidden" name="cod_historial_repor" id='cod_historial_repor' value="<?php $m = (isset($cod_his) && ($cod_his)!='')?$cod_his:'';echo $m; ?>">
     <input type="hidden" name="tipoDato" id='tipoDato' value="<?php $m = (isset($tipoDato) && ($tipoDato)!='')?$tipoDato:'';echo $m; ?>">
-
+    <input type="hidden" name="cod_his_original" id='cod_his_original' value="<?php $m = (isset($cod_his_original) && is_numeric($cod_his_original))?$cod_his_original:'';echo $m; ?>">
     <div class="row" >
       <div class="col-12">
         <hr>
@@ -46,6 +46,7 @@ function GenerarNuevoReporte(){
   var cod_rd=document.getElementById("cod_rd").value;
   var cod_his = document.getElementById("cod_historial_repor").value;
   var tipoDato = document.getElementById("tipoDato").value;
+  var cod_his_original = document.getElementById("cod_his_original").value;
     var form = document.createElement('form');
      form.method = 'post';
      form.action = '../controlador/historial.controlador.php?accion=grnth'; // Coloca la URL de destino correcta
@@ -56,7 +57,8 @@ function GenerarNuevoReporte(){
          paciente_rd:paciente_rd,
          cod_historial:cod_his,
          cod_rd:cod_rd,
-         tipoDato:tipoDato
+         tipoDato:tipoDato,
+         cod_his_original:cod_his_original
      };
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {

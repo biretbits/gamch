@@ -6,10 +6,12 @@
       $fecha_nac_paciente1 = $fi['fecha_nac_usuario'];$sexo_paciente1 = $fi["sexo_usuario"];$ocupacion_paciente1=$fi["ocupacion_usuario"];
       $estado_civil_paciente1 = $fi["estado_civil_usuario"];$escolaridad_paciente1 = $fi["escolaridad_usuario"];
       $zona_his1='';
+      $titulo_historial = '';
       if ($resul7 && count($resul7) > 0){
         $i = 0;
         foreach ($resul7 as $fi){
           $zona_his1 = $fi["zona_his"];
+          $titulo_historial = $fi["titulo"];
         }
       }
 
@@ -22,10 +24,11 @@
        <hr>
      </div>
    </div>
-  <h4>Historial Clinico</h4>
+  <h4>Historial Información <?php echo $titulo_historial; ?></h4>
   <input type="hidden" name="paginas" id='paginas' value="">
   <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
   <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
+  <input type="hidden" name="cod_his_original" id='cod_his_original' value="<?php $ms = (isset($cod_his_original) && is_numeric($cod_his_original))? $cod_his_original:""; echo $ms; ?>">
   <div class="row align-items-center">
     <label for="selectPage" class="form-label col-auto mb-2">Page</label>
     <div class="col-auto mb-2">
@@ -42,49 +45,39 @@
       </select>
     </div>
 
-
-    <div class="col-auto mb-2" title="Nuevo historial">
-      <button type="button" class="d-sm-inline-block btn btn-sm btn-secondary shadow-sm" data-bs-toggle="modal"
-        data-bs-target="#ModalReporteNuevoHistorial" onclick="actualizarhistorialNuevo('','','')">
-          <img src='../imagenes/nuevo_historial.png' style='height: 25px;width: 25px;'>
-      </button>
-    </div>
-
-    <!--<div class="col-auto mb-2" title="Registro de nuevo historial">
-      <div class="col-auto mb-2" title="Registrar o Actualizar">
+    <div class="col-auto mb-2" title="Registro de datos del paciente y responsable">
         <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal"
         data-bs-target="#ModalRegistro"
-        onclick="ActualizarHistorial('',<?php //echo $cod_rd; ?>,<?php //echo $paciente_rd; ?>,'','','','',
+        onclick="ActualizarHistorial('',<?php echo $cod_rd; ?>,<?php echo $paciente_rd; ?>,'','','','',
         '','','','','','',''
-        ,'','','<?php //echo $zona_his1; ?>','<?php //echo $fecha_nac_paciente1; ?>','<?php //echo $sexo_paciente1; ?>'
-        ,'<?php //echo $ocupacion_paciente1;?>','<?php //echo $estado_civil_paciente1; ?>',
-        '<?php //echo $escolaridad_paciente1; ?>','')" <?php //if(count($resul)>0){ echo "disabled";}else{echo "enabled";} ?>>
-          <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
+        ,'','','<?php echo $zona_his1; ?>','<?php echo $fecha_nac_paciente1; ?>','<?php echo $sexo_paciente1; ?>'
+        ,'<?php echo $ocupacion_paciente1;?>','<?php echo $estado_civil_paciente1; ?>',
+        '<?php echo $escolaridad_paciente1; ?>','')" <?php if(count($resul)>0){ echo "disabled";}else{echo "enabled";} ?>>
+          <img src='../imagenes/control.png' style='height: 25px;width: 25px;'>
         </button>
-      </div>
-    </div>-->
+    </div>
 
-    <!--<div class="col-auto mb-2" title="Registro de Consulta">
-      <div class="col-auto mb-2" title="Registro de Consulta">
+    <div class="col-auto mb-2" title="Registro de Consulta">
         <button type="button" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal"
         data-bs-target="#ModalRegistroMotivoConsulta"
-        <?php //if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?>>
+        <?php if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?>>
           <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
         </button>
-      </div>
-    </div>-->
+    </div>
 
     <div class="col-auto mb-2" title="Registro de archivo">
         <button type="button" class="d-sm-inline-block btn btn-sm btn-info shadow-sm" data-bs-toggle="modal"
         data-bs-target="#ModalRegistroDocumentos"
-         <?php if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?>
-        onclick="actualizarImagen('','','','','','')">
+        onclick="actualizarImagen('','','','')" <?php if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?>>
           <img src='../imagenes/file.png' style='height: 25px;width: 25px;'>
         </button>
     </div>
 
+    <div class="col-auto mb-2">
+      <input type="date" name="fecha" id="fecha" value="" class="form-control" onchange="BuscarRegistrosHistorial(1)">
+    </div>
     <div class="col-auto mb-2" title="Reporte">
-      <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm"  onclick="GenerarReporte()">
+      <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
         <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
       </button>
     </div>
@@ -92,12 +85,7 @@
       <!-- espacio vacío para mantener el diseño intacto -->
     </div>
     <div class="col mb-2">
-      <input type="date" class="form-control"name="fecha"id='fecha' value="" onchange="BuscarRegistrosHistorial(1)">
-    </div>
-
-    <div class="col-auto mb-2">
-      <input type="Text" name="buscar" id="buscar" value="" class="form-control" onkeyup="BuscarRegistrosHistorial(1)">
-    </div>
+      </div>
   </div>
   </div>
   <!-- modal para generar fechas desde seleccionar fechas -->
@@ -105,41 +93,6 @@
   // Obtener la fecha actual en formato YYYY-MM-DD
     $fechaActual = date('Y-m-d');
   ?>
-  <!--registrar un nuevo historial--->
-  <div class="modal fade" id="ModalReporteNuevoHistorial" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="miModalLabel">Registro o actualización de un nuevo Historial</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <!-- Contenido del modal -->
-        <div class="modal-body">
-          <div class="card">
-          <div class="card-body">
-          <form class="form-inline" >
-            <div class="row">
-              <input type="hidden" name="subnombre" id='subnombre' value="">
-              <input type="hidden" name="cod_his_his" id='cod_his_his' value="">
-
-              <div class="col-12 mb-3">
-                <label class="form-label">Nombre del historial</label>
-                <input type="text" class="form-control" id='nombre_historial' name="nombre_historial" placeholder="Ingrese el nombre del historial">
-              </div>
-            </div>
-          </div>
-          </div>
-          </form>
-        </div>
-        <!-- Pie de página del modal -->
-        <div class="modal-footer">
-          <button type="button"  class="btn btn-success" title = 'Registrar un nuevo Historial' onclick="RegistrarNuevoHistorial()"><img src='../imagenes/aceptar.ico' style='height: 25px;width: 25px;'> Guardar</button>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
-        </div>
-
-      </div>
-    </div>
-  </div>
 
   <!--Modal de registro de motivos de consultas-->
   <div class="modal fade" id="ModalRegistroMotivoConsulta" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
@@ -158,8 +111,8 @@
           <div class="card-body">
             <form>
 
-              <input type="hidden" name="cod_usuario_consulta"  id = "cod_usuario_medico" value="">
-              <input type="hidden" name="cod_historial_consulta" id='cod_historial_consulta' value="">
+              <input type="text" name="cod_usuario_consulta"  id = "cod_usuario_medico" value="">
+              <input type="text" name="cod_historial_consulta" id='cod_historial_consulta' value="">
               <div class="row">
 
                 <div class="col-md-4 mb-3">
@@ -453,8 +406,6 @@
             <div class="row">
               <canvas id="CanvasImagen" hidden></canvas>
               <input type="hidden" name="cod_historialD" id='cod_historialD' value="">
-              <input type="hidden" name="cod_historialOriginal" id='cod_historialOriginal'value="">
-              <input type="hidden" name="titulo_historial" id='titulo_historial' value="">
               <input type="hidden"id="nombreImagen" name="nombreImagen" value="">
               <input type="hidden"id='ruta_imagen' name="ruta_imagen" value="">
               <div class="col-12">
@@ -498,7 +449,7 @@
               <input type="text" name="cod_historial_repor" id='cod_historial_repor' value="">
               <label for="fecha1" class="form-label">Mostrar desde la pagina hasta la pagina</label>
               <div class="input-group">
-                <input type="text" id="hoja" name="hoja" value="<?php echo $minPag."-".$maxPag; ?>" class="form-control">
+                <input type="text" id="hoja" name="hoja" value="<?php echo $minHoja."-".$maxHoja; ?>" class="form-control">
               </div>
             </div>
             <div class="for-control alert alert-light">
@@ -526,30 +477,60 @@
             <tr>
               <th>N°</th>
               <th>Fecha</th>
-              <th>N° historial</th>
-              <th>Titulo</th>
+              <th>Historial</th>
+              <th>Descripción</th>
+              <th>Responsable Familiar</th>
               <th>Paciente</th>
               <th>Acción</th>
             </tr>
           </thead>
           <tbody>
-      <input type="hidden" name="paginaMax" id="paginaMax" value="<?php $ms = (isset($maxPag) && is_numeric($maxPag))? $maxPag:""; echo $ms; ?>">
-      <input type="hidden" name="paginaMin" id="paginaMin" value="<?php $ms = (isset($minPag) && is_numeric($minPag))? $minPag:""; echo $ms; ?>">
+
       <?php
       if ($resul && count($resul) > 0){
-          $i = 0;
-
+          $i = $inicioList;
         foreach ($resul as $fi){
             echo "<tr>";
               echo "<td>".($i+1)."</td>";
               echo "<td>".$fi['fecha']."</td>";
-              echo "<td>".$fi['titulo']."</td>";
-              if($fi["tipoHistorial"]=='tiene_herencia')
+              echo "<td>";
+              $datosHistorial = $fi["historial_dato"];
+              if($datosHistorial != '')
               {
-                echo "<td><a href='#'  onclick='verHistorial(".$fi["cod_his"].")'>".$fi['subtitulo']."</a></td>";
-              }else {
-                echo "<td>".$fi['subtitulo']."</td>";
+              foreach ($datosHistorial as $datt) {
+                echo $datt["subtitulo"];
               }
+            }else{
+              echo "";
+            }
+            echo "</td>";
+              echo "<td>".$fi['descripcion']."</td>";
+              $datosResponsable = $fi['datos_responsable_familia'];
+              echo "<td>";
+              $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
+              $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
+              $ci_resp = '';$nro_seguro_resp='';$nro_car_form_resp='';
+              if($datosResponsable != '')
+              {
+              foreach ($datosResponsable as $resFamiliar) {
+                $cod_resp=$resFamiliar["cod_usuario"];
+                $nombre_resp = $resFamiliar["nombre_usuario_re"];
+                $ap_resp = $resFamiliar["ap_usuario_re"];
+                $am_resp = $resFamiliar["am_usuario_re"];
+                $fecha_nac = $resFamiliar["fn_usuario_re"];
+                $sexo_resp = $resFamiliar["sexo_usuario"];
+                $ocupacion_resp=$resFamiliar["ocupacion_usuario"];$direccion_responsable=$resFamiliar['direccion_usuario_re'];
+                $telefono_resposable=$resFamiliar["telefono_usuario_re"];$comunidad_responsable=$resFamiliar["comunidad_usuario_re"];
+                $ci_resp = $resFamiliar['ci_usuario'];$nro_seguro_resp= $resFamiliar['nro_seguro_usuario'];
+                $nro_car_form_resp= $resFamiliar['nro_car_form_usuario'];
+                echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
+
+              }
+            }else{
+              echo "";
+            }
+              echo "</td>";
+
               $datospaciente = $fi['paciente_rd_nombre'];
               echo "<td>";
               $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
@@ -564,34 +545,36 @@
 
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  if($fi["tipoHistorial"]=='tiene_herencia')
-                  {//si el historial tiene herencia entonces se mostrara el boton editar y vidualizar la herencia
-                    echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalReporteNuevoHistorial' title='Editar'
-                     onclick='actualizarhistorialNuevo(".$fi['cod_his']."
-                    ,\"".$fi["subtitulo"]."\",\"".$fi["titulo"]."\")'>
+                  if($fi["nombre_imagen"]!=""){
+                     echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
+                     onclick='actualizarImagen(".$fi['cod_his_dat']."
+                    ,\"".$fi["descripcion"]."\",\"".$fi["nombre_imagen"]."\",\"".$fi["ruta_imagen"]."\")'>
                     <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                    echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalReporteNuevoHistorial' title='Vizualizar historial'
-                     onclick='verHistorial(".$fi['cod_his'].")'>
-                    <img src='../imagenes/ojo.ico' height='17' width='17' class='rounded-circle'></button>";
-
                   }else{
-                    $datoEs = $fi["datos"];
-                    $cod_his_dat='';$cod_rd='';$paciente_rd='';$cod_cds='';$zona_his='';
-                    $descripcion='';$hoja='';$nombre_imagen='';$ruta_imagen='';$tipoDato = '';
-                    foreach ($datoEs as $dimagen) {
-                      $cod_his_dat=$dimagen["cod_his_dat"];$cod_rd=$dimagen["cod_rd"];$paciente_rd=$dimagen["paciente_rd"];$cod_cds=$dimagen["cod_cds"];$zona_his=$dimagen["zona_his"];
-                      $descripcion=$dimagen["descripcion"];$hoja=$dimagen["hoja"];$nombre_imagen=$dimagen["nombre_imagen"];$ruta_imagen=$dimagen["ruta_imagen"];
-                      $tipoDato=$dimagen["tipoDato"];
+                    if($fi["tipoDato"]==1)
+                    {
+                      echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
+                      onclick='ActualizarHistorial(".$fi['cod_his_dat'].",".$fi['cod_rd'].",".$fi['paciente_rd']."
+                      ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
+                      ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",
+                      \"".$comunidad_responsable."\",\"".$ci_resp."\",\"".$nro_seguro_resp."\",\"".$nro_car_form_resp."\"
+                      ,\"".$fi["zona_his"]."\",
+                      \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
+                      ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\")'>
+                      <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                    }else if($fi["tipoDato"]==3){
+                      echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
+                      onclick='registroActualizarConsultaHistorial(".$fi['cod_his_dat'].",".$fi['cod_rd'].",".$fi['paciente_rd'].",".$fi["cod_cds"]."
+                      ,\"".$fi["zona_his"]."\",\"".$fi["cod_responsable_familia_his"]."\",\"".$fi["descripcion"]."\",".$fi["hoja"].",\"".$fi["paginas"]."\",\"".$imc."\"
+                      ,\"".$temp."\",\"".$fc."\",\"".$pa."\",
+                      \"".$fr."\",\"".$motivo_consulta."\",\"".$subjetivo."\",\"".$objetivo."\"
+                      ,\"".$fi["analisis"]."\",
+                      \"".$fi["tratamiento"]."\",\"".$fi["evaluacion_de_seguimiento"]."\",
+                      ".$fi["cod_responsable_medico"].",".$fi["cod_his"].")'>
+                      <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     }
-                    //si no se mostrar el boton de editar la imagen y imprimir la imagen
-                    echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-secondary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
-                    onclick='actualizarImagen(\"".$fi['cod_his']."\",\"".$cod_his_dat."\"
-                   ,\"".$descripcion."\",\"".$nombre_imagen."\",\"".$ruta_imagen."\",\"".$fi["titulo"]."\")'>
-                   <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                   echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$cod_his_dat.",\"".$tipoDato."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
-
                   }
-                    //echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+                    echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his_dat'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
                     //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                 echo "</div>";
               echo "</td>";
@@ -705,8 +688,8 @@ function BuscarRegistrosHistorial(page){
     var fecha = document.getElementById("fecha").value;
     var paciente_rd = document.getElementById("paciente_rd").value;
     var cod_rd = document.getElementById("cod_rd").value;
+    var cod_his_original = document.getElementById("cod_his_original").value;
     document.getElementById("paginas").value=page;
-    var buscar = document.getElementById("buscar").value;
     //ponerFechactualAlModalDeReporte(listarDeCuanto,buscar,page,fecha);
     var datos = new FormData(); // Crear un objeto FormData vacío
     datos.append('pagina', page);
@@ -714,9 +697,9 @@ function BuscarRegistrosHistorial(page){
     datos.append('fecha',fecha);
     datos.append("paciente_rd",paciente_rd);
     datos.append("cod_rd",cod_rd);
-    datos.append("buscar",buscar);
+    datos.append("cod_his_original",cod_his_original);
       $.ajax({
-        url: "../controlador/historial.controlador.php?accion=bht",
+        url: "../controlador/historial.controlador.php?accion=bhtdt",
         type: "POST",
         data: datos,
         contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -841,7 +824,7 @@ var ocupacion = document.getElementById("ocupacion").value;
 var fecha_de_consulta = document.getElementById("fecha_de_consulta").value;
 var estado_civil = document.getElementById("estado_civil").value;
 var escolaridad = document.getElementById("escolaridad").value;
-
+var cod_his_original = document.getElementById("cod_his_original").value;
 if(Nombre_responsable==""||ap_responsable==""||am_responsable==""||fecha_nacimiento_responsable==""||sexo_responsable==""
 ||ocupacion_responsable==""
 ||direccion_responsable==""||comunidad_responsable==""||ci==""||fecha_nacimiento==""
@@ -874,6 +857,7 @@ datos.append("fecha_de_consulta",fecha_de_consulta);
 datos.append("estado_civil",estado_civil);
 datos.append("escolaridad",escolaridad);
 datos.append("cod_historial",cod_historial);
+datos.append("cod_his_original",cod_his_original);
 $.ajax({
   url: "../controlador/historial.controlador.php?accion=rhRyP",
   type: "POST",
@@ -881,9 +865,10 @@ $.ajax({
   contentType: false, // Deshabilitar la codificación de tipo MIME
   processData: false, // Deshabilitar la codificación de datos
   success: function(data) {
-  // alert(data+"dasdas");
+  //alert(data+"dasdas");
     data=$.trim(data);
-  //  alert(data);
+  //alert(data);
+  //alert(cod_historial);
     if(data == "correcto"){
 
       //if(accion == 1){
@@ -916,7 +901,7 @@ function alertCorrecto(){
    });
 }
 function IRalLinkTablaRegistroDiario(cod_historial){
-  //alert(historial);
+  //alert(cod_historial);
   if(cod_historial!=''){
     setTimeout(() => {
       var pagina = document.getElementById("paginas").value;
@@ -927,7 +912,7 @@ function IRalLinkTablaRegistroDiario(cod_historial){
     }, 1500);
   }else{
     setTimeout(() => {
-      accionHitorialVer();
+      accionHitorialVerDenuevo();
         $('#ModalRegistro').modal('hide');
     }, 1500);
   }
@@ -1078,6 +1063,7 @@ function Convertir(t){
 */
 }
 function accionHitorialVer(paciente_rd,cod_rd){
+
     var form = document.createElement('form');
      form.method = 'post';
      form.action = '../controlador/historial.controlador.php?accion=vht'; // Coloca la URL de destino correcta
@@ -1127,16 +1113,19 @@ function vaciarCampos(){
    document.getElementById("estado_civil").value='';
    document.getElementById("escolaridad").value='';
 }
-function accionHitorialVer(){
+function accionHitorialVerDenuevo(){
     var paciente_rd=document.getElementById("paciente_rd").value;
     var cod_rd=document.getElementById("cod_rd").value;
+    var cod_his_original = document.getElementById("cod_his_original").value;
     var form = document.createElement('form');
      form.method = 'post';
-     form.action = '../controlador/historial.controlador.php?accion=vht'; // Coloca la URL de destino correcta
+     form.action = '../controlador/historial.controlador.php?accion=Vthdt'; // Coloca la URL de destino correcta
      // Agregar campos ocultos para cada dato
+     //alert(paciente_rd+"       "+cod_rd+"        "+cod_his_original);
      var datos = {
          paciente_rd:paciente_rd,
-         cod_rd:cod_rd
+         cod_rd:cod_rd,
+         cod_his_original:cod_his_original
      };
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {
@@ -1170,29 +1159,34 @@ function validarFormatoDeHoja(hoja){
 }
 
 function GenerarReporte(){
-  //var hoja = document.getElementById("hoja").value;
-  //var resultado = validarFormatoDeHoja(hoja);
-  /*if(resultado == false){
+  var hoja = document.getElementById("hoja").value;
+  var resultado = validarFormatoDeHoja(hoja);
+  if(resultado == false){
     return;
-  }*/
-  /*var sep = hoja.split("-");
+  }
+  var sep = hoja.split("-");
   var hoja1 = sep[0];
   var hoja2 = sep[1];
   if(hoja1 != '' && typeof hoja2 === 'undefined'){
     hoja2=hoja1;
-  }*/
+  }
   var paciente_rd=document.getElementById("paciente_rd").value;
   var cod_rd=document.getElementById("cod_rd").value;
   var cod_his = document.getElementById("cod_historial_repor").value;
+  var cod_his_original = document.getElementById("cod_his_original").value;
+  //alert(hoja1+"   "+hoja2);
   var form = document.createElement('form');
      form.method = 'post';
-     form.action = '../controlador/historial.controlador.php?accion=grh'; // Coloca la URL de destino correcta
+     form.action = '../controlador/historial.controlador.php?accion=grhdt'; // Coloca la URL de destino correcta
      // Agregar campos ocultos para cada dato
      var datos = {
+         hoja1:hoja1,
+         hoja2:hoja2,
          paciente_rd:paciente_rd,
          cod_historial:cod_his,
          cod_rd:cod_rd,
-         tipoDato:0
+         tipoDato:0,
+         cod_his_original:cod_his_original
      };
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {
@@ -1210,15 +1204,17 @@ function GenerarReporte(){
 function imprimir(cod_his,tipoDato){
   var paciente_rd=document.getElementById("paciente_rd").value;
   var cod_rd=document.getElementById("cod_rd").value;
+  var cod_his_original = document.getElementById("cod_his_original").value;
     var form = document.createElement('form');
      form.method = 'post';
-     form.action = '../controlador/historial.controlador.php?accion=ihu'; // Coloca la URL de destino correcta
+     form.action = '../controlador/historial.controlador.php?accion=ihure'; // Coloca la URL de destino correcta
      // Agregar campos ocultos para cada dato
      var datos = {
          paciente_rd:paciente_rd,
          cod_historial:cod_his,
          cod_rd:cod_rd,
-         tipoDato:tipoDato
+         tipoDato:tipoDato,
+         cod_his_original:cod_his_original
      };
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {
@@ -1348,14 +1344,13 @@ function RegistroImagen(){
       return;
     }
   }
+  //alert(cod_his);
     var nombre_imagen = document.getElementById("nombre_imagen").value;
-
     var paciente_rd = document.getElementById("paciente_rd").value;
     var cod_rd = document.getElementById("cod_rd").value;
     var nombreImagen = document.getElementById("nombreImagen").value;
     var ruta_imagen = document.getElementById("ruta_imagen").value;
-    var cod_his_original = document.getElementById("cod_historialOriginal").value;
-    var titulo_historial = document.getElementById("titulo_historial").value;
+    var cod_his_original = document.getElementById("cod_his_original").value;
     formData.append('file', file);
     formData.append('nombre_imagen',nombre_imagen);
     formData.append("paciente_rd",paciente_rd);
@@ -1363,18 +1358,17 @@ function RegistroImagen(){
     formData.append("cod_historial",cod_his);
     formData.append("nombreImagen",nombreImagen);
     formData.append("ruta_imagen",ruta_imagen);
-    formData.append("cod_his_original",cod_his_original);
-    //alert(cod_his_original+"    "+cod_his);
-    formData.append("tipoHistorial",'no_tiene_herencia');
-    formData.append("titulo_historial",titulo_historial);
+    formData.append("cod_historial_original",cod_his_original);
+    //alert(paciente_rd+"    "+cod_rd+"     "+cod_his_original);
+    //alert(cod_his);
     $.ajax({
-      url: "../controlador/historial.controlador.php?accion=rhdochd",
+      url: "../controlador/historial.controlador.php?accion=rhdoc",
       type: "POST",
       data: formData,
       contentType: false, // Deshabilitar la codificación de tipo MIME
       processData: false, // Deshabilitar la codificación de datos
       success: function(data) {
-        alert(data);
+        //alert(data);
         //console.log(data);
         data=$.trim(data);
         if(data == "correcto"){
@@ -1400,8 +1394,8 @@ function ActualizarResultados(){
   if(pagina==''){pagina=1;}
   var paciente_rd = document.getElementById("paciente_rd").value;
   var cod_rd = document.getElementById("cod_rd").value;
+  var cod_his_original = document.getElementById("cod_his_original").value;
   var obt_lis = document.getElementById("selectList").value;
-  var buscar = document.getElementById("buscar").value;
   var listarDeCuanto = verificarList(obt_lis);
   var formData = new FormData();
   formData.append('fecha', "null");
@@ -1409,9 +1403,9 @@ function ActualizarResultados(){
   formData.append("paciente_rd",paciente_rd);
   formData.append("cod_rd",cod_rd);
   formData.append("listarDeCuanto",listarDeCuanto);
-  formData.append("buscar",buscar);
+  formData.append("cod_historial",cod_his_original);
   $.ajax({
-    url: "../controlador/historial.controlador.php?accion=bht",
+    url: "../controlador/historial.controlador.php?accion=bhthd",
     type: "POST",
     data: formData,
     contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -1423,29 +1417,25 @@ function ActualizarResultados(){
     }
   });
 }
-function actualizarImagen(cod_his,cod_his_dat,descripcion,nombre_imagen,ruta_imagen,titulo){
-
-  document.getElementById("cod_historialD").value=cod_his_dat;
+function actualizarImagen(cod_his,descripcion,nombre_imagen,ruta_imagen){
+  document.getElementById("cod_historialD").value=cod_his;
   document.getElementById("nombre_imagen").value=descripcion;
   document.getElementById("nombreImagen").value=nombre_imagen;
   document.getElementById("ruta_imagen").value=ruta_imagen;
-  document.getElementById("cod_historialOriginal").value=cod_his;
-  document.getElementById("titulo_historial").value=titulo;
-
-  const img = new Image();
-  img.src = ruta_imagen+nombre_imagen;
-  const canvas = document.getElementById('imageSeleccionado');
-  const ctx = canvas.getContext('2d');
-  if(ruta_imagen!='' && nombre_imagen != ''){
-    img.onload = function() {
-        // Limpiar el canvas antes de dibujar
-        ctx.clearRect(0, 0, 300, 330);
-        // Dibujar la imagen en el canvas
-        ctx.drawImage(img, 0, 0, 300, 330);
-    };
-  }else{
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
+    const img = new Image();
+    img.src = ruta_imagen+nombre_imagen;
+    const canvas = document.getElementById('imageSeleccionado');
+    const ctx = canvas.getContext('2d');
+    if(ruta_imagen!='' && nombre_imagen != ''){
+      img.onload = function() {
+          // Limpiar el canvas antes de dibujar
+          ctx.clearRect(0, 0, 300, 330);
+          // Dibujar la imagen en el canvas
+          ctx.drawImage(img, 0, 0, 300, 330);
+      };
+    }else{
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 }
 
 function registrarHistorialConsulta(){
@@ -1469,6 +1459,7 @@ function registrarHistorialConsulta(){
   var cod_rd = document.getElementById("cod_rd").value;
   var fecha_consulta = document.getElementById("fecha_consulta").value;
   var hora_consulta = document.getElementById("hora_consulta").value;
+  var cod_his_original = document.getElementById("cod_his_original").value;
   var formData = new FormData();
   formData.append("talla",talla);
   formData.append("peso",peso);
@@ -1490,6 +1481,7 @@ function registrarHistorialConsulta(){
   formData.append("cod_rd",cod_rd);
   formData.append("fecha_consulta",fecha_consulta);
   formData.append("hora_consulta",hora_consulta);
+  formData.append("cod_his_original",cod_his_original);
   $.ajax({
     url: "../controlador/historial.controlador.php?accion=rcht",
     type: "POST",
@@ -1497,8 +1489,18 @@ function registrarHistorialConsulta(){
     contentType: false, // Deshabilitar la codificación de tipo MIME
     processData: false, // Deshabilitar la codificación de datos
     success: function(data) {
-      alert(data);
-      //$("#verDatos").html(data);
+
+      data=$.trim(data);
+      //  alert(data);
+        if(data == "correcto"){
+          alertCorrecto();
+          setTimeout(() => {
+            $('#ModalRegistroMotivoConsulta').modal('hide');
+            ActualizarResultados();
+          }, 2000);
+        }else {
+          error();
+        }
     }
   });
 }
@@ -1515,8 +1517,8 @@ function buscarMedico(){
       data: {nombre:nombre},
       dataType: "json",
       success: function(data) {
-        alert(data);
-        console.log(data);
+        //alert(data);
+        //console.log(data);
         if(data!=""){
           var unir="";
           for (let i = 0; i < data.length; i++) {
@@ -1580,7 +1582,6 @@ datos.append("cod_rd",cod_rd);
 datos.append("nombre_historial",nombre_historial);
 datos.append("subnombre",subnombre);
 datos.append("cod_his",cod_his_his);
-datos.append("tipoHistorial","tiene_herencia");
 $.ajax({
   url: "../controlador/historial.controlador.php?accion=rnnh",
   type: "POST",
@@ -1588,7 +1589,7 @@ $.ajax({
   contentType: false, // Deshabilitar la codificación de tipo MIME
   processData: false, // Deshabilitar la codificación de datos
   success: function(data) {
-  alert(data+"dasdas");
+  //alert(data+"dasdas");
     data=$.trim(data);
   //  alert(data);
     if(data == "correcto"){
@@ -1613,41 +1614,14 @@ $.ajax({
 });
 }
 
-function actualizarhistorialNuevo(cod_his,subtitulo,titulo){
-  document.getElementById("subnombre").value=titulo;
-  document.getElementById("cod_his_his").value=cod_his;
-  document.getElementById("nombre_historial").value=subtitulo;
-}
-
-function verHistorial(cod_historial){
-  var paciente_rd = document.getElementById("paciente_rd").value;
-  var cod_rd = document.getElementById("cod_rd").value;
-  var form = document.createElement('form');
-alert(cod_historial+"    "+cod_rd+"      "+paciente_rd);
-   form.method = 'post';
-   form.action = '../controlador/historial.controlador.php?accion=Vthdt'; // Coloca la URL de destino correcta
-   // Agregar campos ocultos para cada dato
-   var datos = {
-       paciente_rd:paciente_rd,
-       cod_his_original:cod_historial,
-       cod_rd:cod_rd
-   };
-   for (var key in datos) {
-       if (datos.hasOwnProperty(key)) {
-           var input = document.createElement('input');
-           input.type = 'hidden';
-           input.name = key;
-           input.value = datos[key];
-           form.appendChild(input);
-       }
-   }
- // Agregar el formulario al cuerpo del documento y enviarlo
- document.body.appendChild(form);
- form.submit();
-}
-
 function datosDeImpresion(){
-  document.getElementById("hoja").value=document.getElementById("paginaMin").value+"-"+document.getElementById("paginaMax").value;
+  document.getElementById("hoja").value=document.getElementById("hojaMin").value+"-"+document.getElementById("hojaMax").value;
+}
+
+function registroActualizarConsultaHistorial(cod_his_dat,cod_rd,paciente_rd,cod_cds
+,zona_his,cod_responsable_familia_his,descripcion,hoja,paginas,imc,temp,fc,pa,
+fr,motivo_consulta,subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimiento,cod_responsable_medico,cod_his){
+  
 }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

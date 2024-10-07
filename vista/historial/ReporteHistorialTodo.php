@@ -289,9 +289,13 @@ th {
           </div>
           <div class="image-container">
             <?php
-            $cdir = $ruta.$nombre_imagen;
-
-            $c = "data:image/jpg;base64," . base64_encode(file_get_contents($cdir));
+            $cdir = $ruta . $nombre_imagen;
+            //echo "Esto es ".$cdir." <br><br><br><br><br> ";
+             // Obtener la información de tipo MIME del archivo
+             $image_info = getimagesize($cdir);
+             $mime_type = $image_info['mime'];  // Devuelve algo como 'image/jpeg' o 'image/png'
+             // Codificar la imagen en base64
+             $c = "data:" . $mime_type . ";base64," . base64_encode(file_get_contents($cdir));
             ?>
             <img src="<?php echo $c; ?>" alt="No se encontro Imagen"  class="image">
           </div>

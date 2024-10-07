@@ -76,9 +76,9 @@
         $diario = $_SESSION["diario"];
         $_SESSION['this']=$tablahis;
 
-  //echo "<div id='color1'><a href='$diario'id='co'>Registro Diario</a>><a href='#'
-   //onclick='accionHitorialVer($paciente_rd,$cod_rd)'
-   //id='co'>Historial</a>><a href='#'id='co'>Reporte Historial</a>></div>"; ?>
+  echo "<div id='color1'><a href='$diario'id='co'>Registro Diario</a>><a href='#'
+   onclick='accionHitorialVer($paciente_rd,$cod_rd)'
+   id='co'>Historial</a>><a href='#'id='co'>Reporte Historial</a>></div>"; ?>
    <div class="row" >
      <div class="col-12">
        <hr>
@@ -557,7 +557,7 @@ function GenerarNuevoReporte(){
   var cod_his_original = document.getElementById("cod_his_original").value;
     var form = document.createElement('form');
      form.method = 'post';
-     form.action = '../controlador/historial.controlador.php?accion=grntht'; // Coloca la URL de destino correcta
+     form.action = '../controlador/historial.controlador.php?accion=grnthtt'; // Coloca la URL de destino correcta
      // Agregar campos ocultos para cada dato
      var datos = {
          hoja1:hoja1,

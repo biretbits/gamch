@@ -43,13 +43,14 @@ function crearDataBase(){
       crearTablaUsuario($conn);echo "<br>tabla4<br>";
       crearTablaRegistroDiario($conn);echo "<br>tabla5<br>";
       crearTablaHistorial($conn);echo "<br>tabla6<br>";
-      crearTablaFormaPresentacion($conn);echo "<br>tabla7<br>";
-      crearTablaUnidadMedidad($conn);echo "<br>tabla8<br>";
-      crearTablaProducto($conn);echo "<br>tabla9<br>";
-      crearTablaEntrada($conn);echo "<br>tabla10<br>";
-      crearTablaSalida($conn);echo "<br>tabla11<br>";
-      crearTablaProductoSolicitado($conn);echo "<br>tabla12<br>";
-      crearTablaSessiones($conn);echo "<br>tabla13<br>";
+      crearTablaHistorialDatos($conn); echo  "<br>tabla 7<br>";
+      crearTablaFormaPresentacion($conn);echo "<br>tabla8<br>";
+      crearTablaUnidadMedidad($conn);echo "<br>tabla9<br>";
+      crearTablaProducto($conn);echo "<br>tabla10<br>";
+      crearTablaEntrada($conn);echo "<br>tabla11<br>";
+      crearTablaSalida($conn);echo "<br>tabla12<br>";
+      crearTablaProductoSolicitado($conn);echo "<br>tabla13<br>";
+      crearTablaSessiones($conn);echo "<br>tabla14<br>";
 
 echo "Se completo las acciones correctamente, se creo todo";
   // Cerrar conexión
@@ -414,15 +415,59 @@ function crearTablaHistorial($conn){
   DROP TABLE IF EXISTS `historial`;
   CREATE TABLE `historial` (
     `cod_his` int(11) NOT NULL AUTO_INCREMENT,
-    `zona_his` char(70) DEFAULT NULL,
     `cod_rd` int(11) DEFAULT NULL,
     `paciente_rd` int(11) DEFAULT NULL,
     `cod_cds` int(11) DEFAULT NULL,
+    `hoja` int(11) DEFAULT NULL,
+    `titulo` char(100),
+    `subtitulo` char(100),
+    `tipoHistorial` char(15) DEFAULT NULL,
+    `fecha` date DEFAULT NULL,
+    `hora` time DEFAULT NULL,
+    `estado` char(20) DEFAULT NULL,
+    PRIMARY KEY (`cod_his`),
+    KEY `cod_rd` (`cod_rd`),
+    KEY `paciente_rd` (`paciente_rd`),
+    KEY `cod_cds` (`cod_cds`),
+    CONSTRAINT `historialh_ibfk_1` FOREIGN KEY (`cod_rd`) REFERENCES `registro_diario` (`cod_rd`),
+    CONSTRAINT `historialh_ibfk_2` FOREIGN KEY (`paciente_rd`) REFERENCES `usuario` (`cod_usuario`),
+    CONSTRAINT `historialh_ibfk_3` FOREIGN KEY (`cod_cds`) REFERENCES `centro_de_salud` (`cod_cds`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  ";
+echo "llego aquie";
+  // Ejecutar consulta
+  if ($conn->multi_query($sql)) {
+    echo "es aqui";
+      do {
+          // almacenar resultados si hay alguno
+          if ($result = $conn->store_result()) {
+              $result->free();
+          }
+          // imprimir errores
+          if ($conn->error) {
+              echo "Error: aaaaa" . $conn->error;
+          }
+      } while ($conn->more_results() && $conn->next_result());
+  } else {
+      echo "Error al ejecutar SQL: " . $conn->error;
+  }
+}
+
+function crearTablaHistorialDatos($conn){
+  $sql = "
+  DROP TABLE IF EXISTS `historial_dato`;
+  CREATE TABLE `historial_dato` (
+    `cod_his_dat` int(11) NOT NULL AUTO_INCREMENT,
+    `cod_rd` int(11) DEFAULT NULL,
+    `paciente_rd` int(11) DEFAULT NULL,
+    `cod_cds` int(11) DEFAULT NULL,
+    `zona_his` char(70) DEFAULT NULL,
     `cod_responsable_familia_his` int(11) DEFAULT NULL,
     `descripcion` char(255),
+    `hoja` int default 0,
+    `paginas` int default 0,
     `nombre_imagen` VARCHAR(255) default null,
     `ruta_imagen` VARCHAR(255) default null,
-    `hoja` int DEFAULT 0,
     `imc` char(50) DEFAULT '',
     `temp` char(50) DEFAULT '',
     `fc` char(50) DEFAULT '',
@@ -435,25 +480,30 @@ function crearTablaHistorial($conn){
     `tratamiento` mediumtext,
     `evaluacion_de_seguimiento` mediumtext,
     `cod_responsable_medico` int DEFAULT NULL,
+    `cod_his` int DEFAULT NULL,
     `fecha` date DEFAULT NULL,
     `hora` time DEFAULT NULL,
     `tipoDato` int DEFAULT 0,
     `estado` char(20) DEFAULT NULL,
-    PRIMARY KEY (`cod_his`),
+    PRIMARY KEY (`cod_his_dat`),
     KEY `cod_rd` (`cod_rd`),
     KEY `paciente_rd` (`paciente_rd`),
     KEY `cod_cds` (`cod_cds`),
     KEY `cod_responsable_familia_his` (`cod_responsable_familia_his`),
-    CONSTRAINT `historial_ibfk_1` FOREIGN KEY (`cod_rd`) REFERENCES `registro_diario` (`cod_rd`),
-    CONSTRAINT `historial_ibfk_2` FOREIGN KEY (`paciente_rd`) REFERENCES `usuario` (`cod_usuario`),
-    CONSTRAINT `historial_ibfk_3` FOREIGN KEY (`cod_cds`) REFERENCES `centro_de_salud` (`cod_cds`),
-    CONSTRAINT `historial_ibfk_4` FOREIGN KEY (`cod_responsable_familia_his`) REFERENCES `usuario` (`cod_usuario`),
-    CONSTRAINT `historial_ibfk_5` FOREIGN KEY (`cod_responsable_medico`) REFERENCES `usuario` (`cod_usuario`)
+    KEY `cod_responsable_medico` (`cod_responsable_medico`),
+    KEY `cod_his` (`cod_his`),
+    CONSTRAINT `historialDatos_ibfk_1` FOREIGN KEY (`cod_rd`) REFERENCES `registro_diario` (`cod_rd`),
+    CONSTRAINT `historialDatos_ibfk_2` FOREIGN KEY (`paciente_rd`) REFERENCES `usuario` (`cod_usuario`),
+    CONSTRAINT `historialDatos_ibfk_3` FOREIGN KEY (`cod_cds`) REFERENCES `centro_de_salud` (`cod_cds`),
+    CONSTRAINT `historialDatos_ibfk_4` FOREIGN KEY (`cod_responsable_familia_his`) REFERENCES `usuario` (`cod_usuario`),
+    CONSTRAINT `historialDatos_ibfk_5` FOREIGN KEY (`cod_responsable_medico`) REFERENCES `usuario` (`cod_usuario`),
+    CONSTRAINT `historialDatos_ibfk_6` FOREIGN KEY (`cod_his`) REFERENCES `historial` (`cod_his`)
   ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
   ";
 
   // Ejecutar consulta
   if ($conn->multi_query($sql)) {
+    echo "historial de documentos";
       do {
           // almacenar resultados si hay alguno
           if ($result = $conn->store_result()) {
