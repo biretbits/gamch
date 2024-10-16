@@ -13,6 +13,7 @@ header('Content-Disposition: inline; filename="reporte.pdf"');
   include("../librerias/globales.php");
  //echo $fechai."fi   ".$fechaf."ff   ".$buscar."b   ".$pagina."p   ".$listarDeCuanto."ldc" ; ?>
 <style media="screen">
+
 .salto-pagina {
    page-break-after: always;
  }

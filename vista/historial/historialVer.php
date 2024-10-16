@@ -3,6 +3,8 @@
       $diario = $_SESSION["diario"];
       $_SESSION['this']=$tablahis;
       $fi = mysqli_fetch_array($re);
+      $peso_paciente1 = $fi["peso_usuario"];
+      $talla_paciente1 = $fi["talla_usuario"];
       $fecha_nac_paciente1 = $fi['fecha_nac_usuario'];$sexo_paciente1 = $fi["sexo_usuario"];$ocupacion_paciente1=$fi["ocupacion_usuario"];
       $estado_civil_paciente1 = $fi["estado_civil_usuario"];$escolaridad_paciente1 = $fi["escolaridad_usuario"];
       $zona_his1='';
@@ -113,15 +115,16 @@
 
               <input type="text" name="cod_usuario_consulta"  id = "cod_usuario_medico" value="">
               <input type="text" name="cod_historial_consulta" id='cod_historial_consulta' value="">
+              <input type="text" name="cod_dat" id='cod_dat' value="">
               <div class="row">
 
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Talla</label>
-                  <input type="number" class="form-control" id="talla" placeholder="Ingrese la talla">
+                  <input type="number" class="form-control" id="talla" value='<?php $ms = (isset($talla_paciente1) && ($talla_paciente1)!='')? $talla_paciente1:""; echo $ms; ?>' placeholder="Ingrese la talla">
                 </div>
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Peso</label>
-                  <input type="number" class="form-control" id="peso" placeholder="Ingrese el peso">
+                  <input type="number" class="form-control" id="peso" value='<?php $ms = (isset($peso_paciente1) && ($peso_paciente1)!='')? $peso_paciente1:""; echo $ms; ?>' placeholder="Ingrese el peso">
                 </div>
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">IMC</label>
@@ -534,12 +537,13 @@
               $datospaciente = $fi['paciente_rd_nombre'];
               echo "<td>";
               $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
-              $estado_civil_paciente = '';$escolaridad_paciente = '';
+              $estado_civil_paciente = '';$escolaridad_paciente = '';$peso_paciente='';$talla_paciente='';
               foreach ($datospaciente as $datos) {
                 $fecha_nac_paciente=$datos["fn_usuario_re"];
                 $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
                 $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
                 echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
+                $peso_paciente = $datos["peso_usuario"];$talla_paciente = $datos["talla_usuario"];
               }
               echo "</td>";
 
@@ -563,14 +567,21 @@
                       ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\")'>
                       <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     }else if($fi["tipoDato"]==3){
-                      echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
-                      onclick='registroActualizarConsultaHistorial(".$fi['cod_his_dat'].",".$fi['cod_rd'].",".$fi['paciente_rd'].",".$fi["cod_cds"]."
-                      ,\"".$fi["zona_his"]."\",\"".$fi["cod_responsable_familia_his"]."\",\"".$fi["descripcion"]."\",".$fi["hoja"].",\"".$fi["paginas"]."\",\"".$imc."\"
-                      ,\"".$temp."\",\"".$fc."\",\"".$pa."\",
-                      \"".$fr."\",\"".$motivo_consulta."\",\"".$subjetivo."\",\"".$objetivo."\"
+                      $nombre_medico = '';$apellidoP='';$apellidoM='';
+                      foreach ($fi["datos_responsable_medico"] as $da) {
+                        $nombre_medico = $da["nombre_usuario_re"];
+                        $apellidoP = $da["ap_usuario_re"];
+                        $apellidoM = $da["am_usuario_re"];
+                      }
+                      $unir = $nombre_medico." ".$apellidoP." ".$apellidoM;
+                      echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroMotivoConsulta' title='Editar'
+                      onclick='registroActualizarConsultaHistorial(\"".$peso_paciente."\",\"".$talla_paciente."\",".$fi['cod_his_dat'].",".$fi['cod_rd'].",".$fi['paciente_rd'].",".$fi["cod_cds"]."
+                      ,\"".$fi["zona_his"]."\",\"".$fi["cod_responsable_familia_his"]."\",\"".$fi["descripcion"]."\",\"".$fi["imc"]."\"
+                      ,\"".$fi["temp"]."\",\"".$fi["fc"]."\",\"".$fi["pa"]."\",
+                      \"".$fi["fr"]."\",\"".$fi["motivo_consulta"]."\",\"".$fi["subjetivo"]."\",\"".$fi["objetivo"]."\"
                       ,\"".$fi["analisis"]."\",
                       \"".$fi["tratamiento"]."\",\"".$fi["evaluacion_de_seguimiento"]."\",
-                      ".$fi["cod_responsable_medico"].",".$fi["cod_his"].")'>
+                      ".$fi["cod_responsable_medico"].",".$fi["cod_his"].",\"".$fi["fecha"]."\",\"".$fi["hora"]."\",\"".$unir."\",".$fi["cod_his_dat"].")'>
                       <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     }
                   }
@@ -1460,6 +1471,8 @@ function registrarHistorialConsulta(){
   var fecha_consulta = document.getElementById("fecha_consulta").value;
   var hora_consulta = document.getElementById("hora_consulta").value;
   var cod_his_original = document.getElementById("cod_his_original").value;
+  var cod_his_dat = document.getElementById("cod_dat").value;
+
   var formData = new FormData();
   formData.append("talla",talla);
   formData.append("peso",peso);
@@ -1482,6 +1495,7 @@ function registrarHistorialConsulta(){
   formData.append("fecha_consulta",fecha_consulta);
   formData.append("hora_consulta",hora_consulta);
   formData.append("cod_his_original",cod_his_original);
+  formData.append("cod_his_dat",cod_his_dat);
   $.ajax({
     url: "../controlador/historial.controlador.php?accion=rcht",
     type: "POST",
@@ -1491,7 +1505,7 @@ function registrarHistorialConsulta(){
     success: function(data) {
 
       data=$.trim(data);
-      //  alert(data);
+      alert(data);
         if(data == "correcto"){
           alertCorrecto();
           setTimeout(() => {
@@ -1618,10 +1632,29 @@ function datosDeImpresion(){
   document.getElementById("hoja").value=document.getElementById("hojaMin").value+"-"+document.getElementById("hojaMax").value;
 }
 
-function registroActualizarConsultaHistorial(cod_his_dat,cod_rd,paciente_rd,cod_cds
-,zona_his,cod_responsable_familia_his,descripcion,hoja,paginas,imc,temp,fc,pa,
-fr,motivo_consulta,subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimiento,cod_responsable_medico,cod_his){
-  
+function registroActualizarConsultaHistorial(peso,talla,cod_his_dat,cod_rd,paciente_rd,cod_cds
+,zona_his,cod_responsable_familia_his,descripcion,imc,temp,fc,pa,
+fr,motivo_consulta,subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimiento,cod_responsable_medico,cod_his,fecha,hora,responsable,cod_his_dat){
+  document.getElementById("talla").value=peso;
+  document.getElementById("peso").value=talla;
+  document.getElementById("imc").value=imc;
+  document.getElementById("temperatura").value=temp;
+  document.getElementById("fc").value=fc;
+  document.getElementById("pa").value=pa;
+  document.getElementById("fr").value=fr;
+  document.getElementById("motivo_consulta").value=motivo_consulta;
+  document.getElementById("subjetivo").value=subjetivo;
+  document.getElementById("objetivo").value=objetivo;
+  document.getElementById("analisis").value=analisis;
+  document.getElementById("tratamiento").value=tratamiento;
+  document.getElementById("evaluacion_seguimiento").value=evaluacion_de_seguimiento;
+  document.getElementById("medico_responsable").value=responsable;
+  document.getElementById("cod_usuario_medico").value=cod_responsable_medico;
+  document.getElementById("cod_historial_consulta").value=cod_his;
+  document.getElementById("fecha_consulta").value=fecha;
+  document.getElementById("hora_consulta").value=hora;
+  document.getElementById("cod_his_original").value=cod_his;
+  document.getElementById("cod_dat").value=cod_his_dat;
 }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

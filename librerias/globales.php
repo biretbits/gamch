@@ -18,4 +18,15 @@ function mesEnTexto($d) {
       12 => "diciembre"
   );
   return $MonthEsp[$numMonth]; // obtener el nombre del mes en español
-} ?>
+}
+
+function convertirMayus($texto){
+  $capitalizedText = ucwords($texto);
+  return $capitalizedText;
+}
+
+function mayuscula($texto){
+  $textoMayuscula = strtoupper($texto);
+  return $textoMayuscula;
+}
+?>

@@ -129,7 +129,9 @@ class Historial
           "sexo_usuario_re" => $fi["sexo_usuario"],
           "direccion_usuario_re" => $fi["direccion_usuario"],
           "comunidad_usuario_re" => $fi["comunidad_usuario"],
-          "telefono_usuario_re" => $fi["telefono_usuario"]
+          "telefono_usuario_re" => $fi["telefono_usuario"],
+          "peso_usuario" => $fi["peso_usuario"],
+          "talla_usuario" => $fi["talla_usuario"]
         ];
         $a[] = $datos;
       }
@@ -516,8 +518,7 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
 
   function insertarDatosHistorialConsulta($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$motivo_consulta,$subjetivo,$objetivo,
   $analisis,$tratamiento,$evaluacion_seguimiento,$medico_responsable,$cod_usuario_medico,$cod_historial_consulta,$paciente_rd,
-  $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original){
-    $cod_his_dat='';
+  $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat){
     $select = "select *from historial_dato where cod_rd=$cod_rd and paciente_rd=$paciente_rd and cod_his=$cod_his_original and tipoDato=1";
     $res = $this->con->query($select);
     $fila = mysqli_fetch_array($res);
@@ -544,22 +545,30 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
    $medico_responsable = $this->con->real_escape_string($medico_responsable);
    //echo $motivo_consulta."    ".$subjetivo."     ".$objetivo."      ".$analisis."       ".$tratamiento."      ".$evaluacion_seguimiento."      ".$medico_responsable;
    $cod_usuario_medico = $this->con->real_escape_string($cod_usuario_medico);
-   $cod_his = $this->con->real_escape_string($cod_historial_consulta);
+   $cod_his = $this->con->real_escape_string($cod_his_original);
    $paciente_rd = $this->con->real_escape_string($paciente_rd);
    $cod_rd = $this->con->real_escape_string($cod_rd);
    $fecha_consulta = $this->con->real_escape_string($fecha_consulta);
    $hora_consulta = $this->con->real_escape_string($hora_consulta);
+   $cod_his_dat = $this->con->real_escape_string($cod_his_dat);
+   $sql3 = "INSERT INTO usuario(
+       cod_usuario,peso_usuario,talla_usuario
+     ) VALUES (
+       '$paciente_rd','$peso','$talla'
+           ) ON DUPLICATE KEY UPDATE
+            peso_usuario = VALUES(peso_usuario),
+            talla_usuario = VALUES(talla_usuario)
+               ";
+    $resul = $this->con->query($sql3);
+
    //echo "<br>".$cod_usuario_medico."    c".$cod_his."c     ".$paciente_rd."     ".$cod_rd."     ".$fecha_consulta."     ".$hora_consulta;
     // Verificación de datos (opcional: imprimir para debugging)
     //echo $cod_paciente . "  " . $cod_rd . "   " . $cod_his . "   " . $uploadDir . "   " . $fileName . "    " . $nombre_imagen . "    " . $fecha . "   " . $hora;
     // Construir la consulta de inserción con actualización en caso de duplicado
     $maxi = $this->seleccionarMaximo($cod_rd,$paciente_rd,$cod_his);
     $max = $this->seleccionarMaximoHistorialDato($cod_rd,$paciente_rd);
-    $fecha = '';$hora='';
-    if($cod_his_dat == ''){
-      $fecha = $this->con->real_escape_string(date('Y-m-d'));
-      $hora = $this->con->real_escape_string(date('H:i:s')); // Cambiado 'm' por 'i' para los minutos
-    }
+    //echo "cod_rd".$cod_rd."   paciente_rd ".$paciente_rd."    cod_his  ".$cod_his;
+
     $sql = "INSERT INTO historial_dato(
         cod_his_dat,cod_rd,paciente_rd,cod_cds,zona_his,cod_responsable_familia_his,descripcion,
         hoja,paginas,imc,temp,fc,pa,fr,motivo_consulta,
@@ -571,7 +580,7 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
         '$maxi','$max','$imc','$temperatura','$fc','$pa','$fr','$motivo_consulta',
         '$subjetivo','$objetivo','$analisis','$tratamiento','$evaluacion_seguimiento',
         '$cod_usuario_medico','$cod_his_original',
-        '$fecha','$hora','3','activo'
+        '$fecha_consulta','$hora_consulta','3','activo'
             ) ON DUPLICATE KEY UPDATE
               zona_his = VALUES(zona_his),
                 imc = VALUES(imc),
@@ -585,13 +594,15 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
                 analisis = VALUES(analisis),
                 tratamiento = VALUES(tratamiento),
                 evaluacion_de_seguimiento = VALUES(evaluacion_de_seguimiento),
-                cod_responsable_medico = VALUES(cod_responsable_medico)
+                cod_responsable_medico = VALUES(cod_responsable_medico),
+                fecha = VALUES(fecha),
+                hora = VALUES(hora)
                 ";
 
     // Ejecutar la consulta
     //echo $sql;
     $resul = $this->con->query($sql);
-    echo $this->con->error;
+    //echo $this->con->error;
     return $resul;
   }
 
