@@ -77,7 +77,6 @@
     <div class="col-auto mb-2" title="Registro de archivo">
         <button type="button" class="d-sm-inline-block btn btn-sm btn-info shadow-sm" data-bs-toggle="modal"
         data-bs-target="#ModalRegistroDocumentos"
-         <?php if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?>
         onclick="actualizarImagen('','','','','','')">
           <img src='../imagenes/file.png' style='height: 25px;width: 25px;'>
         </button>
@@ -333,6 +332,7 @@
                   <label  class="form-label">Zona his</label>
                   <input type="text" class="form-control" id="zona_his" placeholder="zona his"value="<?php $m = (isset($zona_his1))? $zona_his1: ""; echo $m; ?>">
                 </div>
+
               </div>
             </form>
           </div>
@@ -1220,6 +1220,7 @@ function imprimir(cod_his,tipoDato){
          cod_rd:cod_rd,
          tipoDato:tipoDato
      };
+     //alert(paciente_rd+"     "+cod_rd+"      "+cod_his+"      "+tipoDato);
      for (var key in datos) {
          if (datos.hasOwnProperty(key)) {
              var input = document.createElement('input');
@@ -1374,7 +1375,7 @@ function RegistroImagen(){
       contentType: false, // Deshabilitar la codificación de tipo MIME
       processData: false, // Deshabilitar la codificación de datos
       success: function(data) {
-        alert(data);
+        //alert(data);
         //console.log(data);
         data=$.trim(data);
         if(data == "correcto"){
@@ -1448,60 +1449,6 @@ function actualizarImagen(cod_his,cod_his_dat,descripcion,nombre_imagen,ruta_ima
   }
 }
 
-function registrarHistorialConsulta(){
-  var talla = document.getElementById("talla").value;
-  var peso = document.getElementById("peso").value;
-  var imc = document.getElementById("imc").value;
-  var temperatura = document.getElementById("temperatura").value;
-  var fc = document.getElementById("fc").value;
-  var pa = document.getElementById("pa").value;
-  var fr = document.getElementById("fr").value;
-  var motivo_consulta = document.getElementById("motivo_consulta").value;
-  var subjetivo = document.getElementById("subjetivo").value;
-  var objetivo = document.getElementById("objetivo").value;
-  var analisis = document.getElementById("analisis").value;
-  var tratamiento = document.getElementById("tratamiento").value;
-  var evaluacion_seguimiento = document.getElementById("evaluacion_seguimiento").value;
-  var medico_responsable = document.getElementById("medico_responsable").value;
-  var cod_usuario_medico = document.getElementById("cod_usuario_medico").value;
-  var cod_historial_consulta = document.getElementById("cod_historial_consulta").value;
-  var paciente_rd = document.getElementById("paciente_rd").value;
-  var cod_rd = document.getElementById("cod_rd").value;
-  var fecha_consulta = document.getElementById("fecha_consulta").value;
-  var hora_consulta = document.getElementById("hora_consulta").value;
-  var formData = new FormData();
-  formData.append("talla",talla);
-  formData.append("peso",peso);
-  formData.append("imc",imc);
-  formData.append("temperatura",temperatura);
-  formData.append("fc",fc);
-  formData.append("pa",pa);
-  formData.append("fr",fr);
-  formData.append("motivo_consulta",motivo_consulta);
-  formData.append("subjetivo",subjetivo);
-  formData.append("objetivo",objetivo);
-  formData.append("analisis",analisis);
-  formData.append("tratamiento",tratamiento);
-  formData.append("evaluacion_seguimiento",evaluacion_seguimiento);
-  formData.append("medico_responsable",medico_responsable);
-  formData.append("cod_usuario_medico",cod_usuario_medico);
-  formData.append("cod_historial_consulta",cod_historial_consulta);
-  formData.append("paciente_rd",paciente_rd);
-  formData.append("cod_rd",cod_rd);
-  formData.append("fecha_consulta",fecha_consulta);
-  formData.append("hora_consulta",hora_consulta);
-  $.ajax({
-    url: "../controlador/historial.controlador.php?accion=rcht",
-    type: "POST",
-    data: formData,
-    contentType: false, // Deshabilitar la codificación de tipo MIME
-    processData: false, // Deshabilitar la codificación de datos
-    success: function(data) {
-      alert(data);
-      //$("#verDatos").html(data);
-    }
-  });
-}
 
 //funcion para biscar medico_responsable
 function buscarMedico(){
@@ -1515,7 +1462,7 @@ function buscarMedico(){
       data: {nombre:nombre},
       dataType: "json",
       success: function(data) {
-        alert(data);
+        //alert(data);
         console.log(data);
         if(data!=""){
           var unir="";
@@ -1588,7 +1535,7 @@ $.ajax({
   contentType: false, // Deshabilitar la codificación de tipo MIME
   processData: false, // Deshabilitar la codificación de datos
   success: function(data) {
-  alert(data+"dasdas");
+  //alert(data+"dasdas");
     data=$.trim(data);
   //  alert(data);
     if(data == "correcto"){
@@ -1623,7 +1570,7 @@ function verHistorial(cod_historial){
   var paciente_rd = document.getElementById("paciente_rd").value;
   var cod_rd = document.getElementById("cod_rd").value;
   var form = document.createElement('form');
-alert(cod_historial+"    "+cod_rd+"      "+paciente_rd);
+//alert(cod_historial+"    "+cod_rd+"      "+paciente_rd);
    form.method = 'post';
    form.action = '../controlador/historial.controlador.php?accion=Vthdt'; // Coloca la URL de destino correcta
    // Agregar campos ocultos para cada dato

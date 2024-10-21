@@ -40,6 +40,40 @@
     margin-top: 24%;
     border-collapse: collapse; /* Ajusta este valor para que la segunda tabla baje */
 }
+.izquierdoBorde{
+  border-left: 1px solid white;
+}
+.derechoBorde{
+  border-right: 1px solid white;
+}
+.arribaBorde{
+  border-top: 1px solid white;
+}
+.abajoBorde{
+  border-bottom: 1px solid white;
+}
+.espacio{
+  padding: 0;
+}
+.once{
+  font-size: 11px;
+}
+.doce{
+  font-size: 12px;
+}
+.trece{
+  font-size: 13px;
+}
+.catorce{
+  font-size: 14px
+}
+.quince{
+  font-size: 15px
+}
+.grey{
+  color:grey
+}
+
 </style>
 <div class="container main-content">
 <div class="container p-2">
@@ -50,184 +84,424 @@
   <input type="hidden" name="cod_historial_repor" id='cod_historial_repor' value="<?php $m = (isset($cod_his) && ($cod_his)!='')?$cod_his:'';echo $m; ?>">
   <input type="hidden" name="tipoDato" id='tipoDato' value="<?php $m = (isset($tipoDato) && ($tipoDato)!='')?$tipoDato:'';echo $m; ?>">
 
-  <?php
-  $tablahis=$_SERVER["REQUEST_URI"];
-        $diario = $_SESSION["diario"];
-        $_SESSION['this']=$tablahis;
-
-  echo "<div id='color1'><a href='$diario'id='co'>Registro Diario</a>><a href='#'
-   onclick='accionHitorialVer($paciente_rd,$cod_rd)'
-   id='co'>Historial</a>><a href='#'id='co'>Reporte Historial</a>></div>"; ?>
-   <div class="row" >
-     <div class="col-12">
-       <hr>
-     </div>
-   </div>
-   <input type="button" name="" value="Generar Reporte" class="btn btn-warning" onclick="GenerarNuevoReporte()">
-<?php
-  if ($resul && count($resul) > 0){
+  <br>
+  <div class="row">
+    <div class="col-12">
+      <input type="button" style="padding:3px;margin:3px"name="" value="Generar Reporte" class="btn btn-warning" onclick="GenerarNuevoReporte()">
+    </div>
+  </div>
+  <div class="table-responsive">
+  <table style="border:2px solid white" class="table table-bordered">
+    <tr>
+        <td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde">
+        </td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde"></td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde">
+        </td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde"></td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde">
+        </td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde"></td>
+    </tr>
+        <?php
+      if ($resul && count($resul) > 0){
       $i = 0;
-    foreach ($resul as $fi){
-          $datosResponsable = $fi['datos_responsable_familia'];
-          $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
-          $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
-          $ci_resp = '';$nro_seguro_resp='';$nro_car_form_resp='';
-          foreach ($datosResponsable as $resFamiliar) {
-            $cod_resp=$resFamiliar["cod_usuario"];
-            $nombre_resp = $resFamiliar["nombre_usuario_re"];
-            $ap_resp = $resFamiliar["ap_usuario_re"];
-            $am_resp = $resFamiliar["am_usuario_re"];
-            $fecha_nac = $resFamiliar["fn_usuario_re"];
-            $sexo_resp = $resFamiliar["sexo_usuario"];
-            $ocupacion_resp=$resFamiliar["ocupacion_usuario"];$direccion_responsable=$resFamiliar['direccion_usuario_re'];
-            $telefono_resposable=$resFamiliar["telefono_usuario_re"];$comunidad_responsable=$resFamiliar["comunidad_usuario_re"];
-            $ci_resp = $resFamiliar['ci_usuario'];$nro_seguro_resp= $resFamiliar['nro_seguro_usuario'];
-            $nro_car_form_resp= $resFamiliar['nro_car_form_usuario'];
-          }
+      $tipoDocumento = '';
+      $descripcion = "";
+      $ruta = "";
+      $nombre_imagen = "";
+      $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
+      $estado_civil_paciente = '';$escolaridad_paciente = '';$nombre_usuario = '';$ap_usuario='';$am_usuario='';
+      $edad_usuario = '';$telefono_paciente = '';$direccion_paciente = '';
+      $fecha_actual_consulta = '';$hora_consulta='';$talla_usuario = '';$peso_usuario='';
+      $fc_usuario = '';$fr_usuario='';$imc_usuario='';$pa_usuario = '';$temp_usuario = '';
+      $motivo_consulta = '';$objetivo = '';$subjetivo='';$analisis='';$tratamiento='';$evaluacion_seguimiento='';
+      foreach ($resul as $fi){
+          $tipoDocumento = $fi['tipoDato'];
           $datospaciente = $fi['paciente_rd_nombre'];
-          $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
-          $estado_civil_paciente = '';$escolaridad_paciente = '';$nombre_usuario = '';$ap_usuario='';$am_usuario='';
           foreach ($datospaciente as $datos) {
             $fecha_nac_paciente=$datos["fn_usuario_re"];
             $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
             $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
             $nombre_usuario=$datos["nombre_usuario_re"];$ap_usuario=$datos["ap_usuario_re"];$am_usuario=$datos["am_usuario_re"];
+            $edad_usuario = $datos["edad_usuario"];
+            $telefono_paciente = $datos["telefono_usuario_re"];
+            $direccion_paciente = $datos["direccion_usuario_re"];
+            $talla_usuario = $datos["talla_usuario"];$peso_usuario=$datos["peso_usuario"];
           }
-  ?>
-  <div class="row" >
-    <div class="col-12">
-      <hr>
-    </div>
-  </div>
+          if($tipoDocumento == 1){
+            $datosResponsable = $fi['datos_responsable_familia'];
+            $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
+            $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
+            $ci_resp = '';$nro_seguro_resp='';$nro_car_form_resp='';
+            foreach ($datosResponsable as $resFamiliar) {
+              $cod_resp=$resFamiliar["cod_usuario"];
+              $nombre_resp = $resFamiliar["nombre_usuario_re"];
+              $ap_resp = $resFamiliar["ap_usuario_re"];
+              $am_resp = $resFamiliar["am_usuario_re"];
+              $fecha_nac = $resFamiliar["fn_usuario_re"];
+              $sexo_resp = $resFamiliar["sexo_usuario"];
+              $ocupacion_resp=$resFamiliar["ocupacion_usuario"];$direccion_responsable=$resFamiliar['direccion_usuario_re'];
+              $telefono_resposable=$resFamiliar["telefono_usuario_re"];$comunidad_responsable=$resFamiliar["comunidad_usuario_re"];
+              $ci_resp = $resFamiliar['ci_usuario'];$nro_seguro_resp= $resFamiliar['nro_seguro_usuario'];
+              $nro_car_form_resp= $resFamiliar['nro_car_form_usuario'];
+            }
+    ?>
+    <tr>
+    <td colspan="6">
+    <table class="table">
+      <tr>
+        <td colspan="6">
+          <h5 align='right'>Zona <?php $m = (isset($fi['zona_his']) && $fi['zona_his']!='')?$fi['zona_his']:'';echo $m; ?> </h5>
+          <h6 style='font-size:9px' align='rigth'>SERVICIO DEPARTAMENTAL DE SALUD POTOSI</h6>
+          <h6 style='font-size:9px' align='rigth'>RED DE SERVICIOS DE SALUD MUNICIPAL UNCIA</h6>
+          <h5 align='center' id='subRayar'>HISTORIA CLINICA</h5>
+        </td>
+      </tr>
+      <tr class="abajoBorde">
+        <td colspan="6"  style="padding:0"><div align='center'id='subtitulos'>A.  DATOS ADMINISTRATIVOS</div></td>
+      </tr>
+      <tr>
+        <td colspan="4" style="vertical-align: top;padding:15px;" class='derechoBorde'>
+          <table style="width:65%;border:1px solid white;">
+             <thead>
+                 <tr>
+                    <th id='subtitulos'>RESPONSABLE DE FAMILIA</th>
+                 </tr>
+             </thead>
+             <tbody>
+                <tr>
+                  <td id='datos'>Apellido Paterno: &nbsp;&nbsp;&nbsp;<?php $m = (isset($ap_resp) && is_string($ap_resp))?$ap_resp:'';echo $m; ?></td>
+                </tr>
+                <tr>
+                  <td id='datos'>Apellido Materno:&nbsp;&nbsp;&nbsp;<?php $m = (isset($am_resp) && is_string($am_resp))?$am_resp:'';echo $m; ?></td>
+                </tr>
+                <tr>
+                  <td id='datos'>Nombres:&nbsp;&nbsp;&nbsp;<?php $m = (isset($nombre_resp) && is_string($nombre_resp))?$nombre_resp:'';echo $m; ?></td>
+                </tr>
+                <tr>
+                  <td id='datos'>Fecha de Nacimiento:&nbsp;&nbsp;&nbsp;<?php $m = (isset($fecha_nac) && is_string($fecha_nac))?$fecha_nac:'';echo $m; ?>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sexo:
+                    &nbsp;&nbsp;&nbsp;<?php $m = (isset($sexo_resp) && is_string($sexo_resp))?$sexo_resp:'';echo $m; ?></td>
+                </tr>
+                <tr>
+                  <td id='datos'>Ocupación:&nbsp;&nbsp;&nbsp;<?php $m = (isset($ocupacion_resp) && is_string($ocupacion_resp))?$ocupacion_resp:'';echo $m; ?></td>
+                </tr>
+                <tr>
+                  <td id='datos'>Dirección:&nbsp;&nbsp;&nbsp;<?php $m = (isset($direccion_responsable) && is_string($direccion_responsable))?$direccion_responsable:'';echo $m; ?>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Telefono:&nbsp;&nbsp;&nbsp;<?php $m = (isset($telefono_resposable) && is_string($telefono_resposable))?$telefono_resposable:'';echo $m; ?></td>
+                </tr>
+                <tr>
+                  <td id='datos'>Comunidad:&nbsp;&nbsp;&nbsp;<?php $m = (isset($comunidad_responsable) && is_string($comunidad_responsable))?$comunidad_responsable:'';echo $m; ?></td>
+                </tr>
+                <tr>
+                  <td id='datos'>Municipio Uncia Provincia</td>
+                </tr>
+                <tr>
+                  <td id='datos'>Centro de Salud</td>
+                </tr>
+             </tbody>
+           </table>
+        </td>
+        <td colspan="2" style="vertical-align: top;">
+          <table style="border:1px solid white;margin-top:35%;">
+           <thead>
+             <tr>
+               <td id='datos' style='width: 50%;'>Apellido Paterno</td>
+               <td id='datos' style='width: 50%;'><?php $m = (isset($ap_resp) && is_string($ap_resp))?$ap_resp:'';echo $m; ?></td>
+             </tr>
+             <tr>
+               <td id='datos'>Apellido Materno</td>
+               <td id='datos'><?php $m = (isset($am_resp) && is_string($am_resp))?$am_resp:'';echo $m; ?></td>
+             </tr>
+             <tr>
+               <td id='datos'>Nombres</td>
+               <td id='datos'><?php $m = (isset($nombre_resp) && is_string($nombre_resp))?$nombre_resp:'';echo $m; ?></td>
+             </tr>
+           </thead>
+          </table>
+        </td>
+      </tr>
+      <tr class='abajoBorde'>
+        <td colspan="6" style='padding:0'><div align='center' id='subtitulos'>B.  IDENTIFICACIÓN DEL PACIENTE / USUARIO</div></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="derechoBorde" style="padding: 0;width:33%">
+          <div id='datos'>Apellido Paterno:&nbsp;&nbsp;&nbsp;<?php $m = (isset($ap_usuario) && is_string($ap_usuario))?$ap_usuario:'';echo $m; ?></div>
+        </td>
+        <td colspan="2" class="derechoBorde" style="padding: 0;width:33%">
+          <div id='datos'>Apellido Materno:&nbsp;&nbsp;&nbsp;<?php $m = (isset($am_usuario) && is_string($am_usuario))?$am_usuario:'';echo $m; ?></div>
+        </td>
+        <td colspan="2" style="padding: 0;width:33%">
+          <div id='datos'>Nombres:&nbsp;&nbsp;&nbsp;<?php $m = (isset($nombre_usuario) && is_string($nombre_usuario))?$nombre_usuario:'';echo $m; ?></div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="derechoBorde" style="padding: 0;">
+          <div id='datos'>Fecha de Nacimiento:&nbsp;&nbsp;&nbsp;<?php $m = (isset($fecha_nac_paciente) && is_string($fecha_nac_paciente))?$fecha_nac_paciente:'';echo $m; ?></div>
+        </td>
+        <td colspan="2" class="derechoBorde" style="padding: 0;">
+          <div id='datos'>Sexo:&nbsp;&nbsp;&nbsp;<?php $m = (isset($sexo_paciente) && is_string($sexo_paciente))?$sexo_paciente:'';echo $m; ?></div>
+        </td>
+        <td colspan="1" class="derechoBorde" style="padding: 0;">
+          <div id='datos'>Ocupación:&nbsp;&nbsp;&nbsp;<?php $m = (isset($ocupacion_paciente) && is_string($ocupacion_paciente))?$ocupacion_paciente:'';echo $m; ?></div>
+        </td>
+        <td colspan="1" style="padding: 0;">
+          <div id='datos'>Fecha de consulta:&nbsp;&nbsp;&nbsp;<?php $m = (isset($fi['fecha_rd']) && is_string($fi['fecha_rd']))?$fi['fecha_rd']:'';echo $m; ?></div>
+        </td>
+      </tr>
+      <tr>
+          <td colspan="3" class="derechoBorde" style="padding: 0;">
+            <div id='datos'>Estado civil:&nbsp;&nbsp;&nbsp;<?php $m = (isset($estado_civil_paciente) && is_string($estado_civil_paciente))?$estado_civil_paciente:'';echo $m; ?></div>
+          </td>
 
-  <div class="row">
-    <div class="col-12" align='right'>
-      <h5>Zona <?php $m = (isset($fi['zona_his']) && $fi['zona_his']!='')?$fi['zona_his']:'';echo $m; ?> </h5>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <h6 style='font-size:9px' align='rigth'>SERVICIO DEPARTAMENTAL DE SALUD POTOSI</h6>
-      <h6 style='font-size:9px' align='rigth'>RED DE SERVICIOS DE SALUD MUNICIPAL UNCIA</h6>
-    </div>
-  </div>
-  <div class="row">
-    <h5 align='center' id='subRayar'>HISTORIA CLINICA</h5>
-  </div>
-  <div class="row" id='cuadro'>
-    <h1 align='center' id='subtitulos'>A.  DATOS ADMINISTRATIVOS</h1>
-    <div class="col-6">
-      <table id='table1'>
-       <thead>
-           <tr>
-              <th id='subtitulos'>RESPONSABLE DE FAMILIA</th>
-           </tr>
-       </thead>
-       <tbody>
-          <tr>
-            <td id='datos'>Apellido Paterno: &nbsp;&nbsp;&nbsp;<?php $m = (isset($ap_resp) && is_string($ap_resp))?$ap_resp:'';echo $m; ?></td>
-          </tr>
-          <tr>
-            <td id='datos'>Apellido Materno:&nbsp;&nbsp;&nbsp;<?php $m = (isset($am_resp) && is_string($am_resp))?$am_resp:'';echo $m; ?></td>
-          </tr>
-          <tr>
-            <td id='datos'>Nombres:&nbsp;&nbsp;&nbsp;<?php $m = (isset($nombre_resp) && is_string($nombre_resp))?$nombre_resp:'';echo $m; ?></td>
-          </tr>
-          <tr>
-            <td id='datos'>Fecha de Nacimiento:&nbsp;&nbsp;&nbsp;<?php $m = (isset($fecha_nac) && is_string($fecha_nac))?$fecha_nac:'';echo $m; ?>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sexo:
-              &nbsp;&nbsp;&nbsp;<?php $m = (isset($sexo_resp) && is_string($sexo_resp))?$sexo_resp:'';echo $m; ?></td>
-          </tr>
-          <tr>
-            <td id='datos'>Ocupación:&nbsp;&nbsp;&nbsp;<?php $m = (isset($ocupacion_resp) && is_string($ocupacion_resp))?$ocupacion_resp:'';echo $m; ?></td>
-          </tr>
-          <tr>
-            <td id='datos'>Dirección:&nbsp;&nbsp;&nbsp;<?php $m = (isset($direccion_responsable) && is_string($direccion_responsable))?$direccion_responsable:'';echo $m; ?>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Telefono:&nbsp;&nbsp;&nbsp;<?php $m = (isset($telefono_resposable) && is_string($telefono_resposable))?$telefono_resposable:'';echo $m; ?></td>
-          </tr>
-          <tr>
-            <td id='datos'>Comunidad:&nbsp;&nbsp;&nbsp;<?php $m = (isset($comunidad_responsable) && is_string($comunidad_responsable))?$comunidad_responsable:'';echo $m; ?></td>
-          </tr>
-          <tr>
-            <td id='datos'>Municipio Uncia Provincia</td>
-          </tr>
-          <tr>
-            <td id='datos'>Centro de Salud</td>
-          </tr>
-       </tbody>
-     </table>
-    </div>
-    <div class="col-6">
-      <table id='tabla2'>
-       <tbody>
-            <tr>
-              <td id='datos' style='width: 50%;'>Apellido Paterno</td>
-              <td id='datos' style='width: 50%;'><?php $m = (isset($ap_resp) && is_string($ap_resp))?$ap_resp:'';echo $m; ?></td>
+          <?php $are=array('No Primaria' =>'Educación Primaria sin concluir',
+                          'Primaria'=> 'Educación Primaria concluido',
+                          'No Secundaria'=>'Educación Secundaria sin concluir',
+                          'Secundaria'=>'Educación Secundaria concluido',
+                          'Superior'=>'Educación Superior');
+                ?>
+          <td colspan="3" style="padding: 0;">
+            <div id='datos'>Escolaridad:&nbsp;&nbsp;&nbsp;<?php $m = (isset($escolaridad_paciente) && is_string($escolaridad_paciente))?$are[$escolaridad_paciente]:'';echo $m; ?></div>
+          </td>
+      </tr>
+      <tr>
+        <td class="derechoBorde" colspan="3"style="padding: 0;">
+          <div id='datos'>Idioma</div>
+        </td>
+        <td colspan="3"style="padding: 0;">
+          <div id='datos'>Idiomas hablados</div>
+        </td>
+      </tr>
+      <tr class="abajoBorde">
+        <td colspan="2"  style="padding:0" class='derechoBorde'><div align='center'id='subtitulos'>C.  ANTECEDENTES PEDIATRICOS</div></td>
+        <td colspan="4" style="padding:0"><div align='center'id='subtitulos'>D.  ANTECEDENTES GINECO - OBSTETRICOS</div></td>
+      </tr>
+      <tr>
+        <td colspan="6" style="padding:0">
+          <table style="border:1px solid white;width:100%">
+            <tr><!--17 columnas-->
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:13%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:2.8%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:2.8%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:2.8%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:2.8%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:2.8%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:5%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:6%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:5%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:5%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:6%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:5%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:6%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:8%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:10%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:8%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:9%"></td>
             </tr>
             <tr>
-              <td id='datos'>Apellido Materno</td>
-              <td id='datos'><?php $m = (isset($am_resp) && is_string($am_resp))?$am_resp:'';echo $m; ?></td>
+              <td colspan="1" class='once derechoBorde izquierdoBorde arribaBorde' style="padding:0">Peso RN</td>
+              <td colspan="5" class='once izquierdoBorde arribaBorde' style="padding:0">Parto</td>
+              <td colspan="7" class='once izquierdoBorde arribaBorde' style="padding:0;text-align:center">Embarazos G__P__A__C__</td>
+              <td colspan="2" class='once izquierdoBorde arribaBorde' style="padding:0;text-align:center">PAP</td>
+              <td colspan="2" class='once izquierdoBorde arribaBorde derechoBorde' style="padding:0;text-align:center">Anticoncepción</td>
+            </tr>
+            <!-- uniendo esta los dos tr-->
+            <tr>
+              <td class="once arribaBorde izquierdoBorde" style="padding:0;" colspan="6">Obs. Perinatal</td>
+              <td class="once arribaBorde " style="padding:0;text-align:center" rowspan="2">Año</td>
+              <td class="once arribaBorde" style="padding:0;text-align:center" rowspan="2">Duración meses</td>
+              <td class="once arribaBorde" style="padding:0;text-align:center" colspan="2">Tipo de parto</td>
+              <td class="once arribaBorde" style="padding:0;text-align:center" colspan="2">Nro</td>
+              <td class="once arribaBorde" style="padding:0;text-align:center" rowspan="2"></td>
+              <td class="once arribaBorde" style="padding:0;text-align:center" colspan="1">Fecha</td>
+              <td class="once arribaBorde" style="padding:0;text-align:center" colspan="1">Resultado</td>
+              <td class="once arribaBorde" style="padding:0;text-align:center" colspan="1">Inicio</td>
+              <td class="once arribaBorde derechoBorde" style="padding:0;text-align:center" colspan="1">Método</td>
             </tr>
             <tr>
-              <td id='datos'>Nombres</td>
-              <td id='datos'><?php $m = (isset($nombre_resp) && is_string($nombre_resp))?$nombre_resp:'';echo $m; ?></td>
+              <td class="once arribaBorde izquierdoBorde" style="padding:0;" colspan="6">Lactancia Exclusiva Prolongada</td>
+              <td class="once arribaBorde" style="padding:0" colspan="1">s</td>
+              <td class="once arribaBorde" style="padding:0" colspan="1">s</td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde derechoBorde" style="padding:0;" colspan="1"></td>
             </tr>
-       </tbody>
-      </table>
-    </div>
-    <h1 align='center' id='subtitulos'>B.  IDENTIFICACIÓN DEL PACIENTE / USUARIO</h1>
-    <div class="row">
-      <div class="col-4">
-        <h1 id='datos'>Apellido Paterno:&nbsp;&nbsp;&nbsp;<?php $m = (isset($ap_usuario) && is_string($ap_usuario))?$ap_usuario:'';echo $m; ?></h1>
-      </div>
-      <div class="col-4">
-        <h1 id='datos'>Apellido Materno:&nbsp;&nbsp;&nbsp;<?php $m = (isset($am_usuario) && is_string($am_usuario))?$am_usuario:'';echo $m; ?></h1>
-      </div>
-      <div class="col-4">
-        <h1 id='datos'>Nombres:&nbsp;&nbsp;&nbsp;<?php $m = (isset($nombre_usuario) && is_string($nombre_usuario))?$nombre_usuario:'';echo $m; ?></h1>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-3">
-        <h1 id='datos'>Fecha de Nacimiento:&nbsp;&nbsp;&nbsp;<?php $m = (isset($fecha_nac_paciente) && is_string($fecha_nac_paciente))?$fecha_nac_paciente:'';echo $m; ?></h1>
-      </div>
-      <div class="col-3">
-        <h1 id='datos'>Sexo:&nbsp;&nbsp;&nbsp;<?php $m = (isset($sexo_paciente) && is_string($sexo_paciente))?$sexo_paciente:'';echo $m; ?></h1>
-      </div>
-      <div class="col-3">
-        <h1 id='datos'>Ocupación:&nbsp;&nbsp;&nbsp;<?php $m = (isset($ocupacion_paciente) && is_string($ocupacion_paciente))?$ocupacion_paciente:'';echo $m; ?></h1>
-      </div>
-      <div class="col-3">
-        <h1 id='datos'>Fecha de consulta:&nbsp;&nbsp;&nbsp;<?php $m = (isset($fi['fecha_rd']) && is_string($fi['fecha_rd']))?$fi['fecha_rd']:'';echo $m; ?></h1>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <h1 id='datos'>Estado civil:&nbsp;&nbsp;&nbsp;<?php $m = (isset($estado_civil_paciente) && is_string($estado_civil_paciente))?$estado_civil_paciente:'';echo $m; ?></h1>
-      </div>
-      <?php $are=array('No Primaria' =>'Educación Primaria sin concluir',
-                      'Primaria'=> 'Educación Primaria concluido',
-                      'No Secundaria'=>'Educación Secundaria sin concluir',
-                      'Secundaria'=>'Educación Secundaria concluido',
-                      'Superior'=>'Educación Superior');
+            <!--fin del tr-->
+            <tr>
+              <td class="once arribaBorde izquierdoBorde" style="padding:0;" colspan="6"><div align='center'id='subtitulos'>E. VACUNAS</div></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde derechoBorde" style="padding:0;" colspan="1"></td>
+            </tr>
+            <tr>
+              <td style="padding:0;text-align:center"  class='izquierdoBorde  once' ></td>
+              <td style="padding:0;text-align:center"  class=' once'>1</td>
+              <td style="padding:0;text-align:center"  class=' once'>2</td>
+              <td style="padding:0;text-align:center"  class=' once'>3</td>
+              <td style="padding:0;text-align:center"  class=' once'>4</td>
+              <td style="padding:0;text-align:center"  class='once'>5</td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde" style="padding:0" colspan="1"></td>
+              <td class="once arribaBorde derechoBorde" style="padding:0;" colspan="1"></td>
+            </tr>
+            <?php
+            $nu = array(0 => 'RTC',1 => 'RTC',2 => 'RTC',3 => 'RTC',4 => 'RTC',5 => 'RTC',6 => 'RTC',7 => 'RTC',8 => 'RTC',
+          9 => 'RTC',10 => 'R');
+              for($i = 0;$i<11;$i++){
+                echo "<tr>";
+                echo "<td style='padding:0;'  class='izquierdoBorde  once' >".$nu[$i]."</td>";
+                echo "<td style='padding:0;text-align:center'  class=' once'></td>";
+                echo "<td style='padding:0;text-align:center'  class=' once'></td>";
+                echo "<td style='padding:0;text-align:center'  class=' once'></td>";
+                echo "<td style='padding:0;text-align:center'  class=' once'></td>";
+                echo "<td style='padding:0;text-align:center'  class='once'></td>";
+
+                echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+                echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+                echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+                echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+                echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+                echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+
+                echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+
+                if($i==2){
+                  $textoPrincipal="<div align='center'id='subtitulos'>F. FACTORES DE RIESGO PERSONAL</div>";
+                  echo "<td class='once  derechoBorde derechoBorde'  colspan='4'>".$textoPrincipal."</td>";
+                }
+                if($i<2){
+                  echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+                  echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+                  echo "<td class='once arribaBorde' style='padding:0' colspan='1'></td>";
+                  echo "<td class='once arribaBorde derechoBorde' style='padding:0;' colspan='1'></td>";
+                }else if($i>2){
+                    if($i == 3){
+                      echo "<td class='once arribaBorde derechoBorde' style='padding:0' colspan='4'>Alergias</td>";
+                    }
+                    if($i == 4){
+                      echo "<td class='once arribaBorde' style='padding:0' colspan='2'>Grupo Sanguineo</td>";
+                      echo "<td class='once arribaBorde derechoBorde' style='padding:0' colspan='2'>Rh</td>";
+                    }
+                    if($i == 5){
+                      echo "<td class='once arribaBorde derechoBorde' style='padding:0' colspan='4'>Transfusiones</td>";
+                    }
+                    if($i == 6){
+                      echo "<td class='once arribaBorde ' style='padding:0' colspan='2'>Alcoholismo</td>";
+                      echo "<td class='once arribaBorde derechoBorde' style='padding:0' colspan='2'>Tabaquismo</td>";
+                    }
+
+                    if($i == 7){
+                      echo "<td class='once arribaBorde derechoBorde' style='padding:0' colspan='4'>Drogas o Medicamentos</td>";
+                    }
+                    if($i == 8){
+                      echo "<td class='once arribaBorde derechoBorde' style='padding:0' colspan='4'>Tipo de vivienda</td>";
+                    }
+                    if($i == 9){
+                      echo "<td class='once arribaBorde derechoBorde' style='padding:0' colspan='4'>Alimentación</td>";
+                    }
+                    if($i == 10){
+                      echo "<td class='once arribaBorde derechoBorde' style='padding:0' colspan='4'>Otrosw</td>";
+                    }
+                }
+                echo "</tr>";
+              }
             ?>
-      <div class="col-6">
-        <h1 id='datos'>Escolaridad:&nbsp;&nbsp;&nbsp;<?php $m = (isset($escolaridad_paciente) && is_string($escolaridad_paciente))?$are[$escolaridad_paciente]:'';echo $m; ?></h1>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <h1 id='datos'>Idioma</h1>
-      </div>
-      <div class="col-6">
-        <h1 id='datos'>Idiomas hablados</h1>
-      </div>
-    </div>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="6" style="padding:0;border:1px solid black">
+          <table style="width:100%;border:1px solid white">
+            <tr style="padding:0">
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:13%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:6%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:8%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:6%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:13%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:13%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:5%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:16%"></td>
+              <td class="once arribaBorde derechoBorde abajoBorde" style="padding:0;width:10%"></td>
+              <td class="once arribaBorde abajoBorde" style="padding:0;width:10%"></td>
+            </tr>
+            <tr>
+              <td class="once arribaBorde derechoBorde  izquierdoBorde" style="padding:0;" colspan="2"><div align='center'id='subtitulos'>J. ANTECEDENTES DE HOSPITALIZACIÓN</div></td>
+              <td class="once arribaBorde derechoBorde " style="padding:0;background-color: lightgray;text-align: center;vertical-align: top;" colspan="5"><div id='subtitulos'>H. MEDICAMENTOS EN ENFERMEDADES CRONICAS</div></td>
+              <td class="once arribaBorde derechoBorde " style="padding:0;" colspan="1"><div id='subtitulos' style="padding:1px">I. ANTECEDENTES PATOLOGICOS</div></td>
+              <td class="once arribaBorde derechoBorde " style="padding:0;background-color:lightgray" colspan="1"><div id='subtitulos' style="padding:1px">PERSONALES</div></td>
+              <td class="once arribaBorde derechoBorde " style="padding:0;background-color:lightgray" colspan="1"><div id='subtitulos' style="padding:1px">FAMILIARES</div></td>
+            </tr>
+            <tr>
+              <td class="once izquierdoBorde" style="padding:0;text-align:center" colspan="1">Hospitalizaciones</td>
+              <td class="once " style="padding:0;text-align:center" colspan="1">Año</td>
+              <td class="once " style="padding:0;text-align:center" colspan="1">Evolución</td>
+              <td class="once " style="padding:0;text-align:center" colspan="1">Inicio</td>
+              <td class="once " style="padding:0;text-align:center" colspan="1">Medicamentos</td>
+              <td class="once " style="padding:0;text-align:center" colspan="1">Dosificación</td>
+              <td class="once " style="padding:0;text-align:center" colspan="1">Final</td>
+              <td class="once " style="padding:0;" colspan="1">Hipertencion Arterial</td>
+              <td class="once " style="padding:0;text-align:center" colspan="1"></td>
+              <td class="once arribaBorde derechoBorde" style="padding:0;text-align:center" colspan="1"></td>
+            </tr>
+            <?php
+              $enfer = array(0 => 'Diabetes Mellitus',1=>'Hepatopatias',2=>'Cardiopatia',3=>'Nefropatia',4=>'Enfermedad de Chagas',5=>'Tumores Genitales',
+                              6=>'Patologia Mamaria',7=>'Tubercolosis',8=>'ITS',9=>'Transtornos del SNC',10=>'Obesidad',11=>'Desnutrición');
+              for($i = 0;$i<12;$i++){
+              echo "<tr>";
+                if($i<7){
+                  echo  "<td class='once izquierdoBorde' style='padding:0;text-align:center' colspan='1'></td>";
+                  echo "<td class='once' style='padding:0;text-align:center' colspan='1'></td>";
+                  echo "<td class='once' style='padding:0;text-align:center' colspan='1'></td>";
+                  echo "<td class='once' style='padding:0;text-align:center' colspan='1'></td>";
+                  echo "<td class='once' style='padding:0;text-align:center' colspan='1'></td>";
+                  echo "<td class='once' style='padding:0;text-align:center' colspan='1'></td>";
+                  echo "<td class='once' style='padding:0;text-align:center' colspan='1'></td>";
+                }else {
+                if($i == 7){
+                    echo  "<td class='once izquierdoBorde' style='padding:0;text-align:center' colspan='4'><div align='center'id='subtitulos'>J. FACTORES DE RIESGO SOCIAL</div></td>";
+                    echo "<td class='once' style='padding:0;text-align:center' colspan='3'><div align='center'id='subtitulos'>K. OBSERVACIONES</div></td>";
+                  }else{
+                    echo  "<td class='once izquierdoBorde' style='padding:0;text-align:center' colspan='4'></td>";
+                    echo "<td class='once' style='padding:0;text-align:center' colspan='3'></td>";
+                  }
+                }
+                echo "<td class='once' style='padding:0;' colspan='1'>".$enfer[$i]."</td>";
+                echo "<td class='once' style='padding:0;text-align:center' colspan='1'></td>";
+                echo "<td class='once arribaBorde derechoBorde' style='padding:0;text-align:center' colspan='1'></td>";
+              echo "</tr>";
+              }
+            ?>
+            <tr>
+              <td class='once izquierdoBorde abajoBorde' style='padding:0;margin:2px' colspan='4'>Otros</td>
+              <td class='once abajoBorde' style='padding:0;' colspan='3'></td>
+              <td class='once abajoBorde derechoBorde' style='padding:0;margin:2px' colspan='4'>Otros</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
 
-  </div><!--fin del row-->
-  <div class="row" id='cuadro'>
-
-  </div><!--fin del segundo row-->
-<?php }} ?>
+    </table>
+  </td>
+  </tr>
+  <?php
+  }
+  }
+  }?>
+  </table>
   </div>
 </div>
 

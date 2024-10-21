@@ -864,6 +864,7 @@ function crearTablaUsuario($conn){
       `estado_civil_usuario` char(60) DEFAULT NULL,
       `escolaridad_usuario` char(100) DEFAULT NULL,
       `autoidentificacion_usuario` char(45) DEFAULT NULL,
+      `idioma_usuario` char(45) DEFAULT NULL,
       `nro_seguro_usuario` char(150) DEFAULT NULL,
       `nro_car_form_usuario` char(200) DEFAULT NULL,
       `sexo_usuario` char(20) DEFAULT NULL,

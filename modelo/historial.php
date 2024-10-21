@@ -81,6 +81,22 @@ class Historial
     return $resul;
     mysqli_close($this->con);
   }
+  public function SelectHistorialSOloimagenpRINCIPAL($cod_paciente='',$cod_rd=false,$cod_his){
+    // Verificar si $buscar tiene contenido
+    $sql = " select *from historial_dato where  ";
+    if(is_numeric($cod_paciente)){
+      $sql.=" paciente_rd = $cod_paciente ";
+    }
+    if($cod_rd != false){
+      $sql.=" and cod_rd = $cod_rd";
+   }
+   $sql.=" and cod_his_dat=$cod_his";
+   //echo "<br><br><br>".$sql;
+    $resul = $this->con->query($sql);
+    // Retornar el resultado
+    return $resul;
+    mysqli_close($this->con);
+  }
   public function SelectHistorialDatoTodo($cod_paciente='',$hoja1=false,$hoja2=false,$cod_his=false,$cod_his_original){
     // Verificar si $buscar tiene contenido
     $sql = " select *from historial_dato where  ";
@@ -124,6 +140,7 @@ class Historial
           "estado_civil_usuario" => $fi["estado_civil_usuario"],
           "escolaridad_usuario" => $fi["escolaridad_usuario"],
           "autoidentificacion_usuario" => $fi["autoidentificacion_usuario"],
+          "idioma_usuario" => $fi["idioma_usuario"],
           "nro_seguro_usuario" => $fi["nro_seguro_usuario"],
           "nro_car_form_usuario" => $fi["nro_car_form_usuario"],
           "sexo_usuario_re" => $fi["sexo_usuario"],
@@ -195,7 +212,7 @@ class Historial
   $fecha_nacimiento_responsable,$sexo_responsable,
   $ocupacion_responsable,$direccion_responsable,$telefono_resposable,$comunidad_responsable,$ci,$n_seguro,$n_carp_fam,$zona_his
   ,$cod_usuario,$paciente_rd,
-  $cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_his,$cod_his_original){
+  $cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_his,$cod_his_original,$idioma,$autoidentificacion){
     $sql = "";
     if($cod_usuario !=""){ //existe usuario
       $sql = "update usuario set ";
@@ -297,6 +314,7 @@ class Historial
       }elseif($ci != "" && $si == 'si'){
         $sql.= " ,direccion_usuario = '$direccion_responsable'";
       }
+
       $sql.= "   WHERE cod_usuario = $cod_usuario";
       //echo "??????".$sql." prueba";
       $resul = $this->con->query($sql);
@@ -314,7 +332,8 @@ class Historial
     //actualizar los datos del paciente pero solo algunos datospaciente
     //echo "e".$estado_civil." es ".$escolaridad." fn  ".$fecha_nacimiento."   ".$paciente_rd."   ".$sexo;
     $sql23 = "update usuario set fecha_nac_usuario='$fecha_nacimiento',sexo_usuario='$sexo',ocupacion_usuario='$ocupacion',
-    estado_civil_usuario='$estado_civil', escolaridad_usuario='$escolaridad' where cod_usuario = $paciente_rd";
+    estado_civil_usuario='$estado_civil', escolaridad_usuario='$escolaridad', autoidentificacion_usuario = '$autoidentificacion'
+    , idioma_usuario = '$idioma' where cod_usuario = $paciente_rd";
     $this->con->query($sql23);
 
     $fechaActual = date("Y-m-d");

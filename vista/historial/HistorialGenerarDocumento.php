@@ -1,5 +1,30 @@
 <?php require("../librerias/headeradmin1.php");
 ?>
+<style media="screen">
+
+.imagen-tamano-carta {
+          width: 100%;  /* Tamaño de hoja carta en pantallas grandes */
+          height: auto; /* Tamaño de hoja carta en pantallas grandes */
+          object-fit: cover; /* Ajustar la imagen para cubrir todo el contenedor */
+      }
+
+      /* Media query para hacer que la imagen sea más pequeña en pantallas medianas */
+      @media (max-width: 992px) { /* Para dispositivos medianos (tabletas, pantallas más pequeñas) */
+          .imagen-tamano-carta {
+              width: 70%; /* Ajusta el ancho al 70% del contenedor */
+              height: auto; /* Mantiene la proporción */
+          }
+      }
+
+      /* Media query para hacer que la imagen se ajuste a pantallas pequeñas */
+      @media (max-width: 576px) { /* Para dispositivos pequeños (teléfonos móviles) */
+          .imagen-tamano-carta {
+              width: 100%; /* Ocupa todo el ancho del contenedor */
+              height: auto; /* Mantiene la proporción */
+          }
+      }
+</style>
+
 <div class="container main-content">
   <div class="container p-2">
     <input type="hidden" name="hoja1" id='hoja1' value="<?php $m = (isset($hoja1) && is_numeric($hoja1))?$hoja1:'';echo $m; ?>">
@@ -9,16 +34,15 @@
     <input type="hidden" name="cod_historial_repor" id='cod_historial_repor' value="<?php $m = (isset($cod_his) && ($cod_his)!='')?$cod_his:'';echo $m; ?>">
     <input type="hidden" name="tipoDato" id='tipoDato' value="<?php $m = (isset($tipoDato) && ($tipoDato)!='')?$tipoDato:'';echo $m; ?>">
     <input type="hidden" name="cod_his_original" id='cod_his_original' value="<?php $m = (isset($cod_his_original) && is_numeric($cod_his_original))?$cod_his_original:'';echo $m; ?>">
-    <div class="row" >
+    <br>
+    <div class="row">
       <div class="col-12">
-        <hr>
+        <input type="button" style="padding:3px;margin:3px"name="" value="Generar Reporte" class="btn btn-warning" onclick="GenerarNuevoReporte()">
       </div>
     </div>
-    <input type="button" name="" value="Generar Reporte" class="btn btn-warning" onclick="GenerarNuevoReporte()">
-
     <?php
     if ($resul && count($resul) > 0){
-        $i = 0;
+      $i = 0;
       $descripcion = "";
       $ruta = "";
       $nombre_imagen = "";
@@ -26,15 +50,32 @@
         $descripcion = $fi["descripcion"];
         $ruta = $fi["ruta_imagen"];
         $nombre_imagen = $fi["nombre_imagen"];
-      }?>
-      <div class="row">
-        <div class="col-12">
-          <h5 align='center'><?php echo $descripcion; ?></h5>
-        </div>
-        <div class="">
-          <img src="<?php echo $ruta.$nombre_imagen; ?>" alt="Descripción de la imagen" class="img-fluid d-block mx-auto">
-        </div>
+      }
+      ?>
+      <div class="table-responsive">
+      <table style="border:2px solid black;width:100%" class="table table-bordered">
+        <tr>
+            <td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde">
+            </td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde"></td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde">
+            </td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde"></td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde">
+            </td><td style="width:16%;padding:0" class="abajoBorde derechoBorde izquierdoBorde"></td>
+        </tr>
+        <tr>
+          <td colspan="6" style="border:1px solid black">
+            <table style="border:1px solid black;width:100%">
+              <tr style="border:1px solid black">
+                <td >
+                  <h5 align='center'><?php echo $descripcion; ?></h5>
+                  <img src="<?php echo $ruta.$nombre_imagen; ?>" alt="No se encontro la imagen" class="img-fluid d-block mx-auto imagen-tamano-carta">
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+      </table>
       </div>
+
     <?php }?>
   </div>
 </div>

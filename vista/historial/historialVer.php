@@ -7,6 +7,8 @@
       $talla_paciente1 = $fi["talla_usuario"];
       $fecha_nac_paciente1 = $fi['fecha_nac_usuario'];$sexo_paciente1 = $fi["sexo_usuario"];$ocupacion_paciente1=$fi["ocupacion_usuario"];
       $estado_civil_paciente1 = $fi["estado_civil_usuario"];$escolaridad_paciente1 = $fi["escolaridad_usuario"];
+      $idioma_nuevo = $fi["idioma_usuario"];$auto_nuevo = $fi["autoidentificacion_usuario"];
+      //echo "<br><br><br><br>".$idioma_nuevo."     ".$auto_nuevo;
       $zona_his1='';
       $titulo_historial = '';
       if ($resul7 && count($resul7) > 0){
@@ -26,6 +28,7 @@
        <hr>
      </div>
    </div>
+
   <h4>Historial Información <?php echo $titulo_historial; ?></h4>
   <input type="hidden" name="paginas" id='paginas' value="">
   <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
@@ -54,7 +57,7 @@
         '','','','','','',''
         ,'','','<?php echo $zona_his1; ?>','<?php echo $fecha_nac_paciente1; ?>','<?php echo $sexo_paciente1; ?>'
         ,'<?php echo $ocupacion_paciente1;?>','<?php echo $estado_civil_paciente1; ?>',
-        '<?php echo $escolaridad_paciente1; ?>','')" <?php if(count($resul)>0){ echo "disabled";}else{echo "enabled";} ?>>
+        '<?php echo $escolaridad_paciente1; ?>','','<?php echo $idioma_nuevo; ?>','<?php echo $auto_nuevo; ?>')" <?php if(count($resul)>0){ echo "disabled";}else{echo "enabled";} ?>>
           <img src='../imagenes/control.png' style='height: 25px;width: 25px;'>
         </button>
     </div>
@@ -328,51 +331,43 @@
                   <label class="form-label">Estado Civil</label>
                   <select class="form-select" id="estado_civil" >
                     <option value=''>Seleccione</option>
-                    <?php
-                    $ara = ['soltero(a)','casado(a)','divorciado(a)','union estable'];
-                      if(isset($estado_civil_paciente1) && is_string($estado_civil_paciente1)){
-                        for($i = 0;$i<count($ara);$i++){
-                          if($ara[$i] == $estado_civil_paciente1){
-                            echo "<option selected value='".$ara[$i]."'>".$ara[$i]."</option>";
-                          }else{
-                            echo "<option value='".$ara[$i]."'>".$ara[$i]."</option>";
-                          }
-                        }
-                      }else{
-                        echo "
-                          <option value='soltero(a)'>soltero(a)</option>
-                          <option value='casado(a)'>casado(a)</option>
-                          <option value='divorciado(a)'>divorciado(a)</option>
-                          <option value='union estable'>union estable</option>";
-                      }
-                     ?>
+                    <option value='soltero(a)'>soltero(a)</option>
+                    <option value='casado(a)'>casado(a)</option>
+                    <option value='divorciado(a)'>divorciado(a)</option>
+                    <option value='union estable'>union estable</option>
                   </select>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Escolaridad</label>
                   <select class="form-select" id="escolaridad" >
                     <option value=''>Seleccione</option>
-                    <?php $are = ['Educación Primaria sin concluir','Educación Primaria concluido','Educación Secundaria sin concluir','Educación Secundaria concluido','Educación Superior'];
-                          $ares = ['No Primaria','Primaria','No Secundaria','Secundaria','Superior'];
-                      if(isset($escolaridad_paciente1) && is_string($escolaridad_paciente1)){
+                    <option value='No Primaria'>Educación Primaria sin concluir</option>
+                    <option value='Primaria'>Educación Primaria concluido</option>
+                    <option value='No Secundaria'>Educación Secundaria sin concluir</option>
+                    <option value='Secundaria'>Educación Secundaria concluido</option>
+                    <option value='Superior'>Educación Superior</option>
+                  </select>
+                </div>
 
-                        for($i = 0;$i<count($are);$i++){
-                          if($ares[$i] == $escolaridad_paciente1){
-                            echo "<option selected value='".$ares[$i]."'>".$are[$i]."</option>";
-                          }else{
-                            echo "<option value='".$ares[$i]."'>".$are[$i]."</option>";
-                          }
-                        }
-                      }else{
-                        echo "
-                        <option value='No Primaria'>Educación Primaria sin concluir</option>
-                        <option value='Primaria'>Educación Primaria concluido</option>
-                        <option value='No Secundaria'>Educación Secundaria sin concluir</option>
-                        <option value='Secundaria'>Educación Secundaria concluido</option>
-                        <option value='Superior'>Educación Superior</option>";
-                      }
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Autoidentificación</label>
+                  <select class="form-select"  id="Autoidentificacion">
+                    <option value=''>Seleccione Autoidentificación</option>
+                    <option value='mestiza'>Mestiza</option>
+                    <option value='quechua'>Quechua</option>
+                    <option value='aymara'>Aymara</option>
+                    <option value='otro'>Otros</option>";
+                  </select>
+                </div>
 
-                     ?>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Idioma Hablado</label>
+                  <select class="form-select"  id="idioma">
+                    <option value=''>Seleccione Idioma Hablado</option>
+                    <option value='castellano'>Castellano</option>
+                    <option value='quechua'>Quechua</option>
+                    <option value='aymara'>Aymara</option>
+                    <option value='otro'>Otros</option>";
 
                   </select>
                 </div>
@@ -538,10 +533,12 @@
               echo "<td>";
               $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
               $estado_civil_paciente = '';$escolaridad_paciente = '';$peso_paciente='';$talla_paciente='';
+              $idioma_paciente = '';$autoidentificacion_paciente = '';
               foreach ($datospaciente as $datos) {
                 $fecha_nac_paciente=$datos["fn_usuario_re"];
                 $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
                 $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
+                $idioma_paciente = $datos["idioma_usuario"];$autoidentificacion_paciente=$datos["autoidentificacion_usuario"];
                 echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
                 $peso_paciente = $datos["peso_usuario"];$talla_paciente = $datos["talla_usuario"];
               }
@@ -564,7 +561,7 @@
                       \"".$comunidad_responsable."\",\"".$ci_resp."\",\"".$nro_seguro_resp."\",\"".$nro_car_form_resp."\"
                       ,\"".$fi["zona_his"]."\",
                       \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
-                      ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\")'>
+                      ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\",\"".$idioma_paciente."\",\"".$autoidentificacion_paciente."\")'>
                       <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     }else if($fi["tipoDato"]==3){
                       $nombre_medico = '';$apellidoP='';$apellidoM='';
@@ -757,8 +754,10 @@ function accionHitorialVer(paciente_rd,cod_rd){
 function ActualizarHistorial(cod_his,cod_rd,paciente_rd,Nombre_responsable,ap_responsable,am_responsable,cod_resp,
 fecha_nac,sexo_usuario,ocupacion_responsable,direccion_responsable,telefono_resposable,comunidad_responsable,ci_resp
 ,nro_seguro_resp,nro_car_form_resp,zona_his,fecha_nac_paciente,sexo_paciente,ocupacion_paciente,estado_civil_paciente,
-escolaridad_paciente,fecha_de_consulta){
+escolaridad_paciente,fecha_de_consulta,idioma,autoidentificacion){
   //alert(estado_civil_paciente+"   "+escolaridad_paciente);
+  document.getElementById("idioma").value=idioma;
+  document.getElementById("Autoidentificacion").value=autoidentificacion;
   document.getElementById("cod_historial").value=cod_his;
   document.getElementById("cod_rd").value=cod_rd;
   document.getElementById("paciente_rd").value=paciente_rd;
@@ -836,10 +835,12 @@ var fecha_de_consulta = document.getElementById("fecha_de_consulta").value;
 var estado_civil = document.getElementById("estado_civil").value;
 var escolaridad = document.getElementById("escolaridad").value;
 var cod_his_original = document.getElementById("cod_his_original").value;
+var autoidentificacion = document.getElementById("Autoidentificacion").value;
+var idioma = document.getElementById("idioma").value;
 if(Nombre_responsable==""||ap_responsable==""||am_responsable==""||fecha_nacimiento_responsable==""||sexo_responsable==""
 ||ocupacion_responsable==""
 ||direccion_responsable==""||comunidad_responsable==""||ci==""||fecha_nacimiento==""
-||sexo==""||ocupacion==""||fecha_de_consulta==""||estado_civil==""||escolaridad==""){
+||sexo==""||ocupacion==""||fecha_de_consulta==""||estado_civil==""||escolaridad==""||idioma==""||autoidentificacion==""){
   ingreseNPdatos();
   return;
 }
@@ -869,6 +870,8 @@ datos.append("estado_civil",estado_civil);
 datos.append("escolaridad",escolaridad);
 datos.append("cod_historial",cod_historial);
 datos.append("cod_his_original",cod_his_original);
+datos.append("idioma",idioma);
+datos.append("autoidentificacion",autoidentificacion);
 $.ajax({
   url: "../controlador/historial.controlador.php?accion=rhRyP",
   type: "POST",

@@ -105,12 +105,13 @@ class HistorialControlador{
 
 public function registroDatosResponsablePaciente($Nombre_responsable,$ap_responsable,$am_responsable,$fecha_nacimiento_responsable,$sexo_responsable,
 $ocupacion_responsable,$direccion_responsable,$telefono_resposable,$comunidad_responsable,$ci,$n_seguro,$n_carp_fam,$zona_his,$cod_usuario,$paciente_rd,
-$cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_historial,$cod_his_original){
+$cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_historial,$cod_his_original,
+$idioma,$autoidentificacion){
   $rnp= new historial();
   //echo $cod_usuario;
   $resp = $rnp->insertarNewResponsableyPacientes($Nombre_responsable,$ap_responsable,$am_responsable,$fecha_nacimiento_responsable,$sexo_responsable,
   $ocupacion_responsable,$direccion_responsable,$telefono_resposable,$comunidad_responsable,$ci,$n_seguro,$n_carp_fam,$zona_his,$cod_usuario,$paciente_rd,
-  $cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_historial,$cod_his_original);
+  $cod_rd,$fecha_nacimiento,$sexo,$ocupacion,$fecha_de_consulta,$estado_civil,$escolaridad,$cod_historial,$cod_his_original,$idioma,$autoidentificacion);
   //echo $cod_usuario;
   if($resp != ""){
       echo "correcto";
@@ -367,14 +368,18 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
     //seleccionamos todos los
     $res = $rdi->SelectHistorialTodoOrdenar($paciente_rd,$cod_rd);
     $resul = $this->UniendoDatoHistorial($res,$rdi);
-  if($tipoDato == 1){
-      require("../vista/historial/HistorialGenerarReporte.php");
-    }else if($tipoDato == 2){
-     require("../vista/historial/HistorialGenerarDocumento.php");
-    }else{
-      require("../vista/historial/HistorialGenerarReporteTodo.php");
-    }
+    //echo "<br><br><br><br>".$tipoDato;
+    require("../vista/historial/HistorialGenerarReporteTodo.php");
   }
+
+    public function visualizarGeneradorDeReporteImagenPrincipal($paciente_rd,$cod_his,$cod_rd,$tipoDato){
+      $rdi =new Historial();
+      //seleccionamos todos los
+      $res = $rdi->SelectHistorialSOloimagenpRINCIPAL($paciente_rd,$cod_rd,$cod_his);
+      $resul = $this->UniendoDatoHistorial($res,$rdi);
+      require("../vista/historial/HistorialGenerarDocumento.php");
+    }
+
   public function visualizarGeneradorDeReporteDatohistorial($hoja1,$hoja2,$paciente_rd,$cod_his,$cod_rd,$tipoDato,$cod_his_original){
     $rdi =new Historial();
     $res = $rdi->SelectHistorialDatoTodo($paciente_rd,$hoja1,$hoja2,$cod_his,$cod_his_original);
@@ -631,7 +636,7 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
       require ("../vista/historial/historialVer.php");
     }
   }
-
+//aqui es de reporte total todo
   function UniendoDatoHistorial($resul, $rdi) {
     $ar = [];
     while ($fi = mysqli_fetch_array($resul)) {
@@ -972,7 +977,9 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
       $_POST["estado_civil"],
       $_POST["escolaridad"],
       $_POST["cod_historial"],
-      $_POST["cod_his_original"]
+      $_POST["cod_his_original"],
+      $_POST["idioma"],
+      $_POST["autoidentificacion"]
     );
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="rbph"){
@@ -1078,7 +1085,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
 
    // Recuperar los datos desde la sesión cuando se llega mediante GET
    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-       if (isset($_SESSION['paciente_rd']) && isset($_SESSION['cod_historial']) && isset($_SESSION['cod_rd'])) {
+       if (isset($_SESSION['paciente_rd']) && isset($_SESSION['cod_historial']) && isset($_SESSION['cod_rd'])&& isset($_SESSION['tipoDato'])) {
            // Usar los datos almacenados en la sesión
 
            $paciente_rd = $_SESSION['paciente_rd'];
@@ -1086,7 +1093,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
            $cod_rd = $_SESSION['cod_rd'];
            $tipoDato = $_SESSION['tipoDato'];
            // Llamar a la función que genera el reporte
-           $hc->visualizarGeneradorDeReporte(false,false,$paciente_rd, $cod_historial, $cod_rd,$tipoDato);
+           $hc->visualizarGeneradorDeReporteImagenPrincipal($paciente_rd, $cod_historial, $cod_rd,$tipoDato);
        } else {
            echo "Error: No hay datos para redireccionarles al formulario que esta solicitando.";
        }

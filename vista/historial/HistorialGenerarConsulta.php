@@ -127,11 +127,7 @@ include("../librerias/globales.php");
     <input type="hidden" name="cod_historial_repor" id='cod_historial_repor' value="<?php $m = (isset($cod_his) && ($cod_his)!='')?$cod_his:'';echo $m; ?>">
     <input type="hidden" name="tipoDato" id='tipoDato' value="<?php $m = (isset($tipoDato) && ($tipoDato)!='')?$tipoDato:'';echo $m; ?>">
     <input type="hidden" name="cod_his_original" id='cod_his_original' value="<?php $m = (isset($cod_his_original) && is_numeric($cod_his_original))?$cod_his_original:'';echo $m; ?>">
-    <div class="row" >
-      <div class="col-12">
-        <hr>
-      </div>
-    </div>
+
     <?php
     $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
     $estado_civil_paciente = '';$escolaridad_paciente = '';$nombre_usuario = '';$ap_usuario='';$am_usuario='';
@@ -165,15 +161,19 @@ include("../librerias/globales.php");
       }
     }
      ?>
-    <input type="button" name="" value="Generar Reporte" class="btn btn-warning" onclick="GenerarNuevoReporte()">
-
+     <br>
+     <div class="row">
+       <div class="col-12">
+         <input type="button" style="padding:3px;margin:3px"name="" value="Generar Reporte" class="btn btn-warning" onclick="GenerarNuevoReporte()">
+       </div>
+     </div>
     <div style="width:35%" id='saltoLinea'>
       <div style='font-size:11px;' align='center'>MINISTERIO DE SALUD</div>
       <div style='font-size:11px' align='center'>DEPARTAMENTAL DE SALUD DE POTOSI</div>
       <div style='font-size:11px' align='center'>SERVICIO DE SALUD MUNICIPAL DE UNCIA</div>
     </div>
     <div class="row">
-      <h6 align='center'>CONSULTA DE EMERGENCIAS/ URGENCIAS</h6>
+      <h4 align='center'>CONSULTA DE EMERGENCIAS/ URGENCIAS</h4>
     </div>
     <table class="table table-bordered" style="border: 1px solid black;">
           <thead class="">
