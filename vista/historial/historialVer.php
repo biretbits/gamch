@@ -53,7 +53,7 @@
     <div class="col-auto mb-2" title="Registro de datos del paciente y responsable">
         <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal"
         data-bs-target="#ModalRegistro"
-        onclick="ActualizarHistorial('',<?php echo $cod_rd; ?>,<?php echo $paciente_rd; ?>,'','','','',
+        onclick="ActualizarHistorial('','','','','',
         '','','','','','',''
         ,'','','<?php echo $zona_his1; ?>','<?php echo $fecha_nac_paciente1; ?>','<?php echo $sexo_paciente1; ?>'
         ,'<?php echo $ocupacion_paciente1;?>','<?php echo $estado_civil_paciente1; ?>',
@@ -555,7 +555,7 @@
                     if($fi["tipoDato"]==1)
                     {
                       echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
-                      onclick='ActualizarHistorial(".$fi['cod_his_dat'].",".$fi['cod_rd'].",".$fi['paciente_rd']."
+                      onclick='ActualizarHistorial(".$fi['cod_his_dat']."
                       ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
                       ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",
                       \"".$comunidad_responsable."\",\"".$ci_resp."\",\"".$nro_seguro_resp."\",\"".$nro_car_form_resp."\"
@@ -751,7 +751,7 @@ function accionHitorialVer(paciente_rd,cod_rd){
    form.submit();
 }
 
-function ActualizarHistorial(cod_his,cod_rd,paciente_rd,Nombre_responsable,ap_responsable,am_responsable,cod_resp,
+function ActualizarHistorial(cod_his,Nombre_responsable,ap_responsable,am_responsable,cod_resp,
 fecha_nac,sexo_usuario,ocupacion_responsable,direccion_responsable,telefono_resposable,comunidad_responsable,ci_resp
 ,nro_seguro_resp,nro_car_form_resp,zona_his,fecha_nac_paciente,sexo_paciente,ocupacion_paciente,estado_civil_paciente,
 escolaridad_paciente,fecha_de_consulta,idioma,autoidentificacion){
@@ -759,8 +759,6 @@ escolaridad_paciente,fecha_de_consulta,idioma,autoidentificacion){
   document.getElementById("idioma").value=idioma;
   document.getElementById("Autoidentificacion").value=autoidentificacion;
   document.getElementById("cod_historial").value=cod_his;
-  document.getElementById("cod_rd").value=cod_rd;
-  document.getElementById("paciente_rd").value=paciente_rd;
   document.getElementById("Nombre_responsable").value=Nombre_responsable;
   document.getElementById("ap_responsable").value=ap_responsable;
   document.getElementById("am_responsable").value=am_responsable;
@@ -810,7 +808,7 @@ function accionHitorialVer(paciente_rd,cod_rd){
 
 function RegistroHistorial(){
 //responsable de familia
-var cod_historial=document.getElementById("cod_historial").value;
+var cod_historial=document.getElementById("cod_historial").value;//cod his del dato o de la tabla historial_dato
 var Nombre_responsable =document.getElementById("Nombre_responsable").value;
 var ap_responsable =document.getElementById("ap_responsable").value;
 var am_responsable =document.getElementById("am_responsable").value;
@@ -880,6 +878,7 @@ $.ajax({
   processData: false, // Deshabilitar la codificación de datos
   success: function(data) {
   //alert(data+"dasdas");
+  //console.log(data);
     data=$.trim(data);
   //alert(data);
   //alert(cod_historial);

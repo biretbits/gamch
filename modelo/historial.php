@@ -113,6 +113,7 @@ class Historial
    if($hoja1 != false && $hoja2 != false){
     $sql.=" and (hoja >= '$hoja1' and  hoja <= '$hoja2') ";
   }
+
     $resul = $this->con->query($sql);
     // Retornar el resultado
     return $resul;
@@ -342,7 +343,7 @@ class Historial
     if(is_numeric($cod_his)){//actualizar historial
       $sql ="update historial_dato set zona_his='$zona_his',cod_responsable_familia_his=$cod_usuario where cod_his_dat=$cod_his";
     }else{
-      $maxiHoja = $this->seleccionarMaximo($cod_rd,$paciente_rd,$cod_his);
+      $maxiHoja = $this->seleccionarMaximo($cod_rd,$paciente_rd,$cod_his_original);
       $max = $this->seleccionarMaximoHistorialDato($cod_rd,$paciente_rd);
       $sql = "insert into historial_dato(cod_rd,paciente_rd,cod_cds,zona_his,cod_responsable_familia_his,descripcion,hoja,paginas,cod_his,fecha,hora,tipoDato,estado)values(
       $cod_rd,$paciente_rd,1,'$zona_his',$cod_usuario,'Datos del paciente y responsable de familia',$maxiHoja,$max,$cod_his_original,'$fechaActual','$horaActual',1,'activo')";
@@ -472,6 +473,8 @@ class Historial
  }
 
 function seleccionarMaximo($cod_rd,$paciente_rd,$cod_his){
+
+  //preguntamos si el cod_his
   $sql = "select max(hoja) from historial_dato where cod_rd=$cod_rd and paciente_rd = $paciente_rd and cod_his=$cod_his";
   $resul = $this->con->query($sql);
   if($resul!='')
