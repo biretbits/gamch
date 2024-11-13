@@ -2,6 +2,7 @@
 
 <div class="container main-content">
 <div class="container">
+
   <?php
   /*echo "<div id='color1'><a href='$diario'id='co'>Registro Diario</a>><a href='#'
    onclick='accionHitorialVer($paciente_rd,$cod_rd)'
@@ -9,12 +10,65 @@
 
    ?>
 
+<style media="screen">
+  .colorful-text {
+    font-size: 4em;
+    font-weight: bold;
+    background: linear-gradient(45deg, #f06, #4a90e2, #50e3c2, #f5a623);
+    background-clip: text;
+    color: transparent;
+    text-shadow: 1px 2px 4px rgba(50, 0, 100, 0.3);
+    animation: textAnimation 3s infinite linear;
+  }
+  /* Ajusta la apariencia de Select2 para que coincida con Bootstrap */
+.select2-container .select2-selection--single {
+    height: calc(2.25rem + 2px); /* Ajusta la altura */
+    padding: 0.1rem; /* Padding similar a form-select */
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center; /* Centra el texto verticalmente */
+}
+
+/* Centra el texto verticalmente pero lo alinea a la izquierda */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.5rem; /* Ajusta la altura de la línea */
+    text-align: left; /* Alinea el texto a la izquierda */
+    color: #495057; /* Color de texto similar a Bootstrap */
+    margin-left: 0.375rem; /* Añade un pequeño margen izquierdo */
+}
+
+/* Alinea la flecha correctamente */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%; /* Alinea la flecha con el campo */
+    right: 0.5rem; /* Ajusta el espacio de la flecha */
+}
+
+/* Efectos de enfoque */
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default .select2-selection--single:hover {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Estiliza el dropdown de la lista de opciones */
+.select2-container .select2-dropdown {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+</style>
+
 <h4>Entrada de Productos Farmacéuticos</h4>
 <div class="row" >
      <div class="col-12">
        <hr>
      </div>
    </div>
+
           <div class="row">
               <div class="col-lg-12">
                   <!-- Masthead device mockup feature-->
@@ -71,8 +125,10 @@
                     // Obtener la fecha actual en formato YYYY-MM-DD
                       $fechaActual = date('Y-m-d');
                     ?>
-                    <div class="modal fade" id="ModalRegistro" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+
+
+                    <div class="modal fade" id="ModalRegistro"  aria-labelledby="miModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h6 class="modal-title" id="miModalRegistro">Registro o Actualización, Entrada de productos farmaceuticos</h6>
@@ -83,36 +139,84 @@
                           <div class="card shadow-lg">
                            <div class="card-body">
                              <form>
-                               <input type="hidden" name="cod_producto"id='cod_producto' value="">
-                               <input type="hidden" name="cod_entrada" id='cod_entrada' value="">
-                               <div class="mb-3">
-                                 <label for="cod_producto" class="form-label">Producto farmaceutico</label>
-                                 <input type="text" class="form-control" id="nombre_producto" placeholder="Busque el producto" onkeyup="buscarProductoNuevo()" autocomplete="off">
-                                 <div id="resultadoProducto" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                               <div class="row">
+                                 <input type="text" name="cod_producto"id='cod_producto' value="">
+                                 <input type="text" name="cod_entrada" id='cod_entrada' value="">
+                                 <input type="text" name="cod_proveedor" id='cod_proveedor' value="">
+
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">N° Doc</label>
+                                    <input type="text" name="nrodoc" id='nrodoc' class="form-control" value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Programa de salud</label>
+                                    <input type="text" name="programa_salud" id='programa_salud' class="form-control"value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">N°</label>
+                                    <input type="text" name="nro" id='nro' class="form-control"value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Fuente de reposición</label>
+                                    <input type="text" name="fuente_reposicion" id='fuente_reposicion' class="form-control"value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Proveedor</label>
+                                    <select id="proveedor" class="select2-container" style="width: 100%;">
+                                        <option value="" disabled selected>Buscar proveedor</option>
+                                    </select>
+                                  </div>
+
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Representante</label>
+                                    <input type="text" name="representante" id='representante' class="form-control"value="" disabled>
+                                  </div>
+
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Producto</label>
+                                    <select id="nombre_producto" class="select2-container" style="width: 100%;">
+                                        <option value="" disabled selected>Buscar Producto</option>
+                                    </select>
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Costo valorado</label>
+                                    <input type="text" name="costo_valorado" id='costo_valorado' class="form-control"value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Saldo</label>
+                                    <input type="text" name="saldo" id='saldo' class="form-control"value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">N° de Lote</label>
+                                    <input type="text" name="nrolote" id='nrolote' class="form-control"value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Lote Generico</label>
+                                    <input type="text" name="lote_generico" id='lote_generico' class="form-control"value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="">Lote Nacional</label>
+                                    <input type="text" name="lote_nacional" id='lote_nacional' class="form-control"value="">
+                                  </div>
+                                  <div class="col-md-4 mb-3">
+                                    <label for="name" class="form-label">Cantidad</label>
+                                    <input type="number" class="form-control" id="cantidad" name='cantidad' min='1' value='1' placeholder="Cantidad">
+                                  </div>
+
+                                 <div class="col-md-4 mb-3">
+                                   <label for="name" class="form-label">Costo Unitario</label>
+                                   <input type="number" class="form-control" id="unitario" name='unitario' placeholder="Costo unitario">
                                  </div>
-                               </div>
+                                 <div class="col-md-4 mb-3">
+                                   <label for="name" class="form-label">Costo Total</label>
+                                   <input type="number" class="form-control" id="total" name='total' placeholder="Costo Total" disabled>
+                                 </div>
+                                 <div class="col-md-4 mb-3">
+                                   <label for="vencimiento" class="form-label">Vencimiento</label>
+                                   <input type="date" class="form-control" id="vencimiento" name='vencimiento' placeholder="Vencimiento">
+                                 </div>
 
-                               <div class="mb-3">
-                                 <label for="name" class="form-label">Nro de lote</label>
-                                 <input type="number" class="form-control" id="lote" name='lote' placeholder="Nro de lote">
                                </div>
-                               <div class="mb-3">
-                                 <label for="name" class="form-label">Cantidad</label>
-                                 <input type="number" class="form-control" id="cantidad" name='cantidad' min='1' value='1' placeholder="Cantidad">
-                               </div>
-                               <div class="mb-3">
-                                 <label for="name" class="form-label">Costo Unitario</label>
-                                 <input type="number" class="form-control" id="unitario" name='unitario' placeholder="Costo unitario">
-                               </div>
-                               <div class="mb-3">
-                                 <label for="name" class="form-label">Costo Total</label>
-                                 <input type="number" class="form-control" id="total" name='total' placeholder="Costo Total">
-                               </div>
-                               <div class="mb-3">
-                                 <label for="vencimiento" class="form-label">Vencimiento</label>
-                                 <input type="date" class="form-control" id="vencimiento" name='vencimiento' placeholder="Vencimiento">
-                               </div>
-
                              </form>
                            </div>
                          </div>
@@ -122,9 +226,11 @@
                           <button title='Guardar'type="button" class="btn btn-primary" onclick="registrar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'></button>
                          <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
                         </div>
+
                       </div>
                     </div>
                   </div>
+
                     <div class="row" >
                          <div class="col-12">
                            <hr>
@@ -316,22 +422,112 @@
               </div>
           </div>
       </div>
-      <style media="screen">
-      .colorful-text {
-           font-size: 4em;
-           font-weight: bold;
-           background: linear-gradient(45deg, #f06, #4a90e2, #50e3c2, #f5a623);
-           background-clip: text;
-           color: transparent;
-           text-shadow: 1px 2px 4px rgba(50, 0, 100, 0.3);
-           animation: textAnimation 3s infinite linear;
-
-       }
-      </style>
-
-
- <!-- modal de seleccion de fechas-->
 <script type="text/javascript">
+  // Seleccionamos el campo de entrada por su ID
+  var unitario1 = document.getElementById("unitario");
+  var cantidad1 = document.getElementById("cantidad");
+  // Asignamos la función al evento onkeyup del elemento
+  unitario.onkeyup = funcionCalcular;
+  cantidad.onkeyup = funcionCalcular;
+  function funcionCalcular(){
+    var unitarioValor = unitario1.value * cantidad1.value;
+    // Calculamos el total y lo asignamos al campo 'total'
+    document.getElementById("total").value = unitarioValor.toFixed(2);
+    //alert(document.getElementById("total").value+" ,");
+  }
+
+  $(document).ready(function() {
+    $('#proveedor').select2({
+        dropdownParent: $('#ModalRegistro'), // Mantiene el dropdown dentro del modal
+        placeholder: "Buscar proveedor",
+        ajax: {
+            url:"../controlador/farmacia.controlador.php?accion=bupr", // Archivo PHP que procesará la búsqueda
+            type: 'POST',
+            dataType: 'json',
+            delay: 250, // Tiempo de espera en ms para la solicitud AJAX
+            data: function(params) {
+              //alert(params.term);
+                return {
+                    proveedor: params.term // Término de búsqueda ingresado por el usuario
+                };
+            },
+            processResults: function(data) {
+
+                return {
+                    results: $.map(data, function(item) {
+                        return {
+                            id: item.cod_prov, // ID del proveedor desde la BD
+                            text: item.nombre+" - "+item.nombre_apellidos, // Nombre del proveedor desde la BD
+                            cod_proveedor: item.cod_prov,
+                            nombre_apellidos: item.nombre_apellidos
+                        };
+                    })
+                };
+            },
+
+            cache: true,
+            success: function(response) {
+            console.log("Respuesta recibida desde el servidor:", response);
+          },
+          error: function(xhr, status, error) {
+            console.error("Error en la solicitud:", error);
+            console.log("Detalles del error:", xhr.responseText);
+            //alert("Ocurrió un error al obtener los datos. Revisa la consola para más detalles.");
+        }
+        },
+        minimumInputLength: 1 // Mínimo de caracteres antes de hacer la búsqueda
+    }).on('select2:select', function(e) { // Evento de selección dentro del bloque select2
+        var selectedData = e.params.data; // Obtiene los datos seleccionados
+        $('#cod_proveedor').val(selectedData.cod_proveedor); // Coloca el cod_prov en el input deseado
+        $('#representante').val(selectedData.nombre_apellidos); //
+    });
+  });
+
+  $(document).ready(function() {
+    $('#nombre_producto').select2({
+        dropdownParent: $('#ModalRegistro'), // Mantiene el dropdown dentro del modal
+        placeholder: "Buscar nombre producto",
+        ajax: {
+            url: "../controlador/farmacia.controlador.php?accion=bcp",
+            type: "POST",
+            dataType: 'json',
+            delay: 250, // Tiempo de espera en ms para la solicitud AJAX
+            data: function(params) {
+              //alert(params.term);
+                return {
+                    cod_producto: params.term // Término de búsqueda ingresado por el usuario
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: $.map(data, function(item) {
+                        return {
+                            id: item.cod_generico, // ID del proveedor desde la BD
+                            text: item.nombre+" - "+item.nombre_forma+" - "+item.concentracion, // Nombre del proveedor desde la BD
+                            cod_producto: item.cod_generico,
+                            nombre_apellidos: item.nombre_apellidos
+                        };
+                    })
+                };
+            },
+
+            cache: true,
+            success: function(response) {
+            console.log("Respuesta recibida desde el servidor:", response);
+          },
+          error: function(xhr, status, error) {
+            console.error("Error en la solicitud:", error);
+            console.log("Detalles del error:", xhr.responseText);
+            //alert("Ocurrió un error al obtener los datos. Revisa la consola para más detalles.");
+        }
+        },
+        minimumInputLength: 1 // Mínimo de caracteres antes de hacer la búsqueda
+    }).on('select2:select', function(e) { // Evento de selección dentro del bloque select2
+        var selectedData = e.params.data; // Obtiene los datos seleccionados
+        $('#cod_producto').val(selectedData.cod_producto); // Coloca el cod_prov en el input deseado
+    });
+  });
+
 function Buscar(page){
     var obt_lis = document.getElementById("selectList").value;
     var listarDeCuanto = verificarList(obt_lis);
@@ -371,19 +567,54 @@ function Buscar(page){
   }
 
   function registrar(){
-    var cod_producto = document.getElementById("cod_producto").value;
+  /*  var cod_producto = document.getElementById("cod_producto").value;
     var cantidad = document.getElementById("cantidad").value;
     var vencimiento = document.getElementById("vencimiento").value;
+    var cod_entrada = document.getElementById("cod_entrada").value;*/
+
+    var cod_producto = document.getElementById("cod_producto").value;
     var cod_entrada = document.getElementById("cod_entrada").value;
-    if(cod_producto == "" || cantidad == "" ||vencimiento==""){
+    var cod_proveedor = document.getElementById("cod_proveedor").value;
+    var nrodoc = document.getElementById("nrodoc").value;
+    var programa_salud = document.getElementById("programa_salud").value;
+    var nro = document.getElementById("nro").value;
+    var fuente_reposicion = document.getElementById("fuente_reposicion").value;
+    var proveedor = document.getElementById("proveedor").value;
+    var representante = document.getElementById("representante").value;
+    var nombre_producto = document.getElementById("nombre_producto").value;
+    var costo_valorado = document.getElementById("costo_valorado").value;
+    var saldo = document.getElementById("saldo").value;
+    var nrolote = document.getElementById("nrolote").value;
+    var lote_generico = document.getElementById("lote_generico").value;
+    var lote_nacional = document.getElementById("lote_nacional").value;
+    var cantidad = document.getElementById("cantidad").value;
+    var unitario = document.getElementById("unitario").value;
+    var total = document.getElementById("total").value;
+    var vencimiento = document.getElementById("vencimiento").value;
+    if(cod_producto == "" || cantidad == "" ||vencimiento=="" || unitario=="" || cod_proveedor==""){
       Vacio();
       return;
     }
     var datos = new FormData(); // Crear un objeto FormData vacío
     datos.append("cod_producto",cod_producto);
-    datos.append("cantidad",cantidad);
-    datos.append("vencimiento",vencimiento);
     datos.append("cod_entrada",cod_entrada);
+    datos.append("cod_proveedor",cod_proveedor);
+    datos.append("nrodoc",nrodoc);
+    datos.append("programa_salud",programa_salud);
+    datos.append("nro",nro);
+    datos.append("fuente_reposicion",fuente_reposicion);
+    datos.append("proveedor",proveedor);
+    datos.append("representante",representante);
+    datos.append("nombre_producto",nombre_producto);
+    datos.append("costo_valorado",costo_valorado);
+    datos.append("saldo",saldo);
+    datos.append("nrolote",nrolote);
+    datos.append("lote_generico",lote_generico);
+    datos.append("lote_nacional",lote_nacional);
+    datos.append("cantidad",cantidad);
+    datos.append("unitario",unitario);
+    datos.append("total",total);
+    datos.append("vencimiento",vencimiento);
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=rpe",
         type: "POST",
@@ -480,78 +711,6 @@ function Buscar(page){
     document.getElementById("nombre_producto").value=nombre_producto;
   }
 
-
-  function buscarProductoNuevo() {
-          //vaciarDESPUESdeUNtiempoAdmision();
-          var nombre_producto = document.getElementById("nombre_producto").value;
-          if (nombre_producto != "") {
-              $.ajax({
-                  url: "../controlador/farmacia.controlador.php?accion=bcp",
-                  type: "POST",
-              		data: {cod_producto:nombre_producto},
-              		dataType: "json",
-                  success: function(data) {
-                    //alert(data);
-                    if(data!=""){
-                      var unir="";
-                      for (let i = 0; i < data.length; i++) {
-                        var usuario = data[i];
-
-                        unir+="<div>";
-                        unir+="<div id='u' style=' display: inline-block;display:none;'>"+(data[i].cod_generico)+"</div> ";
-                        unir+="<div id='u' style=' display: inline-block;'>"+(data[i].codigo)+"</div> ";
-                        unir+="<div id='u' style=' display: inline-block;'>"+(data[i].nombre)+"</div> ";
-                        unir+="<div id='ap' style=' display: inline-block;'> "+(data[i].nombre_forma)+"</div> ";
-                        unir+="<div id='am' style=' display: inline-block;'> "+(data[i].concentracion)+"</div></div>";
-
-                      }
-
-                      visualizarProducto(unir);
-                      $('#resultadoProducto div').on('click', function() {
-                              //obtenemos los datos del usuario div resultado
-                        var cod_producto = $(this).children().eq(0).text();
-                        var codigo = $(this).children().eq(1).text();
-                        var nombre = $(this).children().eq(2).text();
-                        var nombre_forma = $(this).children().eq(3).text();
-                        var concentracion = $(this).children().eq(4).text();
-                          //dentro de los id de la vista mostramos los datos que estan en el div resultado
-                          if(nombre != ""){
-                            document.getElementById("nombre_producto").value = (nombre)+" "+(nombre_forma)+" "+(concentracion);
-                            document.getElementById("cod_producto").value = cod_producto;
-                            $('#resultadoProducto').html(""); //para vaciar
-                          }
-                      });
-                    }else{
-                      $('#resultadoProducto').html("<div class='alert alert-light' role='alert'>No se encontro resultados</div>");
-                    }
-
-              		}
-              	});
-              }else{
-                $('#resultadoProducto').html("");
-                document.getElementById("cod_producto").value='';
-              }
-            }
-            function Convertir(t){
-              let palabras = t.split(" ");
-              let nombreConInicialesMayusculas = "";
-               for (let i = 0; i < palabras.length; i++) {
-                 nombreConInicialesMayusculas += palabras[i].charAt(0).toUpperCase() + palabras[i].slice(1) + " ";
-                }
-                 return nombreConInicialesMayusculas.trim();
-             }
-
-              function visualizarProducto(unir){
-
-              $('#resultadoProducto').html(unir);
-              //colocamos un color de css
-              $('#resultadoProducto').css({
-               'cursor': 'pointer',
-               'font-size':'15px'
-               });
-      }
-
-
         function accionBtnActivar(accion,pagina,listarDeCuanto,buscar,cod_entrada,fechai,fechaf){
           var estadoProducto=document.getElementById("estadoProducto").value;
           var buscar = document.getElementById("buscar").value;
@@ -622,6 +781,67 @@ function Buscar(page){
        document.body.appendChild(form);
        form.submit();
       }
+//funcion para buscar proveedorFK1
+// Variable para verificar si Select2 ya ha sido inicializado
 
+/*let select2Inicializado = false;
+
+function buscarProveedor() {
+    // Obtén el valor del campo "proveedor"
+    var proveedor = document.getElementById("proveedor").value;
+
+    // Verifica que el campo tenga un valor y que Select2 no esté ya inicializado
+    if (proveedor !== "" && !select2Inicializado) {
+        // Inicializa Select2
+        $('#proveedor').select2({
+            placeholder: "Selecciona un proveedor",
+            allowClear: true,
+            ajax: {
+                url: "../controlador/farmacia.controlador.php?accion=bcp", // URL del archivo PHP
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    // Pasar el valor del proveedor al backend
+                    return {
+                        proveedor: proveedor // usa el valor actual del input "proveedor"
+                    };
+                },
+                processResults: function(data) {
+                    // Mapea los datos y crea el formato personalizado
+                    return {
+                        results: data.map(function(item) {
+                            return {
+                                id: item.cod_prov,
+                                text: `${item.nombre} - ${item.nombre_apellidos}`
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        // Marca Select2 como inicializado
+        select2Inicializado = true;
+
+        // Abre el menú desplegable después de inicializarlo
+        $('#proveedor').select2('open');
+
+        // Maneja la selección de un proveedor
+        $('#proveedor').on('select2:select', function(e) {
+            var selectedData = e.params.data;
+            document.getElementById("cod_proveedor").value = selectedData.id;
+            document.getElementById("proveedor").value = selectedData.text;
+        });
+    }
+}
+
+$('#ModalRegistro').on('shown.bs.modal', function () {
+       $('#mibuscador').select2({
+           placeholder: "Seleccione un país",
+           allowClear: true
+       });
+   });*/
 </script>
+
 <?php require("../librerias/footeruni.php"); ?>

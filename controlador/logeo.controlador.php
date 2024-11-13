@@ -107,18 +107,18 @@ class LogeoControlador{
 
 	if(isset($_GET["accion"]) && $_GET["accion"]=="is"){
 		$lc->visualizarInicioSession();
-	}
+	}else
 
 	if(isset($_GET["accion"]) && $_GET["accion"]=="vcu"){
 		$lc->verificarLogin($_POST["usuario"],$_POST["contrasena"]);
-	}
+	}else
 	if(isset($_GET["accion"])&&$_GET["accion"]=="salir"){
 		$lc->Drop_usuario();
-	}
+	}else
 	if(isset($_GET["accion"])&&$_GET["accion"]=="vsx")
 	{
 		$lc->validar_usuario_si_existe($_POST['usuario']);
-	}
+	}else
 	if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]!=''){
 		if(isset($_GET["accion"])&&$_GET["accion"]=="ix")
 		{
@@ -130,6 +130,8 @@ class LogeoControlador{
 			}
 			$ins->Redireccionar_inicio();
 		}
+	}else{
+		$ins->Redireccionar_inicio();
 	}
 
 ?>

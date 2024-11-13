@@ -706,6 +706,7 @@ function BuscarRegistrosHistorial(page){
     datos.append("paciente_rd",paciente_rd);
     datos.append("cod_rd",cod_rd);
     datos.append("cod_his_original",cod_his_original);
+    //alert(cod_his_original);
       $.ajax({
         url: "../controlador/historial.controlador.php?accion=bhtdt",
         type: "POST",
@@ -1044,7 +1045,7 @@ function vaciarDESPUESdeUNtiempo(resul){
                 }
             });
         }else{
-          $('#resultado12').html("<div class='alert alert-light' role='alert'>No se encontro resultado12s</div>");
+          $('#resultado12').html("<div class='alert alert-light' role='alert'>No se encontro resultados</div>");
         }
   		}
   	});
@@ -1117,8 +1118,6 @@ function vaciarCampos(){
 
   //identificacion del pacient
    document.getElementById("cod_usuario").value='';
-   document.getElementById("paciente_rd").value='';
-   document.getElementById("cod_rd").value='';
    document.getElementById("fecha_nacimiento").value='';
    document.getElementById("sexo").value='';
    document.getElementById("ocupacion").value='';

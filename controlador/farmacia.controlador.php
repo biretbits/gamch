@@ -589,13 +589,13 @@ class FarmaciaControlador{
         return $ar; // Devolver el array completo fuera del bucle
       }
 
-    public function insertarDatosEntrada($cod_producto,$cantidad,$vencimiento,$cod_entrada){
+    public function insertarDatosEntrada($datos){
       $fechaActual = date('Y-m-d');
       $hora = date('H:i:s');
       $fa =new Farmacia();
       $usuario=$_SESSION["cod_usuario"];
 
-      $resul=$fa->InsertEntradaProducto($cantidad,$vencimiento,$fechaActual,$cod_producto,$cod_entrada,$usuario,$hora);
+      $resul=$fa->InsertEntradaProducto($datos,$fechaActual,$usuario,$hora);
       $this->ActualizarCantidadEnentrada($fechaActual,$fa);
       echo $resul;
     }
@@ -1434,109 +1434,616 @@ class FarmaciaControlador{
     public function MostrarLatabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
         $this->VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
     }
+
+    public function VisualizarTablaProveedro(){
+      $fa = new Farmacia();
+      $listarDeCuanto = 5;$pagina = 1;$buscar = "";
+      $resul1 = $fa->SeleccionarProveedor($buscar,false,false);
+      $num_filas_total = mysqli_num_rows($resul1);
+      $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+              //calculamos el registro inicial
+      $inicioList = ($pagina - 1) * $listarDeCuanto;
+      $res = $fa->SeleccionarProveedor($buscar,$inicioList,$listarDeCuanto);
+      $resul = $this->Uniendo1($res,$fa);
+      require("../vista/proveedor/proveedorTabla.php");
+    }
+
+    function Uniendo1($resul, $rdi) {
+      $ar = [];
+      while ($fi = mysqli_fetch_array($resul)) {
+          // Añadir cada fila al array con una estructura correcta
+          $entry = [
+              "cod_prov" => $fi["cod_prov"],
+              "nombre" => $fi["nombre"],
+              "telefono" => $fi["telefono"],
+              "correo" => $fi["correo"],
+              "cod_representante" => $fi["cod_representante"],
+              "representante" => $rdi->selectDatosRepresentante($fi["cod_representante"]),
+              "estado" => $fi["estado"]
+          ];
+          $ar[] = $entry; // Agregar la entrada al array principal
+      }
+      return $ar; // Devolver el array completo fuera del bucle
+  }
+
+      public function buscarYvisualizarTablaProveedor($pagina,$listarDeCuanto,$buscar){
+        $ch = new Farmacia();
+        $resul1 = $ch->SeleccionarProveedor($buscar,false,false);
+        if(is_string($resul1)){
+          echo "<h6>Ocurrio un error, $resul1</h6>";
+        }else{
+          $num_filas_total = mysqli_num_rows($resul1);
+          $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+                  //calculamos el registro inicial
+          $inicioList = ($pagina - 1) * $listarDeCuanto;
+
+          $res = $ch->SeleccionarProveedor($buscar,$inicioList,$listarDeCuanto);
+          $resul = $this->Uniendo1($res,$ch);
+          echo "<div class='row'>
+            <div class='col'>
+              <div class='table-responsive'>
+              <table class='table'>
+                <thead style='font-size:12px'>
+                  <tr>
+                  <th>N°</th>
+                  <th>Nombre</th>
+                  <th>Telefono</th>
+                  <th>Correo</th>
+                  <th>Representante</th>
+                  <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>";
+
+                if ($resul && count($resul) > 0) {
+                    $i = $inicioList;
+                  foreach ($resul as $fi){
+                      echo "<tr>";
+                        echo "<td>".($i+1)."</td>";
+                        echo "<td>".$fi['nombre']."</td>";
+                        echo "<td>".$fi['telefono']."</td>";
+                        echo "<td>".$fi['correo']."</td>";
+                        $repre = $fi["representante"];
+                        $nombre_apellidos = '';
+                        $telefono = '';
+                        foreach ($repre as $r) {
+                          $nombre_apellidos = $r["nombre_apellidos"];
+                          $telefono = $r["telefono"];
+                        }
+                        $da = $nombre_apellidos." - ".$telefono;
+                        echo "<td>".$nombre_apellidos."</td>";
+
+                        echo "<td>";
+                          echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                          $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi["cod_prov"].",\"".$fi["nombre"]."\",\"".$fi["telefono"]."\",\"".$fi["correo"]."\",".$fi["cod_representante"].",\"".$da."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'>
+                          <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                          echo $dd;
+
+                          if($fi["estado"] == 'activo'){
+                            echo "<button type='button' class='btn btn-danger' title='desactivar' onclick='accionBtnActivar(".$fi["cod_prov"].",\"".$fi["estado"]."\")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                          }else{
+                            echo "<button type='button' class='btn btn-danger' title='activar' onclick='accionBtnActivar(".$fi["cod_prov"].",\"".$fi["estado"]."\")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
+                          }
+                          echo "</div>";
+                      echo "</td>";
+
+                      echo "</tr>";
+                      $i++;
+                    }
+                  }else{
+                    echo "<tr>";
+                    echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+                    echo "</tr>";
+                  }
+
+          echo "</tbody>
+            </table>
+            </div>
+          </div>
+        </div>";
+        if($TotalPaginas!=0){
+          $adjacents=1;
+          $anterior = "&lsaquo; Anterior";
+          $siguiente = "Siguiente &rsaquo;";
+      echo "<div class='row'>
+            <div class='col'>";
+
+          echo "<div class='d-flex flex-wrap flex-sm-row justify-content-between'>";
+            echo '<ul class="pagination">';
+              echo "pagina &nbsp;".$pagina."&nbsp;con&nbsp;";
+                $total=$inicioList+$pagina;
+                if($TotalPaginas > $num_filas_total){
+                  $TotalPaginas = $num_filas_total;
+                }
+              echo '<li class="page-item active"><a class=" href="#"> '.($TotalPaginas).' </a></li> ';
+              echo " &nbsp;de&nbsp;".$num_filas_total." registros";
+            echo '</ul>';
+
+            echo '<ul class="pagination d-flex flex-wrap">';
+
+            // previous label
+            if ($pagina != 1) {
+              echo "<li class='page-item'><a class='page-link'  onclick=\"Buscar(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
+            }
+            if($pagina==1) {
+              echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
+            } else if($pagina==2) {
+              echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"Buscar(1)\" class='page-link'>$anterior</a></li>";
+            }else {
+              echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"Buscar($pagina-1)\">$anterior</a></li>";
+
+            }
+            // first label
+            if($pagina>($adjacents+1)) {
+              echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"Buscar(1)\">1</a></li>";
+            }
+            // interval
+            if($pagina>($adjacents+2)) {
+              echo"<li class='page-item'><a class='page-link'>...</a></li>";
+            }
+
+            // pages
+
+            $pmin = ($pagina>$adjacents) ? ($pagina-$adjacents) : 1;
+            $pmax = ($pagina<($TotalPaginas-$adjacents)) ? ($pagina+$adjacents) : $TotalPaginas;
+            for($i=$pmin; $i<=$pmax; $i++) {
+              if($i==$pagina) {
+                echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
+              }else if($i==1) {
+                echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"Buscar(1)\">$i</a></li>";
+              }else {
+                echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"Buscar(".$i.")\" class='page-link'>$i</a></li>";
+              }
+            }
+
+            // interval
+
+            if($pagina<($TotalPaginas-$adjacents-1)) {
+              echo "<li class='page-item'><a class='page-link'>...</a></li>";
+            }
+            // last
+
+            if($pagina<($TotalPaginas-$adjacents)) {
+              echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"Buscar($TotalPaginas)\">$TotalPaginas</a></li>";
+            }
+            // next
+
+            if($pagina<$TotalPaginas) {
+              echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"Buscar($pagina+1)\">$siguiente</a></li>";
+            }else {
+              echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
+            }
+            if ($pagina != $TotalPaginas) {
+              echo "<li class='page-item'><a class='page-link' onclick=\"Buscar($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
+            }
+
+            echo "</ul>";
+            echo "</div>";
+
+      echo "</div>
+          </div>";
+          }
+        }
+      }
+
+      public function registrarTablaProveedor($array){
+        $ch = new Farmacia();
+        $resul = $ch->InsertarProveedor($array);
+        if($resul != ''){
+          echo "correcto";
+        }else{
+          echo "error";
+        }
+      }
+
+      public function EliminarTablaProveedor($cod_prov,$estado){
+        $ch = new Farmacia();
+        $resul = $ch->EliminarProveedor($cod_prov,$estado);
+        if($resul != ''){
+          echo "correcto";
+        }else{
+          echo "error";
+        }
+      }
+
+      //Representante
+
+      public function VisualizarTablaRepresentante(){
+        $fa = new Farmacia();
+        $listarDeCuanto = 5;$pagina = 1;$buscar = "";
+        $resul1 = $fa->SeleccionarRepresentante($buscar,false,false);
+        $num_filas_total = mysqli_num_rows($resul1);
+        $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+                //calculamos el registro inicial
+        $inicioList = ($pagina - 1) * $listarDeCuanto;
+        $resul = $fa->SeleccionarRepresentante($buscar,$inicioList,$listarDeCuanto);
+
+        require("../vista/proveedor/representanteTabla.php");
+      }
+      public function registrarTablaRepresentante($array){
+        $ch = new Farmacia();
+        $resul = $ch->InsertarRepresentante($array);
+        if($resul != ''){
+          echo "correcto";
+        }else{
+          echo "error";
+        }
+      }
+      public function buscarYvisualizarTablaRepresentante($pagina,$listarDeCuanto,$buscar){
+        $ch = new Farmacia();
+        $resul1 = $ch->SeleccionarRepresentante($buscar,false,false);
+        if(is_string($resul1)){
+          echo "<h6>Ocurrio un error, $resul1</h6>";
+        }else{
+          $num_filas_total = mysqli_num_rows($resul1);
+          $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+                  //calculamos el registro inicial
+          $inicioList = ($pagina - 1) * $listarDeCuanto;
+
+          $resul = $ch->SeleccionarRepresentante($buscar,$inicioList,$listarDeCuanto);
+          echo "<div class='row'>
+            <div class='col'>
+              <div class='table-responsive'>
+              <table class='table'>
+                <thead style='font-size:12px'>
+                  <tr>
+                  <th>N°</th>
+                  <th>Nombre y Apellidos</th>
+                  <th>Telefono</th>
+                  <th>Cargo</th>
+                  <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>";
+
+                if (mysqli_num_rows($resul) > 0){
+                    $i = $inicioList;
+                  while($fi=mysqli_fetch_array($resul)){
+                      echo "<tr>";
+                        echo "<td>".($i+1)."</td>";
+                        echo "<td>".$fi['nombre_apellidos']."</td>";
+                        echo "<td>".$fi['telefono']."</td>";
+
+                        echo "<td>".$fi['cargo']."</td>";
+                        echo "<td>";
+                          echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                          $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi["cod_rep"].",\"".$fi["nombre_apellidos"]."\",\"".$fi["telefono"]."\",\"".$fi["cargo"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'>
+                          <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                          echo $dd;
+                          if($fi["estado"] == 'activo'){
+                            echo "<button type='button' class='btn btn-danger' title='desactivar' onclick='accionBtnActivar(".$fi["cod_rep"].",\"".$fi["estado"]."\")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                          }else{
+                            echo "<button type='button' class='btn btn-danger' title='activar' onclick='accionBtnActivar(".$fi["cod_rep"].",\"".$fi["estado"]."\")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
+                          }
+                          echo "</div>";
+                      echo "</td>";
+
+                      echo "</tr>";
+                      $i++;
+                    }
+                  }else{
+                    echo "<tr>";
+                    echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+                    echo "</tr>";
+                  }
+          echo "</tbody>
+            </table>
+            </div>
+          </div>
+        </div>";
+        if($TotalPaginas!=0){
+          $adjacents=1;
+          $anterior = "&lsaquo; Anterior";
+          $siguiente = "Siguiente &rsaquo;";
+      echo "<div class='row'>
+            <div class='col'>";
+
+          echo "<div class='d-flex flex-wrap flex-sm-row justify-content-between'>";
+            echo '<ul class="pagination">';
+              echo "pagina &nbsp;".$pagina."&nbsp;con&nbsp;";
+                $total=$inicioList+$pagina;
+                if($TotalPaginas > $num_filas_total){
+                  $TotalPaginas = $num_filas_total;
+                }
+              echo '<li class="page-item active"><a class=" href="#"> '.($TotalPaginas).' </a></li> ';
+              echo " &nbsp;de&nbsp;".$num_filas_total." registros";
+            echo '</ul>';
+
+            echo '<ul class="pagination d-flex flex-wrap">';
+
+            // previous label
+            if ($pagina != 1) {
+              echo "<li class='page-item'><a class='page-link'  onclick=\"Buscar(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
+            }
+            if($pagina==1) {
+              echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
+            } else if($pagina==2) {
+              echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"Buscar(1)\" class='page-link'>$anterior</a></li>";
+            }else {
+              echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"Buscar($pagina-1)\">$anterior</a></li>";
+
+            }
+            // first label
+            if($pagina>($adjacents+1)) {
+              echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"Buscar(1)\">1</a></li>";
+            }
+            // interval
+            if($pagina>($adjacents+2)) {
+              echo"<li class='page-item'><a class='page-link'>...</a></li>";
+            }
+
+            // pages
+
+            $pmin = ($pagina>$adjacents) ? ($pagina-$adjacents) : 1;
+            $pmax = ($pagina<($TotalPaginas-$adjacents)) ? ($pagina+$adjacents) : $TotalPaginas;
+            for($i=$pmin; $i<=$pmax; $i++) {
+              if($i==$pagina) {
+                echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
+              }else if($i==1) {
+                echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"Buscar(1)\">$i</a></li>";
+              }else {
+                echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"Buscar(".$i.")\" class='page-link'>$i</a></li>";
+              }
+            }
+
+            // interval
+
+            if($pagina<($TotalPaginas-$adjacents-1)) {
+              echo "<li class='page-item'><a class='page-link'>...</a></li>";
+            }
+            // last
+
+            if($pagina<($TotalPaginas-$adjacents)) {
+              echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"Buscar($TotalPaginas)\">$TotalPaginas</a></li>";
+            }
+            // next
+
+            if($pagina<$TotalPaginas) {
+              echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"Buscar($pagina+1)\">$siguiente</a></li>";
+            }else {
+              echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
+            }
+            if ($pagina != $TotalPaginas) {
+              echo "<li class='page-item'><a class='page-link' onclick=\"Buscar($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
+            }
+
+            echo "</ul>";
+            echo "</div>";
+
+      echo "</div>
+          </div>";
+          }
+        }
+      }
+
+      public function EliminarTablaRepresentante($cod_rep,$estado){
+        $ch = new Farmacia();
+        $resul = $ch->EliminarRepresentante($cod_rep,$estado);
+        if($resul != ''){
+          echo "correcto";
+        }else{
+          echo "error";
+        }
+      }
+
+      public function ReporteRepresentante($buscar){
+    		$ch = new Farmacia();
+    		$resul = $ch->SeleccionarRepresentante($buscar,false,false);
+    		require("../vista/proveedor/ReporterRepresentante.php");
+    	}
+      //end representante
+      public function buscarRepresentanteTabla($representante){
+            $f =new Farmacia();
+      	   $re = $f->representanteBuscar($representante);
+           $datos = array();
+          if ($re->num_rows > 0) {
+         // Recoger los resultados en un array
+           while($row = $re->fetch_assoc()) {
+            $datos[] = $row;
+          }
+            echo json_encode($datos);
+        } else {
+            echo json_encode([]);
+        }
+        }
+      public function ReporteProveedor($buscar){
+      	$ch = new Farmacia();
+        $res = $ch->SeleccionarProveedor($buscar,$inicioList,$listarDeCuanto);
+        $resul = $this->Uniendo1($res,$ch);
+      	require("../vista/proveedor/ReporteProveedor.php");
+      }
+
+
+      public function buscarProveedor($proveedor){
+        $fa =new Farmacia();
+        $re = $fa->buscarProveedorTabla($proveedor);
+        $datos = array();
+        if ($re->num_rows > 0) {
+        // Recoger los resultados en un array
+         while($row = $re->fetch_assoc()) {
+          $datos[] = $row;
+        }
+            echo json_encode($datos);
+        } else {
+            echo json_encode([]);
+        }
+      }
   }
 
   $f = new FarmaciaControlador();
-  if(isset($_GET["accion"]) && $_GET["accion"]=="ngf"){
-		$f->visualizarNombreGenerico();
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="bngt"){
-		$f->BuscarNombreGenerico($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rfnt"){
-    $f->registrarNombreGenerico($_POST["generico"],$_POST["cod_generico"],$_POST['enfermedad'],$_POST['vitrina'],$_POST['stockmin'],$_POST['stockmax'],$_POST['cod_forma'],$_POST['cod_conc'],$_POST['codigo']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="vtf"){
-		$f->visualizarConcentracion();
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="bct"){
-    $f->BuscarConcentracion($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rfc"){
-    $f->registrarConcentracion($_POST["generico"],$_POST["cod_generico"]);
+  if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == 'farmacia'){
+    if(isset($_GET["accion"]) && $_GET["accion"]=="ngf"){
+  		$f->visualizarNombreGenerico();
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bngt"){
+  		$f->BuscarNombreGenerico($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rfnt"){
+      $f->registrarNombreGenerico($_POST["generico"],$_POST["cod_generico"],$_POST['enfermedad'],$_POST['vitrina'],$_POST['stockmin'],$_POST['stockmax'],$_POST['cod_forma'],$_POST['cod_conc'],$_POST['codigo']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="vtf"){
+  		$f->visualizarConcentracion();
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bct"){
+      $f->BuscarConcentracion($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rfc"){
+      $f->registrarConcentracion($_POST["generico"],$_POST["cod_generico"]);
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="vfp"){
+  		$f->visualizarPresentacion();
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bpt"){
+  		$f->BuscarPresentacion($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rp"){
+      $f->registrarPresentacion($_POST["generico"],$_POST["cod_generico"]);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="vpf"){
+  		$f->visualizarProductoFarmacia();
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rpe"){
+      $datos = array("cod_producto"=>$_POST["cod_producto"],
+                      "cod_entrada"=>$_POST["cod_entrada"],
+                      "cod_proveedor"=>$_POST["cod_proveedor"],
+                      "nrodoc"=>$_POST["nrodoc"],
+                      "programa_salud"=>$_POST["programa_salud"],
+                      "nro"=>$_POST["nro"],
+                      "fuente_reposicion"=>$_POST["fuente_reposicion"],
+                      "proveedor"=>$_POST["proveedor"],
+                      "representante"=>$_POST["representante"],
+                      "nombre_producto"=>$_POST["nombre_producto"],
+                      "costo_valorado"=>$_POST["costo_valorado"],
+                      "saldo"=>$_POST["saldo"],
+                      "nrolote"=>$_POST["nrolote"],
+                      "lote_generico"=>$_POST["lote_generico"],
+                      "lote_nacional"=>$_POST["lote_nacional"],
+                      "cantidad"=>$_POST["cantidad"],
+                      "unitario"=>$_POST["unitario"],
+                      "total"=>$_POST["total"],
+                      "vencimiento"=>$_POST["vencimiento"]);
+      $f->insertarDatosEntrada($datos);
+  	}
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bft"){
+  		$f->visualizarBusquedaFarmacia($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf'],$_POST['estadoProducto']);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bcp"){
+  		$f->buscarProductoFarmaceutico($_POST['cod_producto']);
+  	}
+    if(isset($_GET["accion"]) && $_GET['accion']=='vsf'){
+      $f->VisualizarSalidaFarmacia();
+  	}
+    if(isset($_GET["accion"]) && $_GET['accion']=='dNg'){
+      $f->EliminarNG($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_generico"]);
+  	}
+
+    if(isset($_GET["accion"]) && $_GET['accion']=='dbe'){
+      $f->EliminarEF($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_entrada"],$_POST["fechai"],$_POST["fechaf"],$_POST['estadoProducto']);
+  	}
+    if(isset($_GET["accion"]) && $_GET['accion']=='resf'){
+      $f->InsertarActualizarSalida($_POST["cod_producto"],$_POST["cantidad"],$_POST["cod_salida"],$_POST["id_paciente"],
+      $_POST["actualizar"],$_POST["nombre_receta"]);
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="buf"){
+  		$f->buscarPacienteFarmacia($_POST['cod_paciente']);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="efs"){
+  		$f->EliminarSalida($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="vsta"){
+  		$f->VisualizarSalidaFarmaciaTabla($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rcu"){
+    	$f->ReporteConcentracionUnidadMedida($_POST['buscar']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rpr"){
+    	$f->ReportePresentacion($_POST['buscar']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rpg"){
+      $f->ReporteNombreGenerico($_POST['buscar']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rpng"){
+      $f->ReporteProductoEntrada($_POST['buscar'],$_POST["fechai"],$_POST["fechaf"],$_POST["estadoProducto"]);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="soli"){
+      $f->SeleccionarProductoSolicitadoPORid($_POST['cod_solicitado']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="fips"){
+      $ar = array(
+        "cod_producto1" => $_POST["cod_producto1"],
+        "cod_solicitado1" => $_POST["cod_solicitado1"],
+        "cantidad1" => $_POST["cantidad1"]);
+      $f->ActualizarProductoSolicitado($ar);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarEntrega"){
+      $f->ActualizarEntregaApaciente($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarTabla"){
+      $f->actualizarTablaSalida($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bfps"){
+      $f->BuscarDatospSolicitado($_POST['cod_salida']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="DelFps"){
+      $f->DeleteFilaProductoSolicitado($_POST['cod_solicitado']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarTabla"){
+      $f->MostrarLatabla($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="fpro"){
+      $f->VisualizarTablaProveedro();
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bprov"){
+      $f->buscarYvisualizarTablaProveedor($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rprov"){
+      $array = array("cod_prov"=>$_POST["cod_prov"],
+                      "nombre"=>$_POST["nombre"],
+                      "telefono"=>$_POST["telefono"],
+                      "correo"=>$_POST["correo"],
+                      "cod_rep" => $_POST["cod_rep"]);
+      $f->registrarTablaProveedor($array);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="DcP"){
+      $f->EliminarTablaProveedor($_POST["cod_prov"],$_POST["estado"]);
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="Frep"){
+      $f->VisualizarTablaRepresentante();
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rrep"){
+      $array = array("cod_rep"=>$_POST["cod_rep"],
+                      "nombre_apellidos"=>$_POST["nombre_apellidos"],
+                      "telefono"=>$_POST["telefono"],
+                      "cargo"=>$_POST["cargo"]);
+      $f->registrarTablaRepresentante($array);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="brep"){
+      $f->buscarYvisualizarTablaRepresentante($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="DcR"){
+      $f->EliminarTablaRepresentante($_POST["cod_rep"],$_POST["estado"]);
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="rerep"){
+      $f->ReporteRepresentante($_POST["buscar"]);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="brepU"){
+      $f->buscarRepresentanteTabla($_POST["representante"]);
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="repro"){
+      $f->ReporteProveedor($_POST["buscar"]);
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bupr"){
+  		$f->buscarProveedor($_POST['proveedor']);
+  	}
+
   }
 
-  if(isset($_GET["accion"]) && $_GET["accion"]=="vfp"){
-		$f->visualizarPresentacion();
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="bpt"){
-		$f->BuscarPresentacion($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"]);
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rp"){
-    $f->registrarPresentacion($_POST["generico"],$_POST["cod_generico"]);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="vpf"){
-		$f->visualizarProductoFarmacia();
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rpe"){
-    $f->insertarDatosEntrada($_POST["cod_producto"],$_POST["cantidad"],$_POST["vencimiento"],$_POST['cod_entrada']);
-	}
-
-  if(isset($_GET["accion"]) && $_GET["accion"]=="bft"){
-		$f->visualizarBusquedaFarmacia($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf'],$_POST['estadoProducto']);
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="bcp"){
-		$f->buscarProductoFarmaceutico($_POST['cod_producto']);
-	}
-  if(isset($_GET["accion"]) && $_GET['accion']=='vsf'){
-    $f->VisualizarSalidaFarmacia();
-	}
-  if(isset($_GET["accion"]) && $_GET['accion']=='dNg'){
-    $f->EliminarNG($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_generico"]);
-	}
-
-  if(isset($_GET["accion"]) && $_GET['accion']=='dbe'){
-    $f->EliminarEF($_POST["accion"],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST["cod_entrada"],$_POST["fechai"],$_POST["fechaf"],$_POST['estadoProducto']);
-	}
-  if(isset($_GET["accion"]) && $_GET['accion']=='resf'){
-    $f->InsertarActualizarSalida($_POST["cod_producto"],$_POST["cantidad"],$_POST["cod_salida"],$_POST["id_paciente"],
-    $_POST["actualizar"],$_POST["nombre_receta"]);
-  }
-
-  if(isset($_GET["accion"]) && $_GET["accion"]=="buf"){
-		$f->buscarPacienteFarmacia($_POST['cod_paciente']);
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="efs"){
-		$f->EliminarSalida($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="vsta"){
-		$f->VisualizarSalidaFarmaciaTabla($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
-	}
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rcu"){
-  	$f->ReporteConcentracionUnidadMedida($_POST['buscar']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rpr"){
-  	$f->ReportePresentacion($_POST['buscar']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rpg"){
-    $f->ReporteNombreGenerico($_POST['buscar']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="rpng"){
-    $f->ReporteProductoEntrada($_POST['buscar'],$_POST["fechai"],$_POST["fechaf"],$_POST["estadoProducto"]);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="soli"){
-    $f->SeleccionarProductoSolicitadoPORid($_POST['cod_solicitado']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="fips"){
-    $ar = array(
-      "cod_producto1" => $_POST["cod_producto1"],
-      "cod_solicitado1" => $_POST["cod_solicitado1"],
-      "cantidad1" => $_POST["cantidad1"]);
-    $f->ActualizarProductoSolicitado($ar);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarEntrega"){
-    $f->ActualizarEntregaApaciente($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarTabla"){
-    $f->actualizarTablaSalida($_POST['cod_salida'],$_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="bfps"){
-    $f->BuscarDatospSolicitado($_POST['cod_salida']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="DelFps"){
-    $f->DeleteFilaProductoSolicitado($_POST['cod_solicitado']);
-  }
-  if(isset($_GET["accion"]) && $_GET["accion"]=="actualizarTabla"){
-    $f->MostrarLatabla($_POST["pagina"],$_POST["listarDeCuanto"],$_POST["buscar"],$_POST['fechai'],$_POST['fechaf']);
-  }
 ?>

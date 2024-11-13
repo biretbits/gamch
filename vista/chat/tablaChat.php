@@ -150,7 +150,7 @@
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                                   $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi["cod_cons"].",\"".$fi["consulta"]."\",\"".$fi["respuesta_consulta"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo $dd;
-                                  //echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(".$fi["cod_cons"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-danger' title='Eliminar' onclick='accionBtnActivar(".$fi["cod_cons"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
 
                                   echo "</div>";
                               echo "</td>";
@@ -410,6 +410,28 @@ function Buscar(page){
      // Agregar el formulario al cuerpo del documento y enviarlo
      document.body.appendChild(form);
      form.submit();
+    }
+
+    function accionBtnActivar(cod_cons){
+        var datos = new FormData(); // Crear un objeto FormData vacío
+        datos.append("cod_conc",cod_cons)
+        //alert(cod_cons);
+          $.ajax({
+            url: "../controlador/chat.controlador.php?accion=DcC",
+            type: "POST",
+            data: datos,
+            contentType: false, // Deshabilitar la codificación de tipo MIME
+            processData: false, // Deshabilitar la codificación de datos
+            success: function(data) {
+              //alert(data+"dasdas");
+              if(data == 'correcto'){
+                Correcto();
+                IRalLink(cod_cons);
+              }else{
+                Error1();
+              }
+            }
+          });
     }
   </script>
 <?php require("../librerias/footeruni.php"); ?>

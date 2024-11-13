@@ -31,7 +31,7 @@ class sesionControlador{
 							// Destruir la sesión en el servidor
 							session_id($session_id);
 							session_destroy();
-							
+
 						}
 					}
 				}

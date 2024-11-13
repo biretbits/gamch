@@ -63,6 +63,7 @@ class ChatControlador{
 									$dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi["cod_cons"].",\"".$fi["consulta"]."\",\"".$fi["respuesta_consulta"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
 									echo $dd;
                 //  echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(".$fi["cod_cons"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                echo "<button type='button' class='btn btn-danger' title='Eliminar' onclick='accionBtnActivar(".$fi["cod_cons"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
 
                   echo "</div>";
               echo "</td>";
@@ -199,6 +200,15 @@ class ChatControlador{
 		require("../vista/chat/ReporteChat.php");
 	}
 
+  public function EliminarChat($cod_conc){
+    $ch = new Chat();
+		$resul = $ch->EliminarChatSql($cod_conc);
+    if($resul != ''){
+      echo "correcto";
+    }else{
+      echo "error";
+    }
+  }
 }
 
 
@@ -221,6 +231,9 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admin"){
     }
   	if(isset($_GET["accion"]) && $_GET["accion"]=="rch"){
       $uc->ReporteBuscarChat($_POST['buscar']);
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="DcC"){
+      $uc->EliminarChat($_POST['cod_conc']);
     }
 }else{
     $ins->Redireccionar_inicio();

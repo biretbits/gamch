@@ -8,14 +8,22 @@
 
      		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="activos/jquery-3.5.1.min.js"></script>
-        <script src="activos/Chart.min.js"></script>
+        <!-- Bootstrap CSS (solo una vez) -->
         <link rel="stylesheet" type="text/css" href="activos/bootstrap/bootstrap.min.css">
-
-        <script src="activos/bootstrap/bootstrap.min.js"></script>
-        <script src="activos/sweetAlert2/sweetalert2.min.js"></script>
+        <!-- Select2 CSS -->
+        <link href="activos/select2/css/select2.min.css" rel="stylesheet">
+        <!-- SweetAlert2 CSS -->
         <link rel="stylesheet" href="activos/sweetAlert2/sweetalert2.min.css">
-        <link href="activos/bootstrap/bootstrap.min.css" rel="stylesheet">
+        <!-- Tu archivo CSS personalizado -->
         <link href="activos/styles.css" rel="stylesheet" />
+        <!-- Chart.js -->
+        <script src="activos/Chart.min.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="activos/bootstrap/bootstrap.min.js"></script>
+        <!-- SweetAlert2 JS -->
+        <script src="activos/sweetAlert2/sweetalert2.min.js"></script>
+        <!-- Select2 JS -->
+        <script src="activos/select2/js/select2.min.js"></script>
 
 </head>
 <style type="text/css">
@@ -141,20 +149,37 @@ html, body {
   /* Contenedor del chatbot */
   .chatbot-container {
       position: fixed;
-      bottom: 80px; /* Ajusta la distancia desde la parte inferior para que aparezca más arriba del botón */
-      right: -1px;
-      width: 400px;
-      height: 400px;
+      width: 370px;
+      height: 450px;
       border: 1px solid lightgrey;
       border-radius: 5px;
       background: white;
-      transform: translateY(100%);
+      z-index: 1050;
+      display: none; /* Oculto por defecto */
       transition: transform 0.3s ease-in-out;
-      z-index: 1050; /* Asegúrate de que esté debajo del botón pero sobre otros elementos */
   }
 
+  /* Estilos para pantallas grandes (computadoras de escritorio) */
+  @media (min-width: 768px) {
+      .chatbot-container {
+          bottom: 80px; /* Ajusta la distancia desde la parte inferior para que aparezca más arriba del botón */
+          right: 20px; /* Coloca el chatbot en la parte derecha de la pantalla */
+          transform: translateY(0); /* Desactiva el translate Y en pantallas grandes */
+      }
+  }
+
+  /* Estilos para pantallas pequeñas (móviles y tablets) */
+  @media (max-width: 767px) {
+      .chatbot-container {
+          top: 50%; /* Centrado verticalmente */
+          left: 50%; /* Centrado horizontalmente */
+          transform: translate(-50%, -50%); /* Centra el chatbot en la pantalla */
+      }
+  }
+
+  /* Clase para mostrar el chatbot en el centro */
   .chatbot-container.d-block {
-      transform: translateY(0);
+      display: block; /* Muestra el chatbot */
   }
 
   /* Estilo del encabezado del chatbot */
@@ -217,7 +242,7 @@ input[type=number] {
         <a href='#' class='navbar-brand fw-bold'><img src='imagenes/cds.ico' height='30' width='30' class='rounded-circle'> Centro De Salud</a>
 
         <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
-            Menu <span class='navbar-toggler-icon'></span>
+            <span class='navbar-toggler-icon'></span>
         </button>
           <div class='collapse navbar-collapse' id='navbarResponsive'>
             <ul class='navbar-nav ms-auto me-4 my-3 my-lg-0'>
@@ -232,6 +257,10 @@ input[type=number] {
                 echo "
                   <li class='nav-item' title='Servicios'>
                       <a class='nav-link btn btn-outline-warning' href='controlador/servicio.controlador.php?accion=rsr'><img src='imagenes/servicio.ico'style='height: 25px;width: 25px;'></a>
+                  </li>";
+                echo "
+                  <li class='nav-item' title='Patologías'>
+                      <a class='nav-link btn btn-outline-warning' href='controlador/patologias.controlador.php?accion=vtp'><img src='imagenes/patologia.png'style='height: 25px;width: 25px;'></a>
                   </li>";
                 echo "
                   <li class='nav-item' title='ChatBot'>
@@ -285,6 +314,22 @@ input[type=number] {
               }
 
             if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "farmacia"){
+
+            echo "<li class='nav-item dropdown' title='Cliente Proveedor'>
+              <a class='nav-link dropdown-toggle btn btn-outline-warning' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                <img src='imagenes/clienteProveedor.png'style='height: 25px;width: 25px;'> Cliente Proveedor
+              </a>
+              <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>";
+
+              echo "<li class='nav-item' title='Proveedor'>
+                    <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=fpro'>
+                    <img src='imagenes/proveedor.png'style='height: 25px;width: 25px;'> Proveedor</a>
+                  </li>";
+               echo "<li class='nav-item' title='Representante'>
+                     <a class='nav-link btn btn-outline-warning' href='controlador/farmacia.controlador.php?accion=Frep'>
+                     <img src='imagenes/representante.png'style='height: 25px;width: 25px;'> Representante</a>
+                   </li>";
+              echo "</ul>";
               echo "<li class='nav-item dropdown' title='Farmacia'>
                 <a class='nav-link dropdown-toggle btn btn-outline-warning' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
                   <img src='imagenes/farmacia.ico'style='height: 25px;width: 25px;'> Farmacia
@@ -339,28 +384,7 @@ input[type=number] {
 
 
 ?>
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Seleccione el archivo .sql para importar</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="formFile" class="form-label">Selecciona su archivo</label>
-            <input class="form-control" type="file" id="formFile" accept=".sql">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary" onclick="Importar(event)">Importar</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 <!-- Modal del Chatbot -->
 
 <div id="chatbotContainer" class="chatbot-container d-none">
@@ -388,6 +412,46 @@ input[type=number] {
       </div>
   </div>
 
+  <!-- Modal de Bootstrap -->
+  <div class="modal fade" id="chatbotModal" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Encabezado del modal -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="chatbotModalLabel">Chatbot</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Cuerpo del modal con el contenido del chatbot -->
+      <div class="modal-body">
+        <div id="chatbotContainer" class="chatbot-container">
+          <div class="chatbot-body">
+            <div class="wrapper">
+              <div class="form">
+                <div class="bot-inbox inbox">
+                  <div class="icon">
+                    <img src='../imagenes/robot.png' style='height: 25px; width: 25px; transform: translateY(-5px);'>
+                  </div>
+                  <div class="msg-header">
+                    <p>Hola, Bienvenido</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie de página del modal -->
+      <div class="modal-footer">
+        <input id="data" class="form-control me-2" type="text" onkeydown="checkEnter(event)" placeholder="Escriba su consulta">
+        <button id="send-btn" class="btn btn-primary" onclick="enviar()" style="background: Teal;">Enviar</button>
+      </div>
+
+    </div>
+  </div>
+  </div>
 <script type="text/javascript">
 function checkEnter(event) {
     if (event.key === 'Enter') {

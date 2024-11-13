@@ -178,15 +178,65 @@ class Farmacia
    mysqli_close($this->con);
  }
 
- public function InsertEntradaProducto($cantidad,$vencimiento,$fechaActual,$cod_producto,$cod_entrada,$usuario,$hora){
+ public function InsertEntradaProducto($da,$fechaActual,$usuario,$hora){
    $sql = "";$uso = '';
+   $accion = 'si';
+   $cod_entrada = $da["cod_entrada"];
    if(is_numeric($cod_entrada)){//update
       $uso = $this->verificarSIcantidadSEuso($cod_entrada);
       if($uso =='no_se_uso'){
-        $sql="update entrada set cantidad=$cantidad,respaldo_cantidad=$cantidad,vencimiento='$vencimiento',cod_generico=$cod_producto where cod_entrada = $cod_entrada";
+        $accion = 'si';
       }
    }else{//insert
-      $sql="insert into entrada(cantidad,respaldo_cantidad,vencimiento,fecha,hora,cod_usuario,cod_generico)values($cantidad,$cantidad,'$vencimiento','$fechaActual','$hora',$usuario,$cod_producto)";
+      $accion='si';
+   }
+   if($accion == 'si'){
+     $cod_producto = $da["cod_producto"];
+
+      $cod_proveedor = $da["cod_proveedor"];
+      $nrodoc = $da["nrodoc"];
+      $programa_salud = $da["programa_salud"];
+      $nro = $da["nro"];
+      $fuente_reposicion = $da["fuente_reposicion"];
+      $proveedor = $da["proveedor"];
+      $representante = $da["representante"];
+      $nombre_producto = $da["nombre_producto"];
+      $costo_valorado = $da["costo_valorado"];
+      $saldo = $da["saldo"];
+      $nrolote = $da["nrolote"];
+      $lote_generico = $da["lote_generico"];
+      $lote_nacional = $da["lote_nacional"];
+      $cantidad = $da["cantidad"];
+      $unitario = $da["unitario"];
+      $total = $da["total"];
+      $vencimiento = $da["vencimiento"];
+
+      $sql = "INSERT INTO entrada(
+        cod_entrada,nrodoc,nro,fuente_reposicion,programa_salud,cod_proveedor,costo_valorado,saldo,nrolote,lote_generico,
+        lote_nacional,cantidad,respaldo_cantidad,manipulado,costounitario,costototal,costototal_respaldo,
+        vencimiento,fecha,hora,cod_usuario,cod_generico
+        ) VALUES (
+          '$cod_entrada','$nrodoc','$nro','$fuente_reposicion','$programa_salud','$cod_proveedor','$costo_valorado','$saldo','$nrolote',
+          '$lote_generico','$lote_nacional','$cantidad','$cantidad','','$unitario','$total','$total','$vencimiento','$fechaActual',
+          '$hora','$usuario','$cod_producto'
+        ) ON DUPLICATE KEY UPDATE
+          nrodoc=VALUES(nrodoc),
+          nro=VALUES(nro),
+          fuente_reposicion=VALUES(fuente_reposicion),
+          programa_salud=VALUES(programa_salud),
+          cod_proveedor=VALUES(cod_proveedor),
+          costo_valorado=VALUES(costo_valorado),
+          saldo=VALUES(saldo),
+          nrolote=VALUES(nrolote),
+          lote_generico=VALUES(lote_generico),
+          lote_nacional=VALUES(lote_nacional),
+          cantidad=VALUES(cantidad ),
+          respaldo_cantidad=VALUES(respaldo_cantidad),
+          costounitario=VALUES(costounitario),
+          costototal=VALUES(costototal),
+          costototal_respaldo=VALUES(costototal_respaldo),
+          vencimiento=VALUES(vencimiento),
+          cod_generico=VALUES(cod_generico)";
    }
    if($uso=='' or $uso=='no_se_uso')
    {
@@ -202,6 +252,8 @@ class Farmacia
   }
    mysqli_close($this->con);
  }
+
+
 
  function verificarSIcantidadSEuso($cod_entrada){
    $lis = "select *from entrada where cantidad=respaldo_cantidad and cod_entrada = $cod_entrada";
@@ -520,6 +572,155 @@ class Farmacia
      return $resul;
      mysqli_close($this->con);
    }
+
+   //funcion de proveedor
+   public function SeleccionarProveedor($buscar='',$inicioList=false,$listarDeCuanto=false,){
+     $sql = "select *from proveedor";
+     if($buscar != ''){
+       $sql.=" where (lower(nombre) like '%$buscar%')";
+     }
+     $sql.= " order by cod_prov desc";
+     if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
+       $sql.=" LIMIT $listarDeCuanto OFFSET $inicioList ";
+     }
+   //  echo "<br><br><br><br>".$sql;
+     $resul = $this->con->query($sql);
+     // Retornar el resultado
+     if($resul===false){
+       return $this->con->error;
+     }else{
+       return $resul;
+     }
+     mysqli_close($this->con);
+   }
+//end proveedor
+//registrar proveedor
+  public function InsertarProveedor($datos){
+    $cod_prov = $datos["cod_prov"];$nombre=$datos["nombre"];$telefono=$datos["telefono"];
+    $correo = $datos["correo"];$cod_rep = $datos["cod_rep"];
+    $fecha = '';//iniciamos una variable fecha en vacio
+    /*if(!is_numeric($datos["cod_pat"]))
+    {
+      $fecha = date("Y-m-d");
+      $hora = date("H:i:s");
+    }*/
+
+    $sql = "INSERT INTO proveedor(
+              cod_prov,nombre,telefono,correo,cod_representante
+            ) VALUES (
+              '$cod_prov','$nombre','$telefono','$correo','$cod_rep'
+            ) ON DUPLICATE KEY UPDATE
+              nombre = VALUES(nombre),
+              telefono = VALUES(telefono),
+              correo = VALUES(correo),
+              cod_representante = VALUES(cod_representante)";
+    // Ejecutar la consulta
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+//end registrar proveedor
+//Eliminar proveedorTabla
+  public function EliminarProveedor($cod_prov,$estado){
+    $estado_nuevo = '';
+    if($estado == 'activo'){
+      $estado_nuevo = 'desactivo';
+    }else{
+      $estado_nuevo = 'activo';
+    }
+    $sql = "update proveedor set estado = '$estado_nuevo' where cod_prov = $cod_prov";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+//eliniar end
+
+   //funcion de representante
+   public function SeleccionarRepresentante($buscar='',$inicioList=false,$listarDeCuanto=false,){
+     $sql = "select *from representante";
+     if($buscar != ''){
+       $sql.=" where (lower(nombre_apellidos) like '%$buscar%')";
+     }
+     $sql.= " order by cod_rep desc";
+     if(is_numeric($inicioList)&&is_numeric($listarDeCuanto)){
+       $sql.=" LIMIT $listarDeCuanto OFFSET $inicioList ";
+     }
+   //  echo "<br><br><br><br>".$sql;
+     $resul = $this->con->query($sql);
+     // Retornar el resultado
+     if($resul===false){
+       return $this->con->error;
+     }else{
+       return $resul;
+     }
+     mysqli_close($this->con);
+   }
+   public function InsertarRepresentante($datos){
+     $cod_rep = $datos["cod_rep"];$nombre_apellidos=$datos["nombre_apellidos"];$telefono=$datos["telefono"];
+     $cargo = $datos["cargo"];
+     $fecha = '';//iniciamos una variable fecha en vacio
+     /*if(!is_numeric($datos["cod_pat"]))
+     {
+       $fecha = date("Y-m-d");
+       $hora = date("H:i:s");
+     }*/
+
+     $sql = "INSERT INTO representante(
+               cod_rep,nombre_apellidos,telefono,cargo
+             ) VALUES (
+               '$cod_rep','$nombre_apellidos','$telefono','$cargo'
+             ) ON DUPLICATE KEY UPDATE
+               nombre_apellidos = VALUES(nombre_apellidos),
+               telefono = VALUES(telefono),
+               cargo = VALUES(cargo)";
+     // Ejecutar la consulta
+     $resul = $this->con->query($sql);
+     return $resul;
+   }
+   public function EliminarRepresentante($cod_rep,$estado){
+     $estado_nuevo = '';
+     if($estado == 'activo'){
+       $estado_nuevo = 'desactivo';
+     }else{
+       $estado_nuevo = 'activo';
+     }
+     $sql = "update representante set estado = '$estado_nuevo' where cod_rep = $cod_rep";
+     $resul = $this->con->query($sql);
+     return $resul;
+   }
+
+   public function representanteBuscar($representante){
+     $sql = "select *from representante where (lower(nombre_apellidos) like '%$representante%') LIMIT 5 OFFSET 0";
+     $resul = $this->con->query($sql);
+     return $resul;
+   }
+   public function selectDatosRepresentante($id){
+    if(is_numeric($id))
+     {
+       $lis = "select * from representante where cod_rep = $id";
+       $resul = $this->con->query($lis);
+       $a = [];
+       while ($fi = mysqli_fetch_array($resul)) {
+         $datos = [
+           "nombre_apellidos" => $fi["nombre_apellidos"],
+           "telefono"=> $fi["telefono"],
+           "cargo"=>$fi["cargo"]
+         ];
+         $a[] = $datos;
+       }
+       return $a;
+     }else{
+       return '';
+     }
+     mysqli_close($this->con);
+   }
+  //end representante
+  public function buscarProveedorTabla($proveedor){
+    $proveedor = strtolower($proveedor);
+    $lis = "select *from proveedor as p  inner join representante as r on r.cod_rep = p.cod_representante
+    where (LOWER(p.nombre) like '%$proveedor%' or LOWER(r.nombre_apellidos) like '%$proveedor%') and p.estado = 'activo' LIMIT 5 OFFSET 0";
+    $resul = $this->con->query($lis);
+    return $resul;
+    mysqli_close($this->con);
+  }
 }
 
 

@@ -36,6 +36,8 @@ function crearDataBase(){
     echo $conn->error;
   }
   echo "<br>Creando las tablas<br>";
+      crearTablaPatologias($conn);
+      echo "<br>tabla primera creado correctamente<br>";
       crearTablaServicio($conn);
       echo "<br>tabla1<br>";
       crearTablasCDS($conn);echo "<br>tabla2<br>";
@@ -44,6 +46,9 @@ function crearDataBase(){
       crearTablaRegistroDiario($conn);echo "<br>tabla5<br>";
       crearTablaHistorial($conn);echo "<br>tabla6<br>";
       crearTablaHistorialDatos($conn); echo  "<br>tabla 7<br>";
+      crearTablaRepresentante($conn); echo  "<br>tabla representante<br>";
+      crearTablaProveedor($conn); echo  "<br>tabla proveedor<br>";
+
       crearTablaFormaPresentacion($conn);echo "<br>tabla8<br>";
       crearTablaUnidadMedidad($conn);echo "<br>tabla9<br>";
       crearTablaProducto($conn);echo "<br>tabla10<br>";
@@ -55,6 +60,160 @@ function crearDataBase(){
 echo "Se completo las acciones correctamente, se creo todo";
   // Cerrar conexión
   $conn->close();
+}
+
+
+function crearTablaPatologias($conn){
+  $sql = "
+    DROP TABLE IF EXISTS `patologias`;
+    CREATE TABLE `patologias` (
+      `cod_pat` INT(11) NOT NULL AUTO_INCREMENT,
+      `nombre` VARCHAR(100) NOT NULL,
+      `descripcion` TEXT DEFAULT NULL,
+      `sintomas` TEXT DEFAULT NULL,
+      `tratamiento` TEXT DEFAULT NULL,
+      `fecha_registro` DATE DEFAULT NULL,
+      `estado` VARCHAR(10) DEFAULT 'activo',
+      PRIMARY KEY (`cod_pat`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  ";
+
+  // Ejecutar consulta
+  if ($conn->multi_query($sql)) {
+      do {
+          // almacenar resultados si hay alguno
+          if ($result = $conn->store_result()) {
+              $result->free();
+          }
+          // imprimir errores
+          if ($conn->error) {
+              echo "Error ta: " . $conn->error;
+          }
+      } while ($conn->more_results() && $conn->next_result());
+  } else {
+      echo "Error al ejecutar SQL patologias: " . $conn->error;
+  }
+
+  // SQL para insertar datos en la tabla `consultas`
+  $sql_inserts = "
+  INSERT INTO `patologias` (`cod_pat`, `nombre`, `descripcion`, `sintomas`, `tratamiento`, `fecha_registro`) VALUES
+    (1, 'Diabetes tipo 2', 'Trastorno crónico que afecta la forma en que el cuerpo procesa el azúcar en sangre.', 'Aumento de la sed, hambre extrema, pérdida de peso', 'Control de la dieta, medicación oral, insulina', '2024-10-29'),
+    (2, 'Hipertensión', 'Elevación persistente de la presión arterial en las arterias.', 'Dolor de cabeza, visión borrosa, dificultad para respirar', 'Modificaciones en el estilo de vida, antihipertensivos', '2024-10-29'),
+    (3, 'Asma', 'Enfermedad que causa inflamación y estrechamiento de las vías respiratorias.', 'Dificultad para respirar, sibilancias, opresión en el pecho', 'Inhaladores de rescate y controladores', '2024-10-29'),
+    (4, 'Gastritis', 'Inflamación de la mucosa del estómago.', 'Dolor abdominal, náuseas, vómitos', 'Antiacidos, inhibidores de la bomba de protones', '2024-10-29'),
+    (5, 'Artritis', 'Inflamación de una o más articulaciones que causa dolor y rigidez.', 'Dolor articular, hinchazón, disminución del rango de movimiento', 'Antiinflamatorios, fisioterapia', '2024-10-29'),
+    (6, 'Anemia', 'Reducción de los glóbulos rojos o hemoglobina en la sangre.', 'Fatiga, debilidad, piel pálida', 'Suplementos de hierro, cambio de dieta', '2024-10-29'),
+    (7, 'Bronquitis', 'Inflamación de los bronquios, a menudo causada por infección viral.', 'Tos, producción de moco, dificultad para respirar', 'Reposo, líquidos, medicamentos para la tos', '2024-10-29'),
+    (8, 'Neumonía', 'Infección de los pulmones que causa inflamación de los alvéolos.', 'Fiebre, escalofríos, dolor en el pecho', 'Antibióticos, líquidos, descanso', '2024-10-29'),
+    (9, 'Migraña', 'Cefalea recurrente que puede causar náuseas y sensibilidad a la luz.', 'Dolor de cabeza intenso, sensibilidad a la luz', 'Analgesia, triptanos, evitar desencadenantes', '2024-10-29'),
+    (10, 'Amigdalitis', 'Inflamación de las amígdalas, generalmente debido a una infección.', 'Dolor de garganta, dificultad para tragar, fiebre', 'Antibióticos, analgésicos, reposo', '2024-10-29'),
+    (11, 'Colitis', 'Inflamación del colon que causa dolor abdominal y diarrea.', 'Dolor abdominal, diarrea, fatiga', 'Dieta baja en residuos, antibióticos', '2024-10-29'),
+    (12, 'Eczema', 'Condición que causa picazón, enrojecimiento y erupciones en la piel.', 'Picazón, erupciones, piel seca', 'Cremas hidratantes, esteroides tópicos', '2024-10-29'),
+    (13, 'Psoriasis', 'Enfermedad autoinmune que causa parches escamosos en la piel.', 'Parche de piel escamosa, dolor en articulaciones', 'Cremas tópicas, fototerapia, medicamentos', '2024-10-29'),
+    (14, 'Fibromialgia', 'Trastorno de dolor crónico que afecta músculos y tejidos blandos.', 'Dolor muscular, fatiga, trastornos del sueño', 'Ejercicio, terapia física, analgésicos', '2024-10-29'),
+    (15, 'Celiaquía', 'Reacción inmunitaria al gluten, afecta el intestino delgado.', 'Diarrea, dolor abdominal, pérdida de peso', 'Dieta sin gluten', '2024-10-29'),
+    (16, 'Hepatitis B', 'Infección viral que afecta el hígado.', 'Ictericia, fatiga, dolor abdominal', 'Antivirales, vacunación, cuidados de soporte', '2024-10-29'),
+    (17, 'Epilepsia', 'Trastorno neurológico que causa convulsiones recurrentes.', 'Convulsiones, pérdida de conciencia', 'Medicamentos antiepilépticos', '2024-10-29'),
+    (18, 'Tiroiditis', 'Inflamación de la glándula tiroides.', 'Fatiga, aumento de peso, dolor de cuello', 'Hormonas tiroideas, antiinflamatorios', '2024-10-29'),
+    (19, 'SIDA', 'Inmunodeficiencia causada por el VIH, afecta el sistema inmune.', 'Fiebre, pérdida de peso, infecciones oportunistas', 'Antirretrovirales, cuidados de soporte', '2024-10-29'),
+    (20, 'Obesidad', 'Exceso de grasa corporal que aumenta el riesgo de problemas de salud.', 'Aumento de peso, problemas respiratorios, fatiga', 'Control de dieta, ejercicio, terapia médica', '2024-10-29'),
+    (21, 'Síndrome de Fatiga Crónica', 'Trastorno caracterizado por fatiga extrema sin causa clara.', 'Fatiga persistente, dolor muscular, problemas de memoria', 'Terapia cognitiva, actividad física leve', '2024-10-29'),
+    (22, 'Esclerosis múltiple', 'Enfermedad autoinmune que afecta el sistema nervioso central.', 'Entumecimiento, pérdida de coordinación', 'Inmunosupresores, fisioterapia', '2024-10-29'),
+    (23, 'Alzhéimer', 'Demencia progresiva que afecta memoria y otras funciones mentales.', 'Pérdida de memoria, cambios en el comportamiento', 'Medicamentos para mejorar los síntomas', '2024-10-29'),
+    (24, 'Enfermedad de Parkinson', 'Trastorno neurológico que afecta el movimiento.', 'Temblor, rigidez muscular, lentitud en el movimiento', 'Medicamentos, terapia física', '2024-10-29'),
+    (25, 'Depresión', 'Trastorno de ánimo caracterizado por tristeza y pérdida de interés.', 'Tristeza persistente, falta de energía', 'Terapia, antidepresivos', '2024-10-29'),
+    (26, 'Gripe', 'Enfermedad viral respiratoria que causa fiebre y tos.', 'Fiebre, tos, dolores corporales', 'Descanso, líquidos, antivirales', '2024-10-29'),
+    (27, 'Tendinitis', 'Inflamación de un tendón que causa dolor.', 'Dolor y rigidez en la articulación', 'Reposo, hielo, antiinflamatorios', '2024-10-29'),
+    (28, 'Hernia', 'Protrusión de un órgano a través de una apertura en los músculos.', 'Dolor, bulto en la zona afectada', 'Cirugía, observación', '2024-10-29'),
+    (29, 'Infección del tracto urinario', 'Infección que afecta las vías urinarias.', 'Dolor al orinar, necesidad frecuente de orinar', 'Antibióticos', '2024-10-29'),
+    (30, 'Cálculos renales', 'Piedras que se forman en los riñones.', 'Dolor intenso, sangre en la orina', 'Aumento de líquidos, medicamentos', '2024-10-29'),
+    (31, 'Acidez estomacal', 'Sensación de ardor en el pecho o la garganta.', 'Ardor, regurgitación', 'Antiacidos, cambios en la dieta', '2024-10-29'),
+    (32, 'Conjuntivitis', 'Inflamación de la membrana que recubre el ojo.', 'Enrojecimiento, picazón, secreción', 'Compresas frías, colirios', '2024-10-29'),
+    (33, 'Otitis', 'Inflamación del oído, a menudo por infección.', 'Dolor de oído, fiebre, dificultad para dormir', 'Antibióticos, analgésicos', '2024-10-29'),
+    (34, 'Rinitis alérgica', 'Reacción alérgica que afecta la nariz.', 'Estornudos, picazón, congestión', 'Antihistamínicos, descongestionantes', '2024-10-29'),
+    (35, 'Cáncer de mama', 'Crecimiento anormal de células en el tejido mamario.', 'Bulto en el seno, cambios en la piel', 'Cirugía, quimioterapia, radioterapia', '2024-10-29'),
+    (36, 'Cáncer de pulmón', 'Crecimiento anormal de células en los pulmones.', 'Tos persistente, dolor en el pecho', 'Cirugía, quimioterapia, radioterapia', '2024-10-29'),
+    (37, 'Cáncer de próstata', 'Crecimiento anormal de células en la glándula prostática.', 'Dificultad para orinar, dolor en la pelvis', 'Cirugía, radioterapia, hormonas', '2024-10-29'),
+    (38, 'Cáncer de piel', 'Crecimiento anormal de células en la piel.', 'Lunares nuevos, cambios en lunares existentes', 'Cirugía, radioterapia', '2024-10-29'),
+    (39, 'Cáncer de colon', 'Crecimiento anormal de células en el colon.', 'Sangre en las heces, cambio en hábitos intestinales', 'Cirugía, quimioterapia', '2024-10-29'),
+    (40, 'Enfermedad de Crohn', 'Inflamación crónica del tracto digestivo.', 'Dolor abdominal, diarrea, fatiga', 'Medicamentos antiinflamatorios, cirugía', '2024-10-29'),
+    (41, 'Lupus', 'Enfermedad autoinmune que afecta diversos órganos.', 'Fatiga, dolor articular, erupción en la piel', 'Medicamentos inmunosupresores', '2024-10-29'),
+    (42, 'Esclerosis lateral amiotrófica', 'Enfermedad neurodegenerativa que afecta las neuronas motoras.', 'Debilidad muscular, calambres', 'Terapia ocupacional, cuidados de soporte', '2024-10-29'),
+    (43, 'Trastorno de ansiedad generalizada', 'Trastorno que causa preocupación excesiva.', 'Inquietud, fatiga, dificultad para concentrarse', 'Terapia, medicamentos ansiolíticos', '2024-10-29'),
+    (44, 'Crisis hipertensiva', 'Aumento súbito y grave de la presión arterial.', 'Dolor de cabeza, dificultad para respirar', 'Medicamentos para bajar la presión arterial', '2024-10-29'),
+    (45, 'Intolerancia a la lactosa', 'Incapacidad para digerir el azúcar de la leche.', 'Hinchazón, diarrea, cólicos', 'Suplementos de lactasa, evitar productos lácteos', '2024-10-29'),
+    (46, 'Estrés postraumático', 'Trastorno que ocurre después de experimentar un evento traumático.', 'Recuerdos intrusivos, pesadillas', 'Terapia cognitivo-conductual, medicamentos', '2024-10-29'),
+    (47, 'Trastorno obsesivo-compulsivo', 'Trastorno que causa pensamientos intrusivos y rituales repetitivos.', 'Ansiedad, compulsiones', 'Terapia, medicamentos', '2024-10-29'),
+    (48, 'Cálculos biliares', 'Piedras que se forman en la vesícula biliar.', 'Dolor abdominal, náuseas', 'Cirugía, cambios en la dieta', '2024-10-29'),
+    (49, 'Dermatitis de contacto', 'Reacción inflamatoria en la piel debido al contacto con irritantes.', 'Erupción, picazón', 'Evitar el irritante, cremas tópicas', '2024-10-29'),
+    (50, 'Varicela', 'Infección viral que causa picazón y erupción cutánea.', 'Fiebre, sarpullido, cansancio', 'Vacunación, antihistamínicos', '2024-10-29'),
+    (51, 'Hiperlipidemia', 'Elevación de lípidos en sangre, incluyendo colesterol y triglicéridos.', 'Generalmente asintomático', 'Cambios en la dieta, medicamentos', '2024-10-29'),
+    (52, 'Acné', 'Trastorno de la piel que causa brotes de espinillas.', 'Espinillas, granos, cicatrices', 'Tratamientos tópicos, antibióticos', '2024-10-29'),
+    (53, 'Infecciones de transmisión sexual', 'Infecciones adquiridas a través de relaciones sexuales.', 'Dolor al orinar, flujo inusual', 'Antibióticos o antivirales', '2024-10-29'),
+    (54, 'Deshidratación', 'Falta de suficientes líquidos en el cuerpo.', 'Sed intensa, boca seca, fatiga', 'Rehidratación, solución electrolítica', '2024-10-29'),
+    (55, 'Hipotensión', 'Presión arterial anormalmente baja.', 'Mareos, desmayos, fatiga', 'Aumento de líquidos, medicamentos', '2024-10-29'),
+    (56, 'Esclerosis múltiple', 'Enfermedad crónica que afecta el sistema nervioso central.', 'Fatiga, debilidad, problemas de equilibrio', 'Medicamentos inmunomoduladores', '2024-10-29'),
+    (57, 'Sinusitis', 'Inflamación de los senos paranasales.', 'Congestión nasal, dolor facial, fiebre', 'Descongestionantes, antihistamínicos', '2024-10-29'),
+    (58, 'Infección por COVID-19', 'Enfermedad viral que afecta el sistema respiratorio.', 'Tos, fiebre, dificultad para respirar', 'Aislamiento, atención médica', '2024-10-29'),
+    (59, 'Faringitis', 'Inflamación de la faringe, comúnmente causada por virus o bacterias.', 'Dolor de garganta, dificultad para tragar', 'Antibióticos (si es bacterial), analgésicos', '2024-10-29'),
+    (60, 'Parásitos intestinales', 'Organismos que viven en el intestino y pueden causar enfermedad.', 'Dolor abdominal, diarrea, fatiga', 'Medicamentos antiparasitarios', '2024-10-29'),
+    (61, 'Vasculitis', 'Inflamación de los vasos sanguíneos.', 'Erupciones, fiebre, dolor articular', 'Medicamentos inmunosupresores', '2024-10-29'),
+    (62, 'Trombosis venosa profunda', 'Formación de un coágulo sanguíneo en una vena profunda.', 'Hinchazón, dolor en la pierna', 'Anticoagulantes', '2024-10-29'),
+    (63, 'Artritis reumatoide', 'Enfermedad autoinmune que causa inflamación en las articulaciones.', 'Dolor articular, rigidez', 'Medicamentos antiinflamatorios, terapia física', '2024-10-29'),
+    (64, 'Desnutrición', 'Deficiencia de nutrientes esenciales en el cuerpo.', 'Pérdida de peso, fatiga, debilidad', 'Suplementos, cambios en la dieta', '2024-10-29'),
+    (65, 'Anorexia', 'Trastorno alimentario caracterizado por la restricción de la ingesta de alimentos.', 'Pérdida de peso extrema, miedo a aumentar de peso', 'Terapia, soporte nutricional', '2024-10-29'),
+    (66, 'Bulimia', 'Trastorno alimentario caracterizado por episodios de atracones seguidos de purgas.', 'Cicatrices en manos, problemas dentales', 'Terapia, asesoramiento nutricional', '2024-10-29'),
+    (67, 'Enfermedad de Lyme', 'Infección bacteriana transmitida por garrapatas.', 'Erupción, fiebre, fatiga', 'Antibióticos', '2024-10-29'),
+    (68, 'Leucemia', 'Cáncer de los tejidos que forman la sangre.', 'Fatiga, infecciones recurrentes, moretones', 'Quimioterapia, trasplante de médula ósea', '2024-10-29'),
+    (69, 'Enfermedad renal crónica', 'Pérdida progresiva de la función renal.', 'Fatiga, hinchazón, cambios en la micción', 'Control de la presión arterial, diálisis', '2024-10-29'),
+    (70, 'Osteoporosis', 'Enfermedad que debilita los huesos y los hace más propensos a fracturas.', 'Fracturas frecuentes, dolor en los huesos', 'Suplementos de calcio y vitamina D', '2024-10-29'),
+    (71, 'Acidosis metabólica', 'Condición en la que el cuerpo produce demasiados ácidos.', 'Fatiga, confusión, dificultad para respirar', 'Tratamiento de la causa subyacente', '2024-10-29'),
+    (72, 'Alcalosis metabólica', 'Condición en la que hay un exceso de bicarbonato en el cuerpo.', 'Confusión, espasmos musculares', 'Tratamiento de la causa subyacente', '2024-10-29'),
+    (73, 'Gota', 'Artritis causada por la acumulación de ácido úrico.', 'Dolor intenso en las articulaciones, enrojecimiento', 'Medicamentos antiinflamatorios, cambios en la dieta', '2024-10-29'),
+    (74, 'Cáncer de riñón', 'Crecimiento anormal de células en los riñones.', 'Sangre en la orina, dolor lumbar', 'Cirugía, quimioterapia', '2024-10-29'),
+    (75, 'Síndrome de Down', 'Trastorno genético causado por la presencia de un cromosoma extra.', 'Retraso en el desarrollo, características faciales distintivas', 'Terapia de apoyo', '2024-10-29'),
+    (76, 'Trastorno del espectro autista', 'Trastorno del desarrollo que afecta la comunicación y el comportamiento.', 'Dificultades en la interacción social', 'Terapia conductual', '2024-10-29'),
+    (77, 'Deficiencia de vitamina D', 'Baja cantidad de vitamina D en el cuerpo.', 'Fatiga, debilidad ósea', 'Suplementos de vitamina D', '2024-10-29'),
+    (78, 'Hepatitis C', 'Inflamación del hígado causada por el virus de la hepatitis C.', 'Fatiga, ictericia, dolor abdominal', 'Medicamentos antivirales', '2024-10-29'),
+    (79, 'Síndrome del túnel carpiano', 'Compresión del nervio mediano en la muñeca.', 'Dolor en la muñeca, entumecimiento', 'Inmovilización, cirugía', '2024-10-29'),
+    (80, 'Neumonía', 'Infección que inflama los sacos aéreos en uno o ambos pulmones.', 'Tos, fiebre, dificultad para respirar', 'Antibióticos, descanso', '2024-10-29'),
+    (81, 'Hernia', 'Protrusión de un órgano a través de la pared que lo contiene.', 'Dolor, bultos visibles', 'Cirugía', '2024-10-29'),
+    (82, 'Cáncer de hígado', 'Crecimiento anormal de células en el hígado.', 'Pérdida de peso, dolor abdominal', 'Cirugía, quimioterapia', '2024-10-29'),
+    (83, 'Síndrome del intestino irritable', 'Trastorno intestinal que causa dolor abdominal y cambios en el patrón de las heces.', 'Dolor abdominal, distensión', 'Cambios en la dieta, medicamentos', '2024-10-29'),
+    (84, 'Miastenia gravis', 'Enfermedad autoinmune que causa debilidad muscular.', 'Debilidad muscular, problemas de visión', 'Medicamentos inmunosupresores', '2024-10-29'),
+    (85, 'EPOC', 'Enfermedad pulmonar obstructiva crónica.', 'Dificultad para respirar, tos crónica', 'Medicamentos broncodilatadores, oxigenoterapia', '2024-10-29'),
+    (86, 'Alergias alimentarias', 'Reacción adversa del sistema inmunológico a ciertos alimentos.', 'Picazón, hinchazón, dificultad para respirar', 'Evitar alérgenos, medicamentos antihistamínicos', '2024-10-29'),
+    (87, 'Hiperactividad', 'Trastorno que causa dificultades de atención y control de impulsos.', 'Inquietud, dificultad para concentrarse', 'Terapia conductual, medicamentos', '2024-10-29'),
+    (88, 'Infección del tracto urinario', 'Infección que afecta cualquier parte del sistema urinario.', 'Dolor al orinar, necesidad frecuente de orinar', 'Antibióticos', '2024-10-29'),
+    (89, 'Fiebre tifoidea', 'Infección bacteriana que afecta el intestino.', 'Fiebre, debilidad, diarrea', 'Antibióticos', '2024-10-29'),
+    (90, 'Síndrome de fatiga crónica', 'Enfermedad caracterizada por fatiga extrema que no mejora con descanso.', 'Fatiga, dolores musculares, problemas de sueño', 'Tratamiento sintomático', '2024-10-29'),
+    (91, 'Candidiasis', 'Infección por hongos que puede afectar la piel o las mucosas.', 'Picazón, enrojecimiento', 'Antifúngicos', '2024-10-29'),
+    (92, 'Anemia', 'Deficiencia de glóbulos rojos o hemoglobina en la sangre.', 'Fatiga, debilidad, palidez', 'Suplementos de hierro, cambios en la dieta', '2024-10-29'),
+    (93, 'Hernia discal', 'Protrusión del material del disco intervertebral.', 'Dolor de espalda, debilidad en las piernas', 'Fisioterapia, cirugía', '2024-10-29'),
+    (94, 'Enfermedad de Alzheimer', 'Trastorno neurodegenerativo que causa pérdida de memoria y habilidades cognitivas.', 'Pérdida de memoria, confusión', 'Medicamentos, terapia de apoyo', '2024-10-29'),
+    (95, 'Enfermedad celíaca', 'Reacción inmunitaria al gluten que afecta el intestino delgado.', 'Diarrea, dolor abdominal', 'Dieta sin gluten', '2024-10-29'),
+    (96, 'Trastorno del sueño', 'Problemas relacionados con el sueño, como insomnio o apnea del sueño.', 'Dificultades para dormir, somnolencia', 'Tratamiento de la causa subyacente', '2024-10-29'),
+    (97, 'Sordera', 'Pérdida parcial o total de la audición.', 'Dificultades para oír', 'Audífonos, implantes cocleares', '2024-10-29'),
+    (98, 'Problemas de tiroides', 'Trastornos que afectan la tiroides, como el hipotiroidismo.', 'Fatiga, aumento de peso, depresión', 'Medicamentos hormonales', '2024-10-29'),
+    (99, 'Enfermedad de Huntington', 'Trastorno genético que causa la degeneración de las neuronas.', 'Movimientos involuntarios, cambios en la personalidad', 'Tratamiento sintomático', '2024-10-29'),
+    (100, 'Migraña', 'Dolor de cabeza recurrente que puede ser severo.', 'Dolor intenso, náuseas, sensibilidad a la luz', 'Medicamentos analgésicos, cambios en el estilo de vida', '2024-10-29');
+    ";
+
+  // Ejecutar inserciones
+  if ($conn->multi_query($sql_inserts)) {
+      do {
+          // almacenar resultados si hay alguno
+          if ($result = $conn->store_result()) {
+              $result->free();
+          }
+          // imprimir errores
+          if ($conn->error) {
+              echo "Error: " . $conn->error;
+          }
+      } while ($conn->more_results() && $conn->next_result());
+  } else {
+      echo "Error al ejecutar SQL insert: " . $conn->error;
+  }
 }
 
 function crearTablasCDS($conn){
@@ -283,10 +442,20 @@ function crearTablaEntrada($conn){
   DROP TABLE IF EXISTS `entrada`;
   CREATE TABLE `entrada` (
     `cod_entrada` int(11) NOT NULL AUTO_INCREMENT,
+    `nrodoc` char(30) DEFAULT NULL,
+    `nro` char(30) DEFAULT NULL,
+    `fuente_reposicion` char(100) DEFAULT NULL,
+    `programa_salud` char(100) DEFAULT NULL,
+    `cod_proveedor` int(11) DEFAULT NULL,
+    `costo_valorado` double(10,2) DEFAULT NULL,
+    `saldo` double(10,2) DEFAULT NULL,
+    `nrolote` char(20),
+    `lote_generico` char(20),
+    `lote_nacional` char(20),
     `cantidad` int(11) DEFAULT NULL,
     `respaldo_cantidad` int(11) DEFAULT NULL,
     `manipulado` char(3) DEFAULT NULL,
-    `nrolote` char(20),
+
     `costounitario` decimal(10,2),
     `costototal` decimal(10,2),
     `costototal_respaldo` decimal(10,2),
@@ -298,8 +467,10 @@ function crearTablaEntrada($conn){
     `estado_producto` char(50) DEFAULT 'activo',
     `estado` char(10) DEFAULT 'activo',
     PRIMARY KEY (`cod_entrada`),
+    KEY `cod_proveedor` (`cod_proveedor`),
     KEY `cod_usuario` (`cod_usuario`),
     KEY `cod_generico` (`cod_generico`),
+    CONSTRAINT `entrada_ibfk_13` FOREIGN KEY (`cod_proveedor`) REFERENCES `proveedor` (`cod_prov`),
     CONSTRAINT `entrada_ibfk_1` FOREIGN KEY (`cod_usuario`) REFERENCES `usuario` (`cod_usuario`),
     CONSTRAINT `entrada_ibfk_2` FOREIGN KEY (`cod_generico`) REFERENCES `producto` (`cod_generico`)
   ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -321,6 +492,91 @@ function crearTablaEntrada($conn){
       echo "Error al ejecutar SQL: " . $conn->error;
   }
 }
+function crearTablaProveedor($conn) {
+    echo "Iniciando creación de tabla 'proveedor'...<br>";
+    $sql = "
+        DROP TABLE IF EXISTS `proveedor`;
+        CREATE TABLE `proveedor` (
+            `cod_prov` int(11) NOT NULL AUTO_INCREMENT,
+            `nombre` char(150) DEFAULT NULL,
+            `telefono` varchar(15) NOT NULL,
+            `correo` char(150) DEFAULT NULL,
+            `cod_representante` int DEFAULT NULL,
+            `estado` char(10) DEFAULT 'activo',
+            PRIMARY KEY (`cod_prov`),
+            KEY `cod_representante` (`cod_representante`),
+            CONSTRAINT `proveedorFK1` FOREIGN KEY (`cod_representante`) REFERENCES `representante` (`cod_rep`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+        -- Dumping data for table `proveedor`
+        LOCK TABLES `proveedor` WRITE;
+        INSERT INTO `proveedor` (`nombre`, `telefono`, `correo`, `cod_representante`) VALUES
+            ('INTI', 676545634, NULL, 1),
+            ('SIGMACORP', 67345634, NULL, 2),
+            ('COFARBOL LTDA', 67345634, NULL, 3),
+            ('LAFAR', 60345634, NULL, 1),
+            ('LABORATORIOS VITA', 78675767, NULL, 2);
+        UNLOCK TABLES;
+    ";
+
+
+    echo "Ejecutando consultas SQL...<br>";
+
+    // Ejecutar consulta
+    if ($conn->multi_query($sql)) {
+        do {
+            // Verificar resultados de cada consulta
+            if ($result = $conn->store_result()) {
+                $result->free();
+            }
+            if ($conn->error) {
+                echo "Error: " . $conn->error . "<br>";
+            }
+        } while ($conn->more_results() && $conn->next_result());
+    } else {
+        echo "Error al ejecutar SQL: " . $conn->error . "<br>";
+    }
+
+    echo "Finalizado.<br>";
+}
+function crearTablaRepresentante($conn) {
+    $sql = "
+    DROP TABLE IF EXISTS `representante`;
+    CREATE TABLE `representante` (
+        `cod_rep` int(11) NOT NULL AUTO_INCREMENT,
+        `nombre_apellidos` char(150) DEFAULT NULL,
+        `telefono` int NOT NULL,
+        `cargo` char(150) DEFAULT NULL,
+        `estado` char(10) DEFAULT 'activo',
+        PRIMARY KEY (`cod_rep`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+        -- Dumping data for table `representante`
+        LOCK TABLES `representante` WRITE;
+        INSERT INTO `representante` (`nombre_apellidos`, `telefono`, `cargo`) VALUES
+            ('Juan gusman Mamani', 676545634,'Gerente general'),
+            ('Roberto lia river', 67345634,'Gerente'),
+            ('Gabriela ramirez lia', 67345634, 'gerente');
+        UNLOCK TABLES;
+    ";
+
+    // Ejecutar consulta
+    if ($conn->multi_query($sql)) {
+        do {
+            // Almacenar y liberar resultados si los hay
+            if ($result = $conn->store_result()) {
+                $result->free();
+            }
+            // Imprimir errores
+            if ($conn->error) {
+                echo "Error: " . $conn->error;
+            }
+        } while ($conn->more_results() && $conn->next_result());
+    } else {
+        echo "Error al ejecutar SQL: " . $conn->error;
+    }
+}
+
 
 function crearTablaFormaPresentacion($conn){
   $sql = "

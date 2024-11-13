@@ -54,6 +54,12 @@ class Chat
     mysqli_close($this->con);
   }
 
+  public function EliminarChatSql($cod_conc){
+    $sql = "delete from consultas where cod_cons = $cod_conc";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+
 }
 
 

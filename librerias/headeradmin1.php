@@ -8,15 +8,30 @@
 
      		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="../activos/jquery-3.5.1.min.js"></script>
-        <script src="../activos/Chart.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="../activos/bootstrap/bootstrap.min.css">
 
-        <script src="../activos/bootstrap/bootstrap.min.js"></script>
-        <script src="../activos/sweetAlert2/sweetalert2.min.js"></script>
-        <link rel="stylesheet" href="../activos/sweetAlert2/sweetalert2.min.css">
-        <link href="../activos/bootstrap/bootstrap.min.css" rel="stylesheet">
-        <link href="../activos/styles.css" rel="stylesheet" />
+  <!-- Bootstrap CSS (solo una vez) -->
+  <link rel="stylesheet" type="text/css" href="../activos/bootstrap/bootstrap.min.css">
 
+  <!-- Select2 CSS -->
+  <link href="../activos/select2/css/select2.min.css" rel="stylesheet">
+
+  <!-- SweetAlert2 CSS -->
+  <link rel="stylesheet" href="../activos/sweetAlert2/sweetalert2.min.css">
+
+  <!-- Tu archivo CSS personalizado -->
+  <link href="../activos/styles.css" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="../activos/Chart.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="../activos/bootstrap/bootstrap.min.js"></script>
+
+  <!-- SweetAlert2 JS -->
+  <script src="../activos/sweetAlert2/sweetalert2.min.js"></script>
+
+  <!-- Select2 JS -->
+  <script src="../activos/select2/js/select2.min.js"></script>
 
 </head>
 <style type="text/css">
@@ -47,6 +62,7 @@ html, body {
       overflow: hidden; /* Evita que el contenido haga scroll */
       padding: 0; /* Ajusta el relleno si es necesario */
   }
+
 
   /* Contenedor de contenido dentro del modal */
   .wrapper {
@@ -139,25 +155,41 @@ html, body {
       z-index: 1051; /* Asegúrate de que esté sobre otros elementos */
   }
 
-  /* Contenedor del chatbot */
-  .chatbot-container {
-      position: fixed;
-      bottom: 80px; /* Ajusta la distancia desde la parte inferior para que aparezca más arriba del botón */
-      right: -1px;
-      width: 400px;
-      height: 400px;
-      border: 1px solid lightgrey;
-      border-radius: 5px;
-      background: white;
-      transform: translateY(100%);
-      transition: transform 0.3s ease-in-out;
-      z-index: 1050; /* Asegúrate de que esté debajo del botón pero sobre otros elementos */
-  }
+    /* Contenedor del chatbot */
+    .chatbot-container {
+        position: fixed;
+        width: 370px;
+        height: 450px;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        background: white;
+        z-index: 1050;
+        display: none; /* Oculto por defecto */
+        transition: transform 0.3s ease-in-out;
+    }
 
-  .chatbot-container.d-block {
-      transform: translateY(0);
-  }
+    /* Estilos para pantallas grandes (computadoras de escritorio) */
+    @media (min-width: 768px) {
+        .chatbot-container {
+            bottom: 80px; /* Ajusta la distancia desde la parte inferior para que aparezca más arriba del botón */
+            right: 20px; /* Coloca el chatbot en la parte derecha de la pantalla */
+            transform: translateY(0); /* Desactiva el translate Y en pantallas grandes */
+        }
+    }
 
+    /* Estilos para pantallas pequeñas (móviles y tablets) */
+    @media (max-width: 767px) {
+        .chatbot-container {
+            top: 50%; /* Centrado verticalmente */
+            left: 50%; /* Centrado horizontalmente */
+            transform: translate(-50%, -50%); /* Centra el chatbot en la pantalla */
+        }
+    }
+
+    /* Clase para mostrar el chatbot en el centro */
+    .chatbot-container.d-block {
+        display: block; /* Muestra el chatbot */
+    }
   /* Estilo del encabezado del chatbot */
   .chatbot-header {
       background: teal;
@@ -207,6 +239,7 @@ input[type=number] {
   <button type="button" class="btn btn-primary" id="openChatbot">💬</button>
 
   <div class="content">
+
   <?php
   $name = "";
   if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
@@ -218,7 +251,7 @@ input[type=number] {
           <a href='#' class='navbar-brand fw-bold'><img src='../imagenes/cds.ico' height='30' width='30' class='rounded-circle'> Centro De Salud</a>
 
           <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
-              Menu <span class='navbar-toggler-icon'></span>
+               <span class='navbar-toggler-icon'></span>
           </button>
             <div class='collapse navbar-collapse' id='navbarResponsive'>
               <ul class='navbar-nav ms-auto me-4 my-3 my-lg-0'>
@@ -234,7 +267,10 @@ input[type=number] {
                     <li class='nav-item' title='Servicios'>
                         <a class='nav-link btn btn-outline-warning' href='../controlador/servicio.controlador.php?accion=rsr'><img src='../imagenes/servicio.ico'style='height: 25px;width: 25px;'></a>
                     </li>";
-
+                  echo "
+                    <li class='nav-item' title='Patologías'>
+                        <a class='nav-link btn btn-outline-warning' href='../controlador/patologias.controlador.php?accion=vtp'><img src='../imagenes/patologia.png'style='height: 25px;width: 25px;'></a>
+                    </li>";
                   echo "
                     <li class='nav-item' title='ChatBot'>
                         <a class='nav-link btn btn-outline-warning' href='../controlador/chat.controlador.php?accion=tcb'><img src='../imagenes/robot.png'style='height: 25px;width: 25px;'></a>
@@ -286,6 +322,22 @@ input[type=number] {
                 }
 
               if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "farmacia"){
+                echo "<li class='nav-item dropdown' title='Cliente Proveedor'>
+                  <a class='nav-link dropdown-toggle btn btn-outline-warning' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                    <img src='../imagenes/clienteProveedor.png'style='height: 25px;width: 25px;'> Cliente Proveedor
+                  </a>
+                  <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>";
+
+                  echo "<li class='nav-item' title='Proveedor'>
+                        <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=fpro'>
+                        <img src='../imagenes/proveedor.png'style='height: 25px;width: 25px;'> Proveedor</a>
+                      </li>";
+                   echo "<li class='nav-item' title='Representante'>
+                         <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=Frep'>
+                         <img src='../imagenes/representante.png'style='height: 25px;width: 25px;'> Representante</a>
+                       </li>";
+                  echo "</ul>";
+                echo "</li>";
                 echo "<li class='nav-item dropdown' title='Farmacia'>
                   <a class='nav-link dropdown-toggle btn btn-outline-warning' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
                     <img src='../imagenes/farmacia.ico'style='height: 25px;width: 25px;'> Farmacia
@@ -364,7 +416,8 @@ input[type=number] {
     </div>
   </div>
 </div>
-<!-- Modal del Chatbot --><div id="chatbotContainer" class="chatbot-container d-none">
+<!-- Modal del Chatbot -->
+<div id="chatbotContainer" class="chatbot-container d-none">
       <div class="chatbot-header">
           <h5>Chatbot</h5>
           <button type="button" class="btn-close" id="closeChatbot"></button>
@@ -389,7 +442,7 @@ input[type=number] {
       </div>
   </div>
 
-
+  <!-- Modal de Bootstrap -->
 <script type="text/javascript">
 function checkEnter(event) {
     if (event.key === 'Enter') {

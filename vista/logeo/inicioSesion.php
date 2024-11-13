@@ -77,10 +77,9 @@
   function VerificarDatos(){
     var usuario = document.getElementById("usuario").value;
     var contrasena = document.getElementById("contrasena").value;
-
-      var datos=new  FormData();
-      datos.append("usuario",usuario);
-      datos.append("contrasena",contrasena);
+    var datos=new  FormData();
+    datos.append("usuario",usuario);
+    datos.append("contrasena",contrasena);
 
       $.ajax({
         type: "POST", //type of submit
@@ -92,7 +91,6 @@
         processData:false,
         success: function(r){
         //alert(r);
-
           r=$.trim(r);
           if(r == "admin"){
             alertCorrecto();
