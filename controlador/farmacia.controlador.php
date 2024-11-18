@@ -408,10 +408,11 @@ class FarmaciaControlador{
               echo "<td style='background-color:#bfffaf;color:green;text-align:center;font-size:13px'>Stock Adecuado</td>";
             }
             echo "<td>".$fi['nombre_usuario']." ".$fi['ap_usuario']."</td>";
+
             echo "<td>";
               echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-              $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",\"".$fi['stockmax']."\",";
-              $dd.="\"".$fi['cod_forma']."\",\"".$fi['cod_conc']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+              $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",";
+              $dd.="\"".$fi['cod_forma']."\",\"".$fi['cod_conc']."\",\"".$fi['codigo']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
               echo $dd;
               if($fi["estado"] == "activo"){
                 echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_generico'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
@@ -563,13 +564,32 @@ class FarmaciaControlador{
       while ($fi = mysqli_fetch_array($resul)) {
       // Añadir cada fila al array con una estructura correcta
           $entry = [
-              "cod_entrada" => $fi["cod_entrada"],
-              "cantidad" => $fi["cantidad"],
-              "vencimiento" => $fi["vencimiento"],
-              "fecha" => $fi["fecha"],
-              "manipulado" => $fi["manipulado"],
-              "cod_generico" => $fi["cod_generico"],
-              "estado_producto" => $fi["estado_producto"],
+            "cod_entrada" => $fi["cod_entrada"],
+            "nrodoc" => $fi["nrodoc"],
+            "nro" => $fi["nro"],
+            "fuente_reposicion" => $fi["fuente_reposicion"],
+            "programa_salud" => $fi["programa_salud"],
+            "cod_proveedor" => $fi["cod_proveedor"],
+            "proveedorRepre" => $fa->SeleccionarDatosProveed($fi["cod_proveedor"]),
+            "costo_valorado" => $fi["costo_valorado"],
+            "saldo" => $fi["saldo"],
+            "nrolote" => $fi["nrolote"],
+            "lote_generico" => $fi["lote_generico"],
+            "lote_nacional" => $fi["lote_nacional"],
+            "cantidad" => $fi["cantidad"],
+            "respaldo_cantidad" => $fi["respaldo_cantidad"],
+            "manipulado" => $fi["manipulado"],
+            "costounitario" => $fi["costounitario"],
+            "costototal" => $fi["costototal"],
+            "costototal_respaldo" => $fi["costototal_respaldo"],
+            "vencimiento" => $fi["vencimiento"],
+            "fecha" => $fi["fecha"],
+            "hora" => $fi["hora"],
+            "cod_usuario" => $fi["cod_usuario"],
+            "cod_generico" => $fi["cod_generico"],
+            "estado_producto" => $fi["estado_producto"],
+            "estado" => $fi["estado"],
+
                 "codigo" => $fi["codigo"],
                 "nombre" => $fi["nombre"],
                 "cod_forma" => $fi["cod_forma"],
@@ -580,7 +600,7 @@ class FarmaciaControlador{
                 "nombre_forma" => $fa->seleccionarPID($fi['cod_forma']),
                 "cod_conc" => $fi["cod_conc"],
                 "concentracion" => $fa->seleccionarCID($fi['cod_conc']),
-                "estado" => $fi["estado"],
+
               ];
               $ar[] = $entry; // Agregar la entrada al array principal
           }
@@ -635,80 +655,96 @@ class FarmaciaControlador{
           <table class='table'>
             <thead style='font-size:12px'>
               <tr>
-                <th>N°</th>
-                <th>Codigo</th>
-                <th>Nombre Generico</th>
-                <th>Forma presentación</th>
-                <th>Concentración unidad medida</th>
-                <th>Cantidad</th>
-                <th>vencimiento</th>
-                <th>Fecha</th>
-                <th>Estado producto</th>
-                <th>Encargado</th>
-                <th>Acción</th>
+              <th>N°</th>
+              <th>Codigo</th>
+              <th>Nombre Generico</th>
+              <th>Forma presentación</th>
+              <th>Concentración unidad medida</th>
+              <th>Cantidad</th>
+              <th>P. Unitario</th>
+              <th>Costo total</th>
+              <th>vencimiento</th>
+              <th>Fecha</th>
+              <th>Estado producto</th>
+              <th>Encargado</th>
+              <th>Proveedor y representante</th>
+              <th>Acción</th>
               </tr>
             </thead>
-            <tbody>";
+            <tbody style='font-size:12px'>";
         if ($resul && count($resul) > 0) {
           $i = $inicioList;
           foreach ($resul as $fi){
-              echo "<tr>";
-                echo "<td>".($i+1)."</td>";
-                echo "<td>".$fi['codigo']."</td>";
-                echo "<td>".$fi['nombre']."</td>";
+            echo "<tr>";
+              echo "<td>".($i+1)."</td>";
+              echo "<td>".$fi['codigo']."</td>";
+              echo "<td>".$fi['nombre']."</td>";
 
-                $forma = $fi['nombre_forma'];
-                $formaa = "";
-                echo "<td>";
-                foreach ($forma as $form) {
-                  echo $form["nombre_forma"];
-                  $formaa=$form["nombre_forma"];
-                }
-                echo "</td>";
-                $concentracion = $fi['concentracion'];
-                $concentra="";
-                echo "<td>";
-                foreach ($concentracion as $conc) {
-                  echo $conc["concentracion"];
-                  $concentra=$conc["concentracion"];
-                }
-                echo "</td>";
-
-                echo "<td>".$fi['cantidad']."</td>";
-                echo "<td>".$fi['vencimiento']."</td>";
-                echo "<td>".$fi['fecha']."</td>";
-
-                if($fi['estado_producto'] == 'activo'){
-                  echo "<td style='color:green;background-color:#dbffaf;text-align:center'>".$fi['estado_producto']."</td>";
-                }else if($fi['estado_producto'] == 'vencido'){
-                  echo "<td style='color:red;background-color:#ffc8af;text-align:center'>".$fi['estado_producto']."</td>";
-                }
-                echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
-
-                $unir = $fi['nombre']." ".$formaa." ".$concentra;
-                $enable = '';$title='Editar';
-                if($fi['estado_producto']=='vencido'){
-                    $enable='disabled';
-                    $title='El producto esta vencido';
-                }
-                if($fi['manipulado'] == 'si'){
-                  $enable = 'disabled';
-                  $title='El producto ya se uso';
-                }
-                echo "<td>";
-                  echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                  echo "<button type='button' class='btn btn-info' title='$title' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                  if($fi["estado"] == "activo"){
-                    echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-                  }else{
-                    echo "<button type='button' class='btn' style='background-color:#f1948a' title='Activar' onclick='accionBtnActivar(\"desactivo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
-                  }
-                  echo "</div>";
+              $forma = $fi['nombre_forma'];
+              $formaa = "";
+              echo "<td>";
+              foreach ($forma as $form) {
+                echo $form["nombre_forma"];
+                $formaa=$form["nombre_forma"];
+              }
+              echo "</td>";
+              $concentracion = $fi['concentracion'];
+              $concentra = "";
+              echo "<td>";
+              foreach ($concentracion as $conc) {
+                echo $conc["concentracion"];
+                $concentra =$conc['concentracion'];
+              }
               echo "</td>";
 
+              echo "<td>".$fi['cantidad']."</td>";
+              echo "<td>".$fi['costounitario']."</td>";
+              echo "<td>".$fi['costototal']."</td>";
+              echo "<td>".$fi['vencimiento']."</td>";
+              echo "<td>".$fi['fecha']."</td>";
+              $son = '';
+              $proveedorRepresentante = $fi["proveedorRepre"];
+              $proveedor =""; $nombresApellidos ="";
+              foreach ($proveedorRepresentante as $prov) {
+                $son = $prov["nombre"]."-".$prov["nombre_apellidos"];
+                $proveedor = $prov["nombre"];$nombresApellidos= $prov["nombre_apellidos"];
+              }
+              if($fi['estado_producto'] == 'activo'){
+                echo "<td style='color:green;background-color:#dbffaf;text-align:center'>".$fi['estado_producto']."</td>";
+              }else if($fi['estado_producto'] == 'vencido'){
+                echo "<td style='color:red;background-color:#ffc8af;text-align:center'>".$fi['estado_producto']."</td>";
+              }
+              echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
+              echo "<td>".$son."</td>";
+              $unir = $fi['nombre']." ".$formaa." ".$concentra;
+              $enable = '';$title='Editar';
+              if($fi['estado_producto']=='vencido'){
+                  $enable='disabled';
+                  $title='El producto esta vencido';
+              }
+              if($fi['manipulado'] == 'si'){
+                $enable = 'disabled';
+                $title='El producto ya se uso';
+              }
+              echo "<td>";
+                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                echo "<button type='button' class='btn btn-info' title='$title' onclick='ActualizarEntrada(\"".$fi["cod_generico"]."\",\"".$fi["cod_entrada"]."\",\"".$fi["cod_proveedor"]."\",
+                \"".$fi["nrodoc"]."\",\"".$fi["programa_salud"]."\",\"".$fi["nro"]."\"
+                , \"".$fi["fuente_reposicion"]."\",
+                \"".$son."\",\"".$nombresApellidos."\",\"".$unir."\",\"".$fi["costo_valorado"]."\",\"".$fi["saldo"]."\",
+                \"".$fi["nrolote"]."\",\"".$fi["lote_generico"]."\",\"".$fi["lote_nacional"]."\",\"".$fi["cantidad"]."\",\"".$fi["costounitario"]."\",\"".$fi["costototal"]."\",
+                \"".$fi["vencimiento"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                if($fi["estado"] == "activo"){
+                  echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                }else{
+                  echo "<button type='button' class='btn' style='background-color:#f1948a' title='Activar' onclick='accionBtnActivar(\"desactivo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
+               }
+                echo "</div>";
+            echo "</td>";
 
-              echo "</tr>";
-              $i++;
+
+            echo "</tr>";
+            $i++;
             }
           }else{
             echo "<tr>";

@@ -103,7 +103,8 @@
                         </button>
                       </div>
                       <div class="col-auto mb-2" title="Registrar o Actualizar">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarEntrada('','','','','')">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarEntrada('','','','','','','','','','','',
+                        '','','','','','','','')">
                           <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -161,7 +162,7 @@
                                     <input type="text" name="fuente_reposicion" id='fuente_reposicion' class="form-control"value="">
                                   </div>
                                   <div class="col-md-4 mb-3">
-                                    <label for="">Proveedor</label>
+                                    <label for="">Proveedor es</label>
                                     <select id="proveedor" class="select2-container" style="width: 100%;">
                                         <option value="" disabled selected>Buscar proveedor</option>
                                     </select>
@@ -249,14 +250,17 @@
                                 <th>Forma presentación</th>
                                 <th>Concentración unidad medida</th>
                                 <th>Cantidad</th>
+                                <th>P. Unitario</th>
+                                <th>Costo total</th>
                                 <th>vencimiento</th>
                                 <th>Fecha</th>
                                 <th>Estado producto</th>
                                 <th>Encargado</th>
+                                <th>Proveedor y representante</th>
                                 <th>Acción</th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody style='font-size:12px'>
 
                         <?php
                         if ($resul && count($resul) > 0) {
@@ -285,16 +289,24 @@
                                 echo "</td>";
 
                                 echo "<td>".$fi['cantidad']."</td>";
+                                echo "<td>".$fi['costounitario']."</td>";
+                                echo "<td>".$fi['costototal']."</td>";
                                 echo "<td>".$fi['vencimiento']."</td>";
                                 echo "<td>".$fi['fecha']."</td>";
-
+                                $son = '';
+                                $proveedorRepresentante = $fi["proveedorRepre"];
+                                $proveedor =""; $nombresApellidos ="";
+                                foreach ($proveedorRepresentante as $prov) {
+                                  $son = $prov["nombre"]."-".$prov["nombre_apellidos"];
+                                  $proveedor = $prov["nombre"];$nombresApellidos= $prov["nombre_apellidos"];
+                                }
                                 if($fi['estado_producto'] == 'activo'){
                                   echo "<td style='color:green;background-color:#dbffaf;text-align:center'>".$fi['estado_producto']."</td>";
                                 }else if($fi['estado_producto'] == 'vencido'){
                                   echo "<td style='color:red;background-color:#ffc8af;text-align:center'>".$fi['estado_producto']."</td>";
                                 }
                                 echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
-
+                                echo "<td>".$son."</td>";
                                 $unir = $fi['nombre']." ".$formaa." ".$concentra;
                                 $enable = '';$title='Editar';
                                 if($fi['estado_producto']=='vencido'){
@@ -307,7 +319,12 @@
                                 }
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                                  echo "<button type='button' class='btn btn-info' title='$title' onclick='ActualizarEntrada(".$fi['cod_entrada'].",".$fi['cantidad'].",\"".$fi['vencimiento']."\",".$fi['cod_generico'].",\"".$unir."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-info' title='$title' onclick='ActualizarEntrada(\"".$fi["cod_generico"]."\",\"".$fi["cod_entrada"]."\",\"".$fi["cod_proveedor"]."\",
+                                  \"".$fi["nrodoc"]."\",\"".$fi["programa_salud"]."\",\"".$fi["nro"]."\"
+                                  , \"".$fi["fuente_reposicion"]."\",
+                                  \"".$son."\",\"".$nombresApellidos."\",\"".$unir."\",\"".$fi["costo_valorado"]."\",\"".$fi["saldo"]."\",
+                                  \"".$fi["nrolote"]."\",\"".$fi["lote_generico"]."\",\"".$fi["lote_nacional"]."\",\"".$fi["cantidad"]."\",\"".$fi["costounitario"]."\",\"".$fi["costototal"]."\",
+                                  \"".$fi["vencimiento"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro' $enable><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                                   if($fi["estado"] == "activo"){
                                     echo "<button type='button' class='btn btn-danger' title='Desactivar' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",\"".$buscar."\",".$fi['cod_entrada'].",\"".$fechai."\",\"".$fechaf."\")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
                                   }else{
@@ -703,14 +720,38 @@ function Buscar(page){
       }, 1500);
     }
   }
-  function ActualizarEntrada(cod_entrada,cantidad,vencimiento,cod_generico,nombre_producto){
-    document.getElementById('cod_entrada').value=cod_entrada;
-    document.getElementById("cantidad").value=cantidad;
-    document.getElementById("vencimiento").value=vencimiento;
-    document.getElementById("cod_producto").value=cod_generico;
-    document.getElementById("nombre_producto").value=nombre_producto;
-  }
 
+
+  function ActualizarEntrada(cod_producto,cod_entrada,cod_proveedor,nrodoc,programa_salud,nro,fuente_reposicion,proveedor,representante,nombre_producto,costo_valorado,
+  saldo,nrolote,lote_generico,lote_nacional,cantidad,unitario,total,vencimiento){
+    document.getElementById("cod_producto").value=cod_producto;
+    document.getElementById("cod_entrada").value=cod_entrada;
+    document.getElementById("cod_proveedor").value=cod_proveedor;
+    document.getElementById("nrodoc").value=nrodoc;
+    document.getElementById("programa_salud").value=programa_salud;
+    document.getElementById("nro").value=nro;
+    document.getElementById("fuente_reposicion").value=fuente_reposicion;
+    // Usar .val() para pre-seleccionar el proveedor en select2
+
+    $("#proveedor").find("option[value='" + proveedor + "']").length ||
+      $("#proveedor").append(new Option(proveedor, proveedor, true, true));
+    $("#proveedor").val(proveedor).trigger('change');
+    document.getElementById("representante").value=representante;
+
+    $("#nombre_producto").find("option[value='" + nombre_producto + "']").length ||
+      $("#nombre_producto").append(new Option(nombre_producto, nombre_producto, true, true));
+    $("#nombre_producto").val(nombre_producto).trigger('change');
+    document.getElementById("costo_valorado").value=costo_valorado;
+    document.getElementById("saldo").value=saldo;
+
+    document.getElementById("nrolote").value=nrolote;
+    document.getElementById("lote_generico").value=lote_generico;
+    document.getElementById("lote_nacional").value=lote_nacional;
+    document.getElementById("cantidad").value=cantidad;
+    document.getElementById("unitario").value=unitario;
+    document.getElementById("total").value=total;
+    document.getElementById("vencimiento").value=vencimiento;
+  }
         function accionBtnActivar(accion,pagina,listarDeCuanto,buscar,cod_entrada,fechai,fechaf){
           var estadoProducto=document.getElementById("estadoProducto").value;
           var buscar = document.getElementById("buscar").value;

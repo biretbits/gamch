@@ -106,10 +106,10 @@
                                  <label for="name" class="form-label">Stock minimo</label>
                                  <input type="number" class="form-control" id="stockmin" min='0'name='stockmin' value='0' placeholder="stock minimo">
                                </div>
-                               <div class="mb-3">
+                              <!-- <div class="mb-3">
                                  <label for="name" class="form-label">Stock maximo</label>
                                  <input type="number" class="form-control" id="stockmax" min='0'name='stockmax' value='1' placeholder="stock maximo">
-                               </div>
+                               </div>-->
 
                                <div class="mb-3">
                                   <label for="cod_forma" class="form-label">Forma de presentación</label>
@@ -238,7 +238,7 @@
 
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                                  $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",\"".$fi['stockmax']."\",";
+                                  $dd = "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarNombreGenerico(".$fi['cod_generico'].", \"".($fi['nombre'])."\",\"".($fi['enfermedad'])."\",\"".($fi['vitrina'])."\",\"".$fi['stockmin']."\",";
                                   $dd.="\"".$fi['cod_forma']."\",\"".$fi['cod_conc']."\",\"".$fi['codigo']."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo $dd;
                                   if($fi["estado"] == "activo"){
@@ -408,14 +408,15 @@ function Buscar(page){
     var enfermedad = document.getElementById("enfermedad").value;
     var vitrina = document.getElementById("vitrina").value;
     var stockmin = parseInt(document.getElementById("stockmin").value);
-    var stockmax = parseInt(document.getElementById("stockmax").value);
+    //var stockmax = parseInt(document.getElementById("stockmax").value);
+    var stockmax=0;
     var cod_forma = document.getElementById("cod_forma").value;
     var cod_conc = document.getElementById("cod_conc").value;
     if(generico == ''){
       Vacio();
       return;
     }
-    if((stockmin)==0 || (stockmax)==0){
+    if((stockmin)==0){
       Error23();
       return;
     }
@@ -436,6 +437,7 @@ function Buscar(page){
     datos.append("cod_forma",cod_forma);
     datos.append("cod_conc",cod_conc);
     datos.append("codigo",codigo);
+    //alert(cod_generico);
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=rfnt",
         type: "POST",
@@ -446,12 +448,14 @@ function Buscar(page){
       //alert(data+"dasdas");
           if(data == 'correcto'){
             Correcto();
+            IRalLink(cod_generico);
           }else if(data == 'error'){
             Error1();
           }else{
             cod_generico='';
+            IRalLink(cod_generico);
           }
-          IRalLink(cod_generico);
+
         }
       });
   }
@@ -514,7 +518,7 @@ function Buscar(page){
         document.getElementById("enfermedad").value = '';
         document.getElementById("vitrina").value = '';
         document.getElementById("stockmin").value = '';
-        document.getElementById("stockmax").value = '';
+        //document.getElementById("stockmax").value = '';
         document.getElementById("cod_forma").value='';
         document.getElementById("cod_conc").value='';
         $('#ModalRegistro').modal('hide');
@@ -527,13 +531,12 @@ function Buscar(page){
       }, 1500);
     }
   }
-  function ActualizarNombreGenerico(cod_generico,nombre,enfermedad,vitrina,stockmin,stockmax,cod_forma,cod_conc,codigo){
+  function ActualizarNombreGenerico(cod_generico,nombre,enfermedad,vitrina,stockmin,cod_forma,cod_conc,codigo){
     document.getElementById('cod_generico').value=cod_generico;
     document.getElementById("generico").value=nombre;
     document.getElementById("enfermedad").value=enfermedad;
     document.getElementById("vitrina").value=vitrina;
     document.getElementById("stockmin").value=stockmin;
-    document.getElementById("stockmax").value=stockmax;
     document.getElementById("codigo").value=codigo;
     if(cod_forma == 0){
       document.getElementById("cod_forma").selectedIndex = 0;

@@ -115,8 +115,7 @@ class Farmacia
   }
 
   public function SeleccionarProducto($inicioList=false,$listarDeCuanto=false,$buscar='',$fechai=false,$fechaf=false,$estadoProducto=false){
-    $sql="select e.cod_entrada,e.cantidad,e.respaldo_cantidad,e.manipulado,e.vencimiento,e.fecha,e.cod_usuario,e.cod_generico,e.estado_producto,e.estado,
-    p.codigo,p.nombre,p.cod_forma,p.cod_conc,u.cod_usuario,u.nombre_usuario,u.ap_usuario,u.am_usuario
+    $sql="select *
     from entrada as e inner join producto as p on e.cod_generico=p.cod_generico
     inner join usuario as u where e.cod_usuario=u.cod_usuario ";
     if($estadoProducto != false){
@@ -717,6 +716,13 @@ class Farmacia
     $proveedor = strtolower($proveedor);
     $lis = "select *from proveedor as p  inner join representante as r on r.cod_rep = p.cod_representante
     where (LOWER(p.nombre) like '%$proveedor%' or LOWER(r.nombre_apellidos) like '%$proveedor%') and p.estado = 'activo' LIMIT 5 OFFSET 0";
+    $resul = $this->con->query($lis);
+    return $resul;
+    mysqli_close($this->con);
+  }
+  public function SeleccionarDatosProveed($id){
+    $lis = "select *from proveedor as p  inner join representante as r on r.cod_rep = p.cod_representante
+    where p.cod_prov=$id and p.estado = 'activo'";
     $resul = $this->con->query($lis);
     return $resul;
     mysqli_close($this->con);
