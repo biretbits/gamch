@@ -93,6 +93,26 @@ class Usuario
     return $resul;
     mysqli_close($this->con);
   }
+  public function selectDatosUsuario12($cod_usuario){
+    $sql = "select *from usuario where cod_usuario=".$cod_usuario;
+    $resul = $this->con->query($sql);
+    // Retornar el resultado
+    $a = [];
+    while ($fi = mysqli_fetch_array($resul)) {
+      $datos = [
+        "cod_usuario" => $fi["cod_usuario"],
+        "nombre_usuario" => $fi["nombre_usuario"],
+        "ap_usuario" => $fi["ap_usuario"],
+        "am_usuario" => $fi["am_usuario"],
+        "cod_usuario" => $fi["cod_usuario"],
+        "edad_usuario"=>$fi["edad_usuario"]
+      ];
+      $a[] = $datos;
+    }
+    return $a;
+
+    mysqli_close($this->con);
+  }
 
   public function showTables(){
     $tables = array();

@@ -332,8 +332,6 @@
                                  }
                                   echo "</div>";
                               echo "</td>";
-
-
                               echo "</tr>";
                               $i++;
                             }
@@ -765,6 +763,7 @@ function Buscar(page){
           datos.append("estadoProducto",estadoProducto);
           datos.append("cod_entrada",cod_entrada);
           //alert(accion+"   "+buscar+"    "+cod_generico);
+        //  alert(cod_entrada);
           $.ajax({
             url: "../controlador/farmacia.controlador.php?accion=dbe",
             type: "POST",
@@ -772,7 +771,7 @@ function Buscar(page){
             contentType: false, // Deshabilitar la codificación de tipo MIME
             processData: false, // Deshabilitar la codificación de datos
             success: function(data) {
-        //alert(data+"dasdas");
+      //  alert(data+"dasdas");
               data=$.trim(data);
               if(data == "error"){
                 error();

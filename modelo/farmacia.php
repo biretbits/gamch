@@ -115,9 +115,14 @@ class Farmacia
   }
 
   public function SeleccionarProducto($inicioList=false,$listarDeCuanto=false,$buscar='',$fechai=false,$fechaf=false,$estadoProducto=false){
-    $sql="select *
-    from entrada as e inner join producto as p on e.cod_generico=p.cod_generico
-    inner join usuario as u where e.cod_usuario=u.cod_usuario ";
+    $sql="SELECT
+    e.cod_entrada,e.nrodoc,e.nro,e.fuente_reposicion,e.programa_salud,e.cod_proveedor,e.costo_valorado,
+    e.saldo,e.nrolote,e.lote_generico,e.lote_nacional,e.cantidad,e.respaldo_cantidad,e.manipulado,e.costounitario,e.costototal,e.costototal_respaldo,e.vencimiento,e.fecha,
+    e.hora,e.cod_usuario,e.cod_generico,e.estado_producto,e.estado,p.codigo,p.nombre,p.cod_forma,
+    u.cod_usuario,u.nombre_usuario,u.ap_usuario,u.am_usuario,p.cod_conc
+    FROM entrada AS e
+    INNER JOIN producto AS p ON e.cod_generico = p.cod_generico
+    INNER JOIN usuario AS u ON e.cod_usuario = u.cod_usuario ";
     if($estadoProducto != false){
       $sql.=" and e.estado_producto ='$estadoProducto' ";
     }
@@ -275,7 +280,27 @@ class Farmacia
  }
 //funcion para seleccionar de tabla salida
  public function SeleccionarSalida($inicioList=false,$listarDeCuanto=false,$buscar='',$fechai=false,$fechaf=false){
-     $sql="select *from salida as s inner join usuario as u on s.cod_paciente=u.cod_usuario ";
+     $sql="select s.cod_salida,
+          s.nombre_receta,
+          s.entregado,
+          s.cod_usuario,
+          s.cod_paciente,
+          s.fechaHora,
+          s.estado,
+          u.ci_usuario,
+           u.usuario,
+           u.nombre_usuario,
+           u.ap_usuario,
+           u.am_usuario,
+           u.fecha_nac_usuario,
+           u.edad_usuario,
+           u.telefono_usuario,
+           u.direccion_usuario,
+           u.profesion_usuario,
+           u.especialidad_usuario,
+           u.ocupacion_usuario,
+           u.comunidad_usuario
+          from salida as s inner join usuario as u on s.cod_paciente=u.cod_usuario ";
      $si = "no";
      $buscar = strtolower($buscar);
      if($buscar !='' && $si == 'no'){
@@ -283,6 +308,7 @@ class Farmacia
        or lower(u.ap_usuario) LIKE '%$buscar%' or lower(u.am_usuario) LIKE '%$buscar%')";
        $si = 'si';
      }
+
      if($fechai!=false &&$fechaf!=false && $si == 'no'){
        $sql.=" where (DATE(s.fechaHora) >= '$fechai' and DATE(s.fechaHora) <= '$fechaf') ";
      }else if($fechai!=false &&$fechaf!=false && $si == 'si'){
@@ -321,6 +347,7 @@ class Farmacia
    {
      return $uso;
    }else{
+    // echo $cod_entrada."   ".$accion;
      if($accion == 'activo'){
          $sql = "update entrada set estado = 'desactivo' where cod_entrada=".$cod_entrada;
      }else{
@@ -386,11 +413,28 @@ class Farmacia
      $sql= "update producto set stock_producto='$si',cantidad_total=".$cantidad_total." where cod_generico=".$cod_generico."";
      $this->con->query($sql);
    }
+   public function ModificarPrecioTotalEnEntrada($cod_entrada){
+     $sql= "update entrada set costototal= (cantidad * costounitario) where cod_entrada = $cod_entrada";
+     $this->con->query($sql);
+   }
 
-   public function insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$cod_salida){
+   public function insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$cod_salida,$costos,$total,$costosUnitarios){
+    // $costoUnitario = $fa->ObtenerCostoUnitario();
      $select = '';
-       $select="insert into productosolicitado(cantidad_solicitada,codigos_entrada,cantidadRestado,fechaHora,cod_producto,cod_salida)
-       values($cantidad,'$codigos','$cat_res',NOW(),$cod_producto,$cod_salida)";
+       $select="insert into productosolicitado(cantidad_solicitada,codigos_entrada,cantidadRestado,costosUnitario
+       ,costos,costoTotal,fechaHora,cod_producto,cod_salida)
+       values($cantidad,'$codigos','$cat_res','$costosUnitarios','$costos',$total,NOW(),$cod_producto,$cod_salida)";
+
+       $resul = $this->con->query($select);
+       if($resul!=''){
+         $ultimoId = $this->con->insert_id;
+         return $ultimoId;
+       }
+     mysqli_close($this->con);
+   }
+   private function ObtenerCostoUnitario(){
+     $select = '';
+       $select="select costounitario from entrada where cod_entrada";
        $resul = $this->con->query($select);
        if($resul!=''){
          $ultimoId = $this->con->insert_id;
@@ -400,6 +444,7 @@ class Farmacia
    }
 
    public function actualizar_datos_entrada($cod_solicitado){
+     echo $cod_solicitado." cod solicitado";
      $resultado = $this->seleccionarProductoSolicitado($cod_solicitado);
      $fila = mysqli_fetch_array($resultado);
      $codigos = $fila["codigos_entrada"];
@@ -439,7 +484,7 @@ class Farmacia
    }
 
    function seleccionarProductoSolicitado($cod_solicitado){
-     $select="select *from productoSolicitado where cod_solicitado = $cod_solicitado";
+     $select="select *from productosolicitado where cod_solicitado = $cod_solicitado";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
@@ -475,7 +520,7 @@ class Farmacia
    }
 
    public function seleccionarCantEntrada($cod_solicitado){
-     $resultado = $this->seleccionarProductoSolicitadoID($cod_solicitado);
+     $resultado = $this->seleccionarProductoSolicitadoID($cod_solicitado);//seleccionamos productos solicitados
      $fila = mysqli_fetch_array($resultado);
      $codigos = $fila["codigos_entrada"];
      $cantidad_resta = $fila["cantidadRestado"];
@@ -505,19 +550,24 @@ class Farmacia
    }
 
    function InsertarENsalida($cod_salida,$nombre_receta,$usuario,$id_paciente){
-     $select = '';
-     if(is_numeric($cod_salida)){//actualizar
-       $select="update salida set nombre_receta=$nombre_receta,cod_usuario=$usuario,cod_paciente=$id_paciente where cod_salidad = $cod_salida";
-       $resul = $this->con->query($select);
-       return $cod_salida;
-     }else{//insertar
-       $select="insert into salida(nombre_receta,cod_usuario,cod_paciente,fechaHora,estado)values('$nombre_receta',
-       $usuario,$id_paciente,now(),'activo')";
-       $resul = $this->con->query($select);
-       if($resul!=''){
-         $ultimoId = $this->con->insert_id;
-         return $ultimoId;
-       }
+    $sql = '';
+    $sql = "INSERT INTO salida (
+                cod_salida,nombre_receta,cod_usuario,cod_paciente,fechaHora,estado
+            ) VALUES (
+              '$cod_salida','$nombre_receta','$usuario','$id_paciente','now()','activo'
+            ) ON DUPLICATE KEY UPDATE
+               nombre_receta = VALUES(nombre_receta),
+                cod_usuario = VALUES(cod_usuario),
+                cod_paciente = VALUES(cod_paciente)
+                ";
+    $resul = $this->con->query($sql);
+    if($resul!=''){
+      if(is_numeric($cod_salida)){
+        return  $cod_salida;
+      }else{
+        $ultimoId = $this->con->insert_id;
+        return $ultimoId;
+      }
     }
 
    }

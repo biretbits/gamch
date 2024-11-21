@@ -79,11 +79,11 @@
                           <div class="card shadow-lg">
                            <div class="card-body">
                              <form>
-                               <input type="hidden" name="cod_producto"id='cod_producto' value="">
-                               <input type="hidden" name="cod_salida" id='cod_salida' value="">
-                               <input type="hidden" name="usuario_id" id='usuario_id' value="">
-                               <input type="hidden" name="codigos" id='codigos'value="">
-                               <input type="hidden" name="actualizar" id='actualizar' value="">
+                               <input type="text" name="cod_producto"id='cod_producto' value="">
+                               <input type="text" name="cod_salida" id='cod_salida' value="">
+                               <input type="text" name="usuario_id" id='usuario_id' value="">
+                               <input type="text" name="codigos" id='codigos'value="">
+                               <input type="text" name="actualizar" id='actualizar' value="">
                                <div class="mb-3">
                                  <label for="nombre_receta" class="form-label">Nombre receta</label>
                                  <input type="text" class="form-control" id="nombre_receta" placeholder="Nombre de la receta" autocomplete="off">
@@ -119,13 +119,15 @@
                                       <th>Codigo</th>
                                       <th>Producto</th>
                                       <th>Cantidad</th>
-                                      <th>Acciones</th>
+                                      <th>Costo Total</th>
+                                      <th>Acción</th>
                                     </tr>
                                   </thead>
                                   <tbody>
                                     <!-- Aquí se agregarán las filas dinámicamente -->
                                   </tbody>
                                 </table>
+                                <p id='labelTotal' align='right'>Total: </p>
                               </div>
                              </form>
                            </div>
@@ -199,7 +201,7 @@
                                   <input type="hidden" name="cod_solicitado1" id='cod_solicitado1' value="">
                                   <input type="hidden" name="codigos1" id='codigos1'value="">
                                   <input type="hidden" name="cantidadRestado1" id='cantidadRestado1' value="">
-                                  <input type="hidden" name="codigos_entrada1" id='codigos_entrada1' value="">
+                                  <input type="text" name="codigos_entrada1" id='codigos_entrada1' value="">
                                   <input type="hidden" name="fila" id='fila' value="">
                                   <div class="mb-3">
                                     <label for="nombre_producto1" class="form-label">Producto farmaceutico</label>
@@ -229,7 +231,7 @@
                          </div>
                        </div>
                      </div>
-                    <div class="verDatos" id="verDatos">
+                    <div id="verDatos">
                       <div class="row">
                         <div class="col">
                           <div class="table-responsive">
@@ -444,7 +446,7 @@ function Buscar(page){
       return 5;
     }
   }
-
+  var sumar = 0;
   function registrar(){
     var cod_producto = document.getElementById("cod_producto").value;
     var cod_salida = document.getElementById("cod_salida").value;
@@ -494,6 +496,7 @@ function Buscar(page){
     datos.append("id_paciente",id_paciente);
     datos.append("nombre_receta",nombre_receta);
     datos.append("actualizar",actualizar);
+
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=resf",
         type: "POST",
@@ -501,21 +504,27 @@ function Buscar(page){
         contentType: false, // Deshabilitar la codificación de tipo MIME
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-      //  alert(data+"dasdas");
+         //alert(data+"dasdas");
+          console.log(data);
           if(data == 'fecha_vencido'){
             vencido();
           }else if(data == 'error'){
             Error1();
           }else{
-            var separar = data.split(',');
+            var separar = data.split('-');
             var fila = verificarFilas();
             var codi1=parseInt(separar[0]);
             var codi2 = parseInt(separar[1]);
-            var texto = separar[2];
-            if(typeof codi1=== 'number' && typeof codi2 == 'number' && texto == 'correctoEScORRECTO')
+            var costoTotal = parseFloat(separar[2]);
+            var texto = separar[3];
+
+            if(typeof codi1=== 'number' && typeof codi2 == 'number' && typeof costoTotal == 'number' && texto == 'correctoEScORRECTO')
             {
               Correcto3();
-              agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,'');
+              costoTotalMedicamentos(costoTotal);
+            //  alert(costoTotal);
+              var dataa = codi1+","+codi2;
+              agragarFila(codigos,nombre_producto,cantidad,cod_salida,dataa,'',costoTotal);
               document.getElementById("nombre_producto").value='';
               document.getElementById("cod_producto").value='';
               document.getElementById("cantidad").value='';
@@ -526,17 +535,16 @@ function Buscar(page){
               es.textContent ='';
               es.style.backgroundColor = 'white';
               $.ajax({
-                url: "../controlador/farmacia.controlador.php?accion=actualizarTabla",
+                url: "../controlador/farmacia.controlador.php?accion=acTabla",
                 type: "POST",
                 data: datos1,
                 contentType: false, // Deshabilitar la codificación de tipo MIME
                 processData: false, // Deshabilitar la codificación de datos
                 success: function(resul) {
+
                   $("#verDatos").html(resul);
                 }
               });
-            }else{
-              location.href="../controlador/farmacia.controlador.php?accion=vsf";
             }
           }
           //IRalLink(cod_salida);
@@ -641,7 +649,7 @@ function Buscar(page){
     document.getElementById("nombre_receta").value=nombre_receta;
     document.getElementById("cod_paciente").value=cod_paciente;
     document.getElementById("actualizar").value=actualizar;
-    if(actualizar==0){
+    if(actualizar==0){//si actualizar es cero quiero o se mostra un modal vario o con los campos vacios
       document.getElementById("cod_producto").value='';
       document.getElementById("codigos").value='';
       document.getElementById("cod_paciente").value='';
@@ -652,9 +660,11 @@ function Buscar(page){
       document.getElementById("btne").disabled=false;
       document.getElementById("nombre_receta").disabled=false;
       document.getElementById("cod_paciente").disabled=false;
+      document.getElementById("labelTotal").innerHTML="Total: ";
+
       vaciarTabla();
     }else{
-      BuscarDatosProductosSolicitados(cod_salida,entregado);
+      BuscarDatosProductosSolicitados(cod_salida,entregado);//se muestra con los campos llenos
     }
     if(entregado != "" && entregado == 'si'){
       document.getElementById("btnr").disabled=true;
@@ -998,7 +1008,13 @@ function Buscar(page){
       });
     }
 
-    function agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,disabled){
+    function costoTotalMedicamentos(total){
+      sumar = sumar +total;
+      //alert(sumar);
+      document.getElementById("labelTotal").innerHTML="Total: "+sumar;
+    }
+
+    function agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,disabled,costoTotal){
 
       var separar = data.split(',');
       var fila = verificarFilas();
@@ -1009,16 +1025,19 @@ function Buscar(page){
       let codigo = nuevaFila.insertCell(0);
       let celdaProducto = nuevaFila.insertCell(1);
       let celdaCantidad = nuevaFila.insertCell(2);
-      let celdaAcciones = nuevaFila.insertCell(3);
+      let celdaCostoTotal = nuevaFila.insertCell(3);
+        let celdaAcciones = nuevaFila.insertCell(4);
       codigo.innerHTML = codigos;
       celdaProducto.innerHTML =nombre_producto;
       celdaCantidad.innerHTML =cantidad;
+      celdaCostoTotal.innerHTML =costoTotal;
       celdaAcciones.innerHTML = `<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
       <button type='button' class='btn btn-info' title='Editar' ${disabled} onclick='ActualizarSolicitud(${fila},${codi},"${codigos}")' data-bs-toggle='modal' data-bs-target='#ModalEditar'>
         <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
       </button>
-      <button type='button' class='btn btn-danger'title='Eliminar Producto' ${disabled} onclick='eliminarFila(${fila},${codi})'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>
+      <button type='button' class='btn btn-danger'title='Eliminar Producto' ${disabled} onclick='eliminarFila(${fila},${codi},"${codigos}")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>
     </div>`;
+
 /*<button type='button' class='btn btn-danger' onclick='eliminarFila(this)'>Eliminar</button>*/
     }
 
@@ -1191,6 +1210,7 @@ function Buscar(page){
      timer: 3000
    });
   }
+  //funcion para mostrar en la tabla
   function BuscarDatosProductosSolicitados(cod_salida,entregados){
     var disabled='';
     if(entregados == 'si'){
@@ -1203,11 +1223,14 @@ function Buscar(page){
         data: {cod_salida:cod_salida},
         dataType: "json",
         success: function(data) {
+          let total = 0;
           for (let i = 0; i < data.length; i++) {
             var ps = data[i];
             var dataa = ps.cod_salida+","+ps.cod_solicitado;
-            agragarFila(ps.codigo,ps.nombre,ps.cantidad_solicitada,ps.cod_salida,dataa,disabled);
+            agragarFila(ps.codigo,ps.nombre,ps.cantidad_solicitada,ps.cod_salida,dataa,disabled,ps.costoTotal);
+            total = total+parseFloat(ps.costoTotal);
           }
+          costoTotalMedicamentos(total);
           if(data.length >0){
             document.getElementById("nombre_receta").disabled=true;
             document.getElementById("cod_paciente").disabled=true;
@@ -1221,7 +1244,7 @@ function Buscar(page){
       tabla.innerHTML = ''; // Vacía todo el contenido del tbody
   }
 
-  function eliminarFila(fila,cod_solicitado){
+  function eliminarFila(fila,cod_solicitado,codigos){
     var datos = new FormData(); // Crear un objeto FormData vacío
     datos.append("cod_solicitado",cod_solicitado);
     Swal.fire({
@@ -1242,7 +1265,7 @@ function Buscar(page){
          contentType: false, // Deshabilitar la codificación de tipo MIME
          processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-          //alert(data);
+          alert(data);
           if(data=='error'){
             Error1();
           }else if(data == 'fecha_vencido'){

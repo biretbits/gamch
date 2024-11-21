@@ -908,6 +908,9 @@ function crearTablaProductoSolicitado($conn){
       `cantidad_solicitada` int(11) DEFAULT NULL,
       `codigos_entrada` text DEFAULT NULL,
       `cantidadRestado` text DEFAULT NULL,
+      `costosUnitario` text DEFAULT NULL,
+      `costos`  text DEFAULT NULL,
+      `costoTotal`  double(10,2) DEFAULT NULL,
       `fechaHora` datetime DEFAULT NULL,
       `cod_producto` int(11) DEFAULT NULL,
       `cod_salida` int(11) DEFAULT NULL,
@@ -923,7 +926,7 @@ function crearTablaProductoSolicitado($conn){
   }
 
 }
-
+//  `costoTotal`  double(10,2) DEFAULT NULL,
 function crearTablaRegistroDiario($conn){
   $sql = "DROP TABLE IF EXISTS `registro_diario`";
   if (!$conn->query($sql)) {
