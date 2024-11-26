@@ -444,7 +444,7 @@ class Farmacia
    }
 
    public function actualizar_datos_entrada($cod_solicitado){
-     echo $cod_solicitado." cod solicitado";
+    // echo $cod_solicitado." cod solicitado";
      $resultado = $this->seleccionarProductoSolicitado($cod_solicitado);
      $fila = mysqli_fetch_array($resultado);
      $codigos = $fila["codigos_entrada"];
@@ -579,12 +579,12 @@ class Farmacia
      // Retornar el resultado
      return $resul;
    }
-   function actualizarProductosSolicitados($ar,$codigosNEW,$cat_resNEW){
+   function actualizarProductosSolicitados($ar,$codigosNEW,$cat_resNEW,$costos,$total,$costosUnitarios){
      $cod_solicitado = $ar['cod_solicitado1'];
      $cod_producto = $ar["cod_producto1"];
      $cantidad = $ar["cantidad1"];
      $sql = "update productoSolicitado set cantidad_solicitada=$cantidad,codigos_entrada='$codigosNEW',
-     cantidadRestado='$cat_resNEW',cod_producto=$cod_producto where cod_solicitado = $cod_solicitado";
+     cantidadRestado='$cat_resNEW',costosUnitario = '$costosUnitarios',costos = '$costos', costoTotal = $total,cod_producto=$cod_producto where cod_solicitado = $cod_solicitado";
      $resul = $this->con->query($sql);
      // Retornar el resultado
      return $resul;

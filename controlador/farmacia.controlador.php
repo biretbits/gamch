@@ -1180,6 +1180,7 @@ class FarmaciaControlador{
      }
 
    }
+   //funciones para modificar el precio total de entradas
    function actualizarNuevoPrecioTotal($codigos,$fa){
      $array = explode(",", $codigos);//separamos por comas
       // Recorremos el array con un ciclo for
@@ -1414,17 +1415,23 @@ class FarmaciaControlador{
         $codigos = $re[0];
         $cantiEntra = $re[1];
         $fa->SumasActualizar($codigos,$cantiEntra);//si cumple todo entonces se podra actualizar
-
+        //sumamos todo lo que se devolvio para de nuevo realizar las resta
         $fechaActual = date('Y-m-d');
         $resultado = $fa->entradaTodo($fechaActual,$cod_producto);//seleccionar todas las entradas pero desde una fecha y de un producto
         $retorno = $this->disminuir_stock($resultado,$fa,$cantidad);//funcion para dsminuir la cantidad
-        $codigosNEW = $retorno[0];//codigos separado por comas es el nuevo
-        $cat_resNEW = $retorno[1];//cantidades restado separado por comas el nuevo
+
+        $codigosNEW = $retorno[0];//codigos separado por comas
+        $cat_resNEW = $retorno[1];//cantidades restado separado por comas
+        $costos = $retorno[2];//retorna el costo total una vez multiplicado por el costo unitario
+        $total = $retorno[3];//total de la multiplicacion de costo unitario por la cantidad solicitada
+        $costosUnitarios = $retorno[4];//solo los costos unitarios
+        //echo $costos."  ".$total."    ".$costosUnitarios;
         $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
         $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
-        $ress = $fa->actualizarProductosSolicitados($ar,$codigosNEW,$cat_resNEW);//funcion para poner los nuevos datos
+        $ress = $fa->actualizarProductosSolicitados($ar,$codigosNEW,$cat_resNEW,$costos,$total,$costosUnitarios);//funcion para poner los nuevos datos
+        $this->actualizarNuevoPrecioTotal($codigosNEW,$fa);//funcion para modificar el precio total deacuerdo a la cantidad que se tiene
         if($ress != ''){
-          echo "correcto";
+          echo $total;
         }else{
           echo "error";
         }

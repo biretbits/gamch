@@ -8,7 +8,7 @@
    id='co'>Historial</a>></div>"; */
 
    ?>
-
+<input type="text" name="cod_salida_anterior" id='cod_salida_anterior'value="">
 <h4>Salida de productos farmaceuticos</h4>
 <div class="row" >
      <div class="col-12">
@@ -71,7 +71,7 @@
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h6 class="modal-title" id="miModalRegistro">Registro o Actualización, Entrada de productos farmaceuticos</h6>
+                          <h6 class="modal-title" id="miModalRegistro">Registro de Entrada de productos farmaceuticos</h6>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Contenido del modal -->
@@ -127,11 +127,12 @@
                                     <!-- Aquí se agregarán las filas dinámicamente -->
                                   </tbody>
                                 </table>
-                                <p id='labelTotal' align='right'>Total: </p>
+                                <p id='labelTotal' align='right'>Total: 0 </p>
                               </div>
                              </form>
                            </div>
                          </div>
+                         <input type="hidden" name="numeroTotal" id='numeroTotal' value="">
                         <!-- Pie de página del modal -->
                       </div>
                         <div class="modal-footer">
@@ -521,7 +522,7 @@ function Buscar(page){
             if(typeof codi1=== 'number' && typeof codi2 == 'number' && typeof costoTotal == 'number' && texto == 'correctoEScORRECTO')
             {
               Correcto3();
-              costoTotalMedicamentos(costoTotal);
+              costoTotalMedicamentos(costoTotal,cod_salida);
             //  alert(costoTotal);
               var dataa = codi1+","+codi2;
               agragarFila(codigos,nombre_producto,cantidad,cod_salida,dataa,'',costoTotal);
@@ -660,10 +661,12 @@ function Buscar(page){
       document.getElementById("btne").disabled=false;
       document.getElementById("nombre_receta").disabled=false;
       document.getElementById("cod_paciente").disabled=false;
-      document.getElementById("labelTotal").innerHTML="Total: ";
+      document.getElementById("labelTotal").innerHTML="Total: 0";
+      document.getElementById("numeroTotal").value=0;
 
       vaciarTabla();
     }else{
+
       BuscarDatosProductosSolicitados(cod_salida,entregado);//se muestra con los campos llenos
     }
     if(entregado != "" && entregado == 'si'){
@@ -1008,10 +1011,16 @@ function Buscar(page){
       });
     }
 
-    function costoTotalMedicamentos(total){
+    function costoTotalMedicamentos(total,cod_salida){
+      var cod_salida_anterior = document.getElementById("cod_salida_anterior").value;
+      document.getElementById("cod_salida_anterior").value=cod_salida;
+      if(cod_salida != cod_salida_anterior){//verificamos si el cod_actual es igual al codigo anterios esto con el proposito de seguir sumando las nuevas cantidades agregadas
+        sumar = 0;//si es diferente sumar comenzara en 0 de nuevo
+      }
       sumar = sumar +total;
       //alert(sumar);
-      document.getElementById("labelTotal").innerHTML="Total: "+sumar;
+      document.getElementById("labelTotal").innerHTML="Total: "+sumar.toFixed(2);
+      document.getElementById("numeroTotal").value=sumar.toFixed(2);
     }
 
     function agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,disabled,costoTotal){
@@ -1076,7 +1085,7 @@ function Buscar(page){
           contentType: false, // Deshabilitar la codificación de tipo MIME
           processData: false, // Deshabilitar la codificación de datos
           success: function(data) {
-          //alert(data+"dasdas");
+          alert(data+"dasdas");
             if(data == 'fecha_vencido'){
               vencido();
             }else if(data == 'error'){
@@ -1084,26 +1093,46 @@ function Buscar(page){
             }else{
               Correcto();
               vaciarCamposDeProductoSolicitado();
-              actualizarLaFila(fila,codigos1,nombre_producto1,cantidad1,cod_solicitado1);
+                //alert(data+"   "+cantidad1+"   "+codigos1+"    "+nombre_producto1+"    "+cod_solicitado1+"    "+fila);
+              actualizarLaFila(fila,codigos1,nombre_producto1,cantidad1,cod_solicitado1,data);
+
             }
             //IRalLink(cod_salida);
           }
         });
 
     }
-    function actualizarLaFila(filaIndex,codigos1,nombre_producto1,cantidad1,cod_solicitado1) {
+
+    function actualizarLaFila(filaIndex,codigos1,nombre_producto1,cantidad1,cod_solicitado1,total) {
+      //alert(total);
             var tabla = document.getElementById('tablaProductos');
             var fila = tabla.rows[filaIndex];
+            let  total_fila = fila.cells[3].innerText;
+            var texto = document.getElementById("labelTotal").innerText;
+            let numero = document.getElementById("numeroTotal").value;
+            var re = (parseFloat(numero) - parseFloat(total_fila))+ parseFloat(total);
+            document.getElementById("labelTotal").innerHTML="Total: "+re.toFixed(2);
+            document.getElementById("numeroTotal").value = re.toFixed(2);
             fila.cells[0].innerHTML = codigos1;
-            fila.cells[1].innerHTML = nombre_producto1;
-            fila.cells[2].innerHTML = cantidad1;
-            fila.cells[3].innerHTML =  `<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-            <button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSolicitud(${filaIndex},${cod_solicitado1},"${codigos1}")' data-bs-toggle='modal' data-bs-target='#ModalEditar'>
-              <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
-            </button>
+             fila.cells[1].innerHTML = nombre_producto1;
+             fila.cells[2].innerHTML = cantidad1;
+             fila.cells[3].innerHTML = total;
+             // Agregar nueva celda o modificar la celda existente
+             if (!fila.cells[4]) {
+               fila.insertCell(4);
+             }
 
-            <button type='button' title='Eliminar Producto' class='btn btn-danger' onclick='eliminarFila(${filaIndex},${cod_solicitado1})'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>
-          </div>`;
+             fila.cells[4].innerHTML = `<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+                 <button type='button' class='btn btn-info' title='Editar'
+                         onclick='ActualizarSolicitud(${filaIndex}, ${cod_solicitado1}, "${codigos1}")'
+                         data-bs-toggle='modal' data-bs-target='#ModalEditar'>
+                   <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
+                 </button>
+                 <button type='button' title='Eliminar Producto' class='btn btn-danger'
+                         onclick='eliminarFila(${filaIndex}, ${cod_solicitado1})'>
+                   <img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'>
+                 </button>
+               </div>`;
     }
     function vaciarCamposDeProductoSolicitado(){
       document.getElementById("cod_producto1").value='';
@@ -1230,7 +1259,8 @@ function Buscar(page){
             agragarFila(ps.codigo,ps.nombre,ps.cantidad_solicitada,ps.cod_salida,dataa,disabled,ps.costoTotal);
             total = total+parseFloat(ps.costoTotal);
           }
-          costoTotalMedicamentos(total);
+          alert(total);
+          costoTotalMedicamentos(total,cod_salida);
           if(data.length >0){
             document.getElementById("nombre_receta").disabled=true;
             document.getElementById("cod_paciente").disabled=true;
