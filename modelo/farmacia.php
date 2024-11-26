@@ -497,9 +497,10 @@ class Farmacia
     //echo $c."   ".$cantOLD;
     if($c == 'si'){//si es mayor solo copiamos el dato de respando cantidad
       //echo "lleggooooooooo";
-      $sql = "update entrada set cantidad = $cantOLD where cod_entrada=".$cod_entrada;
+      $sql = "update entrada set cantidad = $cantOLD,costototal = costounitario * cantidad  where cod_entrada=".$cod_entrada;
     }else{//si no es mayor solo sumamos el valor
-      $sql = "update entrada set cantidad = (cantidad+$nueva_cantidad) where cod_entrada=".$cod_entrada;
+      $sql = "update entrada set cantidad = (cantidad+$nueva_cantidad), costototal = costounitario * cantidad
+       where cod_entrada=".$cod_entrada;
     }
     $this->con->query($sql);
    }
@@ -554,7 +555,7 @@ class Farmacia
     $sql = "INSERT INTO salida (
                 cod_salida,nombre_receta,cod_usuario,cod_paciente,fechaHora,estado
             ) VALUES (
-              '$cod_salida','$nombre_receta','$usuario','$id_paciente','now()','activo'
+              '$cod_salida','$nombre_receta','$usuario','$id_paciente',NOW(),'activo'
             ) ON DUPLICATE KEY UPDATE
                nombre_receta = VALUES(nombre_receta),
                 cod_usuario = VALUES(cod_usuario),

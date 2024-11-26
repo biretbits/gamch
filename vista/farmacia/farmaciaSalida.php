@@ -1012,12 +1012,15 @@ function Buscar(page){
     }
 
     function costoTotalMedicamentos(total,cod_salida){
+
       var cod_salida_anterior = document.getElementById("cod_salida_anterior").value;
+
       document.getElementById("cod_salida_anterior").value=cod_salida;
       if(cod_salida != cod_salida_anterior){//verificamos si el cod_actual es igual al codigo anterios esto con el proposito de seguir sumando las nuevas cantidades agregadas
         sumar = 0;//si es diferente sumar comenzara en 0 de nuevo
       }
       sumar = sumar +total;
+        //alert(sumar+" "+total+"    "+cod_salida+"     "+cod_salida_anterior);
       //alert(sumar);
       document.getElementById("labelTotal").innerHTML="Total: "+sumar.toFixed(2);
       document.getElementById("numeroTotal").value=sumar.toFixed(2);
@@ -1129,7 +1132,7 @@ function Buscar(page){
                    <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
                  </button>
                  <button type='button' title='Eliminar Producto' class='btn btn-danger'
-                         onclick='eliminarFila(${filaIndex}, ${cod_solicitado1})'>
+                         onclick='eliminarFila(${filaIndex}, ${cod_solicitado1},"${codigos1}")'>
                    <img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'>
                  </button>
                </div>`;
@@ -1259,7 +1262,7 @@ function Buscar(page){
             agragarFila(ps.codigo,ps.nombre,ps.cantidad_solicitada,ps.cod_salida,dataa,disabled,ps.costoTotal);
             total = total+parseFloat(ps.costoTotal);
           }
-          alert(total);
+        //  alert(total);
           costoTotalMedicamentos(total,cod_salida);
           if(data.length >0){
             document.getElementById("nombre_receta").disabled=true;
@@ -1295,7 +1298,7 @@ function Buscar(page){
          contentType: false, // Deshabilitar la codificación de tipo MIME
          processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-          alert(data);
+          //alert(data);
           if(data=='error'){
             Error1();
           }else if(data == 'fecha_vencido'){
@@ -1311,11 +1314,14 @@ function Buscar(page){
   }
 
   function eliminarFilaTabla(index){
-    var tabla = document.getElementById('tablaProductos');
-    tabla.deleteRow(index);
+    var cod_salida = document.getElementById("cod_salida").value;//obtenemos el cod_salida
+    var tabla = document.getElementById('tablaProductos');//ingresamos a la tabla
+    var fila = tabla.rows[index];//obtenemos un valor de la tabla del index qu es una fila
+    let  total_fila = fila.cells[3].innerText;//obtenemos el valor
+    costoTotalMedicamentos(-total_fila,cod_salida);
+    tabla.deleteRow(index);//des pues eliminamos de la tabla esa filla
     var filas = verificarFilas();
     if(filas == 1){
-
       document.getElementById("nombre_receta").disabled=false;
       document.getElementById("cod_paciente").disabled=false;
     }

@@ -1299,12 +1299,11 @@ class FarmaciaControlador{
     public function EliminarSalida($cod_salida,$pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
       $fa =new Farmacia();
       $cc=0;$fechaActual = date('Y-m-d');
-      $resultado = $fa->SeleccionarCodigosSolicitados($cod_salida);
+      $resultado = $fa->SeleccionarCodigosSolicitados($cod_salida);//seleccionamos los codigos solicitados de productos de entraa
       $vencimiento="no";
       if($resultado && mysqli_num_rows($resultado)>0)
       {
-        echo "entro";
-        while($fi = mysqli_fetch_array($resultado)){
+        while($fi = mysqli_fetch_array($resultado)){//recoremos todos los productos
           $cc = 0;
           $cc = $fa->actualizar_datos_entrada($fi["cod_solicitado"]);//slo verificamos si esta vencido o no
           if($cc == 1){
@@ -1313,22 +1312,22 @@ class FarmaciaControlador{
           }
         }
       }
-      if($vencimiento == 'no'){
-        $resulta = $fa->SeleccionarCodigosSolicitados($cod_salida);
+      if($vencimiento == 'no'){//SI EL VENCIMIENTO ES NO ENTONCES PODEMOS ELIMINAR
+        $resulta = $fa->SeleccionarCodigosSolicitados($cod_salida);//SELECCIONAMOS TODOS LOS CODIGOS SOLICITADOS POR EL USUARIO
         if($resulta && mysqli_num_rows($resulta)>0)
         {
-          while($f=mysqli_fetch_array($resulta)){
-            $this->actualizarCuandoEliminaSalida($f["cod_solicitado"]);
-            $resulDel=$fa->deleteProductoSolicitado($f["cod_solicitado"]);
+          while($f=mysqli_fetch_array($resulta)){//RECORREMOS TODA LA LISTA DE PRODUCTOS SOLICITADOS RELACIONADO CON UN RECETARIO QUE TIENE UN ID
+            $this->actualizarCuandoEliminaSalida($f["cod_solicitado"]);//se lo retornamos los productos solicitados a la entrada
+            $resulDel=$fa->deleteProductoSolicitado($f["cod_solicitado"]);//luego lo eliminamos
           }
         }
-        $resul = $fa->eliminarRegistro($cod_salida);
+        $resul = $fa->eliminarRegistro($cod_salida);//y despues de todo eliminamos la salida
         if($resul!=''){
           $this->VisualizarSalidaFarmaciaTabla($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf);
         }else{
           echo "error";
         }
-      }else{
+      }else{//ENTONCES QUIERE DECIR QUE EXISTE UN PRODUCTO VENCIDO
         echo "fecha_vencido";
       }
     }

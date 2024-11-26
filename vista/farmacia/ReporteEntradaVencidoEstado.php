@@ -33,41 +33,24 @@ table {
   }
   table td:nth-child(1) {
     text-align: center;
-    width: 80px;
+    width: 10px;
   }
   table td:nth-child(2) {
-    text-align: left;
-    width: 190px;
+    text-align: center;
+    width: 40px;
   }
   table td:nth-child(3) {
-    width: 140px;
-    text-align:left;
+    width: 90px;
   }
   table td:nth-child(4) {
-    width: 120px;
-    text-align: left;
+    width: 125px;
   }
-  table td:nth-child(5) {
-    width: 110px;
-    text-align: left;
+  table td:nth-child(10) {
+    width: 80px;
   }
-  table td:nth-child(6) {
-    width: 90px;
-    text-align: center;
+  table td:nth-child(13) {
+    width: 65px;
   }
-  table td:nth-child(7) {
-    width: 70px;
-    text-align: right;
-  }
-  table td:nth-child(8) {
-    width: 70px;
-    text-align: right;
-  }
-  table td:nth-child(9) {
-    width: 70px;
-    text-align: right;
-  }
-
 
   table th {
     background-color: #f2f2f2;
@@ -158,24 +141,25 @@ td,th{
         <table>
             <thead>
               <tr>
-                <th>Código</th>
-                <th>Nombre Genérico</th>
-                <th>Forma farmaceútica</th>
-                <th>Concentración</th>
-                <th>N° de Lote</th>
-                <th>Fecha Vto</th>
+                <th>N°</th>
+                <th>Codigo</th>
+                <th>Nombre Generico</th>
+                <th>Forma presentación</th>
+                <th>Concentración unidad medida</th>
                 <th>Cantidad</th>
-                <th>C./Unitario</th>
-                <th>C./Total</th>
+                <th>vencimiento</th>
+                <th>Fecha</th>
+                <th>Estado producto</th>
+                <th>Encargado</th>
               </tr>
             </thead>
             <tbody>
               <?php
               if ($resul &&count($resul) > 0) {
                 $i = 1;
-                $total = 0;
                 foreach ($resul as $fi){
                     echo "<tr>";
+                      echo "<td>".($i)."</td>";
                       echo "<td>".$fi['codigo']."</td>";
                       echo "<td>".$fi['nombre']."</td>";
 
@@ -195,25 +179,32 @@ td,th{
                         $concentra =$conc['concentracion'];
                       }
                       echo "</td>";
-                      echo "<td>".$fi['nrolote']."</td>";
-                      echo "<td>".$fi['vencimiento']."</td>";
+
                       echo "<td>".$fi['cantidad']."</td>";
-                      echo "<td>".$fi['costounitario']."</td>";
-                      echo "<td>".$fi['costototal']."</td>";
-                      $total = $total + $fi['costototal'];
+                      echo "<td>".$fi['vencimiento']."</td>";
+                      echo "<td>".$fi['fecha']."</td>";
+
+                      if($fi['estado_producto'] == 'activo'){
+                        echo "<td style='color:green;background-color:#dbffaf;text-align:center'>".$fi['estado_producto']."</td>";
+                      }else if($fi['estado_producto'] == 'vencido'){
+                        echo "<td style='color:red;background-color:#ffc8af;text-align:center'>".$fi['estado_producto']."</td>";
+                      }
+                      echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
+
+                      $unir = $fi['nombre']." ".$formaa." ".$concentra;
+                      $enable = '';$title='Editar';
+                      if($fi['estado_producto']=='vencido'){
+                          $enable='disabled';
+                          $title='El producto esta vencido';
+                      }
+                      if($fi['manipulado'] == 'si'){
+                        $enable = 'disabled';
+                        $title='El producto ya se uso';
+                      }
+
                     echo "</tr>";
                     $i++;
                   }
-                  echo "<tr>";
-                  // Deja las primeras 6 columnas vacías pero no las ocultes.
-                  // Usa colspan para las dos últimas columnas que mostrarán el valor de $total
-                  echo "<td colspan='7' style='border-bottom: solid white;border-left: solid white;border-right:solid white;'></td>"; // Oculta las primeras 6 columnas
-                  // Muestra el valor de $total en la penúltima columna
-                  echo "<td colspan='1'  style='width: 70px;text-align: right;border-bottom: solid white;'>Total:</td>";
-                  // Muestra el valor de $total en la última columna
-                  echo "<td colspan='1' style='width: 70px;text-align: right'>".$total."</td>";
-                  echo "</tr>";
-
                 }else{
                   echo "<tr>";
                   echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
@@ -267,7 +258,7 @@ $options->setIsHtml5ParserEnabled(true);
 //$dompdf->loadHtml($html);
 
 $dompdf->loadHtml($html);
-$dompdf->setPaper('letter', 'landscape');
+$dompdf->setPaper('letter');
 
 $dompdf->render();
 $type=false;

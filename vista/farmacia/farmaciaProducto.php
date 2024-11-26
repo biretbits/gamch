@@ -245,14 +245,15 @@
                             <thead style="font-size:12px">
                               <tr>
                                 <th>N°</th>
-                                <th>Codigo</th>
-                                <th>Nombre Generico</th>
-                                <th>Forma presentación</th>
-                                <th>Concentración unidad medida</th>
+                                <th>Código</th>
+                                <th>Nombre Genérico</th>
+                                <th>Forma farmaceútica</th>
+                                <th>Concentración</th>
+                                <th>N° de Lote</th>
+                                <th>Fecha Vto</th>
                                 <th>Cantidad</th>
-                                <th>P. Unitario</th>
-                                <th>Costo total</th>
-                                <th>vencimiento</th>
+                                <th>C./Unitario</th>
+                                <th>C./Total</th>
                                 <th>Fecha</th>
                                 <th>Estado producto</th>
                                 <th>Encargado</th>
@@ -287,11 +288,11 @@
                                   $concentra =$conc['concentracion'];
                                 }
                                 echo "</td>";
-
+                                echo "<td>".$fi['nrolote']."</td>";
+                                echo "<td>".$fi['vencimiento']."</td>";
                                 echo "<td>".$fi['cantidad']."</td>";
                                 echo "<td>".$fi['costounitario']."</td>";
                                 echo "<td>".$fi['costototal']."</td>";
-                                echo "<td>".$fi['vencimiento']."</td>";
                                 echo "<td>".$fi['fecha']."</td>";
                                 $son = '';
                                 $proveedorRepresentante = $fi["proveedorRepre"];
