@@ -100,41 +100,6 @@
 
   }
 ?>
-<?php if(!isset($_SESSION['tipo_usuario'])){ ?>
-  <aside class="d-flex align-items-center justify-content-center text-center bg-gradient-primary-to-secondary" style="min-height: 50vh;">
-      <div class="container px-5">
-          <div class="row justify-content-center">
-              <div class="col-lg-6 col-md-8 col-12">
-                  <div class="card" style="background-color:khaki">
-                      <div class="card-body" style="background: linear-gradient(to right, yellow, #feb47b);">
-                          <h3 style="color:blue;text-shadow: 2px 2px 2px black;">Acceso</h3>
-                          <img src="imagenes/acceso.png" class="img-circle" height='100' width='110'/>
-                          <br><br>
-                          <form method="POST">
-                              <div class='input-group mb-3'>
-                                  <input class="form-control" style="color:black" type="text" id="usuario" name="usuario" placeholder="Nombre usuario">
-                                  <span class='input-group-addon' id='grupo_user'></span>
-                              </div>
-                              <span id="text_user"></span>
-                              <div class='input-group mb-3'>
-                                  <input class="form-control" style="color:black" type='password' id="contrasena" name="contrasena" placeholder="Contraseña">
-                                  <button class="btn btn-outline-secondary che" type="button" id="che" onclick="mostrar()">
-                                      <img src='imagenes/ojo.ico' style='height: 25px;width: 25px;'>
-                                  </button>
-                              </div>
-                              <br>
-                              <button type="button" class="btn btn-warning" id="submit" value="Ingresar" onclick="VerificarDatos();">
-                                  <img src='imagenes/entrar.ico' height='25' width='25' alt='Imagen centrada'> Ingresar
-                              </button>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </aside>
-
-<?php } ?>
 <aside class="text-center bg-gradient-primary-to-secondary">
   <?php   $fecha_actual = date('Y-m-d');
     echo "<h6>Total de pacientes atendidos por servicios hoy ".$fecha_actual."</h6>"; ?>

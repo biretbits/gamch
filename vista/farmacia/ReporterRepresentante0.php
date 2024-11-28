@@ -1,5 +1,4 @@
 <?php
-//PARA MOSTRAR IMAGENES extension=gd SE DEBE HABILITAR ESTO extension=gd Y ESO SE DEBE REALIZAR EN XAMPP SI SE ESTA TRABAJANDO CON XAMMP PARA PPHP
 ob_end_clean();
 // Iniciar el almacenamiento en búfer de salida
 ob_start();
@@ -14,10 +13,6 @@ header('Content-Disposition: inline; filename="reporte.pdf"');
   include("../librerias/globales.php");
  //echo $fechai."fi   ".$fechaf."ff   ".$buscar."b   ".$pagina."p   ".$listarDeCuanto."ldc" ; ?>
 <style media="screen">
-.col{
-       width:49%;
-       display: inline-block;
-     }
 table {
     border-collapse: collapse;
     width: 100%;
@@ -106,6 +101,7 @@ td,th{
       background-color:red;
 
     }
+
      .linea{
        display: inline-block;
      }
@@ -121,67 +117,67 @@ td,th{
     </style>
   </head>
   <body>
-<?php
-if($fechai > $fechaf){
-  $aux = $fechai;
-  $fechai=$fechaf;
-  $fechaf = $aux;
-}
- ?>
+    <?php
+    $fechai = date('Y-m-d');
+
+
+     ?>
     <div class="">
           <div   style='width:100%;' align='center'>
 
-            <font class="subtitulo"><b>PACIENTES ATENDIDOS POR EDADES</b></font><br>
+            <font class="subtitulo"><b>LISTA DE REPRESENTANTES</b></font><br>
 
             <font class="subtitulo3">Llallagua , <?php
             list($año1, $mes1, $dia1) = explode('-', $fechai);
-            list($año2, $mes2, $dia2) = explode('-', $fechaf);
 
-            if($fechai == $fechaf){
-              echo $dia1." de ".mesEnTexto($mes1)." ".$año1;
-            }else{
-              echo "".$dia1." de ".mesEnTexto($mes1)." ".$año1." al ".$dia2." de ".mesEnTexto($mes2)." ".$año2;
-            }
+            echo $dia1." de ".mesEnTexto($mes1)." ".$año1;
+
             ?>
           </font>
           </div>
           <br>
       </div>
-        <br><br>
+        <div style="clear:both;"></div>
+        <table>
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>Nombre y Apellidos</th>
+                <th>Telefono</th>
+                <th>Cargo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              if (mysqli_num_rows($resul) > 0){
+                  $i = 0;
+                while($fi=mysqli_fetch_array($resul)){
+                    echo "<tr>";
+                      echo "<td>".($i+1)."</td>";
+                      echo "<td>".$fi['nombre_apellidos']."</td>";
+                      echo "<td>".$fi['telefono']."</td>";
+                      echo "<td>".$fi['cargo']."</td>";
+                    echo "</tr>";
+                    $i++;
+                  }
+                }else{
+                  echo "<tr>";
+                  echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+                  echo "</tr>";
+                }
+
+                 ?>
+
+            </tbody>
+        </table>
   <style media="screen">
     /*eliminando borde izquierdo dercho y de abajo*/
     #bor{
       border-bottom: none;border-right: none; border-left: none;
     }
   </style>
-<div style="clear:both;"></div>
-  <?php
-      for($i = 0;$i<count($graficos);$i++){
-        echo "<div class='col'>";
-        echo "<p>CANTIDAD DE PACIENTES DE ".$edades[$i]." AÑOS</p>";
-        $img = $graficos[$i];
-        $img = str_replace('data:image/png;base64,', '', $img);
-        $fileData = base64_decode($img);
-        echo "<img  width='340' height='200' src='data:image/png;base64,".base64_encode($fileData)."' alt='Imagen'>";
-        echo "</div>";
-      }
-      ?>
-<style media="screen">
-/* Estilo para la fila */
-.row {
-    display: flex;
-    flex-wrap: wrap; /* Permite que las columnas se envuelvan a la siguiente fila */
-}
 
-/* Estilo para las columnas */
-.column {
-    flex: 1 1 50%; /* Cada columna ocupa el 50% del ancho de la fila */
-    padding: 10px;
-    border: 1px solid #ccc; /* Solo para visualización */
-    box-sizing: border-box; /* Incluir padding y border en el ancho total */
-}
 
-</style>
 
 
   </body>

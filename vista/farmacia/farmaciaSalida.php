@@ -8,7 +8,7 @@
    id='co'>Historial</a>></div>"; */
 
    ?>
-<input type="text" name="cod_salida_anterior" id='cod_salida_anterior'value="">
+<input type="hidden" name="cod_salida_anterior" id='cod_salida_anterior'value="">
 <h4>Salida de productos farmaceuticos</h4>
 <div class="row" >
      <div class="col-12">
@@ -79,11 +79,11 @@
                           <div class="card shadow-lg">
                            <div class="card-body">
                              <form>
-                               <input type="text" name="cod_producto"id='cod_producto' value="">
-                               <input type="text" name="cod_salida" id='cod_salida' value="">
-                               <input type="text" name="usuario_id" id='usuario_id' value="">
-                               <input type="text" name="codigos" id='codigos'value="">
-                               <input type="text" name="actualizar" id='actualizar' value="">
+                               <input type="hidden" name="cod_producto"id='cod_producto' value="">
+                               <input type="hidden" name="cod_salida" id='cod_salida' value="">
+                               <input type="hidden" name="usuario_id" id='usuario_id' value="">
+                               <input type="hidden" name="codigos" id='codigos'value="">
+                               <input type="hidden" name="actualizar" id='actualizar' value="">
                                <div class="mb-3">
                                  <label for="nombre_receta" class="form-label">Nombre receta</label>
                                  <input type="text" class="form-control" id="nombre_receta" placeholder="Nombre de la receta" autocomplete="off">
@@ -202,7 +202,7 @@
                                   <input type="hidden" name="cod_solicitado1" id='cod_solicitado1' value="">
                                   <input type="hidden" name="codigos1" id='codigos1'value="">
                                   <input type="hidden" name="cantidadRestado1" id='cantidadRestado1' value="">
-                                  <input type="text" name="codigos_entrada1" id='codigos_entrada1' value="">
+                                  <input type="hidden" name="codigos_entrada1" id='codigos_entrada1' value="">
                                   <input type="hidden" name="fila" id='fila' value="">
                                   <div class="mb-3">
                                     <label for="nombre_producto1" class="form-label">Producto farmaceutico</label>
@@ -288,6 +288,8 @@
                                 //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
                                   echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                                   echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-warning' title='Imprimir' onclick='ImprimirRecibo(".$fi['cod_salida'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+
                                   echo "</div>";
                                 echo "</td>";
 
@@ -522,7 +524,7 @@ function Buscar(page){
             if(typeof codi1=== 'number' && typeof codi2 == 'number' && typeof costoTotal == 'number' && texto == 'correctoEScORRECTO')
             {
               Correcto3();
-              costoTotalMedicamentos(costoTotal,cod_salida);
+              costoTotalMedicamentos(costoTotal,codi1);
             //  alert(costoTotal);
               var dataa = codi1+","+codi2;
               agragarFila(codigos,nombre_producto,cantidad,cod_salida,dataa,'',costoTotal);
@@ -663,7 +665,6 @@ function Buscar(page){
       document.getElementById("cod_paciente").disabled=false;
       document.getElementById("labelTotal").innerHTML="Total: 0";
       document.getElementById("numeroTotal").value=0;
-
       vaciarTabla();
     }else{
 
@@ -1014,11 +1015,13 @@ function Buscar(page){
     function costoTotalMedicamentos(total,cod_salida){
 
       var cod_salida_anterior = document.getElementById("cod_salida_anterior").value;
-
+      //alert(cod_salida_anterior);
       document.getElementById("cod_salida_anterior").value=cod_salida;
+    //  alert(cod_salida);
       if(cod_salida != cod_salida_anterior){//verificamos si el cod_actual es igual al codigo anterios esto con el proposito de seguir sumando las nuevas cantidades agregadas
         sumar = 0;//si es diferente sumar comenzara en 0 de nuevo
       }
+      //alert(sumar+"   "+total);
       sumar = sumar +total;
         //alert(sumar+" "+total+"    "+cod_salida+"     "+cod_salida_anterior);
       //alert(sumar);
@@ -1213,7 +1216,7 @@ function Buscar(page){
               }else if(data == 'correcto'){
                 Correcto();
                 $.ajax({
-                  url: "../controlador/farmacia.controlador.php?accion=actualizarTabla",
+                  url: "../controlador/farmacia.controlador.php?accion=acTabla",
                   type: "POST",
                   data: datos1,
                   contentType: false, // Deshabilitar la codificación de tipo MIME

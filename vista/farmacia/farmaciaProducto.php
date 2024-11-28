@@ -141,9 +141,9 @@
                            <div class="card-body">
                              <form>
                                <div class="row">
-                                 <input type="text" name="cod_producto"id='cod_producto' value="">
-                                 <input type="text" name="cod_entrada" id='cod_entrada' value="">
-                                 <input type="text" name="cod_proveedor" id='cod_proveedor' value="">
+                                 <input type="hidden" name="cod_producto"id='cod_producto' value="">
+                                 <input type="hidden" name="cod_entrada" id='cod_entrada' value="">
+                                 <input type="hidden" name="cod_proveedor" id='cod_proveedor' value="">
 
                                   <div class="col-md-4 mb-3">
                                     <label for="">N° Doc</label>
@@ -631,6 +631,11 @@ function Buscar(page){
     datos.append("unitario",unitario);
     datos.append("total",total);
     datos.append("vencimiento",vencimiento);
+    var r = VerificarFechaVencimiento(vencimiento);
+    if(r == 1){//si es 1 lo cortamos y esto quiere decir que se ingreso una fecha menor a la fecha actual
+      FechaNoValida();
+      return;
+    }
       $.ajax({
         url: "../controlador/farmacia.controlador.php?accion=rpe",
         type: "POST",
@@ -652,6 +657,32 @@ function Buscar(page){
         }
       });
   }
+
+  function VerificarFechaVencimiento(vencimiento){
+    // Convertir la fecha del campo y la fecha actual a objetos Date
+    const fechaSeleccionada = new Date(vencimiento);
+    const fechaActual = new Date();
+
+    // Eliminar la parte de tiempo de la fecha actual para comparar solo las fechas
+    fechaActual.setHours(0, 0, 0, 0);
+
+    // Comparar las fechas
+    if (fechaSeleccionada <= fechaActual) {
+      return 1;
+    }else{
+      return 0;
+    }
+  }
+
+      function FechaNoValida(){
+        Swal.fire({
+         icon: 'info',
+         title: '¡Información!',
+         text: '¡Fecha de vencimiento no valida!',
+         showConfirmButton: false,
+         timer: 3000
+       });
+      }
 
     function usado(){
       Swal.fire({

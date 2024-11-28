@@ -604,8 +604,7 @@ class Farmacia
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
-     mysqli_close($this->con);
-   }
+  }
 
    public function deleteProductoSolicitado($cod_solicitado){
      $select="delete from productoSolicitado where cod_solicitado=$cod_solicitado";
@@ -776,7 +775,31 @@ class Farmacia
     where p.cod_prov=$id and p.estado = 'activo'";
     $resul = $this->con->query($lis);
     return $resul;
-    mysqli_close($this->con);
+  }
+
+  public function  entrada2(){
+    $select="select *from entrada where estado = 'activo'";
+    $resul = $this->con->query($select);
+    return $resul;
+  }
+
+  public function ActualizarEnEntradaAvencido($cod_entrada){
+    $sql2 = "update entrada set estado_producto='vencido' where cod_entrada=".$cod_entrada."";
+    $resul = $this->con->query($sql2);
+  }
+  public function SeleccionarSoloProductos(){
+    $select2="select *from producto where estado='activo'";
+    $resul = $this->con->query($select2);
+    if($resul != ''){
+      return $resul;
+    }else{
+      return "error";
+    }
+  }
+
+  public function updateStockProducto($total,$cod_generico,$accion){
+    $sql= "update producto set stock_producto='".$accion."', cantidad_total=".$total." where cod_generico=".$cod_generico."";
+    $resul = $this->con->query($sql);
   }
 }
 

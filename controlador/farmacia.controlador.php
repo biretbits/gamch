@@ -291,6 +291,12 @@ class FarmaciaControlador{
   //funcion para seleccionar los nombres genericos todo
   public function visualizarNombreGenerico(){
     $fa =new Farmacia();
+    //al momento de abrir lo primero sera verificar si hay productos vencidos para eso llamamos a las siguientes funciones
+    $this->ActualizarEntrada($fa);
+    //fin de verificar
+    //actualizar e stock en tabla productos farmaceuticos
+    $this->ActualizarCantidadProducto($fa);
+    //fin productos farmaceuticos
     $listarDeCuanto = 5;$pagina = 1;$buscar = "";
     $resul1 = $fa->SeleccionarNombreGenerico(false,false,$buscar);
     $num_filas_total = mysqli_num_rows($resul1);
@@ -541,6 +547,12 @@ class FarmaciaControlador{
 
   public function visualizarProductoFarmacia(){
     $fa =new Farmacia();
+    //al momento de abrir lo primero sera verificar si hay productos vencidos para eso llamamos a las siguientes funciones
+    $this->ActualizarEntrada($fa);
+    //fin de verificar
+    //actualizar e stock en tabla productos farmaceuticos
+    $this->ActualizarCantidadProducto($fa);
+    //fin productos farmaceuticos
     $listarDeCuanto = 5;$pagina = 1;$buscar = "";$fechai=false;$fechaf=false;$estadoProducto=false;
     $resul1 = $fa->SeleccionarProducto(false,false,$buscar,false,false,false);
     $num_filas_total = mysqli_num_rows($resul1);
@@ -557,6 +569,57 @@ class FarmaciaControlador{
     $rp=$fa->seleccionarP();
     require("../vista/farmacia/farmaciaProducto.php");
   }
+  //funciones para convertir los productos a vencidos
+
+  //funcion de actualizacion de entradas si esta en stock o ya vencio
+  function ActualizarEntrada($fa){
+    $fechaActual = date('Y-m-d');
+    $da =$fa->entrada2();
+    $fecha1_time = strtotime($fechaActual);
+    while($fi=mysqli_fetch_array($da)){
+      $fechaVencimiento = $fi['vencimiento'];
+      $fecha2_time = strtotime($fechaVencimiento);
+      if($fecha1_time>=$fecha2_time){
+      //  echo $fecha1_time.">=".$fecha2_time." vencido";
+        $fa->ActualizarEnEntradaAvencido($fi["cod_entrada"]);//colocamos como vencido el producto
+      }
+    }
+  }
+
+function ActualizarCantidadProducto($fa){
+	$fechaActual = date('Y-m-d');
+  $da=$fa->SeleccionarSoloProductos();
+  if($da != 'error')
+  {
+    $new = array();
+    while($fila = mysqli_fetch_array($da)){
+      $new[$fila["cod_generico"]]=array("total" => 0);
+    }
+    $da1=$fa->entrada2();
+    $fecha2_time = strtotime($fechaActual);
+    while($fi=mysqli_fetch_array($da1)){
+      $fecha1_time = strtotime($fi['vencimiento']);
+      if($fecha1_time>$fecha2_time){
+        $new[$fi["cod_generico"]]["total"]=$new[$fi["cod_generico"]]["total"]+$fi['cantidad'];
+        //echo "aaaa".$new[$fi["cod_generico"]]["total"]."<br>";
+      }
+    }
+
+    $da2=$fa->SeleccionarSoloProductos();
+    while($fil = mysqli_fetch_array($da2)){
+      $sql = '';
+      if($new[$fil['cod_generico']]['total']<=$fil["stockmin"]){
+          $fa->updateStockProducto($new[$fil['cod_generico']]['total'],$fil["cod_generico"],'si');
+      }else{
+        //echo "aaaaaallwgoa".$fil['cod_generico']."   ".$fil['nombre']."<br>";
+        $fa->updateStockProducto($new[$fil['cod_generico']]['total'],$fil["cod_generico"],'no');
+      }
+    }
+  }else{
+   echo "error";
+  }
+}
+  //fin funciones vencidos
 
   function UniendoProducto($resul, $fa){
     $ar = [];
@@ -617,6 +680,12 @@ class FarmaciaControlador{
 
       $resul=$fa->InsertEntradaProducto($datos,$fechaActual,$usuario,$hora);
       $this->ActualizarCantidadEnentrada($fechaActual,$fa);
+      //al momento de abrir lo primero sera verificar si hay productos vencidos para eso llamamos a las siguientes funciones
+      $this->ActualizarEntrada($fa);
+      //fin de verificar
+      //actualizar e stock en tabla productos farmaceuticos
+      $this->ActualizarCantidadProducto($fa);
+      //fin productos farmaceuticos
       echo $resul;
     }
     public function visualizarBusquedaFarmacia($pagina,$listarDeCuanto,$buscar,$fechai,$fechaf,$estadoProducto){
@@ -870,6 +939,12 @@ class FarmaciaControlador{
     }
     public function VisualizarSalidaFarmacia(){
       $fa =new Farmacia();
+      //al momento de abrir lo primero sera verificar si hay productos vencidos para eso llamamos a las siguientes funciones
+      $this->ActualizarEntrada($fa);
+      //fin de verificar
+      //actualizar e stock en tabla productos farmaceuticos
+      $this->ActualizarCantidadProducto($fa);
+      //fin productos farmaceuticos
       $listarDeCuanto = 5;$pagina = 1;$buscar = "";
       $resul1 = $fa->SeleccionarSalida(false,false,$buscar,false,false);
       $num_filas_total = mysqli_num_rows($resul1);
@@ -970,9 +1045,10 @@ class FarmaciaControlador{
                   echo "<td>";
                     echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
-                    echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                    echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-                    echo "</div>";
+                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                  echo "<button type='button' class='btn btn-warning' title='Imprimir' onclick='ImprimirRecibo(".$fi['cod_salida'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+                  echo "</div>";
                   echo "</td>";
 
                 echo "</tr>";

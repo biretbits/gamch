@@ -38,6 +38,10 @@ table {
   table td:nth-child(2) {
     text-align: left;
     width: 190px;
+    max-width: 190px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   table td:nth-child(3) {
     width: 140px;

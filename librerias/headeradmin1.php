@@ -322,20 +322,30 @@ input[type=number] {
                 }
 
               if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] == "farmacia"){
-                echo "<li class='nav-item dropdown' title='Cliente Proveedor'>
+                echo "<li class='nav-item dropdown' title='Proveedor farmacia'>
                   <a class='nav-link dropdown-toggle btn btn-outline-warning' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                    <img src='../imagenes/clienteProveedor.png'style='height: 25px;width: 25px;'> Cliente Proveedor
+                    <img src='../imagenes/clienteProveedor.png'style='height: 25px;width: 25px;'> Proveedor farmacia
                   </a>
                   <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>";
 
-                  echo "<li class='nav-item' title='Proveedor'>
-                        <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=fpro'>
-                        <img src='../imagenes/proveedor.png'style='height: 25px;width: 25px;'> Proveedor</a>
+                    echo "
+                    <li class='nav-item' title='Concentración Unidad de medida'>
+                        <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=vtf'>
+                        <img src='../imagenes/volumen.png'style='height: 25px;width: 25px;'> Concentración</a>
+                    </li>";
+                    echo "
+                      <li class='nav-item' title='Forma de presentación'>
+                          <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=vfp'>
+                          <img src='../imagenes/caja.png'style='height: 25px;width: 25px;'> Presentación</a>
                       </li>";
-                   echo "<li class='nav-item' title='Representante'>
-                         <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=Frep'>
-                         <img src='../imagenes/representante.png'style='height: 25px;width: 25px;'> Representante</a>
-                       </li>";
+                    echo "<li class='nav-item' title='Proveedor'>
+                          <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=fpro'>
+                          <img src='../imagenes/proveedor.png'style='height: 25px;width: 25px;'> Proveedor</a>
+                        </li>";
+                     echo "<li class='nav-item' title='Representante'>
+                           <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=Frep'>
+                           <img src='../imagenes/representante.png'style='height: 25px;width: 25px;'> Representante</a>
+                         </li>";
                   echo "</ul>";
                 echo "</li>";
                 echo "<li class='nav-item dropdown' title='Farmacia'>
@@ -345,23 +355,18 @@ input[type=number] {
                   <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>";
                 echo "
                   <li class='nav-item' title='Productos Farmacéuticos'>
-                      <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=ngf'>Productos Farmacéuticos</a>
+                      <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=ngf'>
+                      <img src='../imagenes/farmacia.png'style='height: 25px;width: 25px;'> Productos Farmacéuticos</a>
                   </li>";
-                  echo "
-                    <li class='nav-item' title='Concentración Unidad de medida'>
-                        <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=vtf'>Concentración</a>
-                    </li>";
-                    echo "
-                      <li class='nav-item' title='Forma de presentación'>
-                          <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=vfp'>Presentación</a>
-                      </li>";
                     echo "
                       <li class='nav-item' title='Entrada'>
-                          <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=vpf'>Entrada</a>
+                          <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=vpf'>
+                          <img src='../imagenes/entrada.png'style='height: 25px;width: 25px;'> Entrada</a>
                       </li>";
                     echo "
                       <li class='nav-item' title='Salida'>
-                          <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=vsf'>Salida</a>
+                          <a class='nav-link btn btn-outline-warning' href='../controlador/farmacia.controlador.php?accion=vsf'>
+                          <img src='../imagenes/salida.png'style='height: 25px;width: 25px;'> Salida</a>
                       </li>";
                   echo "</ul>
                   </li>";
