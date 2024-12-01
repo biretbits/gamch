@@ -115,19 +115,20 @@
                                <div class="table-responsive">
                                 <table class="table" id="tablaProductos">
                                   <thead>
-                                    <tr style="font-size:13px">
+                                    <tr style="font-size:11px">
                                       <th>Codigo</th>
                                       <th>Producto</th>
                                       <th>Cantidad</th>
                                       <th>Costo Total</th>
+                                      <th>Fecha hora de Registro</th>
                                       <th>Acción</th>
                                     </tr>
                                   </thead>
-                                  <tbody>
+                                  <tbody style="font-size:11px">
                                     <!-- Aquí se agregarán las filas dinámicamente -->
                                   </tbody>
                                 </table>
-                                <p id='labelTotal' align='right'>Total: 0 </p>
+                                <p id='labelTotal' align='right' style="font-size:11px">Total: 0 </p>
                               </div>
                              </form>
                            </div>
@@ -507,19 +508,20 @@ function Buscar(page){
         contentType: false, // Deshabilitar la codificación de tipo MIME
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-         //alert(data+"dasdas");
+         alert(data+"dasdas");
           console.log(data);
           if(data == 'fecha_vencido'){
             vencido();
           }else if(data == 'error'){
             Error1();
           }else{
-            var separar = data.split('-');
+            var separar = data.split('&');
             var fila = verificarFilas();
             var codi1=parseInt(separar[0]);
             var codi2 = parseInt(separar[1]);
             var costoTotal = parseFloat(separar[2]);
-            var texto = separar[3];
+            var fechaActual = separar[3];
+            var texto = separar[4];
 
             if(typeof codi1=== 'number' && typeof codi2 == 'number' && typeof costoTotal == 'number' && texto == 'correctoEScORRECTO')
             {
@@ -527,7 +529,7 @@ function Buscar(page){
               costoTotalMedicamentos(costoTotal,codi1);
             //  alert(costoTotal);
               var dataa = codi1+","+codi2;
-              agragarFila(codigos,nombre_producto,cantidad,cod_salida,dataa,'',costoTotal);
+              agragarFila(codigos,nombre_producto,cantidad,cod_salida,dataa,'',costoTotal,fechaActual);
               document.getElementById("nombre_producto").value='';
               document.getElementById("cod_producto").value='';
               document.getElementById("cantidad").value='';
@@ -978,7 +980,7 @@ function Buscar(page){
             }
 
     function ActualizarSolicitud(fila,codi,codigo){
-      alert(codi+"  "+codigo);
+      //alert(codi+"  "+codigo);
       document.getElementById("cod_solicitado1").value=codi;
       document.getElementById("codigos1").value=codigo;
       document.getElementById("fila").value=fila;
@@ -1029,7 +1031,7 @@ function Buscar(page){
       document.getElementById("numeroTotal").value=sumar.toFixed(2);
     }
 
-    function agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,disabled,costoTotal){
+    function agragarFila(codigos,nombre_producto,cantidad,cod_salida,data,disabled,costoTotal,fechaHora_solicitado){
 
       var separar = data.split(',');
       var fila = verificarFilas();
@@ -1041,11 +1043,14 @@ function Buscar(page){
       let celdaProducto = nuevaFila.insertCell(1);
       let celdaCantidad = nuevaFila.insertCell(2);
       let celdaCostoTotal = nuevaFila.insertCell(3);
-        let celdaAcciones = nuevaFila.insertCell(4);
+      let celdaFechaRegistro = nuevaFila.insertCell(4);
+
+      let celdaAcciones = nuevaFila.insertCell(5);
       codigo.innerHTML = codigos;
       celdaProducto.innerHTML =nombre_producto;
       celdaCantidad.innerHTML =cantidad;
       celdaCostoTotal.innerHTML =costoTotal;
+      celdaFechaRegistro.innerHTML =fechaHora_solicitado;
       celdaAcciones.innerHTML = `<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
       <button type='button' class='btn btn-info' title='Editar' ${disabled} onclick='ActualizarSolicitud(${fila},${codi},"${codigos}")' data-bs-toggle='modal' data-bs-target='#ModalEditar'>
         <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'>
@@ -1114,6 +1119,7 @@ function Buscar(page){
             var tabla = document.getElementById('tablaProductos');
             var fila = tabla.rows[filaIndex];
             let  total_fila = fila.cells[3].innerText;
+            let  fechaHora_solicitado = fila.cells[4].innerText;
             var texto = document.getElementById("labelTotal").innerText;
             let numero = document.getElementById("numeroTotal").value;
             var re = (parseFloat(numero) - parseFloat(total_fila))+ parseFloat(total);
@@ -1123,12 +1129,13 @@ function Buscar(page){
              fila.cells[1].innerHTML = nombre_producto1;
              fila.cells[2].innerHTML = cantidad1;
              fila.cells[3].innerHTML = total;
+             fila.cells[4].innerHTML = fechaHora_solicitado;
              // Agregar nueva celda o modificar la celda existente
-             if (!fila.cells[4]) {
-               fila.insertCell(4);
+             if (!fila.cells[5]) {
+               fila.insertCell(5);
              }
 
-             fila.cells[4].innerHTML = `<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+             fila.cells[5].innerHTML = `<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
                  <button type='button' class='btn btn-info' title='Editar'
                          onclick='ActualizarSolicitud(${filaIndex}, ${cod_solicitado1}, "${codigos1}")'
                          data-bs-toggle='modal' data-bs-target='#ModalEditar'>
@@ -1262,7 +1269,7 @@ function Buscar(page){
           for (let i = 0; i < data.length; i++) {
             var ps = data[i];
             var dataa = ps.cod_salida+","+ps.cod_solicitado;
-            agragarFila(ps.codigo,ps.nombre,ps.cantidad_solicitada,ps.cod_salida,dataa,disabled,ps.costoTotal);
+            agragarFila(ps.codigo,ps.nombre,ps.cantidad_solicitada,ps.cod_salida,dataa,disabled,ps.costoTotal,ps.fechaHora_solicitado);
             total = total+parseFloat(ps.costoTotal);
           }
         //  alert(total);

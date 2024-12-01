@@ -185,6 +185,13 @@ class Usuario
     return $resul;
   }
 
+  public function seleccionarSessionesTabla(){
+    $sql = "select COUNT(*) as contar from sessiones";
+    $resul = $this->con->query($sql);
+    // Retornar el resultado
+    return $resul;
+  }
+
   public function CambiarEstadoAdminAcceso($activo){
     $sql = "update usuario set control_acceso='$activo' where tipo_usuario='admin'";
     $resul = $this->con->query($sql);

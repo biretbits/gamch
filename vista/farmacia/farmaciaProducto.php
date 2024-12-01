@@ -68,7 +68,6 @@
        <hr>
      </div>
    </div>
-
           <div class="row">
               <div class="col-lg-12">
                   <!-- Masthead device mockup feature-->
@@ -305,6 +304,10 @@
                                   echo "<td style='color:green;background-color:#dbffaf;text-align:center'>".$fi['estado_producto']."</td>";
                                 }else if($fi['estado_producto'] == 'vencido'){
                                   echo "<td style='color:red;background-color:#ffc8af;text-align:center'>".$fi['estado_producto']."</td>";
+                                }else if($fi['estado_producto'] == 'mes'){
+                                  echo "<td style='color:gold;background-color:lightyellow;text-align:center'>Vence en 1 mes</td>";
+                                }else if($fi['estado_producto'] == 'menos_mes'){
+                                  echo "<td style='color:orange;background-color:cornsilk;text-align:center'>Vence en menos de 1  mes</td>";
                                 }
                                 echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
                                 echo "<td>".$son."</td>";

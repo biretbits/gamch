@@ -418,12 +418,12 @@ class Farmacia
      $this->con->query($sql);
    }
 
-   public function insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$cod_salida,$costos,$total,$costosUnitarios){
+   public function insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$cod_salida,$costos,$total,$costosUnitarios,$fechaHoraActual){
     // $costoUnitario = $fa->ObtenerCostoUnitario();
      $select = '';
        $select="insert into productosolicitado(cantidad_solicitada,codigos_entrada,cantidadRestado,costosUnitario
        ,costos,costoTotal,fechaHora,cod_producto,cod_salida)
-       values($cantidad,'$codigos','$cat_res','$costosUnitarios','$costos',$total,NOW(),$cod_producto,$cod_salida)";
+       values($cantidad,'$codigos','$cat_res','$costosUnitarios','$costos',$total,'$fechaHoraActual',$cod_producto,$cod_salida)";
 
        $resul = $this->con->query($select);
        if($resul!=''){
@@ -600,7 +600,8 @@ class Farmacia
    }
 
    public function buscarDatosProductoS($cod_salida){
-     $select="select *from productosolicitado as ps inner join producto as p on ps.cod_producto=p.cod_generico where cod_salida=$cod_salida";
+     $select="select   ps.fechaHora AS fechaHora_solicitado,p.fechaHora AS fechaHora_producto,ps.*,p.*
+     from productosolicitado as ps inner join producto as p on ps.cod_producto=p.cod_generico where cod_salida=$cod_salida";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
@@ -783,8 +784,8 @@ class Farmacia
     return $resul;
   }
 
-  public function ActualizarEnEntradaAvencido($cod_entrada){
-    $sql2 = "update entrada set estado_producto='vencido' where cod_entrada=".$cod_entrada."";
+  public function ActualizarEnEntradaAvencido($cod_entrada,$accion){
+    $sql2 = "update entrada set estado_producto='".$accion."' where cod_entrada=".$cod_entrada."";
     $resul = $this->con->query($sql2);
   }
   public function SeleccionarSoloProductos(){

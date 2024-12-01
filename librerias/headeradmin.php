@@ -55,6 +55,7 @@ html, body {
       padding: 0; /* Ajusta el relleno si es necesario */
   }
 
+
   /* Contenedor de contenido dentro del modal */
   .wrapper {
       width: 100%;
@@ -146,42 +147,41 @@ html, body {
       z-index: 1051; /* Asegúrate de que esté sobre otros elementos */
   }
 
-  /* Contenedor del chatbot */
-  .chatbot-container {
-      position: fixed;
-      width: 370px;
-      height: 450px;
-      border: 1px solid lightgrey;
-      border-radius: 5px;
-      background: white;
-      z-index: 1050;
-      display: none; /* Oculto por defecto */
-      transition: transform 0.3s ease-in-out;
-  }
+    /* Contenedor del chatbot */
+    .chatbot-container {
+        position: fixed;
+        width: 370px;
+        height: 450px;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        background: white;
+        z-index: 1050;
+        display: none; /* Oculto por defecto */
+        transition: transform 0.3s ease-in-out;
+    }
 
-  /* Estilos para pantallas grandes (computadoras de escritorio) */
-  @media (min-width: 768px) {
-      .chatbot-container {
-          bottom: 80px; /* Ajusta la distancia desde la parte inferior para que aparezca más arriba del botón */
-          right: 20px; /* Coloca el chatbot en la parte derecha de la pantalla */
-          transform: translateY(0); /* Desactiva el translate Y en pantallas grandes */
-      }
-  }
+    /* Estilos para pantallas grandes (computadoras de escritorio) */
+    @media (min-width: 768px) {
+        .chatbot-container {
+            bottom: 80px; /* Ajusta la distancia desde la parte inferior para que aparezca más arriba del botón */
+            right: 20px; /* Coloca el chatbot en la parte derecha de la pantalla */
+            transform: translateY(0); /* Desactiva el translate Y en pantallas grandes */
+        }
+    }
 
-  /* Estilos para pantallas pequeñas (móviles y tablets) */
-  @media (max-width: 767px) {
-      .chatbot-container {
-          top: 50%; /* Centrado verticalmente */
-          left: 50%; /* Centrado horizontalmente */
-          transform: translate(-50%, -50%); /* Centra el chatbot en la pantalla */
-      }
-  }
+    /* Estilos para pantallas pequeñas (móviles y tablets) */
+    @media (max-width: 767px) {
+        .chatbot-container {
+            top: 50%; /* Centrado verticalmente */
+            left: 50%; /* Centrado horizontalmente */
+            transform: translate(-50%, -50%); /* Centra el chatbot en la pantalla */
+        }
+    }
 
-  /* Clase para mostrar el chatbot en el centro */
-  .chatbot-container.d-block {
-      display: block; /* Muestra el chatbot */
-  }
-
+    /* Clase para mostrar el chatbot en el centro */
+    .chatbot-container.d-block {
+        display: block; /* Muestra el chatbot */
+    }
   /* Estilo del encabezado del chatbot */
   .chatbot-header {
       background: teal;
@@ -215,8 +215,8 @@ html, body {
       height: auto; /* Ajusta la altura del botón automáticamente */
       padding: 5px 10px; /* Ajusta el padding del botón para hacerlo más pequeño */
   }
-/*quitar los botones de incremento y decremento de un campo de typo numbert html*/
-input[type=number]::-webkit-inner-spin-button,
+  /*para quitar botones de incremento y decreento de un campo de type number*/
+  input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
@@ -457,6 +457,27 @@ input[type=number] {
     </div>
   </div>
   </div>
+  <style media="screen">
+  .mensaje-espere {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #3498db; /* Puedes cambiar el color si lo prefieres */
+    animation: moverTexto 2s linear infinite;
+  }
+
+  @keyframes moverTexto {
+    0% {
+        transform: translateX(0); /* Empieza en la posición original */
+    }
+    50% {
+        transform: translateX(20px); /* Se mueve 20px a la derecha */
+    }
+    100% {
+        transform: translateX(0); /* Regresa a la posición original */
+    }
+  }
+  </style>
 <script type="text/javascript">
 function checkEnter(event) {
     if (event.key === 'Enter') {
@@ -494,11 +515,15 @@ function enviar(){
       processData:false,
       success: function(result) {
       //  alert(result);
-          var replay = '<div class="bot-inbox inbox"><div class="icon"><img src="imagenes/robot.png"style="height: 25px;width: 25px;"></div><div class="msg-header"><p>' + result + '</p></div></div>';
-          $(".form").append(replay);
-              // cuando el chat baja, la barra de desplazamiento llega automáticamente al final
-              $(".form").scrollTop($(".form")[0].scrollHeight);
-          }
+          $(".form").append('<span class="mensaje-espere">....</span>');
+          $(".form").scrollTop($(".form")[0].scrollHeight);
+          setTimeout(function() {
+            $(".mensaje-espere").remove();
+            var replay = '<div class="bot-inbox inbox"><div class="icon"><img src="imagenes/robot.png"style="height: 25px;width: 25px; transform: translateY(3px);"></div><div class="msg-header"><p>' + result + '</p></div></div>';
+            $(".form").append(replay);
+            $(".form").scrollTop($(".form")[0].scrollHeight);
+          }, 1500);
+        }
       });
   }
 

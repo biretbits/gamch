@@ -446,7 +446,27 @@ input[type=number] {
           <button id="send-btn" width='20px' height='20px'class='btn btn-primary' onclick="enviar()" style='background:Teal'>Enviar</button>
       </div>
   </div>
+<style media="screen">
+.mensaje-espere {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #3498db; /* Puedes cambiar el color si lo prefieres */
+  animation: moverTexto 2s linear infinite;
+}
 
+@keyframes moverTexto {
+  0% {
+      transform: translateX(0); /* Empieza en la posición original */
+  }
+  50% {
+      transform: translateX(20px); /* Se mueve 20px a la derecha */
+  }
+  100% {
+      transform: translateX(0); /* Regresa a la posición original */
+  }
+}
+</style>
   <!-- Modal de Bootstrap -->
 <script type="text/javascript">
 function checkEnter(event) {
@@ -484,12 +504,16 @@ function enviar(){
       contentType:false,
       processData:false,
       success: function(result) {
-      //  alert(result);
-          var replay = '<div class="bot-inbox inbox"><div class="icon"><img src="../imagenes/robot.png"style="height: 25px;width: 25px; transform: translateY(-5px);"></div><div class="msg-header"><p>' + result + '</p></div></div>';
-          $(".form").append(replay);
-              // cuando el chat baja, la barra de desplazamiento llega automáticamente al final
-              $(".form").scrollTop($(".form")[0].scrollHeight);
-          }
+        //  alert(result);
+          $(".form").append('<span class="mensaje-espere">....</span>');
+          $(".form").scrollTop($(".form")[0].scrollHeight);
+          setTimeout(function() {
+            $(".mensaje-espere").remove();
+            var replay = '<div class="bot-inbox inbox"><div class="icon"><img src="../imagenes/robot.png"style="height: 25px;width: 25px; transform: translateY(-5px);"></div><div class="msg-header"><p>' + result + '</p></div></div>';
+            $(".form").append(replay);
+            $(".form").scrollTop($(".form")[0].scrollHeight);
+          }, 1500);
+        }
       });
   }
 

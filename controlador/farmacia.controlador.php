@@ -5,6 +5,7 @@ require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();
 $abi = $ins->verificarSession();
+//echo "<br><br><br><br>".$abi."llego";
 if($abi!='' and $abi=='cerrar'){
   $ins->Destroy();
   $ins->Redireccionar_inicio();
@@ -567,22 +568,37 @@ class FarmaciaControlador{
     $rng=$fa->seleccionarNG();
     $rc=$fa->seleccionarC();
     $rp=$fa->seleccionarP();
+
     require("../vista/farmacia/farmaciaProducto.php");
   }
   //funciones para convertir los productos a vencidos
 
-  //funcion de actualizacion de entradas si esta en stock o ya vencio
+  //funcion de actualizacion de entradas si esta en stock o ya vencio o falta un mes
   function ActualizarEntrada($fa){
+    date_default_timezone_set('America/La_Paz');
     $fechaActual = date('Y-m-d');
     $da =$fa->entrada2();
     $fecha1_time = strtotime($fechaActual);
+
+    $fecha_actual = new DateTime(date('Y-m-d'));//obtenemos la fecha actual
+  //  echo "<br><br><br><br>Fecha actual: " . $fecha_actual->format('Y-m-d');
     while($fi=mysqli_fetch_array($da)){
       $fechaVencimiento = $fi['vencimiento'];
       $fecha2_time = strtotime($fechaVencimiento);
+      $fecha_vencimiento = new DateTime($fechaVencimiento);
+      $diferencia = $fecha_actual->diff($fecha_vencimiento);
+//      echo "<br> mes ".$diferencia->m."    d ".$diferencia->d."      año".$diferencia->y."  vencimiento  ".$fechaVencimiento;
+
       if($fecha1_time>=$fecha2_time){
       //  echo $fecha1_time.">=".$fecha2_time." vencido";
-        $fa->ActualizarEnEntradaAvencido($fi["cod_entrada"]);//colocamos como vencido el producto
+        $fa->ActualizarEnEntradaAvencido($fi["cod_entrada"],"vencido");//colocamos como vencido el producto
+      }else if($diferencia->m == 0 && $diferencia->y == 0 && $diferencia->d >15 && $diferencia->d <=31){
+        //echo "<br><br><br>".$diferencia->m."     ".$diferencia->y;
+        $fa->ActualizarEnEntradaAvencido($fi["cod_entrada"],"mes");
+      }else if(($diferencia->m == 0 && $diferencia->d >=1 && $diferencia->d <=15  && $diferencia->y == 0)){
+        $fa->ActualizarEnEntradaAvencido($fi["cod_entrada"],"menos_mes");
       }
+
     }
   }
 
@@ -782,6 +798,10 @@ function ActualizarCantidadProducto($fa){
                 echo "<td style='color:green;background-color:#dbffaf;text-align:center'>".$fi['estado_producto']."</td>";
               }else if($fi['estado_producto'] == 'vencido'){
                 echo "<td style='color:red;background-color:#ffc8af;text-align:center'>".$fi['estado_producto']."</td>";
+              }else if($fi['estado_producto'] == 'mes'){
+                echo "<td style='color:gold;background-color:lightyellow;text-align:center'>Vence en 1 mes</td>";
+              }else if($fi['estado_producto'] == 'menos_mes'){
+                echo "<td style='color:orange;background-color:cornsilk;text-align:center'>Vence en menos de 1  mes</td>";
               }
               echo "<td>".$fi['nombre_usuario']." ".$fi["ap_usuario"]."</td>";
               echo "<td>".$son."</td>";
@@ -1243,11 +1263,12 @@ function ActualizarCantidadProducto($fa){
        $this->ActualizarEntradas($fechaActual,$fa);//funcion para actualizar el vencimiento
        $this->ActualizarCantidadEnentrada($fechaActual,$fa);//funcion para actualizar la cantidad total en producto
        $cod_solicitado='';
-       $idsolicitado=$fa->insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$idSalida,$costos,$total,$costosUnitarios);
+       $fechaHoraActual = date('Y-m-d H:i:s');
+       $idsolicitado=$fa->insertarNuevoRegistroSalida($cod_producto,$cantidad,$codigos,$cat_res,$idSalida,$costos,$total,$costosUnitarios,$fechaHoraActual);
 
        $this->actualizarNuevoPrecioTotal($codigos,$fa);//funcion para modificar el precio total deacuerdo a la cantidad que se tiene
        if(is_numeric($idSalida) && is_numeric($idsolicitado)){
-         echo $idSalida."-".$idsolicitado."-".$total."-correctoEScORRECTO";
+         echo $idSalida."&".$idsolicitado."&".$total."&".$fechaHoraActual."&correctoEScORRECTO";
        }else{
          echo "error";
        }
@@ -2192,6 +2213,8 @@ function ActualizarCantidadProducto($fa){
   		$f->buscarProveedor($_POST['proveedor']);
   	}
 
+  }else{
+      $ins->Redireccionar_inicio();
   }
 
 ?>
