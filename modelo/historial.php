@@ -662,7 +662,9 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
       $fecha = date("Y-m-d");
       $hora = date("H:i:s");
     }
-
+    $cod_his = !empty($cod_his) ? (int)$cod_his : NULL;
+    $cod_rd = !empty($cod_rd) ? (int)$cod_rd : NULL;
+    $paciente_rd = !empty($paciente_rd) ? (int)$paciente_rd : NULL;
     $sql = "INSERT INTO historial(
               cod_his,cod_rd,paciente_rd,cod_cds,titulo,subtitulo,tipoHistorial,fecha,hora,estado
             ) VALUES (
