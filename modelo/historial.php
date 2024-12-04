@@ -653,7 +653,7 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
     }
   }
 
-  public function InsertarNuevoHistorial($paciente_rd,$cod_rd,$nombre_historial,$cod_his,$subnombre,$tipoHistoria){
+  public function InsertarNuevoHistorial($paciente_rd,$cod_rd,$nombre_historial,$cod_his,$subnombre,$tipoHistorial){
     $fecha = '';$hora = '';
     if(!is_numeric($cod_his))
     {
