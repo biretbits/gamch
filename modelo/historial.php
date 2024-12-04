@@ -666,10 +666,9 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
     $cod_cds = 1;  // Asumimos que este campo tiene un valor por defecto (1 en este caso)
     $sql = '';
     if(!is_numeric($cod_his)){
-      $sql = "INSERT INTO historial (
-                cod_his, cod_rd, paciente_rd, cod_cds, hoja,titulo, subtitulo, tipoHistorial, fecha, hora, estado
+      $sql = "insert into historial (cod_his, cod_rd, paciente_rd, cod_cds, titulo, subtitulo, tipoHistorial, fecha, hora, estado
             ) VALUES (
-                $cod_his, $cod_rd, $paciente_rd, $cod_cds,NULL,'$subnombre', '$nombre_historial', '$tipoHistorial', '$fecha', '$hora', 'activo')";
+                $cod_his, $cod_rd, $paciente_rd, $cod_cds,'$subnombre', '$nombre_historial', '$tipoHistorial', '$fecha', '$hora', 'activo')";
     }else{
       $sql = "update historial set subtitulo='$nombre_historial' where cod_his = $cod_his";
     }
