@@ -251,5 +251,28 @@ public function seleccionarServicios(){
     return $resul;
     mysqli_close($this->con);
   }
+
+  public function buscarMotivo_Consulta_sql($nombre){
+    $nombre = strtolower($nombre);
+    $lis = "SELECT * FROM patologias where (LOWER(nombre) like '%$nombre%' or LOWER(descripcion) like '%$nombre%') LIMIT 5 OFFSET 0";
+    $resul = $this->con->query($lis);
+    return $resul;
+  }
+
+  public function seleccionarPatologias(){
+    $lis = "select *from patologias";
+    $resul = $this->con->query($lis);
+    return $resul;
+  }
+
+  public function seleccionarHisotialDatoTodo($fechaInicio,$fechaFinal){
+    $sql = '';
+    $sql = "select * from historial_dato where";
+    $sql.=" (fecha >= '".$fechaInicio."' and fecha <= '".$fechaFinal."') and tipoDato = 3 ";
+    //echo "<br><br><br><br><br><br><br><br><br>".$sql;
+
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
 }
  ?>

@@ -406,6 +406,95 @@ echo "<div class='row'>
     $resultado = $rdi->seleccionarServicios();
     require("../vista/registroDiario/reportesDiario.php");
   }
+
+  public function BuscarMotivoConsulta($motivo_consulta){
+    $h =new RegistroDiario();
+    $re = $h->buscarMotivo_Consulta_sql($motivo_consulta);
+    $datos = array();
+    if ($re->num_rows > 0) {
+    // Recoger los resultados en un array
+      while($row = $re->fetch_assoc()) {
+        $datos[] = $row;
+      }
+        echo json_encode($datos);
+    } else {
+        echo json_encode([]);
+    }
+
+  }
+
+  public function MostrarPatologiasPorPatologias(){
+    $h =new RegistroDiario();
+    //$resul = $ch->SeleccionarPatoligias($buscar,false,false);
+    $resul = $h->seleccionarPatologias();
+    $resul1 = $h->seleccionarPatologias();
+    $fechaActual = date('Y-m-d');
+    $resulHistorialDato = $h->seleccionarHisotialDatoTodo($fechaActual,$fechaActual);
+    $resultadoTotal = $this->contarPacientesPorEnfermedad($resul,$resulHistorialDato);
+    require("../vista/patologia/reportePorPatologia.php");
+  }
+
+  public function BuscarPacientePorEnfermedadReporte($fechai,$fechaf){
+      $h =new RegistroDiario();
+      //$resul = $ch->SeleccionarPatoligias($buscar,false,false);
+      $resul = $h->seleccionarPatologias();
+      $resul1 = $h->seleccionarPatologias();
+      $resulHistorialDato = $h->seleccionarHisotialDatoTodo($fechai,$fechaf);
+      $resultadoTotal = $this->contarPacientesPorEnfermedad($resul,$resulHistorialDato);
+      require("../vista/patologia/ReporteEnfermedad.php");
+  }
+
+  private function contarPacientesPorEnfermedad($resul,$resulHistorialDato){
+    $en = array();
+    while($fi = mysqli_fetch_array($resul)){
+      $en[$fi["cod_pat"]] = array('contar' =>0 ,'patologias'=> $fi['nombre'],'descripcion'=> $fi['descripcion'],'sintomas'=> $fi['sintomas']);
+    }
+    if($resulHistorialDato != ''){
+      while($fi=mysqli_fetch_array($resulHistorialDato)){
+        $en[$fi['cod_patologia']]['contar']+=1;
+      }
+      return $en;
+    }else{
+      return $en;
+    }
+  }
+
+  public function BuscarPacientePorEnfermedad($fechainicio,$fechafinal){
+    $h =new RegistroDiario();
+    //$resul = $ch->SeleccionarPatoligias($buscar,false,false);
+    $resul = $h->seleccionarPatologias();
+    $resul1 = $h->seleccionarPatologias();
+    $resulHistorialDato = $h->seleccionarHisotialDatoTodo($fechainicio,$fechafinal);
+    $resultadoTotal = $this->contarPacientesPorEnfermedad($resul,$resulHistorialDato);
+    echo "<div class='table-responsive' style='width: 60%; margin: auto;'>
+    <table class='table table-bordered' style='font-size: 12px;'>
+      <thead style='text-align:center'>
+        <tr>
+          <th>N°</th>
+          <th>Enfermedad</th>
+          <th>Contar</th>
+        </tr>
+      </thead>
+      <tbody>";
+        $k = 1;
+        $suma = 0;
+        while ($fi = mysqli_fetch_array($resul1)) {
+          echo "<tr>";
+          echo "<td>" . $k . "</td>";
+          echo "<td>" . $resultadoTotal[$fi['cod_pat']]['patologias'] . "</td>";
+          echo "<td style='text-align:right'>" . $resultadoTotal[$fi['cod_pat']]['contar'] . "</td>";
+          $suma += $resultadoTotal[$fi['cod_pat']]['contar'];
+          echo "</tr>";
+          $k += 1;
+        }
+        echo "<tr>";
+        echo "<td align='center' colspan='2'>Total</td>";
+        echo "<td style='text-align:right'>" . $suma . "</td>";
+        echo "</tr>";
+      echo "</tbody>
+    </table>
+  </div>";
+  }
 }
 
 	$rd=new  RegistroDiarioControlador();
@@ -512,6 +601,24 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
     if(isset($_GET["accion"]) && $_GET["accion"]=="rpd"){
   		$rd->reportesRegistroDiario();
   	}
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="BmC"){
+  		$rd->BuscarMotivoConsulta($_POST["motivo_consulta"]);
+  	}
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="patPac"){
+      $rd->MostrarPatologiasPorPatologias();
+    }
+    if(isset($_GET["accion"]) && $_GET["accion"]=="bpen"){
+      $rd->BuscarPacientePorEnfermedad($_POST["fechai"],$_POST["fechaf"]);
+    }
+
+    if(isset($_GET["accion"]) && $_GET["accion"]=="grpp"){
+      $rd->BuscarPacientePorEnfermedadReporte($_POST["fechai"],$_POST["fechaf"]);
+    }
+
+
+
 }else{
   $ins->Redireccionar_inicio();
 }

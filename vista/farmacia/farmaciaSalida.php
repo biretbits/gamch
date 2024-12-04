@@ -1,4 +1,5 @@
-<?php require("../librerias/headeradmin1.php"); ?>
+<?php require("../librerias/headeradmin1.php");
+  include("../librerias/globales.php");?>
 
 <div class="container main-content">
 <div class="container">
@@ -44,7 +45,7 @@
                       </div>
 
                       <div class="col-auto mb-2" title="Reporte">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalReportePorFecha">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-warning shadow-sm" onclick="ReporteTodoSalida()">
                           <img src='../imagenes/reporte.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -91,13 +92,13 @@
                                <div class="mb-3">
                                  <label for="cod_paciente" class="form-label">Paciente</label>
                                  <input type="text" class="form-control" id="cod_paciente" placeholder="Busque al paciente" onkeyup="buscarPaciente()"autocomplete="off">
-                                 <div id="resultadoPaciente" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                                 <div id="resultadoPaciente" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
                                  </div>
                                </div>
                                <div class="mb-3">
                                  <label for="cod_producto" class="form-label">Producto farmaceutico</label>
                                  <input type="text" class="form-control" id="nombre_producto" placeholder="Busque el producto" onkeyup="buscarProductoNuevo()" autocomplete="off">
-                                 <div id="resultadoProducto" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                                 <div id="resultadoProducto" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
                                  </div>
                                </div>
                                <div class="mb-3">
@@ -143,44 +144,6 @@
                       </div>
                     </div>
                   </div>
-                    <div class="modal fade" id="ModalReportePorFecha" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="miModalLabel">Selección de fechas</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-                          <!-- Contenido del modal -->
-                          <div class="modal-body">
-                            <form class="form-inline" >
-                              <input type="hidden" name="pagina1" id='pagina1' value="">
-                              <div class="row mb-3">
-                                <label for="fecha1" class="form-label">Fecha inicio</label>
-                                <div class="input-group">
-                                  <input type="date" id="fecha1" name="fecha1" value="<?php echo $fechaActual; ?>" class="form-control">
-                                </div>
-                              </div>
-                              <div class="row mb-3">
-                                <label for="fecha1" class="form-label">Fecha final</label>
-                                <div class="input-group">
-                                  <input type="date" id="fecha2" name="fecha2" value="<?php echo $fechaActual; ?>" class="form-control">
-                                </div>
-                              </div>
-                              <div class="for-control alert alert-light">
-                                Nota:
-                                Seleccione de que fecha a que fecha quiere generar reporte
-                              </div>
-                            </form>
-                          </div>
-                          <!-- Pie de página del modal -->
-                          <div class="modal-footer">
-                            <button type="button"  class="btn btn-success" title = 'Generar reporte' onclick="GenerarReporte()"><img src='../imagenes/aceptar.ico' style='height: 25px;width: 25px;'> Generar</button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
                     <div class="row" >
                          <div class="col-12">
                            <hr>
@@ -208,12 +171,13 @@
                                   <div class="mb-3">
                                     <label for="nombre_producto1" class="form-label">Producto farmaceutico</label>
                                     <input type="text" class="form-control" id="nombre_producto1" placeholder="Busque el producto" onkeyup="buscarProductoNuevo1()" autocomplete="off">
-                                    <div id="resultadoProducto1" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                                    <div id="resultadoProducto1" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
                                     </div>
                                   </div>
                                   <div class="mb-3">
                                     <label for="name" class="form-label">Stock Total</label>
-                                    <input disabled type="text" class="form-control" id="total_stock1" name='total_stock1' min='1' value='0' placeholder="Stock Total">
+                                    <input disabled type="hidden" class="form-control" id="total_stock1" name='total_stock1' min='1' value='0' placeholder="Stock Total">
+                                    <input disabled type="text" class="form-control" id="total_stock2" name='total_stock2' min='1' value='0' placeholder="Stock Total">
                                   </div>
                                   <p id='stock_es1' class='form-control'></p>
                                   <div class="mb-3">
@@ -245,7 +209,7 @@
                                 <th>Paciente</th>
                                 <th>Encargado Farmacia</th>
                                 <th>Fecha</th>
-                                <th>Entregado</th>
+                                <th>Estado</th>
                                 <th>Acción</th>
                               </tr>
                             </thead>
@@ -265,7 +229,7 @@
                                 echo "<td>";
                                 foreach ($paciente as $form) {
                                   $datos_paciente = $form["nombre_usuario"]." ".$form["ap_usuario"]." ".$form["am_usuario"];
-                                  echo $form["nombre_usuario"]." ".$form["ap_usuario"]." ".$form["am_usuario"];
+                                  echo convertirMayus($form["nombre_usuario"])." ".convertirMayus($form["ap_usuario"])." ".convertirMayus($form["am_usuario"]);
                                   $cod_paciente=$form["cod_usuario"];
                                 }
                                 echo "</td>";
@@ -273,22 +237,28 @@
                                 $cod_usuario = "";
                                 echo "<td>";
                                 foreach ($Encargado as $conc) {
-                                  echo $conc["nombre_usuario"]." ".$conc["ap_usuario"]." ".$conc["am_usuario"];
+                                  echo convertirMayus($conc["nombre_usuario"])." ".convertirMayus($conc["ap_usuario"])." ".convertirMayus($conc["am_usuario"]);
                                   $cod_usuario =$conc['cod_usuario'];
                                 }
                                 echo "</td>";
-
-                                echo "<td>".$fi['fechaHora']."</td>";
+                                $bloquear = '';
+                                if($fi['fechaHora'] == null){
+                                  echo "<td style='color:red'>Falta entregar</td>";
+                                }else{
+                                  echo "<td>".$fi['fechaHora']."</td>";
+                                }
                                 if($fi["entregado"] == 'si'){
                                   echo "<td  style='color:green;background-color:#dbffaf;text-align:center'>Entregado</td>";
+                                  $bloquear = 'disabled';
                                 }else{
                                   echo "<td  style='color:red;background-color:#faa3aA;text-align:center'>No entregado</td>";
+                                  $bloquear = 'enabled';
                                 }
                                 echo "<td>";
                                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                                 //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
                                   echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                                  echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                                  echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")' $bloquear><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle' ></button>";
                                   echo "<button type='button' class='btn btn-warning' title='Imprimir' onclick='ImprimirRecibo(".$fi['cod_salida'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
 
                                   echo "</div>";
@@ -508,7 +478,7 @@ function Buscar(page){
         contentType: false, // Deshabilitar la codificación de tipo MIME
         processData: false, // Deshabilitar la codificación de datos
         success: function(data) {
-         alert(data+"dasdas");
+        // alert(data+"dasdas");
           console.log(data);
           if(data == 'fecha_vencido'){
             vencido();
@@ -940,6 +910,7 @@ function Buscar(page){
                                   document.getElementById("cod_producto1").value = cod_producto;
                                   document.getElementById("codigos1").value=codigos;
                                   document.getElementById("total_stock1").value=total;
+                                  document.getElementById("total_stock2").value=total;
                                   var es = document.getElementById("stock_es1");
                                   if(estado.trim() == 'si'){
                                     es.textContent ='Stock bajo';
@@ -985,6 +956,9 @@ function Buscar(page){
       document.getElementById("codigos1").value=codigo;
       document.getElementById("fila").value=fila;
 
+      var tabla = document.getElementById('tablaProductos');
+      var filaes = tabla.rows[fila];
+      let total_fila = filaes.cells[2].innerText;
       $.ajax({
           url: "../controlador/farmacia.controlador.php?accion=soli",
           type: "POST",
@@ -994,7 +968,8 @@ function Buscar(page){
             for (let i = 0; i < data.length; i++) {
               var usuario = data[i];
               document.getElementById("cod_producto1").value=data[i].cod_producto;
-              document.getElementById("total_stock1").value=data[i].cantidad_total;
+              document.getElementById("total_stock1").value=parseFloat(data[i].cantidad_total);
+              document.getElementById("total_stock2").value = parseFloat(data[i].cantidad_total)+parseFloat(total_fila);
               document.getElementById("cantidadRestado1").value=data[i].cantidadRestado;
               document.getElementById("nombre_producto1").value=data[i].nombre;
               document.getElementById("cantidad1").value=data[i].cantidad_solicitada;
@@ -1070,10 +1045,12 @@ function Buscar(page){
       var codigos_entrada1 = document.getElementById("codigos_entrada1").value;
       var nombre_producto1 = document.getElementById("nombre_producto1").value;
       var total_stock1 = parseInt(document.getElementById("total_stock1").value);
+
+      var total_stock2 = parseInt(document.getElementById("total_stock2").value);
       var cantidad1 = parseInt(document.getElementById("cantidad1").value);
       var fila =document.getElementById("fila").value;
       //alert(cantidad1+"    "+total_stock1);
-      if(cantidad1>=total_stock1){
+      if(cantidad1>total_stock2){//en stock 2 tenemos tanto la cantidad que tenia actualmente mas la cantidad que habia en la base de datos
         cambie_Cantidad();
         return;
       }
@@ -1096,7 +1073,7 @@ function Buscar(page){
           contentType: false, // Deshabilitar la codificación de tipo MIME
           processData: false, // Deshabilitar la codificación de datos
           success: function(data) {
-          alert(data+"dasdas");
+          //alert(data+"dasdas");
             if(data == 'fecha_vencido'){
               vencido();
             }else if(data == 'error'){
@@ -1335,6 +1312,55 @@ function Buscar(page){
       document.getElementById("nombre_receta").disabled=false;
       document.getElementById("cod_paciente").disabled=false;
     }
+  }
+
+  //funcion para imprimir ImprimirRecibo
+  function ImprimirRecibo(cod_salida){
+      var form = document.createElement('form');
+       form.method = 'post';
+       form.action = '../controlador/farmacia.controlador.php?accion=Irec'; // Coloca la URL de destino correcta
+       // Agregar campos ocultos para cada dato
+       var datos = {
+         cod_salida:cod_salida,
+       };
+       for (var key in datos) {
+           if (datos.hasOwnProperty(key)) {
+               var input = document.createElement('input');
+               input.type = 'hidden';
+               input.name = key;
+               input.value = datos[key];
+               form.appendChild(input);
+           }
+       }
+     // Agregar el formulario al cuerpo del documento y enviarlo
+     document.body.appendChild(form);
+     form.submit();
+  }
+  function ReporteTodoSalida(){
+    var fechai = document.getElementById("fechai").value;
+    var fechaf = document.getElementById("fechaf").value;
+    var buscar = document.getElementById("buscar").value;
+      var form = document.createElement('form');
+       form.method = 'post';
+       form.action = '../controlador/farmacia.controlador.php?accion=Rts'; // Coloca la URL de destino correcta
+       // Agregar campos ocultos para cada dato
+       var datos = {
+         fechai:fechai,
+         fechaf:fechaf,
+         buscar:buscar
+       };
+       for (var key in datos) {
+           if (datos.hasOwnProperty(key)) {
+               var input = document.createElement('input');
+               input.type = 'hidden';
+               input.name = key;
+               input.value = datos[key];
+               form.appendChild(input);
+           }
+       }
+     // Agregar el formulario al cuerpo del documento y enviarlo
+     document.body.appendChild(form);
+     form.submit();
   }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

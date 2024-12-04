@@ -33,45 +33,24 @@ table {
   }
   table td:nth-child(1) {
     text-align: center;
-    width: 80px;
+    width: 10px;
   }
   table td:nth-child(2) {
-    text-align: left;
-    width: 190px;
-    max-width: 190px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    text-align: center;
+    width: 40px;
   }
   table td:nth-child(3) {
-    width: 140px;
-    text-align:left;
+    width: 90px;
   }
   table td:nth-child(4) {
-    width: 120px;
-    text-align: left;
+    width: 125px;
   }
-  table td:nth-child(5) {
-    width: 110px;
-    text-align: left;
+  table td:nth-child(10) {
+    width: 80px;
   }
-  table td:nth-child(6) {
-    width: 90px;
-    text-align: center;
+  table td:nth-child(13) {
+    width: 65px;
   }
-  table td:nth-child(7) {
-    width: 70px;
-    text-align: right;
-  }
-  table td:nth-child(8) {
-    width: 70px;
-    text-align: right;
-  }
-  table td:nth-child(9) {
-    width: 70px;
-    text-align: right;
-  }
-
 
   table th {
     background-color: #f2f2f2;
@@ -139,91 +118,98 @@ td,th{
   </head>
   <body>
     <?php
-     ?>
+    $fechai = date('Y-m-d');
+    $nombre_apellidos_paciente = '';
+    $nombre_apellidos_usuario = '';
+    $nombre_receta = '';
+    if ($resul &&count($resul) > 0) {
+      $i = 1;
+      foreach ($resul as $fi){
+        $nombre_receta = $fi["nombre_receta"];
+        $paciente = $fi['paciente'];
+        foreach ($paciente as $pr) {
+          $nombre_apellidos_paciente=$pr["nombre_usuario"]." ".$pr["ap_usuario"]." ".$pr["am_usuario"];
+        }
+        $usuario = $fi['usuario'];
+        foreach ($paciente as $pr) {
+          $nombre_apellidos_usuario=$pr["nombre_usuario"]." ".$pr["ap_usuario"]." ".$pr["am_usuario"];
+        }
+      }
+    }
+    ?>
     <div class="">
           <div   style='width:100%;' align='center'>
 
-            <font class="subtitulo"><b>ENTRADA DE PRODUCTOS FARMACEUTICOS</b></font><br>
+            <font class="subtitulo3"><b>Recibo de medicamentos</b></font><br>
 
             <font class="subtitulo3">Llallagua , <?php
             list($año1, $mes1, $dia1) = explode('-', $fechai);
-            list($año2, $mes2, $dia2) = explode('-', $fechaf);
-            if($fechai == $fechaf){
-              echo $dia1." de ".mesEnTexto($mes1)." ".$año1;
-            }else{
-              echo "".$dia1." de ".mesEnTexto($mes1)." ".$año1." al ".$dia2." de ".mesEnTexto($mes2)." ".$año2;
-            }
+
+            echo $dia1." de ".mesEnTexto($mes1)." ".$año1;
+
             ?>
           </font>
           </div>
           <br>
       </div>
         <div style="clear:both;"></div>
+        <div style="width:50%;" class="linea">
+          <font class="subtitulo3"><b>Receta:</b> <?php echo $nombre_receta; ?></font>&nbsp;&nbsp;&nbsp;&nbsp;
+          <font class="subtitulo3"><b>Paciente:</b>   <?php echo $nombre_apellidos_paciente; ?></font>
+        </div>
+          <br><br>
+
         <table>
             <thead style="display: table-row-group;">
               <tr>
-                <th>Código</th>
-                <th>Nombre Genérico</th>
-                <th>Forma farmaceútica</th>
-                <th>Concentración</th>
-                <th>N° de Lote</th>
-                <th>Fecha Vto</th>
+                <th>N°</th>
+                <th>Codígo</th>
+                <th>Producto</th>
                 <th>Cantidad</th>
-                <th>C./Unitario</th>
-                <th>C./Total</th>
+                <th>Fecha y hora</th>
+                <th>Costo total</th>
+
               </tr>
             </thead>
             <tbody>
               <?php
-              if ($resul &&count($resul) > 0) {
+              $total = 0;
+              if ($resul &&count($re) > 0) {
                 $i = 1;
-                $total = 0;
-                foreach ($resul as $fi){
+                foreach ($re as $fi){
                     echo "<tr>";
-                      echo "<td>".$fi['codigo']."</td>";
-                      echo "<td>".$fi['nombre']."</td>";
-
-                      $forma = $fi['nombre_forma'];
+                      echo "<td>".($i)."</td>";
+                      $codigo = '';
+                      $nombre_producto = '';
+                      $producto = $fi['productos'];
                       $formaa = "";
-                      echo "<td>";
-                      foreach ($forma as $form) {
-                        echo $form["nombre_forma"];
-                        $formaa=$form["nombre_forma"];
+                      foreach ($producto as $pr) {
+                        $nombre_producto=$pr["nombre"];
+                        $codigo = $pr["codigo"];
                       }
-                      echo "</td>";
-                      $concentracion = $fi['concentracion'];
-                      $concentra = "";
-                      echo "<td>";
-                      foreach ($concentracion as $conc) {
-                        echo $conc["concentracion"];
-                        $concentra =$conc['concentracion'];
-                      }
-                      echo "</td>";
-                      echo "<td>".$fi['nrolote']."</td>";
-                      echo "<td>".$fi['vencimiento']."</td>";
-                      echo "<td>".$fi['cantidad']."</td>";
-                      echo "<td>".$fi['costounitario']."</td>";
-                      echo "<td>".$fi['costototal']."</td>";
-                      $total = $total + $fi['costototal'];
-                    echo "</tr>";
+                      echo "<td>".($codigo)."</td>";
+                      echo "<td>".($nombre_producto)."</td>";
+                      echo "<td>".($fi["cantidad_solicitada"])."</td>";
+                      echo "<td>".$fi['fechaHora']."</td>";
+                      echo "<td style='text-align:right'>".($fi["costoTotal"])."</td>";
+                      echo "</tr>";
+                      $total = $total + $fi["costoTotal"];
                     $i++;
                   }
                   echo "<tr>";
                   // Deja las primeras 6 columnas vacías pero no las ocultes.
                   // Usa colspan para las dos últimas columnas que mostrarán el valor de $total
-                  echo "<td colspan='7' style='border-bottom: solid white;border-left: solid white;border-right:solid white;'></td>"; // Oculta las primeras 6 columnas
+                  echo "<td colspan='4' style='border-bottom: solid white;border-left: solid white;border-right:solid white;'></td>"; // Oculta las primeras 6 columnas
                   // Muestra el valor de $total en la penúltima columna
                   echo "<td colspan='1'  style='width: 70px;text-align: right;border-bottom: solid white;'>Total:</td>";
                   // Muestra el valor de $total en la última columna
                   echo "<td colspan='1' style='width: 70px;text-align: right'>".$total."</td>";
                   echo "</tr>";
-
                 }else{
                   echo "<tr>";
                   echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
                   echo "</tr>";
                 }
-
                  ?>
 
             </tbody>
@@ -271,13 +257,13 @@ $options->setIsHtml5ParserEnabled(true);
 //$dompdf->loadHtml($html);
 
 $dompdf->loadHtml($html);
-$dompdf->setPaper('letter', 'landscape');
+$dompdf->setPaper('letter');
 
 $dompdf->render();
 $type=false;
 if(!isset($_GET["id"]))
   $type=false;
-$dompdf->stream("archivo_.pdf",array("Attachment"=>$type));
+$dompdf->stream("medicamentos.pdf",array("Attachment"=>$type));
 
 
 ?>

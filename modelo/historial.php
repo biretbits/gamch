@@ -538,14 +538,15 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
     return $f["max(hoja)"];
   }
 
-  function insertarDatosHistorialConsulta($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$motivo_consulta,$subjetivo,$objetivo,
+  function insertarDatosHistorialConsulta($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$subjetivo,$objetivo,
   $analisis,$tratamiento,$evaluacion_seguimiento,$medico_responsable,$cod_usuario_medico,$cod_historial_consulta,$paciente_rd,
-  $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat){
+  $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat,$cod_patologia){
+    //echo "cod_rd   ".$cod_rd."  paciente_rd  ".$paciente_rd."   cod_his  ".$cod_his_original;
     $select = "select *from historial_dato where cod_rd=$cod_rd and paciente_rd=$paciente_rd and cod_his=$cod_his_original and tipoDato=1";
     $res = $this->con->query($select);
     $fila = mysqli_fetch_array($res);
     //echo $cod_usuario_medico."    ".$medico_responsable;
-
+  //  echo $fila["zona_his"]." ## ".$fila["cod_cds"]."  ##  ".$fila["cod_responsable_familia_his"]." hola mamamamm";
    $zona_his = $this->con->real_escape_string($fila["zona_his"]);
    $cod_cds = $this->con->real_escape_string($fila["cod_cds"]);
    $cod_responsable_familia_his = $this->con->real_escape_string($fila["cod_responsable_familia_his"]);
@@ -557,8 +558,7 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
    $fc = $this->con->real_escape_string($fc);
    $pa = $this->con->real_escape_string($pa);
    $fr = $this->con->real_escape_string($fr);
-   //echo $talla."    ".$peso."    ".$imc."     ".$temperatura."    ".$fc."     ".$pa."      ".$fr."abajo";
-   $motivo_consulta = $this->con->real_escape_string($motivo_consulta);
+
    $subjetivo = $this->con->real_escape_string($subjetivo);
    $objetivo = $this->con->real_escape_string($objetivo);
    $analisis = $this->con->real_escape_string($analisis);
@@ -593,13 +593,13 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
 
     $sql = "INSERT INTO historial_dato(
         cod_his_dat,cod_rd,paciente_rd,cod_cds,zona_his,cod_responsable_familia_his,descripcion,
-        hoja,paginas,imc,temp,fc,pa,fr,motivo_consulta,
+        hoja,paginas,imc,temp,fc,pa,fr,cod_patologia,
         subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimiento,
         cod_responsable_medico,cod_his,
         fecha,hora,tipoDato,estado
       ) VALUES (
         '$cod_his_dat','$cod_rd','$paciente_rd','$cod_cds','$zona_his','$cod_responsable_familia_his','Documento de consulta',
-        '$maxi','$max','$imc','$temperatura','$fc','$pa','$fr','$motivo_consulta',
+        '$maxi','$max','$imc','$temperatura','$fc','$pa','$fr','$cod_patologia',
         '$subjetivo','$objetivo','$analisis','$tratamiento','$evaluacion_seguimiento',
         '$cod_usuario_medico','$cod_his_original',
         '$fecha_consulta','$hora_consulta','3','activo'
@@ -610,7 +610,7 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
                 fc = VALUES(fc),
                 pa = VALUES(pa),
                 fr = VALUES(fr),
-                motivo_consulta = VALUES(motivo_consulta),
+                cod_patologia = VALUES(cod_patologia),
                 subjetivo = VALUES(subjetivo),
                 objetivo = VALUES(objetivo),
                 analisis = VALUES(analisis),
@@ -749,6 +749,31 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
       $a[] = $datos;
     }
     return $a;
+  }
+
+  public function seleccionarPatologia($cod_patologia){
+    //echo $cod_patologia;
+    if(is_numeric($cod_patologia))
+    {
+      $sql="select *from patologias where cod_pat=$cod_patologia";
+      $resul = $this->con->query($sql);
+        $a = [];
+      while ($fi = mysqli_fetch_array($resul)) {
+        $datos = [
+          "cod_pat"=>$fi["cod_pat"],
+          "nombre"=>$fi["nombre"],
+          "descripcion"=>$fi["descripcion"],
+          "sintomas"=>$fi["sintomas"],
+          "tratamiento"=>$fi["tratamiento"],
+          "fecha_registro"=>$fi["fecha_registro"],
+          "estado"=>$fi["estado"]
+        ];
+        $a[] = $datos;
+      }
+      return $a;
+    }else{
+      return '';
+    }
   }
 
 }

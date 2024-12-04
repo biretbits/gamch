@@ -146,7 +146,7 @@ if($fechai > $fechaf){
       </div>
         <div style="clear:both;"></div>
         <table>
-            <thead>
+            <thead style="display: table-row-group;">
               <tr>
                 <th>N°</th>
                 <th>Servicio</th>

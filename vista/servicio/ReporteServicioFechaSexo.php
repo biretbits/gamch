@@ -151,7 +151,7 @@ if($fechai > $fechaf){
         </div>
 
         <table>
-            <thead>
+            <thead style="display: table-row-group;">
               <tr>
                 <th>N°</th>
                 <th>Servicio</th>
@@ -201,7 +201,7 @@ if($fechai > $fechaf){
           <br>
         </div>
         <table>
-            <thead>
+            <thead style="display: table-row-group;">
               <tr>
                 <th>N°</th>
                 <th>Servicio</th>

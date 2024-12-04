@@ -555,7 +555,7 @@ class Farmacia
     $sql = "INSERT INTO salida (
                 cod_salida,nombre_receta,cod_usuario,cod_paciente,fechaHora,estado
             ) VALUES (
-              '$cod_salida','$nombre_receta','$usuario','$id_paciente',NOW(),'activo'
+              '$cod_salida','$nombre_receta','$usuario','$id_paciente',null,'activo'
             ) ON DUPLICATE KEY UPDATE
                nombre_receta = VALUES(nombre_receta),
                 cod_usuario = VALUES(cod_usuario),
@@ -591,8 +591,8 @@ class Farmacia
      return $resul;
    }
 
-   public function ActualizarEntregaDePaciente($cod_salida){
-     $select="update salida set entregado = 'si' where cod_salida=$cod_salida";
+   public function ActualizarEntregaDePaciente($cod_salida,$fecha){
+     $select="update salida set entregado = 'si',fechaHora = '$fecha' where cod_salida=$cod_salida";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
@@ -802,6 +802,38 @@ class Farmacia
     $sql= "update producto set stock_producto='".$accion."', cantidad_total=".$total." where cod_generico=".$cod_generico."";
     $resul = $this->con->query($sql);
   }
+
+  public function selectMedicamentosObtenidos($cod_salida){
+    $sql= "select *from productosolicitado where cod_salida=$cod_salida";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+
+  public function selectMedicamentosSalida($cod_salida){
+    $sql= "select *from salida where cod_salida=$cod_salida";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+
+    public function selectProductos($cod_producto){
+      $datos = []; // Inicializar la variable para evitar errores si no hay resultados
+      $sql= "select *from producto where cod_generico=$cod_producto";
+      $resul = $this->con->query($sql);
+      while($row = $resul->fetch_assoc()) {
+       $datos[] = $row;
+     }
+     return $datos;
+    }
+
+    public function selectodosLosDatosUsuario($cod_usuario){
+      $datos = []; // Inicializar la variable para evitar errores si no hay resultados
+      $sql= "select *from usuario where cod_usuario=$cod_usuario";
+      $resul = $this->con->query($sql);
+      while($row = $resul->fetch_assoc()) {
+       $datos[] = $row;
+     }
+     return $datos;
+    }
 }
 
 

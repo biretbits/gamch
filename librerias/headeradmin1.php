@@ -35,6 +35,14 @@
 
 </head>
 <style type="text/css">
+.encimaElTexto{
+  position: absolute; /* Permite que el div se posicione sobre otros elementos */
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  background-color: white; /* Fondo para que el contenido sea legible */
+  border: 1px solid #ccc; /* Opcional: para hacerlo más visible */
+  padding: 10px; /* Espaciado interno */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
 html, body {
       height: 100%;
       margin: 0;
@@ -315,6 +323,10 @@ input[type=number] {
                           ";
                     echo "<li class='nav-item' title='Pacientes atendidos por servicio por edad'>
                             <a class='nav-link btn btn-outline-warning' href='../controlador/servicio.controlador.php?accion=rGE'><img src='../imagenes/servicio.ico'style='height: 25px;width: 25px;'> Pacientes atendidos por edad</a>
+                          </li>
+                          ";
+                    echo "<li class='nav-item' title='Pacientes por enfermedad'>
+                            <a class='nav-link btn btn-outline-warning' href='../controlador/registroDiario.controlador.php?accion=patPac'><img src='../imagenes/servicio.ico'style='height: 25px;width: 25px;'> Pacientes por enfermedad</a>
                           </li>
                           ";
                   echo "</ul>

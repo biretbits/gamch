@@ -226,6 +226,7 @@ class PatologiaControlador{
 		$resul = $ch->SeleccionarPatoligias($buscar,false,false);
 		require("../vista/patologia/ReportePatologia.php");
   }
+
 }
 
 
@@ -255,6 +256,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=="admin"){
   if(isset($_GET["accion"]) && $_GET["accion"]=="reppat"){
     $uc->ReporteBuscarPatologias($_POST['buscar']);
   }
+
 }else{
     $ins->Redireccionar_inicio();
 }

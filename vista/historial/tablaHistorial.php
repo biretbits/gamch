@@ -233,7 +233,7 @@
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Medico responsable</label>
                   <input type="text" class="form-control" id="medico_responsable" placeholder="Medico responsable" onkeyup="buscarMedico()">
-                  <div id="resultado13" align='left' class='alert alert-light mb-0 py-0 border-0'></div>
+                  <div id="resultado13" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'></div>
                 </div>
               </div>
               </div>

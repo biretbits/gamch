@@ -26,7 +26,7 @@
               <div class="col-md-4 mb-3">
                 <label for="Nombre" class="form-label">Nombre</label>
                 <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre" onkeyup="buscarExitepaciente()" autocomplete="off">
-                <div id="resultado" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                <div id="resultado" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
                 </div>
               </div>
               <div class="col-md-4 mb-3">
@@ -73,13 +73,13 @@
               <div class="col-md-4 mb-3">
                 <label for="personal que brinda la atencion" class="form-label">personal que brinda la atencion</label>
                 <input type="text" class="form-control" id="personalatencion" placeholder="personal que brinda la atencion" onkeyup= "atencionMedico()" autocomplete="off">
-                <div id="resultadomedico" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                <div id="resultadomedico" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
               </div>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="resp. admision" class="form-label">resp. admision</label>
                 <input type="text" class="form-control" id="respadmision" placeholder="responsable de Admision" onkeyup="buscarResponsableAdmision()" autocomplete="off">
-                <div id="resultadoadmision" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                <div id="resultadoadmision" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
                 </div>
               </div>
               <div class="col-md-4 mb-3">

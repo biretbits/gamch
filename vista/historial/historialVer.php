@@ -65,7 +65,10 @@
     <div class="col-auto mb-2" title="Registro de Consulta">
         <button type="button" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal"
         data-bs-target="#ModalRegistroMotivoConsulta"
-        <?php if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?>>
+        <?php if(count($resul)>0){ echo "enable";}else{echo "disabled";} ?> onclick="registroActualizarConsultaHistorial('','','','','',''
+        ,'','','','','','','',
+        '','','','','','','','','','','','','',
+        '','')">
           <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
         </button>
     </div>
@@ -98,7 +101,6 @@
   // Obtener la fecha actual en formato YYYY-MM-DD
     $fechaActual = date('Y-m-d');
   ?>
-
   <!--Modal de registro de motivos de consultas-->
   <div class="modal fade" id="ModalRegistroMotivoConsulta" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-xl">
@@ -116,9 +118,10 @@
           <div class="card-body">
             <form>
 
-              <input type="text" name="cod_usuario_consulta"  id = "cod_usuario_medico" value="">
-              <input type="text" name="cod_historial_consulta" id='cod_historial_consulta' value="">
-              <input type="text" name="cod_dat" id='cod_dat' value="">
+              <input type="hidden" name="cod_usuario_consulta"  id = "cod_usuario_medico" value="">
+              <input type="hidden" name="cod_historial_consulta" id='cod_historial_consulta' value="">
+              <input type="hidden" name="cod_patologia" id='cod_patologia' value="">
+              <input type="hidden" name="cod_dat" id='cod_dat' value="">
               <div class="row">
 
                 <div class="col-md-4 mb-3">
@@ -150,13 +153,14 @@
                   <label  class="form-label">F.R.</label>
                   <input type="text" class="form-control" id="fr" placeholder="Ingrese el fr">
                 </div>
-
-                <div class="col-md-4 mb-3">
+                <div class="col-md-8 mb-3">
                 </div>
                 <div class="col-md-6 mb-3">
-                  <label  class="form-label">Motivo de consulta</label>
-                  <textarea class='form-control' id='motivo_consulta'></textarea>
-                </div>
+                 <label for="motivo_consulta" class="form-label">Motivo de consulta</label>
+                 <input type="text" class="form-control" id="motivo_consulta" placeholder="Busque el motivo de consulta" onkeyup="buscarMotivoDeConsulta()" autocomplete="off">
+                 <div id="resultadoMotivo" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
+                 </div>
+               </div>
                 <div class="col-md-6 mb-3">
                   <label  class="form-label">Subjetivo</label>
                   <textarea class='form-control' id='subjetivo'></textarea>
@@ -193,7 +197,7 @@
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Medico responsable</label>
                   <input type="text" class="form-control" id="medico_responsable" placeholder="Medico responsable" onkeyup="buscarMedico()">
-                  <div id="resultado13" align='left' class='alert alert-light mb-0 py-0 border-0'></div>
+                  <div id="resultado13" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'></div>
                 </div>
               </div>
               </div>
@@ -236,7 +240,7 @@
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Nombre de Responsable</label>
                   <input type="text" class="form-control" id="Nombre_responsable" placeholder="Nombre de Responsable" onkeyup='buscarExitepaciente()'>
-                  <div id="resultado12" align='left' class='alert alert-light mb-0 py-0 border-0'>
+                  <div id="resultado12" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -571,14 +575,19 @@
                         $apellidoM = $da["am_usuario_re"];
                       }
                       $unir = $nombre_medico." ".$apellidoP." ".$apellidoM;
+                      $patologia = '';$cod_patologia='';
+                      foreach ($fi["motivo_consulta"] as $da2) {
+                        $patologia = $da2["nombre"];
+                        $cod_patologia = $da2["cod_pat"];
+                      }
                       echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroMotivoConsulta' title='Editar'
                       onclick='registroActualizarConsultaHistorial(\"".$peso_paciente."\",\"".$talla_paciente."\",".$fi['cod_his_dat'].",".$fi['cod_rd'].",".$fi['paciente_rd'].",".$fi["cod_cds"]."
                       ,\"".$fi["zona_his"]."\",\"".$fi["cod_responsable_familia_his"]."\",\"".$fi["descripcion"]."\",\"".$fi["imc"]."\"
                       ,\"".$fi["temp"]."\",\"".$fi["fc"]."\",\"".$fi["pa"]."\",
-                      \"".$fi["fr"]."\",\"".$fi["motivo_consulta"]."\",\"".$fi["subjetivo"]."\",\"".$fi["objetivo"]."\"
+                      \"".$fi["fr"]."\",\"".$fi["subjetivo"]."\",\"".$fi["objetivo"]."\"
                       ,\"".$fi["analisis"]."\",
                       \"".$fi["tratamiento"]."\",\"".$fi["evaluacion_de_seguimiento"]."\",
-                      ".$fi["cod_responsable_medico"].",".$fi["cod_his"].",\"".$fi["fecha"]."\",\"".$fi["hora"]."\",\"".$unir."\",".$fi["cod_his_dat"].")'>
+                      ".$fi["cod_responsable_medico"].",".$fi["cod_his"].",\"".$fi["fecha"]."\",\"".$fi["hora"]."\",\"".$unir."\",".$fi["cod_his_dat"].",\"".$patologia."\",\"".$cod_patologia."\")'>
                       <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                     }
                   }
@@ -1458,7 +1467,7 @@ function registrarHistorialConsulta(){
   var fc = document.getElementById("fc").value;
   var pa = document.getElementById("pa").value;
   var fr = document.getElementById("fr").value;
-  var motivo_consulta = document.getElementById("motivo_consulta").value;
+  var cod_patologia = document.getElementById("cod_patologia").value;
   var subjetivo = document.getElementById("subjetivo").value;
   var objetivo = document.getElementById("objetivo").value;
   var analisis = document.getElementById("analisis").value;
@@ -1482,7 +1491,6 @@ function registrarHistorialConsulta(){
   formData.append("fc",fc);
   formData.append("pa",pa);
   formData.append("fr",fr);
-  formData.append("motivo_consulta",motivo_consulta);
   formData.append("subjetivo",subjetivo);
   formData.append("objetivo",objetivo);
   formData.append("analisis",analisis);
@@ -1497,6 +1505,8 @@ function registrarHistorialConsulta(){
   formData.append("hora_consulta",hora_consulta);
   formData.append("cod_his_original",cod_his_original);
   formData.append("cod_his_dat",cod_his_dat);
+  formData.append("cod_patologia",cod_patologia);
+  //alert(cod_patologia);
   $.ajax({
     url: "../controlador/historial.controlador.php?accion=rcht",
     type: "POST",
@@ -1504,9 +1514,9 @@ function registrarHistorialConsulta(){
     contentType: false, // Deshabilitar la codificación de tipo MIME
     processData: false, // Deshabilitar la codificación de datos
     success: function(data) {
-
+    //  alert(data);
       data=$.trim(data);
-      alert(data);
+    //  alert(data);
         if(data == "correcto"){
           alertCorrecto();
           setTimeout(() => {
@@ -1635,7 +1645,8 @@ function datosDeImpresion(){
 
 function registroActualizarConsultaHistorial(peso,talla,cod_his_dat,cod_rd,paciente_rd,cod_cds
 ,zona_his,cod_responsable_familia_his,descripcion,imc,temp,fc,pa,
-fr,motivo_consulta,subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimiento,cod_responsable_medico,cod_his,fecha,hora,responsable,cod_his_dat){
+fr,subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimiento,cod_responsable_medico,cod_his,fecha,hora,responsable,cod_his_dat,
+patologia,cod_patologia){
   document.getElementById("talla").value=peso;
   document.getElementById("peso").value=talla;
   document.getElementById("imc").value=imc;
@@ -1643,7 +1654,7 @@ fr,motivo_consulta,subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimi
   document.getElementById("fc").value=fc;
   document.getElementById("pa").value=pa;
   document.getElementById("fr").value=fr;
-  document.getElementById("motivo_consulta").value=motivo_consulta;
+  document.getElementById("motivo_consulta").value=patologia;
   document.getElementById("subjetivo").value=subjetivo;
   document.getElementById("objetivo").value=objetivo;
   document.getElementById("analisis").value=analisis;
@@ -1654,8 +1665,69 @@ fr,motivo_consulta,subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimi
   document.getElementById("cod_historial_consulta").value=cod_his;
   document.getElementById("fecha_consulta").value=fecha;
   document.getElementById("hora_consulta").value=hora;
-  document.getElementById("cod_his_original").value=cod_his;
   document.getElementById("cod_dat").value=cod_his_dat;
+  document.getElementById("cod_patologia").value=cod_patologia;
+}
+
+function buscarMotivoDeConsulta(){
+//  vaciarDESPUESdeUNtiempo();
+  var motivo_consulta = document.getElementById("motivo_consulta").value;
+
+  if(motivo_consulta != ""){
+  $.ajax({
+    url: "../controlador/registroDiario.controlador.php?accion=BmC",
+    type: "POST",
+    data: {motivo_consulta:motivo_consulta},
+    dataType: "json",
+    success: function(data) {
+
+     if(data!=""){
+        var unir="";
+        for (let i = 0; i < data.length; i++) {
+          var usuario = data[i];
+          unir+="<div><div id='u' style=' display: inline-block;display:none;'>"+(data[i].cod_pat)+"</div> ";
+          unir+="<div id='ap' style=' display: inline-block;'> "+(data[i].nombre)+"</div> ";
+          unir+="<div id='am' style=' display: inline-block;display:none;'> "+(data[i].descripcion)+"</div> ";
+          unir+="<div id='am' style=' display: inline-block;display:none;'> "+(data[i].tratamiento)+"</div> ";
+          unir+="<div id='c' style=' display: inline-block;display:none;'>"+data[i].sintomas+"</div></div>";
+        }
+        visualizarMotivo(unir);
+        $('#resultadoMotivo div').on('click', function() {
+                //obtenemos los datos del usuario div resultado
+          var cod_pat = $(this).children().eq(0).text();
+          var nombre = $(this).children().eq(1).text();
+          var descripcion = $(this).children().eq(2).text();
+          var tratamiento = $(this).children().eq(3).text();
+          var sintomas = $(this).children().eq(4).text();
+            if(nombre != ""){
+              document.getElementById("cod_patologia").value=cod_pat;
+              document.getElementById("motivo_consulta").value = nombre;
+              $('#resultadoMotivo').html(""); //para vaciar
+            }
+        });
+      }else{
+        $('#resultadoMotivo').html("<div class='alert alert-light' role='alert'>No se encontro resultados</div>");
+      }
+      }
+    });
+  }else{
+    $('#resultadoMotivo').html("");
+  }
+}
+
+
+function visualizarMotivo(unir){
+
+$('#resultadoMotivo').html(unir);
+//colocamos un color de css
+$('#resultadoMotivo').css({
+ 'cursor': 'pointer',
+ 'font-size':'15px'
+ });
+ // Obtener el elemento div con el id "results"
+/* const divResults = document.getElementById('results');   // Cambiar la clase del div
+divResults.setAttribute('class', 'alert alert-primary mb-0 py-0 border-0');
+*/
 }
 </script>
 <?php require("../librerias/footeruni.php"); ?>

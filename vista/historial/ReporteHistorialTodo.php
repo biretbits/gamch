@@ -273,6 +273,7 @@ border-top: 1px solid white;
                $direccion_paciente = $datos["direccion_usuario_re"];
                $talla_usuario = $datos["talla_usuario"];$peso_usuario=$datos["peso_usuario"];
              }
+
              if($tipoDocumento == 1){
                $datosResponsable = $fi['datos_responsable_familia'];
                $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
@@ -685,7 +686,13 @@ border-top: 1px solid white;
 
      <?php
      }else if($tipoDocumento==3){
-       $motivo_consulta=$fi["motivo_consulta"];$objetivo=$fi["objetivo"];$subjetivo=$fi["subjetivo"];
+       $motivo_consulta = '';
+       $patologia = '';$cod_patologia='';
+       foreach ($fi["motivo_consulta"] as $da2) {
+         $motivo_consulta = $da2["nombre"];
+         $cod_patologia = $da2["cod_pat"];
+       }
+       $objetivo=$fi["objetivo"];$subjetivo=$fi["subjetivo"];
        $analisis=$fi["analisis"];$tratamiento=$fi["tratamiento"];$evaluacion_seguimiento = $fi["evaluacion_de_seguimiento"];
        $fecha_actual_consulta = $fi["fecha"];
        $hora_consulta=$fi["hora"];$fc_usuario=$fi["fc"];$fr_usuario=$fi["fr"];$imc_usuario=$fi["imc"];$pa_usuario=$fi["pa"];

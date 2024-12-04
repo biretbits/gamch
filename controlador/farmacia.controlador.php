@@ -1043,7 +1043,7 @@ function ActualizarCantidadProducto($fa){
                   echo "<td>";
                   foreach ($paciente as $form) {
                     $datos_paciente = $form["nombre_usuario"]." ".$form["ap_usuario"]." ".$form["am_usuario"];
-                    echo $form["nombre_usuario"]." ".$form["ap_usuario"]." ".$form["am_usuario"];
+                    echo ($form["nombre_usuario"])." ".($form["ap_usuario"])." ".($form["am_usuario"]);
                     $cod_paciente=$form["cod_usuario"];
                   }
                   echo "</td>";
@@ -1051,24 +1051,31 @@ function ActualizarCantidadProducto($fa){
                   $cod_usuario = "";
                   echo "<td>";
                   foreach ($Encargado as $conc) {
-                    echo $conc["nombre_usuario"]." ".$conc["ap_usuario"]." ".$conc["am_usuario"];
+                    echo ($conc["nombre_usuario"])." ".($conc["ap_usuario"])." ".($conc["am_usuario"]);
                     $cod_usuario =$conc['cod_usuario'];
                   }
                   echo "</td>";
-
-                  echo "<td>".$fi['fechaHora']."</td>";
+                  $bloquear = '';
+                  if($fi['fechaHora'] == null){
+                    echo "<td style='color:red'>Falta entregar</td>";
+                  }else{
+                    echo "<td>".$fi['fechaHora']."</td>";
+                  }
                   if($fi["entregado"] == 'si'){
                     echo "<td  style='color:green;background-color:#dbffaf;text-align:center'>Entregado</td>";
+                    $bloquear = 'disabled';
                   }else{
                     echo "<td  style='color:red;background-color:#faa3aA;text-align:center'>No entregado</td>";
+                    $bloquear = 'enabled';
                   }
                   echo "<td>";
                     echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   //echo $fi['cod_salida'].",".$fi['cantidad_salida'].",".$datos_paciente.",".$fi['nombre'].",".$fi["cantidad_total"].",".$cod_paciente.",".$fi['cod_generico'];
-                  echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                  echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-                  echo "<button type='button' class='btn btn-warning' title='Imprimir' onclick='ImprimirRecibo(".$fi['cod_salida'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
-                  echo "</div>";
+                    echo "<button type='button' class='btn btn-info' title='Editar' onclick='ActualizarSalida(".$fi['cod_salida'].",".$cod_paciente.",\"".$fi["nombre_receta"]."\",\"".$datos_paciente."\",1,\"".$fi["entregado"]."\")' data-bs-toggle='modal' data-bs-target='#ModalRegistro'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                    echo "<button type='button' class='btn btn-danger' title='Elimina todo' onclick='eliminar(".$fi['cod_salida'].")' $bloquear><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle' ></button>";
+                    echo "<button type='button' class='btn btn-warning' title='Imprimir' onclick='ImprimirRecibo(".$fi['cod_salida'].")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+
+                    echo "</div>";
                   echo "</td>";
 
                 echo "</tr>";
@@ -1538,7 +1545,8 @@ function ActualizarCantidadProducto($fa){
 
     public function ActualizarEntregaApaciente($cod_salida,$pagina,$listarDeCuanto,$buscar,$fechai,$fechaf){
       $fa =new Farmacia();
-      $resul = $fa->ActualizarEntregaDePaciente($cod_salida);
+      $fecha_actual  = date('Y-m-d H:i:s');
+      $resul = $fa->ActualizarEntregaDePaciente($cod_salida,$fecha_actual);
       if($resul!=''){
         echo "correcto";
       }else{
@@ -2039,6 +2047,71 @@ function ActualizarCantidadProducto($fa){
             echo json_encode([]);
         }
       }
+
+      //funcion para imprimir o descargar el pdf de medicamentos tomados por un estudiante
+      public function ImprimirReciboMedicamentos($cod_salida){
+        $fa =new Farmacia();
+        echo $cod_salida;
+        $resul = $fa->selectMedicamentosSalida($cod_salida);//salida
+        $re = $fa->selectMedicamentosObtenidos($cod_salida);//productosolicitado
+        $re = $this->UniendoMedicamentos($re,$fa);//productoSolicitado
+        $resul = $this->UniendoSalidaMedi($resul,$fa);//salida
+        require("../vista/farmacia/ReporteImprimirMedicamentos.php");
+      }
+
+      function UniendoSalidaMedi($resul, $rdi) {
+        $ar = [];
+        while ($fi = mysqli_fetch_array($resul)) {
+            // Añadir cada fila al array con una estructura correcta
+            $entry = [
+                "cod_salida" => $fi["cod_salida"],
+                "nombre_receta" => $fi["nombre_receta"],
+                "entregado" => $fi["entregado"],
+                "cod_usuario" => $fi["cod_usuario"],
+                "usuario" => $rdi->selectodosLosDatosUsuario($fi["cod_usuario"]),
+                "cod_paciente" => $fi["cod_paciente"],
+                "paciente" => $rdi->selectodosLosDatosUsuario($fi["cod_paciente"]),
+                "fechaHora" => $fi["fechaHora"],
+                "estado" => $fi["estado"],
+            ];
+            $ar[] = $entry; // Agregar la entrada al array principal
+        }
+        return $ar; // Devolver el array completo fuera del bucle
+    }
+      function UniendoMedicamentos($resul, $rdi) {
+        $ar = [];
+        while ($fi = mysqli_fetch_array($resul)) {
+            // Añadir cada fila al array con una estructura correcta
+            $entry = [
+                "cod_solicitado" => $fi["cod_solicitado"],
+                "cantidad_solicitada" => $fi["cantidad_solicitada"],
+                "codigos_entrada" => $fi["codigos_entrada"],
+                "cantidadRestado" => $fi["cantidadRestado"],
+                "costoUnitario" => $fi["costoUnitario"],
+                "costos" => $fi["costos"],
+                "costoTotal" => $fi["costoTotal"],
+                "fechaHora" => $fi["fechaHora"],
+                "cod_producto" => $fi["cod_producto"],
+                "cod_salida" => $fi["cod_salida"],
+                "productos" => $rdi->selectProductos($fi["cod_producto"]),
+            ];
+            $ar[] = $entry; // Agregar la entrada al array principal
+        }
+        return $ar; // Devolver el array completo fuera del bucle
+    }
+
+
+    public function VisualizarSalidaFarmaciaReporte($fechai,$fechaf,$buscar){
+      $fa =new Farmacia();
+      $res = $fa->SeleccionarSalida(false,false,$buscar,$fechai,$fechaf);
+      //$resul = $this->Uniendo($res,$fa);*/
+      //$r = $fa->p();
+      $resul = $this->UniendoSalida($res,$fa);
+      $rng=$fa->seleccionarNG();
+      $rc=$fa->seleccionarC();
+      $rp=$fa->seleccionarP();
+      require("../vista/farmacia/ReportefarmaciaSalida.php");
+    }
   }
 
   $f = new FarmaciaControlador();
@@ -2211,6 +2284,12 @@ function ActualizarCantidadProducto($fa){
 
     if(isset($_GET["accion"]) && $_GET["accion"]=="bupr"){
   		$f->buscarProveedor($_POST['proveedor']);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="Irec"){
+  		$f->ImprimirReciboMedicamentos($_POST['cod_salida']);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="Rts"){
+  		$f->VisualizarSalidaFarmaciaReporte($_POST['fechai'],$_POST["fechaf"],$_POST["buscar"]);
   	}
 
   }else{

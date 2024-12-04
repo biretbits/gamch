@@ -712,24 +712,25 @@ echo "llego aquie";
 function crearTablaHistorialDatos($conn){
   $sql = "
   DROP TABLE IF EXISTS `historial_dato`;
-  CREATE TABLE `historial_dato` (
+
+CREATE TABLE `historial_dato` (
     `cod_his_dat` int(11) NOT NULL AUTO_INCREMENT,
     `cod_rd` int(11) DEFAULT NULL,
     `paciente_rd` int(11) DEFAULT NULL,
     `cod_cds` int(11) DEFAULT NULL,
     `zona_his` char(70) DEFAULT NULL,
     `cod_responsable_familia_his` int(11) DEFAULT NULL,
-    `descripcion` char(255),
-    `hoja` int default 0,
-    `paginas` int default 0,
-    `nombre_imagen` VARCHAR(255) default null,
-    `ruta_imagen` VARCHAR(255) default null,
+    `descripcion` char(255) DEFAULT NULL,
+    `hoja` int DEFAULT 0,
+    `paginas` int DEFAULT 0,
+    `nombre_imagen` VARCHAR(255) DEFAULT NULL,
+    `ruta_imagen` VARCHAR(255) DEFAULT NULL,
     `imc` char(50) DEFAULT '',
     `temp` char(50) DEFAULT '',
     `fc` char(50) DEFAULT '',
     `pa` char(50) DEFAULT '',
     `fr` char(50) DEFAULT '',
-    `motivo_consulta` mediumtext,
+    `cod_patologia` int DEFAULT NULL,
     `subjetivo` mediumtext,
     `objetivo` mediumtext,
     `analisis` mediumtext,
@@ -745,16 +746,19 @@ function crearTablaHistorialDatos($conn){
     KEY `cod_rd` (`cod_rd`),
     KEY `paciente_rd` (`paciente_rd`),
     KEY `cod_cds` (`cod_cds`),
+    KEY `cod_patologia` (`cod_patologia`),
     KEY `cod_responsable_familia_his` (`cod_responsable_familia_his`),
     KEY `cod_responsable_medico` (`cod_responsable_medico`),
     KEY `cod_his` (`cod_his`),
     CONSTRAINT `historialDatos_ibfk_1` FOREIGN KEY (`cod_rd`) REFERENCES `registro_diario` (`cod_rd`),
     CONSTRAINT `historialDatos_ibfk_2` FOREIGN KEY (`paciente_rd`) REFERENCES `usuario` (`cod_usuario`),
     CONSTRAINT `historialDatos_ibfk_3` FOREIGN KEY (`cod_cds`) REFERENCES `centro_de_salud` (`cod_cds`),
-    CONSTRAINT `historialDatos_ibfk_4` FOREIGN KEY (`cod_responsable_familia_his`) REFERENCES `usuario` (`cod_usuario`),
-    CONSTRAINT `historialDatos_ibfk_5` FOREIGN KEY (`cod_responsable_medico`) REFERENCES `usuario` (`cod_usuario`),
-    CONSTRAINT `historialDatos_ibfk_6` FOREIGN KEY (`cod_his`) REFERENCES `historial` (`cod_his`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    CONSTRAINT `historialDatos_ibfk_4` FOREIGN KEY (`cod_patologia`) REFERENCES `patologias` (`cod_pat`),
+    CONSTRAINT `historialDatos_ibfk_5` FOREIGN KEY (`cod_responsable_familia_his`) REFERENCES `usuario` (`cod_usuario`),
+    CONSTRAINT `historialDatos_ibfk_6` FOREIGN KEY (`cod_responsable_medico`) REFERENCES `usuario` (`cod_usuario`),
+    CONSTRAINT `historialDatos_ibfk_7` FOREIGN KEY (`cod_his`) REFERENCES `historial` (`cod_his`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
   ";
 
   // Ejecutar consulta

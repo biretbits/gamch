@@ -626,7 +626,14 @@ include("../librerias/globales.php");
   </tr>
   <?php
   }else if($tipoDocumento==3){
-    $motivo_consulta=$fi["motivo_consulta"];$objetivo=$fi["objetivo"];$subjetivo=$fi["subjetivo"];
+    $motivo_consulta = '';
+    $patologia = '';$cod_patologia='';
+    foreach ($fi["motivo_consulta"] as $da2) {
+      $motivo_consulta = $da2["nombre"];
+      $cod_patologia = $da2["cod_pat"];
+    }
+    echo $motivo_consulta."dsdsdsdsdsdsds";
+    $objetivo=$fi["objetivo"];$subjetivo=$fi["subjetivo"];
     $analisis=$fi["analisis"];$tratamiento=$fi["tratamiento"];$evaluacion_seguimiento = $fi["evaluacion_de_seguimiento"];
     $fecha_actual_consulta = $fi["fecha"];
     $hora_consulta=$fi["hora"];$fc_usuario=$fi["fc"];$fr_usuario=$fi["fr"];$imc_usuario=$fi["imc"];$pa_usuario=$fi["pa"];

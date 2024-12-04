@@ -548,13 +548,13 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
     require("../vista/historial/ReporteHistorial.php");
   }
 
-  public function InsertarConsultaHistorial($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$motivo_consulta,$subjetivo,$objetivo,
+  public function InsertarConsultaHistorial($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$subjetivo,$objetivo,
   $analisis,$tratamiento,$evaluacion_seguimiento,$medico_responsable,$cod_usuario_medico,$cod_historial_consulta,$paciente_rd,
-  $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat){
+  $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat,$cod_patologia){
     $rdi =new Historial();
-    $resul = $rdi->insertarDatosHistorialConsulta($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$motivo_consulta,$subjetivo,$objetivo,
+    $resul = $rdi->insertarDatosHistorialConsulta($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$subjetivo,$objetivo,
     $analisis,$tratamiento,$evaluacion_seguimiento,$medico_responsable,$cod_usuario_medico,$cod_historial_consulta,$paciente_rd,
-    $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat);
+    $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat,$cod_patologia);
 
     if($resul != ''){
       echo "correcto";
@@ -658,7 +658,8 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
           "fc"=>$fi["fc"],
           "pa"=>$fi["pa"],
           "fr"=>$fi["fr"],
-          "motivo_consulta"=>$fi["motivo_consulta"],
+          "cod_patologia"=>$fi["cod_patologia"],
+          "motivo_consulta" => $rdi->seleccionarPatologia($fi["cod_patologia"]),
           "subjetivo"=>$fi["subjetivo"],
           "objetivo"=>$fi["objetivo"],
           "analisis"=>$fi["analisis"],
@@ -720,112 +721,117 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
               </tr>
             </thead>
             <tbody>";
-                  if ($resul && count($resul) > 0){
-                    $i = $inicioList;
-                  foreach ($resul as $fi){
-                      echo "<tr>";
-                        echo "<td>".($i+1)."</td>";
-                        echo "<td>".$fi['fecha']."</td>";
-                        echo "<td>";
-                        $datosHistorial = $fi["historial_dato"];
-                        if($datosHistorial != '')
-                        {
-                        foreach ($datosHistorial as $datt) {
-                          echo $datt["subtitulo"];
-                        }
-                      }else{
-                        echo "";
-                      }
-                      echo "</td>";
-                        echo "<td>".$fi['descripcion']."</td>";
-                        $datosResponsable = $fi['datos_responsable_familia'];
-                        echo "<td>";
-                        $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
-                        $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
-                        $ci_resp = '';$nro_seguro_resp='';$nro_car_form_resp='';
-                        if($datosResponsable != '')
-                        {
-                        foreach ($datosResponsable as $resFamiliar) {
-                          $cod_resp=$resFamiliar["cod_usuario"];
-                          $nombre_resp = $resFamiliar["nombre_usuario_re"];
-                          $ap_resp = $resFamiliar["ap_usuario_re"];
-                          $am_resp = $resFamiliar["am_usuario_re"];
-                          $fecha_nac = $resFamiliar["fn_usuario_re"];
-                          $sexo_resp = $resFamiliar["sexo_usuario"];
-                          $ocupacion_resp=$resFamiliar["ocupacion_usuario"];$direccion_responsable=$resFamiliar['direccion_usuario_re'];
-                          $telefono_resposable=$resFamiliar["telefono_usuario_re"];$comunidad_responsable=$resFamiliar["comunidad_usuario_re"];
-                          $ci_resp = $resFamiliar['ci_usuario'];$nro_seguro_resp= $resFamiliar['nro_seguro_usuario'];
-                          $nro_car_form_resp= $resFamiliar['nro_car_form_usuario'];
-                          echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
-
-                        }
-                      }else{
-                        echo "";
-                      }
-                        echo "</td>";
-
-                        $datospaciente = $fi['paciente_rd_nombre'];
-                        echo "<td>";
-                        $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
-                        $estado_civil_paciente = '';$escolaridad_paciente = '';$peso_paciente='';$talla_paciente='';
-                        $idioma_paciente = '';$autoidentificacion_paciente = '';
-                        foreach ($datospaciente as $datos) {
-                          $fecha_nac_paciente=$datos["fn_usuario_re"];
-                          $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
-                          $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
-                          $idioma_paciente = $datos["idioma_usuario"];$autoidentificacion_paciente=$datos["autoidentificacion_usuario"];
-                          echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
-                          $peso_paciente = $datos["peso_usuario"];$talla_paciente = $datos["talla_usuario"];
-                        }
-                        echo "</td>";
-
-                        echo "<td>";
-                          echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                            if($fi["nombre_imagen"]!=""){
-                               echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
-                               onclick='actualizarImagen(".$fi['cod_his_dat']."
-                              ,\"".$fi["descripcion"]."\",\"".$fi["nombre_imagen"]."\",\"".$fi["ruta_imagen"]."\")'>
-                              <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                            }else{
-                              if($fi["tipoDato"]==1)
-                              {
-                                echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
-                                onclick='ActualizarHistorial(".$fi['cod_his_dat']."
-                                ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
-                                ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",
-                                \"".$comunidad_responsable."\",\"".$ci_resp."\",\"".$nro_seguro_resp."\",\"".$nro_car_form_resp."\"
-                                ,\"".$fi["zona_his"]."\",
-                                \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
-                                ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\",\"".$idioma_paciente."\",\"".$autoidentificacion_paciente."\")'>
-                                <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                              }else if($fi["tipoDato"]==3){
-                                $nombre_medico = '';$apellidoP='';$apellidoM='';
-                                foreach ($fi["datos_responsable_medico"] as $da) {
-                                  $nombre_medico = $da["nombre_usuario_re"];
-                                  $apellidoP = $da["ap_usuario_re"];
-                                  $apellidoM = $da["am_usuario_re"];
-                                }
-                                $unir = $nombre_medico." ".$apellidoP." ".$apellidoM;
-                                echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroMotivoConsulta' title='Editar'
-                                onclick='registroActualizarConsultaHistorial(\"".$peso_paciente."\",\"".$talla_paciente."\",".$fi['cod_his_dat'].",".$fi['cod_rd'].",".$fi['paciente_rd'].",".$fi["cod_cds"]."
-                                ,\"".$fi["zona_his"]."\",\"".$fi["cod_responsable_familia_his"]."\",\"".$fi["descripcion"]."\",\"".$fi["imc"]."\"
-                                ,\"".$fi["temp"]."\",\"".$fi["fc"]."\",\"".$fi["pa"]."\",
-                                \"".$fi["fr"]."\",\"".$fi["motivo_consulta"]."\",\"".$fi["subjetivo"]."\",\"".$fi["objetivo"]."\"
-                                ,\"".$fi["analisis"]."\",
-                                \"".$fi["tratamiento"]."\",\"".$fi["evaluacion_de_seguimiento"]."\",
-                                ".$fi["cod_responsable_medico"].",".$fi["cod_his"].",\"".$fi["fecha"]."\",\"".$fi["hora"]."\",\"".$unir."\",".$fi["cod_his_dat"].")'>
-                                <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                              }
-                            }
-                              echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his_dat'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
-                              //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-                          echo "</div>";
-                        echo "</td>";
-
-                      echo "</tr>";
-                      $i++;
+            if ($resul && count($resul) > 0){
+                $i = $inicioList;
+              foreach ($resul as $fi){
+                  echo "<tr>";
+                    echo "<td>".($i+1)."</td>";
+                    echo "<td>".$fi['fecha']."</td>";
+                    echo "<td>";
+                    $datosHistorial = $fi["historial_dato"];
+                    if($datosHistorial != '')
+                    {
+                    foreach ($datosHistorial as $datt) {
+                      echo $datt["subtitulo"];
                     }
-                    }else{
+                  }else{
+                    echo "";
+                  }
+                  echo "</td>";
+                    echo "<td>".$fi['descripcion']."</td>";
+                    $datosResponsable = $fi['datos_responsable_familia'];
+                    echo "<td>";
+                    $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
+                    $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
+                    $ci_resp = '';$nro_seguro_resp='';$nro_car_form_resp='';
+                    if($datosResponsable != '')
+                    {
+                    foreach ($datosResponsable as $resFamiliar) {
+                      $cod_resp=$resFamiliar["cod_usuario"];
+                      $nombre_resp = $resFamiliar["nombre_usuario_re"];
+                      $ap_resp = $resFamiliar["ap_usuario_re"];
+                      $am_resp = $resFamiliar["am_usuario_re"];
+                      $fecha_nac = $resFamiliar["fn_usuario_re"];
+                      $sexo_resp = $resFamiliar["sexo_usuario"];
+                      $ocupacion_resp=$resFamiliar["ocupacion_usuario"];$direccion_responsable=$resFamiliar['direccion_usuario_re'];
+                      $telefono_resposable=$resFamiliar["telefono_usuario_re"];$comunidad_responsable=$resFamiliar["comunidad_usuario_re"];
+                      $ci_resp = $resFamiliar['ci_usuario'];$nro_seguro_resp= $resFamiliar['nro_seguro_usuario'];
+                      $nro_car_form_resp= $resFamiliar['nro_car_form_usuario'];
+                      echo $resFamiliar["nombre_usuario_re"]." ".$resFamiliar["ap_usuario_re"]." ".$resFamiliar["am_usuario_re"];
+
+                    }
+                  }else{
+                    echo "";
+                  }
+                    echo "</td>";
+
+                    $datospaciente = $fi['paciente_rd_nombre'];
+                    echo "<td>";
+                    $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
+                    $estado_civil_paciente = '';$escolaridad_paciente = '';$peso_paciente='';$talla_paciente='';
+                    $idioma_paciente = '';$autoidentificacion_paciente = '';
+                    foreach ($datospaciente as $datos) {
+                      $fecha_nac_paciente=$datos["fn_usuario_re"];
+                      $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
+                      $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
+                      $idioma_paciente = $datos["idioma_usuario"];$autoidentificacion_paciente=$datos["autoidentificacion_usuario"];
+                      echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
+                      $peso_paciente = $datos["peso_usuario"];$talla_paciente = $datos["talla_usuario"];
+                    }
+                    echo "</td>";
+
+                    echo "<td>";
+                      echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                        if($fi["nombre_imagen"]!=""){
+                           echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
+                           onclick='actualizarImagen(".$fi['cod_his_dat']."
+                          ,\"".$fi["descripcion"]."\",\"".$fi["nombre_imagen"]."\",\"".$fi["ruta_imagen"]."\")'>
+                          <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                        }else{
+                          if($fi["tipoDato"]==1)
+                          {
+                            echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
+                            onclick='ActualizarHistorial(".$fi['cod_his_dat']."
+                            ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
+                            ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",
+                            \"".$comunidad_responsable."\",\"".$ci_resp."\",\"".$nro_seguro_resp."\",\"".$nro_car_form_resp."\"
+                            ,\"".$fi["zona_his"]."\",
+                            \"".$fecha_nac_paciente."\",\"".$sexo_paciente."\",\"".$ocupacion_paciente."\",\"".$estado_civil_paciente."\"
+                            ,\"".$escolaridad_paciente."\",\"".$fi["fecha"]."\",\"".$idioma_paciente."\",\"".$autoidentificacion_paciente."\")'>
+                            <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                          }else if($fi["tipoDato"]==3){
+                            $nombre_medico = '';$apellidoP='';$apellidoM='';
+                            foreach ($fi["datos_responsable_medico"] as $da) {
+                              $nombre_medico = $da["nombre_usuario_re"];
+                              $apellidoP = $da["ap_usuario_re"];
+                              $apellidoM = $da["am_usuario_re"];
+                            }
+                            $unir = $nombre_medico." ".$apellidoP." ".$apellidoM;
+                            $patologia = '';$cod_patologia='';
+                            foreach ($fi["motivo_consulta"] as $da2) {
+                              $patologia = $da2["nombre"];
+                              $cod_patologia = $da2["cod_pat"];
+                            }
+                            echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroMotivoConsulta' title='Editar'
+                            onclick='registroActualizarConsultaHistorial(\"".$peso_paciente."\",\"".$talla_paciente."\",".$fi['cod_his_dat'].",".$fi['cod_rd'].",".$fi['paciente_rd'].",".$fi["cod_cds"]."
+                            ,\"".$fi["zona_his"]."\",\"".$fi["cod_responsable_familia_his"]."\",\"".$fi["descripcion"]."\",\"".$fi["imc"]."\"
+                            ,\"".$fi["temp"]."\",\"".$fi["fc"]."\",\"".$fi["pa"]."\",
+                            \"".$fi["fr"]."\",\"".$fi["subjetivo"]."\",\"".$fi["objetivo"]."\"
+                            ,\"".$fi["analisis"]."\",
+                            \"".$fi["tratamiento"]."\",\"".$fi["evaluacion_de_seguimiento"]."\",
+                            ".$fi["cod_responsable_medico"].",".$fi["cod_his"].",\"".$fi["fecha"]."\",\"".$fi["hora"]."\",\"".$unir."\",".$fi["cod_his_dat"].",\"".$patologia."\",\"".$cod_patologia."\")'>
+                            <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                          }
+                        }
+                          echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his_dat'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+                          //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                      echo "</div>";
+                    echo "</td>";
+
+                  echo "</tr>";
+                  $i++;
+                }
+                  }else{
                       echo "<tr>";
                       echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
                       echo "</tr>";
@@ -1182,7 +1188,6 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
     $_POST["fc"],
     $_POST["pa"],
     $_POST["fr"],
-    $_POST["motivo_consulta"],
     $_POST["subjetivo"],
     $_POST["objetivo"],
     $_POST["analisis"],
@@ -1196,7 +1201,8 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
     $_POST["fecha_consulta"],
     $_POST["hora_consulta"],
     $_POST["cod_his_original"],
-    $_POST["cod_his_dat"]);
+    $_POST["cod_his_dat"],
+    $_POST["cod_patologia"]);
   }
 
 

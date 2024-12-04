@@ -139,14 +139,14 @@ td,th{
       </div>
         <div style="clear:both;"></div>
         <table>
-            <thead>
+            <thead style="display: table-row-group;">
               <tr>
                 <th>N°</th>
                 <th>Codigo</th>
                 <th>Nombre generico</th>
                 <th>Forma de presentación</th>
                 <th>Concentración unidad de medida</th>
-                
+
                 <th>Vitrina</th>
                 <th>Stock</th>
                 <th>Estado</th>
