@@ -223,34 +223,34 @@ class Farmacia
                       nro = '$nro',
                       fuente_reposicion = '$fuente_reposicion',
                       programa_salud = '$programa_salud',
-                      cod_proveedor = '$cod_proveedor',
-                      costo_valorado = '$costo_valorado',
-                      saldo = '$saldo',
+                      cod_proveedor = $cod_proveedor,
+                      costo_valorado = $costo_valorado,
+                      saldo = $saldo,
                       nrolote = '$nrolote',
                       lote_generico = '$lote_generico',
                       lote_nacional = '$lote_nacional',
-                      cantidad = '$cantidad',
-                      respaldo_cantidad = '$cantidad',
+                      cantidad = $cantidad,
+                      respaldo_cantidad = $cantidad,
                       manipulado = '',
-                      costounitario = '$unitario',
-                      costototal = '$total',
-                      costototal_respaldo = '$total',
+                      costounitario = $unitario,
+                      costototal = $total,
+                      costototal_respaldo = $total,
                       vencimiento = '$vencimiento',
                       cod_generico = '$cod_producto',
                       fecha = '$fechaActual',
                       hora = '$hora',
-                      cod_usuario = '$usuario'
-                  WHERE cod_entrada = '$cod_entrada'";
+                      cod_usuario = $usuario
+                  WHERE cod_entrada = $cod_entrada";
       } else {
           // Si cod_entrada no es numérico, se realiza un INSERT
           $sql = "INSERT INTO entrada (
-                      cod_entrada, nrodoc, nro, fuente_reposicion, programa_salud, cod_proveedor, costo_valorado, saldo, nrolote, lote_generico,
+                      nrodoc, nro, fuente_reposicion, programa_salud, cod_proveedor, costo_valorado, saldo, nrolote, lote_generico,
                       lote_nacional, cantidad, respaldo_cantidad, manipulado, costounitario, costototal, costototal_respaldo,
                       vencimiento, fecha, hora, cod_usuario, cod_generico
                   ) VALUES (
-                      '$cod_entrada', '$nrodoc', '$nro', '$fuente_reposicion', '$programa_salud', '$cod_proveedor', '$costo_valorado', '$saldo', '$nrolote',
-                      '$lote_generico', '$lote_nacional', '$cantidad', '$cantidad', '', '$unitario', '$total', '$total', '$vencimiento', '$fechaActual',
-                      '$hora', '$usuario', '$cod_producto'
+                      '$nrodoc', '$nro', '$fuente_reposicion', '$programa_salud', $cod_proveedor, $costo_valorado, $saldo, '$nrolote',
+                      '$lote_generico', '$lote_nacional', $cantidad, $cantidad, '', $unitario, $total, $total, '$vencimiento', '$fechaActual',
+                      '$hora', $usuario, $cod_producto
                   )";
       }
 
@@ -566,17 +566,17 @@ class Farmacia
     $sql = "UPDATE salida
             SET
                 nombre_receta = '$nombre_receta',
-                cod_usuario = '$usuario',
-                cod_paciente = '$id_paciente',
+                cod_usuario = $usuario,
+                cod_paciente = $id_paciente,
                 fechaHora = null,
                 estado = 'activo'
-            WHERE cod_salida = '$cod_salida'";
+            WHERE cod_salida = $cod_salida";
     } else {
         // Si cod_salida no es numérico, se realiza un INSERT
         $sql = "INSERT INTO salida (
-                    cod_salida, nombre_receta, cod_usuario, cod_paciente, fechaHora, estado
+                     nombre_receta, cod_usuario, cod_paciente, fechaHora, estado
                 ) VALUES (
-                    '$cod_salida', '$nombre_receta', '$usuario', '$id_paciente', null, 'activo'
+                    '$nombre_receta', $usuario, $id_paciente, null, 'activo'
                 )";
     }
 
@@ -681,14 +681,14 @@ class Farmacia
                     nombre = '$nombre',
                     telefono = '$telefono',
                     correo = '$correo',
-                    cod_representante = '$cod_rep'
-                WHERE cod_prov = '$cod_prov'";
+                    cod_representante = $cod_rep
+                WHERE cod_prov =$cod_prov";
     } else {
         // Si cod_prov no es numérico, se realiza un INSERT
         $sql = "INSERT INTO proveedor (
-                    cod_prov, nombre, telefono, correo, cod_representante
+                    nombre, telefono, correo, cod_representante
                 ) VALUES (
-                    '$cod_prov', '$nombre', '$telefono', '$correo', '$cod_rep'
+                     '$nombre', '$telefono', '$correo', $cod_rep
                 )";
     }
 
@@ -748,13 +748,13 @@ class Farmacia
                  nombre_apellidos = '$nombre_apellidos',
                  telefono = '$telefono',
                  cargo = '$cargo'
-             WHERE cod_rep = '$cod_rep'";
+             WHERE cod_rep = $cod_rep";
      } else {
          // Si cod_rep no es numérico, se realiza un INSERT
          $sql = "INSERT INTO representante (
-                     cod_rep, nombre_apellidos, telefono, cargo
+                     nombre_apellidos, telefono, cargo
                  ) VALUES (
-                     '$cod_rep', '$nombre_apellidos', '$telefono', '$cargo'
+                      '$nombre_apellidos', '$telefono', '$cargo'
                  )";
      }
 

@@ -10,9 +10,7 @@ if($abi!='' and $abi=='cerrar'){
   $ins->Destroy();
   $ins->Redireccionar_inicio();
 }
-if(isset($_SESSION["tipo_usuario"])==""){
-    $ins->Redireccionar_inicio();
-}
+
 date_default_timezone_set('America/La_Paz');
 class FarmaciaControlador{
 
