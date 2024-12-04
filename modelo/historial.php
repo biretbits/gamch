@@ -663,18 +663,16 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
       $hora = date("H:i:s");
     }
 
-    $cod_his = !empty($cod_his) ? (int)$cod_his : NULL;
-    $cod_rd = !empty($cod_rd) ? (int)$cod_rd : NULL;
-    $paciente_rd = !empty($paciente_rd) ? (int)$paciente_rd : NULL;
     $cod_cds = 1;  // Asumimos que este campo tiene un valor por defecto (1 en este caso)
-
-    // En tu caso, cod_his es auto_increment, así que si es NULL, MySQL lo genera automáticamente.
-    $sql = "INSERT INTO historial (
-              cod_his, cod_rd, paciente_rd, cod_cds, hoja,titulo, subtitulo, tipoHistorial, fecha, hora, estado
-          ) VALUES (
-              $cod_his, $cod_rd, $paciente_rd, $cod_cds,NULL,'$subnombre', '$nombre_historial', '$tipoHistorial', '$fecha', '$hora', 'activo'
-          ) ON DUPLICATE KEY UPDATE
-              subtitulo = VALUES(subtitulo)";
+    $sql = '';
+    if(!is_numeric($cod_his)){
+      $sql = "INSERT INTO historial (
+                cod_his, cod_rd, paciente_rd, cod_cds, hoja,titulo, subtitulo, tipoHistorial, fecha, hora, estado
+            ) VALUES (
+                $cod_his, $cod_rd, $paciente_rd, $cod_cds,NULL,'$subnombre', '$nombre_historial', '$tipoHistorial', '$fecha', '$hora', 'activo')";
+    }else{
+      $sql = "update historial set subtitulo='$nombre_historial' where cod_his = $cod_his";
+    }
     // Ejecutar la consulta
     $resul = $this->con->query($sql);
     $sql_con = "update registro_diario set historial_clinico_rd = 'si' WHERE paciente_rd = $paciente_rd and cod_rd = $cod_rd";
