@@ -1559,7 +1559,7 @@ $.ajax({
   },
   error: function(r){
     console.log("Error detalle:", r); // Esto imprimirá el objeto de error completo en la consola
- alert("Ocurrió un error: " + JSON.stringify(r));
+    alert("Ocurrió un error: " + JSON.stringify(r));
   }
 });
 }

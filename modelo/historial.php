@@ -666,7 +666,7 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
     $sql = "INSERT INTO historial(
               cod_his,cod_rd,paciente_rd,cod_cds,titulo,subtitulo,tipoHistorial,fecha,hora,estado
             ) VALUES (
-              '$cod_his','$cod_rd','$paciente_rd','1','$subnombre','$nombre_historial','$tipoHistorial','$fecha','$hora','activo'
+              $cod_his,$cod_rd,$paciente_rd,1,'$subnombre','$nombre_historial','$tipoHistorial','$fecha','$hora','activo'
             ) ON DUPLICATE KEY UPDATE
               subtitulo = VALUES(subtitulo)";
     // Ejecutar la consulta
