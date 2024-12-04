@@ -108,6 +108,8 @@
              timer: 1500
            });
           }
+        },error: function(r){
+          alert("Ocurrió un error: " + JSON.stringify(r));
         }
       });
 

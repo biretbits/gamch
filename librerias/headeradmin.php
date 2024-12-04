@@ -243,7 +243,7 @@ input[type=number] {
   $name = "";
   if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] != ""){
     $name = $_SESSION["usuario"];
-    echo $_SESSION["tipo_usuario"];
+    //echo $_SESSION["tipo_usuario"];
   }
 
   echo "<nav style=' border-bottom: 1px solid silver;' class='navbar navbar-expand-lg navbar-light fixed-top shadow-sm' id='mainNav'>
