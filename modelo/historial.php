@@ -665,17 +665,18 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
 
     $cod_cds = 1;  // Asumimos que este campo tiene un valor por defecto (1 en este caso)
     $sql = '';
-    if(!is_numeric($cod_his)){
+    if(is_numeric($cod_his)){
+      $sql = "update historial set subtitulo='$nombre_historial' where cod_his = $cod_his";
+    }else{
       $sql = "insert into historial (cod_his, cod_rd, paciente_rd, cod_cds, titulo, subtitulo, tipoHistorial, fecha, hora, estado
             ) VALUES (
                 $cod_his, $cod_rd, $paciente_rd, $cod_cds,'$subnombre', '$nombre_historial', '$tipoHistorial', '$fecha', '$hora', 'activo')";
-    }else{
-      $sql = "update historial set subtitulo='$nombre_historial' where cod_his = $cod_his";
+
     }
     // Ejecutar la consulta
     $resul = $this->con->query($sql);
-    $sql_con = "update registro_diario set historial_clinico_rd = 'si' WHERE paciente_rd = $paciente_rd and cod_rd = $cod_rd";
-    $res1 = $this->con->query($sql_con);
+    //$sql_con = "update registro_diario set historial_clinico_rd = 'si' WHERE paciente_rd = $paciente_rd and cod_rd = $cod_rd";
+    //$res1 = $this->con->query($sql_con);
     return $resul;
   }
 
