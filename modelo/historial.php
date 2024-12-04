@@ -391,16 +391,28 @@ class Historial
      // Construir la consulta de inserción con actualización en caso de duplicado
      $maxi = $this->seleccionarMaximo($cod_rd,$paciente_rd,$cod_his_original);
      $max = $this->seleccionarMaximoHistorialDato($cod_rd,$paciente_rd);
-     $sql = "INSERT INTO historial_dato (
-                 cod_his_dat,zona_his,cod_rd, paciente_rd,cod_cds,descripcion, nombre_imagen, ruta_imagen,hoja,paginas,cod_his,fecha, hora,tipoDato, estado
-             ) VALUES (
-                 '$cod_his','$zona_his', '$cod_rd', '$cod_paciente','$cod_cds','$nombre_imagen', '$fileName', '$uploadDir','$maxi','$max','$cod_his_original','$fecha', '$hora','2','activo'
-             ) ON DUPLICATE KEY UPDATE
-                descripcion = VALUES(descripcion),
-                 nombre_imagen = VALUES(nombre_imagen),
-                 ruta_imagen = VALUES(ruta_imagen)
-                 ";
-
+     if (is_numeric($cod_his)) {
+     // Si cod_his es numérico, se realiza un UPDATE
+     $sql = "UPDATE historial_dato
+             SET
+                 zona_his = '$zona_his',
+                 descripcion = '$nombre_imagen',
+                 nombre_imagen = '$fileName',
+                 ruta_imagen = '$uploadDir',
+                 hoja = '$maxi',
+                 paginas = '$max',
+                 cod_his = '$cod_his_original',
+                 fecha = '$fecha',
+                 hora = '$hora'
+             WHERE cod_his_dat = '$cod_his'";
+     } else {
+         // Si cod_his no es numérico, se realiza un INSERT
+         $sql = "INSERT INTO historial_dato (
+                     cod_his_dat, zona_his, cod_rd, paciente_rd, cod_cds, descripcion, nombre_imagen, ruta_imagen, hoja, paginas, cod_his, fecha, hora, tipoDato, estado
+                 ) VALUES (
+                     '$cod_his', '$zona_his', '$cod_rd', '$cod_paciente', '$cod_cds', '$nombre_imagen', '$fileName', '$uploadDir', '$maxi', '$max', '$cod_his_original', '$fecha', '$hora', '2', 'activo'
+                 )";
+     }
      // Ejecutar la consulta
      $resul = $this->con->query($sql);
      return $resul;
@@ -421,12 +433,22 @@ class Historial
 
      }
 
-      $sql = "INSERT INTO historial(
-         cod_his,cod_rd,paciente_rd,cod_cds,titulo,subtitulo,tipoHistorial,fecha,hora,estado
-       ) VALUES (
-         '$cod_his_original','$cod_rd','$paciente_rd','1','$titulo_historial','$nombre_imagen','$tipoHistorial','$fecha','$hora','activo'
-       )ON DUPLICATE KEY UPDATE
-                subtitulo = VALUES(subtitulo)";
+     $sql = '';
+     if (is_numeric($cod_his_original)) {
+         // Si cod_his_original es numérico, se realiza un UPDATE
+         $sql = "UPDATE historial
+                 SET
+                     subtitulo = '$nombre_imagen'
+                 WHERE cod_his = '$cod_his_original'";
+     } else {
+         // Si cod_his_original no es numérico, se realiza un INSERT
+         $sql = "INSERT INTO historial (
+                     cod_his, cod_rd, paciente_rd, cod_cds, titulo, subtitulo, tipoHistorial, fecha, hora, estado
+                 ) VALUES (
+                     '$cod_his_original', '$cod_rd', '$paciente_rd', '1', '$titulo_historial', '$nombre_imagen', '$tipoHistorial', '$fecha', '$hora', 'activo'
+                 )";
+     }
+
 
              // Ejecutar la consulta
        $resul12 = $this->con->query($sql);
@@ -452,15 +474,24 @@ class Historial
    //echo $cod_his_original;
    $maxi = $this->seleccionarMaximo($cod_rd,$paciente_rd,$cod_his_original);
    $max = $this->seleccionarMaximoHistorialDato($cod_rd,$paciente_rd);
-   $sql = "INSERT INTO historial_dato (
-               cod_his_dat,cod_rd, paciente_rd,cod_cds,descripcion, nombre_imagen, ruta_imagen,hoja,paginas,cod_his,fecha, hora,tipoDato, estado
-           ) VALUES (
-               '$cod_his', '$cod_rd', '$cod_paciente','1','$nombre_imagen', '$fileName', '$uploadDir','$maxi','$max','$cod_his_original','$fecha', '$hora','2','activo'
-           ) ON DUPLICATE KEY UPDATE
-              descripcion = VALUES(descripcion),
-               nombre_imagen = VALUES(nombre_imagen),
-               ruta_imagen = VALUES(ruta_imagen)
-               ";
+   $sql = '';
+   if (is_numeric($cod_his)) {
+    // Si cod_his es numérico, hacemos un UPDATE
+     $sql = "UPDATE historial_dato
+            SET
+                descripcion = '$nombre_imagen',
+                nombre_imagen = '$fileName',
+                ruta_imagen = '$uploadDir'
+            WHERE cod_his_dat = '$cod_his'";
+   } else {
+    // Si cod_his no es numérico (es decir, el registro no existe), hacemos un INSERT
+     $sql = "INSERT INTO historial_dato (
+                cod_his_dat, cod_rd, paciente_rd, cod_cds, descripcion, nombre_imagen, ruta_imagen, hoja, paginas, cod_his, fecha, hora, tipoDato, estado
+            ) VALUES (
+                '$cod_his', '$cod_rd', '$cod_paciente', '1', '$nombre_imagen', '$fileName', '$uploadDir', '$maxi', '$max', '$cod_his_original', '$fecha', '$hora', '2', 'activo'
+            )";
+  }
+
 
    // Ejecutar la consulta
    if($tipoHistorial != '' && $cod_his ==''){
@@ -573,14 +604,12 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
    $fecha_consulta = $this->con->real_escape_string($fecha_consulta);
    $hora_consulta = $this->con->real_escape_string($hora_consulta);
    $cod_his_dat = $this->con->real_escape_string($cod_his_dat);
-   $sql3 = "INSERT INTO usuario(
-       cod_usuario,peso_usuario,talla_usuario
-     ) VALUES (
-       '$paciente_rd','$peso','$talla'
-           ) ON DUPLICATE KEY UPDATE
-            peso_usuario = VALUES(peso_usuario),
-            talla_usuario = VALUES(talla_usuario)
-               ";
+   $sql3 = "UPDATE usuario
+         SET
+             peso_usuario = '$peso',
+             talla_usuario = '$talla'
+         WHERE cod_usuario = '$paciente_rd'";
+
     $resul = $this->con->query($sql3);
 
    //echo "<br>".$cod_usuario_medico."    c".$cod_his."c     ".$paciente_rd."     ".$cod_rd."     ".$fecha_consulta."     ".$hora_consulta;
@@ -590,36 +619,40 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
     $maxi = $this->seleccionarMaximo($cod_rd,$paciente_rd,$cod_his);
     $max = $this->seleccionarMaximoHistorialDato($cod_rd,$paciente_rd);
     //echo "cod_rd".$cod_rd."   paciente_rd ".$paciente_rd."    cod_his  ".$cod_his;
+    $sql = '';
+    if (is_numeric($cod_his_dat)) {
+                $sql = "UPDATE historial_dato
+                        SET
+                            zona_his = '$zona_his',
+                            imc = '$imc',
+                            temp = '$temperatura',
+                            fc = '$fc',
+                            pa = '$pa',
+                            fr = '$fr',
+                            cod_patologia = '$cod_patologia',
+                            subjetivo = '$subjetivo',
+                            objetivo = '$objetivo',
+                            analisis = '$analisis',
+                            tratamiento = '$tratamiento',
+                            evaluacion_de_seguimiento = '$evaluacion_seguimiento',
+                            cod_responsable_medico = '$cod_usuario_medico',
+                            fecha = '$fecha_consulta',
+                            hora = '$hora_consulta'
+                        WHERE cod_his_dat = '$cod_his_dat'";
+            } else {
+                $sql = "INSERT INTO historial_dato(
+                            cod_his_dat, cod_rd, paciente_rd, cod_cds, zona_his, cod_responsable_familia_his, descripcion,
+                            hoja, paginas, imc, temp, fc, pa, fr, cod_patologia,
+                            subjetivo, objetivo, analisis, tratamiento, evaluacion_de_seguimiento,
+                            cod_responsable_medico, cod_his, fecha, hora, tipoDato, estado
+                        ) VALUES (
+                            '$cod_his_dat', '$cod_rd', '$paciente_rd', '$cod_cds', '$zona_his', '$cod_responsable_familia_his', 'Documento de consulta',
+                            '$maxi', '$max', '$imc', '$temperatura', '$fc', '$pa', '$fr', '$cod_patologia',
+                            '$subjetivo', '$objetivo', '$analisis', '$tratamiento', '$evaluacion_seguimiento',
+                            '$cod_usuario_medico', '$cod_his_original', '$fecha_consulta', '$hora_consulta', '3', 'activo'
+                        )";
+            }
 
-    $sql = "INSERT INTO historial_dato(
-        cod_his_dat,cod_rd,paciente_rd,cod_cds,zona_his,cod_responsable_familia_his,descripcion,
-        hoja,paginas,imc,temp,fc,pa,fr,cod_patologia,
-        subjetivo,objetivo,analisis,tratamiento,evaluacion_de_seguimiento,
-        cod_responsable_medico,cod_his,
-        fecha,hora,tipoDato,estado
-      ) VALUES (
-        '$cod_his_dat','$cod_rd','$paciente_rd','$cod_cds','$zona_his','$cod_responsable_familia_his','Documento de consulta',
-        '$maxi','$max','$imc','$temperatura','$fc','$pa','$fr','$cod_patologia',
-        '$subjetivo','$objetivo','$analisis','$tratamiento','$evaluacion_seguimiento',
-        '$cod_usuario_medico','$cod_his_original',
-        '$fecha_consulta','$hora_consulta','3','activo'
-            ) ON DUPLICATE KEY UPDATE
-              zona_his = VALUES(zona_his),
-                imc = VALUES(imc),
-                temp = VALUES(temp),
-                fc = VALUES(fc),
-                pa = VALUES(pa),
-                fr = VALUES(fr),
-                cod_patologia = VALUES(cod_patologia),
-                subjetivo = VALUES(subjetivo),
-                objetivo = VALUES(objetivo),
-                analisis = VALUES(analisis),
-                tratamiento = VALUES(tratamiento),
-                evaluacion_de_seguimiento = VALUES(evaluacion_de_seguimiento),
-                cod_responsable_medico = VALUES(cod_responsable_medico),
-                fecha = VALUES(fecha),
-                hora = VALUES(hora)
-                ";
 
     // Ejecutar la consulta
     //echo $sql;
@@ -629,14 +662,8 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
   }
 
   function insertarTallaPesoUsuario($talla,$peso,$paciente_rd){
-
-        $sql = "INSERT INTO usuario(
-                peso_usuario,talla_usuario,cod_usuario
-                ) VALUES (
-                  '$peso','$talla','$paciente_rd'
-                ) ON DUPLICATE KEY UPDATE
-                  peso_usuario = VALUES(peso_usuario),
-                   talla_usuario = VALUES(talla_usuario)";
+      $sql = "UPDATE usuario SET peso_usuario = '$peso',talla_usuario = '$talla'
+                   WHERE cod_usuario = '$paciente_rd'";
 
         // Ejecutar la consulta
         $resul = $this->con->query($sql);
@@ -670,7 +697,6 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
     }else{
       $sql = "insert into historial(cod_rd,paciente_rd,cod_cds,titulo,subtitulo,tipoHistorial, fecha, hora, estado) VALUES (
                 $cod_rd, $paciente_rd, $cod_cds,'$subnombre', '$nombre_historial', '$tipoHistorial', '$fecha', '$hora', 'activo')";
-
     }
     // Ejecutar la consulta
     $resul = $this->con->query($sql);

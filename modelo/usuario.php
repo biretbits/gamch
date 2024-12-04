@@ -209,19 +209,29 @@ class Usuario
     $tipo_usuario = $this->con->real_escape_string($tipo_usuario);
     $session_end = $this->con->real_escape_string($session_end);
     // Construir la consulta
-    $sql = "INSERT INTO sessiones (
-              session_id, cod_usuario, usuario, nombre_usuario, ap_usuario, am_usuario, tipo_usuario, session_start, session_end
-          ) VALUES (
-              '$session_id', $cod_usuario, '$usuario', '$nombre_usuario', '$ap_usuario', '$am_usuario', '$tipo_usuario', NOW(), '$session_end'
-          ) ON DUPLICATE KEY UPDATE
-              cod_usuario = VALUES(cod_usuario),
-              usuario = VALUES(usuario),
-              nombre_usuario = VALUES(nombre_usuario),
-              ap_usuario = VALUES(ap_usuario),
-              am_usuario = VALUES(am_usuario),
-              tipo_usuario = VALUES(tipo_usuario),
-              session_start = VALUES(session_start),
-              session_end = VALUES(session_end)";
+    $sql = '';
+    if (is_numeric($session_id)) {
+    // Si session_id es numérico, se realiza un UPDATE
+    $sql = "UPDATE sessiones
+            SET
+                cod_usuario = $cod_usuario,
+                usuario = '$usuario',
+                nombre_usuario = '$nombre_usuario',
+                ap_usuario = '$ap_usuario',
+                am_usuario = '$am_usuario',
+                tipo_usuario = '$tipo_usuario',
+                session_start = NOW(),
+                session_end = '$session_end'
+            WHERE session_id = '$session_id'";
+    } else {
+        // Si session_id no es numérico, se realiza un INSERT
+        $sql = "INSERT INTO sessiones (
+                    session_id, cod_usuario, usuario, nombre_usuario, ap_usuario, am_usuario, tipo_usuario, session_start, session_end
+                ) VALUES (
+                    '$session_id', $cod_usuario, '$usuario', '$nombre_usuario', '$ap_usuario', '$am_usuario', '$tipo_usuario', NOW(), '$session_end'
+                )";
+    }
+
     $resul = $this->con->query($sql);
     // Retornar el resultado
   }

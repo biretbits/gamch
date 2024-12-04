@@ -214,34 +214,46 @@ class Farmacia
       $unitario = $da["unitario"];
       $total = $da["total"];
       $vencimiento = $da["vencimiento"];
+      $sql = '';
+      if (is_numeric($cod_entrada)) {
+          // Si cod_entrada es numérico, se realiza un UPDATE
+          $sql = "UPDATE entrada
+                  SET
+                      nrodoc = '$nrodoc',
+                      nro = '$nro',
+                      fuente_reposicion = '$fuente_reposicion',
+                      programa_salud = '$programa_salud',
+                      cod_proveedor = '$cod_proveedor',
+                      costo_valorado = '$costo_valorado',
+                      saldo = '$saldo',
+                      nrolote = '$nrolote',
+                      lote_generico = '$lote_generico',
+                      lote_nacional = '$lote_nacional',
+                      cantidad = '$cantidad',
+                      respaldo_cantidad = '$cantidad',
+                      manipulado = '',
+                      costounitario = '$unitario',
+                      costototal = '$total',
+                      costototal_respaldo = '$total',
+                      vencimiento = '$vencimiento',
+                      cod_generico = '$cod_producto',
+                      fecha = '$fechaActual',
+                      hora = '$hora',
+                      cod_usuario = '$usuario'
+                  WHERE cod_entrada = '$cod_entrada'";
+      } else {
+          // Si cod_entrada no es numérico, se realiza un INSERT
+          $sql = "INSERT INTO entrada (
+                      cod_entrada, nrodoc, nro, fuente_reposicion, programa_salud, cod_proveedor, costo_valorado, saldo, nrolote, lote_generico,
+                      lote_nacional, cantidad, respaldo_cantidad, manipulado, costounitario, costototal, costototal_respaldo,
+                      vencimiento, fecha, hora, cod_usuario, cod_generico
+                  ) VALUES (
+                      '$cod_entrada', '$nrodoc', '$nro', '$fuente_reposicion', '$programa_salud', '$cod_proveedor', '$costo_valorado', '$saldo', '$nrolote',
+                      '$lote_generico', '$lote_nacional', '$cantidad', '$cantidad', '', '$unitario', '$total', '$total', '$vencimiento', '$fechaActual',
+                      '$hora', '$usuario', '$cod_producto'
+                  )";
+      }
 
-      $sql = "INSERT INTO entrada(
-        cod_entrada,nrodoc,nro,fuente_reposicion,programa_salud,cod_proveedor,costo_valorado,saldo,nrolote,lote_generico,
-        lote_nacional,cantidad,respaldo_cantidad,manipulado,costounitario,costototal,costototal_respaldo,
-        vencimiento,fecha,hora,cod_usuario,cod_generico
-        ) VALUES (
-          '$cod_entrada','$nrodoc','$nro','$fuente_reposicion','$programa_salud','$cod_proveedor','$costo_valorado','$saldo','$nrolote',
-          '$lote_generico','$lote_nacional','$cantidad','$cantidad','','$unitario','$total','$total','$vencimiento','$fechaActual',
-          '$hora','$usuario','$cod_producto'
-        ) ON DUPLICATE KEY UPDATE
-          nrodoc=VALUES(nrodoc),
-          nro=VALUES(nro),
-          fuente_reposicion=VALUES(fuente_reposicion),
-          programa_salud=VALUES(programa_salud),
-          cod_proveedor=VALUES(cod_proveedor),
-          costo_valorado=VALUES(costo_valorado),
-          saldo=VALUES(saldo),
-          nrolote=VALUES(nrolote),
-          lote_generico=VALUES(lote_generico),
-          lote_nacional=VALUES(lote_nacional),
-          cantidad=VALUES(cantidad ),
-          respaldo_cantidad=VALUES(respaldo_cantidad),
-          costounitario=VALUES(costounitario),
-          costototal=VALUES(costototal),
-          costototal_respaldo=VALUES(costototal_respaldo),
-          vencimiento=VALUES(vencimiento),
-          cod_generico=VALUES(cod_generico)";
-   }
    if($uso=='' or $uso=='no_se_uso')
    {
      $resul = $this->con->query($sql);
@@ -254,9 +266,8 @@ class Farmacia
   }else{
     return $uso;
   }
-   mysqli_close($this->con);
  }
-
+}
 
 
  function verificarSIcantidadSEuso($cod_entrada){
@@ -273,11 +284,11 @@ class Farmacia
 
  public function buscarProductoFar($nombre_producto){
    $nombre_producto = strtolower($nombre_producto);
-   $lis = "select *from producto as p inner join forma_presentacion as f on p.cod_forma=f.cod_forma inner join conc_uni_med as c on p.cod_conc=c.cod_conc WHERE p.estado='activo' and LOWER(p.nombre) LIKE '%$nombre_producto%' LIMIT 5 OFFSET 0;";
+   $lis = "select *from producto as p inner join forma_presentacion as f on p.cod_forma=f.cod_forma inner join
+   conc_uni_med as c on p.cod_conc=c.cod_conc WHERE p.estado='activo' and LOWER(p.nombre) LIKE '%$nombre_producto%' LIMIT 5 OFFSET 0";
    $resul = $this->con->query($lis);
    return $resul;
-   mysqli_close($this->con);
- }
+}
 //funcion para seleccionar de tabla salida
  public function SeleccionarSalida($inicioList=false,$listarDeCuanto=false,$buscar='',$fechai=false,$fechaf=false){
      $sql="select s.cod_salida,
@@ -324,8 +335,6 @@ class Farmacia
      }else{
        return $resul;
      }
-     mysqli_close($this->con);
-
  }
 
  public function UpdateNG($accion,$cod_generico){
@@ -432,7 +441,7 @@ class Farmacia
        }
      mysqli_close($this->con);
    }
-   private function ObtenerCostoUnitario(){
+   public function ObtenerCostoUnitario(){
      $select = '';
        $select="select costounitario from entrada where cod_entrada";
        $resul = $this->con->query($select);
@@ -550,17 +559,27 @@ class Farmacia
      return $resul;
    }
 
-   function InsertarENsalida($cod_salida,$nombre_receta,$usuario,$id_paciente){
+   public function InsertarENsalida($cod_salida,$nombre_receta,$usuario,$id_paciente){
     $sql = '';
-    $sql = "INSERT INTO salida (
-                cod_salida,nombre_receta,cod_usuario,cod_paciente,fechaHora,estado
-            ) VALUES (
-              '$cod_salida','$nombre_receta','$usuario','$id_paciente',null,'activo'
-            ) ON DUPLICATE KEY UPDATE
-               nombre_receta = VALUES(nombre_receta),
-                cod_usuario = VALUES(cod_usuario),
-                cod_paciente = VALUES(cod_paciente)
-                ";
+    if (is_numeric($cod_salida)) {
+    // Si cod_salida es numérico, se realiza un UPDATE
+    $sql = "UPDATE salida
+            SET
+                nombre_receta = '$nombre_receta',
+                cod_usuario = '$usuario',
+                cod_paciente = '$id_paciente',
+                fechaHora = null,
+                estado = 'activo'
+            WHERE cod_salida = '$cod_salida'";
+    } else {
+        // Si cod_salida no es numérico, se realiza un INSERT
+        $sql = "INSERT INTO salida (
+                    cod_salida, nombre_receta, cod_usuario, cod_paciente, fechaHora, estado
+                ) VALUES (
+                    '$cod_salida', '$nombre_receta', '$usuario', '$id_paciente', null, 'activo'
+                )";
+    }
+
     $resul = $this->con->query($sql);
     if($resul!=''){
       if(is_numeric($cod_salida)){
@@ -654,16 +673,25 @@ class Farmacia
       $fecha = date("Y-m-d");
       $hora = date("H:i:s");
     }*/
+    $sql = '';
+    if (is_numeric($cod_prov)) {
+        // Si cod_prov es numérico, se realiza un UPDATE
+        $sql = "UPDATE proveedor
+                SET
+                    nombre = '$nombre',
+                    telefono = '$telefono',
+                    correo = '$correo',
+                    cod_representante = '$cod_rep'
+                WHERE cod_prov = '$cod_prov'";
+    } else {
+        // Si cod_prov no es numérico, se realiza un INSERT
+        $sql = "INSERT INTO proveedor (
+                    cod_prov, nombre, telefono, correo, cod_representante
+                ) VALUES (
+                    '$cod_prov', '$nombre', '$telefono', '$correo', '$cod_rep'
+                )";
+    }
 
-    $sql = "INSERT INTO proveedor(
-              cod_prov,nombre,telefono,correo,cod_representante
-            ) VALUES (
-              '$cod_prov','$nombre','$telefono','$correo','$cod_rep'
-            ) ON DUPLICATE KEY UPDATE
-              nombre = VALUES(nombre),
-              telefono = VALUES(telefono),
-              correo = VALUES(correo),
-              cod_representante = VALUES(cod_representante)";
     // Ejecutar la consulta
     $resul = $this->con->query($sql);
     return $resul;
@@ -712,15 +740,24 @@ class Farmacia
        $fecha = date("Y-m-d");
        $hora = date("H:i:s");
      }*/
+     $sql = '';
+     if (is_numeric($cod_rep)) {
+     // Si cod_rep es numérico, se realiza un UPDATE
+     $sql = "UPDATE representante
+             SET
+                 nombre_apellidos = '$nombre_apellidos',
+                 telefono = '$telefono',
+                 cargo = '$cargo'
+             WHERE cod_rep = '$cod_rep'";
+     } else {
+         // Si cod_rep no es numérico, se realiza un INSERT
+         $sql = "INSERT INTO representante (
+                     cod_rep, nombre_apellidos, telefono, cargo
+                 ) VALUES (
+                     '$cod_rep', '$nombre_apellidos', '$telefono', '$cargo'
+                 )";
+     }
 
-     $sql = "INSERT INTO representante(
-               cod_rep,nombre_apellidos,telefono,cargo
-             ) VALUES (
-               '$cod_rep','$nombre_apellidos','$telefono','$cargo'
-             ) ON DUPLICATE KEY UPDATE
-               nombre_apellidos = VALUES(nombre_apellidos),
-               telefono = VALUES(telefono),
-               cargo = VALUES(cargo)";
      // Ejecutar la consulta
      $resul = $this->con->query($sql);
      return $resul;

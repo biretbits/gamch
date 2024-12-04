@@ -58,15 +58,15 @@ class UsuarioControlador{
     <div class='row'>
       <div class='col'>
         <div class='table-responsive'>
-        <table class='table'>
+        <table class='table' style='font-size:11px'>
           <thead>
             <tr>
               <th>N°</th>
-              <th>C.I.</th>
+              <th>Cedula de Identidad</th>
               <th>Usuario</th>
               <th>Nombre</th>
-              <th>Apellido P.</th>
-              <th>Apellido M.</th>
+              <th>Apellido Paterno</th>
+              <th>Apellido Materno</th>
               <th>Telefono</th>
               <th>Dirección</th>
               <th>Profesión</th>
@@ -96,9 +96,9 @@ class UsuarioControlador{
           echo "<td>";
             echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
               echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-              if($fi["estado"] == "activo" && $fi["tipo_usuario"] != "admin"){
+              if($fi["estado"] == "activo" && $fi["tipo_usuario"] !='admin'){
                 echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-              }else if($fi["tipo_usuario"] != "admin"){
+              }else if($fi["estado"] == "desactivo" && $fi["tipo_usuario"] !='admin'){
                 echo "<button type='button' class='btn btn-danger' title='Activar Usuario' onclick='accionBtnActivar(\"desactivo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/activar.ico' height='17' width='17' class='rounded-circle'></button>";
               }
             echo "</div>";

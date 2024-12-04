@@ -44,15 +44,24 @@ class Patologia
       $hora = date("H:i:s");
     }
 
-    $sql = "INSERT INTO patologias(
-              cod_pat,nombre,descripcion,sintomas,tratamiento,fecha_registro,estado
-            ) VALUES (
-              '$cod_pat','$nombre','$descripcion','$sintomas','$tratamiento','$fecha','activo'
-            ) ON DUPLICATE KEY UPDATE
-              nombre = VALUES(nombre),
-              descripcion = VALUES(descripcion),
-              sintomas = VALUES(sintomas),
-              tratamiento = VALUES(tratamiento)";
+    if (is_numeric($cod_pat)) {
+    // Si cod_pat es numérico, se realiza un UPDATE
+    $sql = "UPDATE patologias
+            SET
+                nombre = '$nombre',
+                descripcion = '$descripcion',
+                sintomas = '$sintomas',
+                tratamiento = '$tratamiento'
+            WHERE cod_pat = '$cod_pat'";
+    } else {
+        // Si cod_pat no es numérico, se realiza un INSERT
+        $sql = "INSERT INTO patologias (
+                    cod_pat, nombre, descripcion, sintomas, tratamiento, fecha_registro, estado
+                ) VALUES (
+                    '$cod_pat', '$nombre', '$descripcion', '$sintomas', '$tratamiento', '$fecha', 'activo'
+                )";
+    }
+
     // Ejecutar la consulta
     $resul = $this->con->query($sql);
     return $resul;
