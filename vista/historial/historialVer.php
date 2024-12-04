@@ -1607,6 +1607,7 @@ datos.append("cod_rd",cod_rd);
 datos.append("nombre_historial",nombre_historial);
 datos.append("subnombre",subnombre);
 datos.append("cod_his",cod_his_his);
+datos.append("tipoHistorial",'');
 $.ajax({
   url: "../controlador/historial.controlador.php?accion=rnnh",
   type: "POST",
@@ -1614,7 +1615,7 @@ $.ajax({
   contentType: false, // Deshabilitar la codificación de tipo MIME
   processData: false, // Deshabilitar la codificación de datos
   success: function(data) {
-  //alert(data+"dasdas");
+    alert(data+"dasdas");
     data=$.trim(data);
   //  alert(data);
     if(data == "correcto"){

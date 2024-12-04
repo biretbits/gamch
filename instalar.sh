@@ -27,7 +27,7 @@ echo "Instalación de MySQL Server completada"
 
 # Instalar Apache2
 echo "Instalando Apache2"
-apt install -y apache2 || error_exit "Error al instalar Apache2"
+apt install apache2 || error_exit "Error al instalar Apache2"
 echo "Instalación de Apache2 completada"
 
 # Habilitar Apache2 para que se inicie automáticamente al arrancar
@@ -40,3 +40,6 @@ systemctl start apache2 || error_exit "Error al iniciar Apache2"
 systemctl status apache2 || error_exit "Apache2 no se está ejecutando correctamente"
 
 echo "Instalación y configuración de Apache2 completada"
+
+echo "instalar php"
+sudo apt install php php-cli php-fpm php-mysql php-xml php-mbstring php-curl php-zip php-json -y
