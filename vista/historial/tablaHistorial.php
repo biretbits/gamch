@@ -1556,6 +1556,9 @@ $.ajax({
        timer: 1500
      });
     }
+  },
+  error: function(r){
+    alert("ocurrio un error"+r);
   }
 });
 }
