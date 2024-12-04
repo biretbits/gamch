@@ -1210,7 +1210,6 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
     $hc->buscarBDMedicoResponsable($_POST['nombre']);
   }
   if(isset($_GET["accion"]) && $_GET["accion"]=="rnnh"){
-
     $hc->RegistrarNuevoHistorial($_POST["paciente_rd"],$_POST["cod_rd"],$_POST["nombre_historial"],$_POST["cod_his"],$_POST["subnombre"],'tiene_herencia');
   }
 

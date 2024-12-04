@@ -1607,7 +1607,7 @@ datos.append("cod_rd",cod_rd);
 datos.append("nombre_historial",nombre_historial);
 datos.append("subnombre",subnombre);
 datos.append("cod_his",cod_his_his);
-alert(paciente_rd+"   "+cod_rd+"    "+nombre_historial+"    "+subnombre+"    "cod_his);
+//alert(paciente_rd+"   "+cod_rd+"    "+nombre_historial+"    "+subnombre+"    "cod_his_his);
 $.ajax({
   url: "../controlador/historial.controlador.php?accion=rnnh",
   type: "POST",
@@ -1636,6 +1636,9 @@ $.ajax({
        timer: 1500
      });
     }
+  },
+  error: function(r){
+    alert("ocurrio este error "+r);
   }
 });
 }
