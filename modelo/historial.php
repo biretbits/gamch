@@ -408,9 +408,9 @@ class Historial
      } else {
          // Si cod_his no es numérico, se realiza un INSERT
          $sql = "INSERT INTO historial_dato (
-                     cod_his_dat, zona_his, cod_rd, paciente_rd, cod_cds, descripcion, nombre_imagen, ruta_imagen, hoja, paginas, cod_his, fecha, hora, tipoDato, estado
+                      zona_his, cod_rd, paciente_rd, cod_cds, descripcion, nombre_imagen, ruta_imagen, hoja, paginas, cod_his, fecha, hora, tipoDato, estado
                  ) VALUES (
-                     '$cod_his', '$zona_his', '$cod_rd', '$cod_paciente', '$cod_cds', '$nombre_imagen', '$fileName', '$uploadDir', '$maxi', '$max', '$cod_his_original', '$fecha', '$hora', '2', 'activo'
+                      '$zona_his', '$cod_rd', '$cod_paciente', '$cod_cds', '$nombre_imagen', '$fileName', '$uploadDir', '$maxi', '$max', '$cod_his_original', '$fecha', '$hora', '2', 'activo'
                  )";
      }
      // Ejecutar la consulta
@@ -443,9 +443,9 @@ class Historial
      } else {
          // Si cod_his_original no es numérico, se realiza un INSERT
          $sql = "INSERT INTO historial (
-                     cod_his, cod_rd, paciente_rd, cod_cds, titulo, subtitulo, tipoHistorial, fecha, hora, estado
+                     cod_rd, paciente_rd, cod_cds, titulo, subtitulo, tipoHistorial, fecha, hora, estado
                  ) VALUES (
-                     '$cod_his_original', '$cod_rd', '$paciente_rd', '1', '$titulo_historial', '$nombre_imagen', '$tipoHistorial', '$fecha', '$hora', 'activo'
+                    '$cod_rd', '$paciente_rd', '1', '$titulo_historial', '$nombre_imagen', '$tipoHistorial', '$fecha', '$hora', 'activo'
                  )";
      }
 
@@ -486,9 +486,9 @@ class Historial
    } else {
     // Si cod_his no es numérico (es decir, el registro no existe), hacemos un INSERT
      $sql = "INSERT INTO historial_dato (
-                cod_his_dat, cod_rd, paciente_rd, cod_cds, descripcion, nombre_imagen, ruta_imagen, hoja, paginas, cod_his, fecha, hora, tipoDato, estado
+                cod_rd, paciente_rd, cod_cds, descripcion, nombre_imagen, ruta_imagen, hoja, paginas, cod_his, fecha, hora, tipoDato, estado
             ) VALUES (
-                '$cod_his', '$cod_rd', '$cod_paciente', '1', '$nombre_imagen', '$fileName', '$uploadDir', '$maxi', '$max', '$cod_his_original', '$fecha', '$hora', '2', 'activo'
+                 '$cod_rd', '$cod_paciente', '1', '$nombre_imagen', '$fileName', '$uploadDir', '$maxi', '$max', '$cod_his_original', '$fecha', '$hora', '2', 'activo'
             )";
   }
 
@@ -641,12 +641,12 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
                         WHERE cod_his_dat = '$cod_his_dat'";
             } else {
                 $sql = "INSERT INTO historial_dato(
-                            cod_his_dat, cod_rd, paciente_rd, cod_cds, zona_his, cod_responsable_familia_his, descripcion,
+                             cod_rd, paciente_rd, cod_cds, zona_his, cod_responsable_familia_his, descripcion,
                             hoja, paginas, imc, temp, fc, pa, fr, cod_patologia,
                             subjetivo, objetivo, analisis, tratamiento, evaluacion_de_seguimiento,
                             cod_responsable_medico, cod_his, fecha, hora, tipoDato, estado
                         ) VALUES (
-                            '$cod_his_dat', '$cod_rd', '$paciente_rd', '$cod_cds', '$zona_his', '$cod_responsable_familia_his', 'Documento de consulta',
+                             '$cod_rd', '$paciente_rd', '$cod_cds', '$zona_his', '$cod_responsable_familia_his', 'Documento de consulta',
                             '$maxi', '$max', '$imc', '$temperatura', '$fc', '$pa', '$fr', '$cod_patologia',
                             '$subjetivo', '$objetivo', '$analisis', '$tratamiento', '$evaluacion_seguimiento',
                             '$cod_usuario_medico', '$cod_his_original', '$fecha_consulta', '$hora_consulta', '3', 'activo'
