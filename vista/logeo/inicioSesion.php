@@ -1,53 +1,44 @@
 
 <?php require("../librerias/headeradmin1.php"); ?>
-<br><br><br><br>
+<div class="container main-content">
 <div class="container">
-    <div class="row" >
-				<div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
-				 <div class="modal-content" style='padding:20px 15px;background: linear-gradient(to right, gray, white);' >
-					<center>
-					<h3 Style='color:blue;text-shadow: 2px 2px 2px black;'>Acceso</h3></center>
-                    <center>
-                    <img src="../imagenes/acceso.png"class="img-circle"  height='100' width='110'/>
-					</center>
-          <br>
-            <form method="POST">
-							<div class='input-group'>
-								<input class="form-control" style="color:black" type="text"  id="usuario" name ="usuario" placeholder=" Nombre usuario" >
-									<span class='input-group-addon' id='grupo_user'></span>
-							</div>
-							<span id="text_user"></span>
-		           <br>
+<div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="row w-100">
+        <div class="col-lg-4 col-md-6 col-12 mx-auto">
+            <div class="modal-content" style="padding: 20px 15px; background: linear-gradient(to right, gray, white);border-radius:20px">
+                <div class="text-center">
+                    <h3 style="color: blue; text-shadow: 2px 2px 2px black;">Acceso</h3>
+                    <img src="../imagenes/acceso.png" class="img-circle" height="100" width="110"/>
+                </div>
+                <br>
+                <form method="POST">
+                    <div class="input-group mb-3">
+                        <input class="form-control" style="color:black" type="text" id="usuario" name="usuario" placeholder="Nombre usuario">
+                        <span class="input-group-addon" id="grupo_user"></span>
+                    </div>
+                    <span id="text_user"></span>
+                    <br>
 
-							<div class='input-group'>
-								<input class="form-control" style="color:black" type='password' id="contrasena" name ="contrasena" placeholder="Contraseña"><br>
-                <button class="btn btn-outline-secondary che" type="button" id="che" onclick="mostrar()">
-                  <img src='../imagenes/ojo.ico'style='height: 25px;width: 25px;'>
-                </button>
-							</div>
-							<br>
-              <button type="button" class="btn btn-warning" id="submit" value="Ingresar" onclick="VerificarDatos();"><img src='../imagenes/entrar.ico' height='25' width='25' alt='Imagen centrada'>  Ingresar</button>
-
-							<br>
-						</form>
-						<br>
-				</div>
-			</div>
-		</div>
-    <br>
-    <div class="row">
-      <div class="col-6">
-        <div class="container px-5 text-center" style='background-color:DarkKhaki; border-radius: 3%;'>
-                <div style='color:black'>"Más vale prevenir que curar."</div>
+                    <div class="input-group mb-3">
+                        <input class="form-control" style="color:black" type="password" id="contrasena" name="contrasena" placeholder="Contraseña"><br>
+                        <button class="btn btn-outline-secondary" type="button" id="che" onclick="mostrar()">
+                            <img src="../imagenes/ojo.ico" style="height: 25px; width: 25px;">
+                        </button>
+                    </div>
+                    <br>
+                    <button type="button" class="btn btn-warning w-100" id="submit" value="Ingresar" onclick="VerificarDatos();">
+                        <img src="../imagenes/entrar.ico" height="25" width="25" alt="Imagen centrada"> Ingresar
+                    </button>
+                    <br>
+                </form>
+                <br>
+            </div>
         </div>
-      </div>
-      <div class="col-6">
-        <div class="container px-5 text-center" style='background-color:Khaki; border-radius: 3%;'>
-                <div style='color:black'>"El que tiene salud, lo tiene todo."</div>
-        </div>
-      </div>
     </div>
-<br>
+</div>
+</div>
+</div>
+
 <script type="text/javascript">
 
 
