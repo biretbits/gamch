@@ -135,7 +135,7 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
      'activo'
    );";
       $resul = $this->con->query($sql);
-      if($resul =! ""){
+      if($resul != ""){
         $ultimo_id = $this->con->insert_id;
        $cod_usuario = $ultimo_id;
      }
