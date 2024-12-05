@@ -39,7 +39,7 @@ class HistorialControlador{
         "titulo" => $fi["titulo"],
         "subtitulo" => $fi["subtitulo"],
         "tipoHistorial" => $fi["tipoHistorial"],
-        "datos" => ($fi['tipoHistorial'] == 'no_tiene_herenc') ? $rdi->seleccionarHistorialDatoImagen($fi["cod_his"],$fi["paciente_rd"],$fi["cod_rd"]) : '',
+        "datos" => ($fi['tipoHistorial'] == 'no_tiene_herencia') ? $rdi->seleccionarHistorialDatoImagen($fi["cod_his"],$fi["paciente_rd"],$fi["cod_rd"]) : '',
         "paciente_rd" => $fi["paciente_rd"],
         "paciente_rd_nombre" => $rdi->selectDatosUsuarios($fi["paciente_rd"]),
         "cod_cds" => $fi["cod_cds"],
