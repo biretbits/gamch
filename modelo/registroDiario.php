@@ -86,10 +86,7 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
 
  public function insertarNewpacientes($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
  $historiaclinica,$signos_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria){
-   if($fechaderetornodeHistoria == '')
-   {
-     $fechaderetornodeHistoria = '0000-00-00';
-   }
+
    $sql='';
    if($cod_usuario =="" || $cod_usuario == NULL){
      $sql = "insert into usuario(ci_usuario,
@@ -136,7 +133,14 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    paciente_rd,
    cod_cds,
    estado)values('$fechaActual','$horaActual',
-   $servicio,'$signos_sintomas','no','$fechaderetornodeHistoria',$personalatencion,$respadmision,$cod_usuario,1,'activo')";
+   $servicio,'$signos_sintomas','no',";
+   if($fechaderetornodeHistoria == '')
+   {
+     $sql33.="NULL";
+   }else{
+     $sql33.="'$fechaderetornodeHistoria'";
+   }
+   $sql33.=",$personalatencion,$respadmision,$cod_usuario,1,'activo')";
    $resu = $this->con->query($sql33);#ejecutamos y ya existe esta fila con el campo no
    $sql_consu = "select *from historial where paciente_rd = $cod_usuario";#buscamos si el usuario tiene historial registrado si o no
    $res = $this->con->query($sql_consu);
