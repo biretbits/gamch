@@ -117,15 +117,15 @@ $_SESSION["diario"] = $RegistroDiario;?>
               <th>N°</th>
               <th>Fecha</th>
               <th>Hora</th>
-              <th>Nombre y Apellidos</th>
+              <th>Nombres y Apellidos</th>
               <th>Fecha de Nacimiento</th>
               <th>Edad</th>
               <th>Dirección</th>
               <th>Servicio</th>
               <th>Signos y Sintomas</th>
-              <th>Personal que Brinda la atencion</th>
-              <th>Hist. clinica</th>
-              <th>Resp. Admision</th>
+              <th>Personal que Brinda la atención</th>
+              <th>Historial Clínica</th>
+              <th>Responsable de Admisión</th>
               <th>Fecha de retorno de la Historia</th>
               <th>Acción</th>
             </tr>

@@ -15,7 +15,7 @@
     <div class="col-md-10 offset-md-1">
       <div class="card">
         <div class="card-header">
-          FORMULARIO ACTUALIZACION DE REGISTRO DIARIO
+          ACTUALIZACIÓN DE REGISTRO DIARIO
         </div>
         <div class="card-body">
           <form>
@@ -98,21 +98,21 @@
                 value="<?php $msg = (isset($fe["signo_sintomas_rd"]) && is_string($fe["signo_sintomas_rd"])) ? $fe["signo_sintomas_rd"]:""; echo $msg; ?>">
               </div>
               <div class="col-md-4 mb-3">
-                <label for="personal que brinda la atencion" class="form-label">personal que brinda la atencion</label>
+                <label for="personal que brinda la atencion" class="form-label">Personal que brinda la atención</label>
                 <input type="text" class="form-control" id="personalatencion" placeholder="personal que brinda la atencion" onkeyup= "atencionMedico()"
                 value="<?php $msg = (isset($nombreP) && is_string($nombreP)) ? $nombreP:""; echo $msg; ?>">
                 <div id="resultadomedico" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
               </div>
               </div>
               <div class="col-md-4 mb-3">
-                <label for="resp. admision" class="form-label">resp. admision</label>
+                <label for="resp. admision" class="form-label">Responsable de admisión</label>
                 <input type="text" class="form-control" id="respadmision" placeholder="responsable de Admision" onkeyup="buscarResponsableAdmision()"
                 value="<?php $msg = (isset($nombreR) && is_string($nombreR)) ? $nombreR:""; echo $msg; ?>">
                 <div id="resultadoadmision" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
                 </div>
               </div>
               <div class="col-md-4 mb-3">
-                <label for="fecha de retorno de Historia" class="form-label">fecha de retorno de Historia</label>
+                <label for="fecha de retorno de Historia" class="form-label">Fecha de retorno de Historia</label>
                 <input type="date" class="form-control" id="fechaderetornodeHistoria" placeholder="fecha de retorno de Historia"
                 value="<?php $msg = (isset($fe["fecha_retorno_historia_rd"]) && is_string($fe["fecha_retorno_historia_rd"])) ? $fe["fecha_retorno_historia_rd"]:""; echo $msg; ?>">
               </div>
@@ -123,7 +123,7 @@
                 value="<?php $msg = (isset($fe["historial_clinico_rd"]) && is_string($fe["historial_clinico_rd"])) ? $fe["historial_clinico_rd"]:""; echo $msg; ?>">
               </div>
             </div>
-            <button type="button" class="btn btn-primary" onclick="insertardatosus()">REGISTRAR CAMBIOS</button>
+            <button type="button" class="btn btn-primary" onclick="insertardatosus()">Registrar Cambios</button>
           </form>
         </div>
         <div class="card-footer text-muted">

@@ -145,12 +145,12 @@ td,th{
                 <th>Nombre y Apellidos</th>
                 <th>Fecha de Nacimiento</th>
                 <th>Edad</th>
-                <th>Direc.</th>
+                <th>Dirección</th>
                 <th>Servicio</th>
                 <th>Signos y Sintomas</th>
-                <th>Personal que Brinda la atencion</th>
-                <th>Hist. clinica</th>
-                <th>Resp. Admision</th>
+                <th>Personal que Brinda la atención</th>
+                <th>Historial Clínica</th>
+                <th>Responsable de Admisión</th>
                 <th>Fecha de retorno de Historia</th>
               </tr>
             </thead>
