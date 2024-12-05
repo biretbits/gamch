@@ -310,14 +310,10 @@ echo "<div class='row'>
     $resp = $rnp->insertarNewpacientes($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
     $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria);
     //echo $cod_usuario;
-    if(is_string($resp)){
-      echo $resp;
-    }else{
-      if($resp != ""){
-          echo "correcto";
-      } else{
-          echo "error";
-      }
+    if($resp != ""){
+        echo "correcto";
+    } else{
+        echo "error";
     }
   }
   public function insertarActualizacionPaciente($cod_rd,$cod_usuario,
