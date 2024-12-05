@@ -86,6 +86,10 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
 
  public function insertarNewpacientes($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
  $historiaclinica,$signos_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria){
+   if($fechaderetornodeHistoria == '')
+   {
+     $fechaderetornodeHistoria = '0000-00-00';
+   }
    if($cod_usuario =="" || $cod_usuario == NULL){
      $sql = "insert into usuario(ci_usuario,
      usuario,
