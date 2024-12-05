@@ -111,8 +111,8 @@ $_SESSION["diario"] = $RegistroDiario;?>
     <div class="row">
       <div class="col">
         <div class="table-responsive">
-        <table class="table">
-          <thead style="font-size:12px">
+        <table class="table" style="font-size:12px">
+          <thead>
             <tr>
               <th>N°</th>
               <th>Fecha</th>
