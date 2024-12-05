@@ -399,8 +399,6 @@ class Historial
                  descripcion = '$nombre_imagen',
                  nombre_imagen = '$fileName',
                  ruta_imagen = '$uploadDir',
-                 hoja = '$maxi',
-                 paginas = '$max',
                  cod_his = '$cod_his_original',
                  fecha = '$fecha',
                  hora = '$hora'
