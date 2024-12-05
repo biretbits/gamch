@@ -1145,13 +1145,18 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
          // Obtener información del archivo
          $fileTmpPath = $_FILES["file"]["tmp_name"];
          $fileName = $_FILES["file"]["name"];
-         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-         // Validar la extensión del archivo
+         $fileSize = $_FILES['file']['size'];
+         $maxFileSize = 2 * 1024 * 1024;
+         if ($fileSize > $maxFileSize) {
+           echo "maximo";
+         }else{
+           $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+           // Validar la extensión del archivo
             // Especifica el directorio de destino para el archivo subido
              $uploadDir = '../librerias/temp/';
 
             $hc->insertarDocumentos($_POST["nombreImagen"],$fileTmpPath,$uploadDir,basename($fileName),$_POST["nombre_imagen"],$_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_historial"],$_POST["cod_historial_original"]);
-
+        }
     } else {
       if(isset($_POST["cod_historial"]) && $_POST["cod_historial"]!=''){
         $hc->insertarDocumentos($_POST["nombreImagen"],'',$_POST["ruta_imagen"],$_POST["nombreImagen"],$_POST["nombre_imagen"],$_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_historial"],$_POST["cod_historial_original"]);
@@ -1165,13 +1170,18 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
          // Obtener información del archivo
          $fileTmpPath = $_FILES["file"]["tmp_name"];
          $fileName = $_FILES["file"]["name"];
-         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-         // Validar la extensión del archivo
+         $fileSize = $_FILES['file']['size'];
+         $maxFileSize = 2 * 1024 * 1024;
+         if ($fileSize > $maxFileSize) {
+           echo "maximo";
+         }else{
+           $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+          // Validar la extensión del archivo
             // Especifica el directorio de destino para el archivo subido
              $uploadDir = '../librerias/temp/';
 
             $hc->insertarDocumentosHistorial($_POST["nombreImagen"],$fileTmpPath,$uploadDir,basename($fileName),$_POST["nombre_imagen"],$_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_historial"],$_POST["cod_his_original"],$_POST["tipoHistorial"],$_POST["titulo_historial"]);
-
+        }
     } else {
       if(isset($_POST["cod_historial"]) && $_POST["cod_historial"]!=''){
         $hc->insertarDocumentosHistorial($_POST["nombreImagen"],'',$_POST["ruta_imagen"],$_POST["nombreImagen"],$_POST["nombre_imagen"],$_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_historial"],$_POST["cod_his_original"],$_POST["tipoHistorial"],$_POST["titulo_historial"]);

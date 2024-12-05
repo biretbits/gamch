@@ -1402,6 +1402,8 @@ function RegistroImagen(){
           }, 2000);
         }else if(data == 'error'){
           AlertaUniversal('error','¡Error!',"Ocurrio un error al realizar la acción.");
+        }else if(data == 'maximo'){
+          AlertaUniversal('info','información','El archivo es demasiado grande. El tamaño máximo permitido es 2 MB.');
         }else{
           AlertaUniversal('info','información',data);
         }
