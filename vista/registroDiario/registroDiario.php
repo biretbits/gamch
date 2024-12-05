@@ -458,7 +458,7 @@ function buscarResponsableAdmision() {
             contentType: false, // Deshabilitar la codificación de tipo MIME
             processData: false, // Deshabilitar la codificación de datos
             success: function(data) {
-              //alert(data+"dasdas");
+              alert(data+"dasdas");
               data=$.trim(data);
               if(data == "correcto"){
 
@@ -478,6 +478,8 @@ function buscarResponsableAdmision() {
                  timer: 1500
                });
               }
+            },error:function(r){
+              alert("Ocurrió un error: " + JSON.stringify(r));
             }
           });
         }
