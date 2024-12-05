@@ -1148,7 +1148,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
          $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
          // Validar la extensión del archivo
             // Especifica el directorio de destino para el archivo subido
-             $uploadDir = '../librerias/temp/Documentos/otrasConsultas/';
+             $uploadDir = '../librerias/temp/';
 
             $hc->insertarDocumentos($_POST["nombreImagen"],$fileTmpPath,$uploadDir,basename($fileName),$_POST["nombre_imagen"],$_POST["paciente_rd"],$_POST["cod_rd"],$_POST["cod_historial"],$_POST["cod_historial_original"]);
 
