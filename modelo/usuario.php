@@ -200,38 +200,29 @@ class Usuario
 
   public function insertarDatosSession($session_id,$session_start,$cod_usuario,$usuario,
   $nombre_usuario,$ap_usuario,$am_usuario,$tipo_usuario,$session_end){
-    $session_id = $this->con->real_escape_string($session_id);
-    $cod_usuario = $cod_usuario; // Asume que este valor es seguro y correcto
-    $usuario = $this->con->real_escape_string($usuario);
-    $nombre_usuario = $this->con->real_escape_string($nombre_usuario);
-    $ap_usuario = $this->con->real_escape_string($ap_usuario);
-    $am_usuario = $this->con->real_escape_string($am_usuario);
-    $tipo_usuario = $this->con->real_escape_string($tipo_usuario);
-    $session_end = $this->con->real_escape_string($session_end);
+
+    $_SESSION["session_id"] = $session_id;
+
+      $session_start = date('Y-m-d H:i:s');
+      $sessionEnd = "abierto";
+      $us->insertarDatosSession($session_id,$session_start,$fila['cod_usuario'],$fila["usuario"],$fila["nombre_usuario"],$fila["ap_usuario"],$fila["am_usuario"],$fila["tipo_usuario"],$sessionEnd);
     // Construir la consulta
     $sql = '';
-    if (is_numeric($session_id)) {
-    // Si session_id es numérico, se realiza un UPDATE
+    $sql = "INSERT INTO sessiones (
+            session_id, cod_usuario, usuario, nombre_usuario, ap_usuario, am_usuario, tipo_usuario, session_start, session_end
+        ) VALUES (
+            '$session_id', $cod_usuario, '$usuario', '$nombre_usuario', '$ap_usuario', '$am_usuario', '$tipo_usuario', NOW(), '$session_end'
+        )
+        ON DUPLICATE KEY UPDATE
+            cod_usuario = $cod_usuario,
+            usuario = '$usuario',
+            nombre_usuario = '$nombre_usuario',
+            ap_usuario = '$ap_usuario',
+            am_usuario = '$am_usuario',
+            tipo_usuario = '$tipo_usuario',
+            session_start = NOW(),
+            session_end = '$session_end'";
 
-    $sql = "UPDATE sessiones
-            SET
-                cod_usuario = $cod_usuario,
-                usuario = '$usuario',
-                nombre_usuario = '$nombre_usuario',
-                ap_usuario = '$ap_usuario',
-                am_usuario = '$am_usuario',
-                tipo_usuario = '$tipo_usuario',
-                session_start = NOW(),
-                session_end = '$session_end'
-            WHERE session_id = '$session_id'";
-    } else {
-        // Si session_id no es numérico, se realiza un INSERT
-        $sql = "INSERT INTO sessiones (
-                    session_id, cod_usuario, usuario, nombre_usuario, ap_usuario, am_usuario, tipo_usuario, session_start, session_end
-                ) VALUES (
-                    '$session_id', $cod_usuario, '$usuario', '$nombre_usuario', '$ap_usuario', '$am_usuario', '$tipo_usuario', NOW(), '$session_end'
-                )";
-    }
 
     $resul = $this->con->query($sql);
     // Retornar el resultado
