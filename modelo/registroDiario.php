@@ -19,7 +19,6 @@ class RegistroDiario
     $lis = "select *from registro_diario where estado='activo'";
     $resul = $this->con->query($lis);
     return $resul;
-    mysqli_close($this->con);
   }
   public function SelectPorBusquedaRegistroDiario($buscar,$inicioList,$listarDeCuanto,$fecha,$fechai=false,$fechaf=false){
     // Verificar si $buscar tiene contenido
@@ -49,7 +48,6 @@ class RegistroDiario
     $resul = $this->con->query($sql);
     // Retornar el resultado
     return $resul;
-    mysqli_close($this->con);
   }
   public function selectNombreUsuario($id){
     $sql = "select nombre_usuario,ap_usuario,am_usuario from usuario where cod_usuario = $id";
@@ -57,7 +55,6 @@ class RegistroDiario
     // Retornar el resultado
     $fi = mysqli_fetch_array($resul);
     return $fi["nombre_usuario"]." ".$fi["ap_usuario"]." ".$fi["am_usuario"];
-    mysqli_close($this->con);
   }
 
 
@@ -68,7 +65,6 @@ class RegistroDiario
           LIMIT 5 OFFSET 0;";
     $resul = $this->con->query($lis);
     return $resul;
-    mysqli_close($this->con);
   }
 
   public function buscarrespAdmisionsql($respadmision){
@@ -78,7 +74,6 @@ class RegistroDiario
           LIMIT 5 OFFSET 0;";
     $resul = $this->con->query($lis);
     return $resul;
-    mysqli_close($this->con);
 }
 public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    $personalquebrindalaatencion = strtolower($personalquebrindalaatencion);
@@ -87,7 +82,6 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
          LIMIT 5 OFFSET 0;";
    $resul = $this->con->query($lis);
    return $resul;
-   mysqli_close($this->con);
  }
 
  public function insertarNewpacientes($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
@@ -141,7 +135,6 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
      'activo'
    );";
       $resul = $this->con->query($sql);
-
       if($resul =! ""){
         $ultimo_id = $this->con->insert_id;
        $cod_usuario = $ultimo_id;
@@ -163,14 +156,12 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
      $re78 = $this->con->query($sqlnew);
    }
   return $resu;
-  mysqli_close($this->con);
 }
 
 public function seleccionarDatos($cod_rd,$paciente_rd){
   $sql = "select * from usuario as u inner join registro_diario as r on u.cod_usuario = r.paciente_rd where r.paciente_rd = $paciente_rd and cod_rd = $cod_rd";
   $resu = $this->con->query($sql);
   return $resu;
-  mysqli_close($this->con);
 }
 
 public function UpdateDatosRegistroDiario($cod_rd,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,
@@ -193,14 +184,12 @@ public function selectServicio($id){
   $fi=mysqli_fetch_array($resul);
   $nombre = $fi["nombre_servicio"];
   return $nombre;
-  mysqli_close($this->con);
 }
 
 public function seleccionarServicios(){
   $lis = "select *from servicio where estado='activo'";
   $resul = $this->con->query($lis);
   return $resul;
-  mysqli_close($this->con);
 }
 
   public function seleccionarRegistrosDiario($fechai,$fechaf){
@@ -226,7 +215,6 @@ public function seleccionarServicios(){
     //echo $sql;
     $resul = $this->con->query($sql);
     return $resul;
-    mysqli_close($this->con);
   }
 
   public function seleccionarRegistrosDiarioPorSexo($tiposexo,$fechai,$fechaf){
@@ -260,7 +248,6 @@ public function seleccionarServicios(){
     //echo $sql;
     $resul = $this->con->query($sql);
     return $resul;
-    mysqli_close($this->con);
   }
 
   public function seleccionarRegistrosDiarioPorEdad($edadi=false,$edadf=false,$fechai,$fechaf){
@@ -290,7 +277,6 @@ public function seleccionarServicios(){
 
     $resul = $this->con->query($sql);
     return $resul;
-    mysqli_close($this->con);
   }
 
   public function buscarMotivo_Consulta_sql($nombre){
