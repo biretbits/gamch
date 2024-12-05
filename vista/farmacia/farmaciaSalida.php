@@ -1085,7 +1085,9 @@ function Buscar(page){
               actualizarLaFila(fila,codigos1,nombre_producto1,cantidad1,cod_solicitado1,data);
 
             }
-            //IRalLink(cod_salida);
+            //IRalLink(cod_salida);k
+          },error:function(r){
+            alert("Ocurrió un error: " + JSON.stringify(r));
           }
         });
 
