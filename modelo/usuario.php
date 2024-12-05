@@ -226,9 +226,9 @@ class Usuario
     } else {
         // Si session_id no es numérico, se realiza un INSERT
         $sql = "INSERT INTO sessiones (
-                    session_id, cod_usuario, usuario, nombre_usuario, ap_usuario, am_usuario, tipo_usuario, session_start, session_end
+                    cod_usuario, usuario, nombre_usuario, ap_usuario, am_usuario, tipo_usuario, session_start, session_end
                 ) VALUES (
-                    '$session_id', $cod_usuario, '$usuario', '$nombre_usuario', '$ap_usuario', '$am_usuario', '$tipo_usuario', NOW(), '$session_end'
+                     $cod_usuario, '$usuario', '$nombre_usuario', '$ap_usuario', '$am_usuario', '$tipo_usuario', NOW(), '$session_end'
                 )";
     }
 
