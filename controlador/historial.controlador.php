@@ -1,5 +1,5 @@
 <?php
-require_once '../modelo/historial.php';
+require '../modelo/historial.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();

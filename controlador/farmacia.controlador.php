@@ -1,6 +1,6 @@
 <?php
-require_once '../modelo/farmacia.php';
-require_once '../modelo/usuario.php';
+require '../modelo/farmacia.php';
+require '../modelo/usuario.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();

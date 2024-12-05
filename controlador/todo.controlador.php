@@ -1,6 +1,6 @@
 <?php
-require_once '../modelo/usuario.php';
-require_once '../modelo/chat.php';
+require '../modelo/usuario.php';
+require '../modelo/chat.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();

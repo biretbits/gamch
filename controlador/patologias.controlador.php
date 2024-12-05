@@ -1,5 +1,5 @@
 <?php
-require_once '../modelo/patologia.php';
+require '../modelo/patologia.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();

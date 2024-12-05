@@ -1,5 +1,5 @@
 <?php
-require_once '../modelo/usuario.php';
+require '../modelo/usuario.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();

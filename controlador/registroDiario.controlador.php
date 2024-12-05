@@ -1,6 +1,6 @@
 <?php
-require_once '../modelo/registroDiario.php';
-require_once '../modelo/servicio.php';
+require '../modelo/registroDiario.php';
+require '../modelo/servicio.php';
 require "sesion.controlador.php";
 $ins=new sesionControlador();
 $ins->StarSession();

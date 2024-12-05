@@ -133,12 +133,16 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
      ,''
      ,1,
      'activo'
-   );";
+   )";
       $resul = $this->con->query($sql);
-      if($resul != ""){
+      if ($resul) {
+        // Obtén el último ID insertado
         $ultimo_id = $this->con->insert_id;
-       $cod_usuario = $ultimo_id;
-     }
+        $cod_usuario = $ultimo_id;
+    } else {
+        // Maneja el error en caso de fallo
+        echo "Error al insertar datos: " . $this->error;
+    }
   }
     $sql33 = '';
    $fechaActual = date("Y-m-d");
