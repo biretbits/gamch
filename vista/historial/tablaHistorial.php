@@ -1376,7 +1376,7 @@ function RegistroImagen(){
       processData: false, // Deshabilitar la codificación de datos
       success: function(data) {
         alert(data);
-        console.log(data);
+        //console.log(data);
         data=$.trim(data);
         if(data == "correcto"){
           alertCorrecto();
@@ -1391,6 +1391,8 @@ function RegistroImagen(){
         }else{
           AlertaUniversal('info','información',data);
         }
+      },error:function(r){
+        alert("Ocurrió un error: " + JSON.stringify(r));
       }
     });
 
