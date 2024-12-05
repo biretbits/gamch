@@ -1375,7 +1375,7 @@ function RegistroImagen(){
       contentType: false, // Deshabilitar la codificación de tipo MIME
       processData: false, // Deshabilitar la codificación de datos
       success: function(data) {
-        alert(data);
+        //alert(data);
         //console.log(data);
         data=$.trim(data);
         if(data == "correcto"){
@@ -1434,7 +1434,7 @@ function actualizarImagen(cod_his,cod_his_dat,descripcion,nombre_imagen,ruta_ima
   document.getElementById("ruta_imagen").value=ruta_imagen;
   document.getElementById("cod_historialOriginal").value=cod_his;
   document.getElementById("titulo_historial").value=titulo;
-
+  alert(ruta_imagen+"   "+nombre_imagen);
   const img = new Image();
   img.src = ruta_imagen+nombre_imagen;
   const canvas = document.getElementById('imageSeleccionado');
