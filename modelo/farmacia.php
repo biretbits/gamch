@@ -603,7 +603,7 @@ class Farmacia
      $cod_solicitado = $ar['cod_solicitado1'];
      $cod_producto = $ar["cod_producto1"];
      $cantidad = $ar["cantidad1"];
-     $sql = "update productoSolicitado set cantidad_solicitada=$cantidad,codigos_entrada='$codigosNEW',
+     $sql = "update productosolicitado set cantidad_solicitada=$cantidad,codigos_entrada='$codigosNEW',
      cantidadRestado='$cat_resNEW',costosUnitario = '$costosUnitarios',costos = '$costos', costoTotal = $total,cod_producto=$cod_producto where cod_solicitado = $cod_solicitado";
      $resul = $this->con->query($sql);
      // Retornar el resultado
@@ -627,19 +627,17 @@ class Farmacia
   }
 
    public function deleteProductoSolicitado($cod_solicitado){
-     $select="delete from productoSolicitado where cod_solicitado=$cod_solicitado";
+     $select="delete from productosolicitado where cod_solicitado=$cod_solicitado";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
-     mysqli_close($this->con);
    }
 
    public function SeleccionarCodigosSolicitados($cod_salida){
-     $select="select * from productoSolicitado where cod_salida=$cod_salida";
+     $select="select * from productosolicitado where cod_salida=$cod_salida";
      $resul = $this->con->query($select);
      // Retornar el resultado
      return $resul;
-     mysqli_close($this->con);
    }
 
    //funcion de proveedor
