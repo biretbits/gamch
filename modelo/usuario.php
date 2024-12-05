@@ -201,11 +201,6 @@ class Usuario
   public function insertarDatosSession($session_id,$session_start,$cod_usuario,$usuario,
   $nombre_usuario,$ap_usuario,$am_usuario,$tipo_usuario,$session_end){
 
-    $_SESSION["session_id"] = $session_id;
-
-      $session_start = date('Y-m-d H:i:s');
-      $sessionEnd = "abierto";
-      $us->insertarDatosSession($session_id,$session_start,$fila['cod_usuario'],$fila["usuario"],$fila["nombre_usuario"],$fila["ap_usuario"],$fila["am_usuario"],$fila["tipo_usuario"],$sessionEnd);
     // Construir la consulta
     $sql = '';
     $sql = "INSERT INTO sessiones (
