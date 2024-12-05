@@ -144,7 +144,7 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    $fechaActual = date("Y-m-d");
    $horaActual = date("H:i:s");
 
-   trigger_error("Fecha: $fechaActual | Hora: $horaActual | Servicio: $servicio | Síntomas: $signos_sintomas | Fecha de Retorno: $fechaderetornodeHistoria | Personal de Atención: $personalatencion | Respuesta de Admisión: $respadmision | cod_usuario: $cod_usuario", E_USER_ERROR);
+   trigger_error("cod_usuario: $cod_usuario", E_USER_ERROR);
 
    $sql = "insert into registro_diario(
     fecha_rd,

@@ -450,6 +450,21 @@ function buscarResponsableAdmision() {
         	datos.append("personalatencion",cd_atencion);
         	datos.append("respadmision",cd_admision);
         	datos.append("fechaderetornodeHistoria",fechaderetornodeHistoria);
+          alert(
+  "Código de Usuario: " + cod_usuario + "\n" +
+  "Nombre: " + nombre + "\n" +
+  "Apellido Paterno: " + ap_usuario + "\n" +
+  "Apellido Materno: " + am_usuario + "\n" +
+  "Fecha de Nacimiento: " + fecha_nacimiento + "\n" +
+  "Edad: " + edad + "\n" +
+  "Dirección: " + direccion_usuario + "\n" +
+  "Servicio: " + servicio + "\n" +
+  "Signos y Síntomas: " + signos_sintomas + "\n" +
+  "Historia Clínica: " + historiaclinica + "\n" +
+  "Código de Atención: " + cd_atencion + "\n" +
+  "Código de Admisión: " + cd_admision + "\n" +
+  "Fecha de Retorno: " + fechaderetornodeHistoria
+);
 
           $.ajax({
             url: "../controlador/registroDiario.controlador.php?accion=rNp",
