@@ -90,7 +90,7 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    $sql='';
    if($cod_usuario =="" || $cod_usuario == NULL){
      $sql = "insert into usuario(ci_usuario,
-     usuario,
+     nombre_usuario,
      ap_usuario,
      am_usuario,
      fecha_nac_usuario,

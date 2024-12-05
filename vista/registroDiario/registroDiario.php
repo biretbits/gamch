@@ -450,7 +450,7 @@ function buscarResponsableAdmision() {
         	datos.append("personalatencion",cd_atencion);
         	datos.append("respadmision",cd_admision);
         	datos.append("fechaderetornodeHistoria",fechaderetornodeHistoria);
-          alert(
+    /*      alert(
   "Código de Usuario: " + cod_usuario + "\n" +
   "Nombre: " + nombre + "\n" +
   "Apellido Paterno: " + ap_usuario + "\n" +
@@ -464,7 +464,7 @@ function buscarResponsableAdmision() {
   "Código de Atención: " + cd_atencion + "\n" +
   "Código de Admisión: " + cd_admision + "\n" +
   "Fecha de Retorno: " + fechaderetornodeHistoria
-);
+);*/
 
           $.ajax({
             url: "../controlador/registroDiario.controlador.php?accion=rNp",
@@ -473,7 +473,7 @@ function buscarResponsableAdmision() {
             contentType: false, // Deshabilitar la codificación de tipo MIME
             processData: false, // Deshabilitar la codificación de datos
             success: function(data) {
-              alert(data+"dasdas");
+            //  alert(data+"dasdas");
               data=$.trim(data);
               if(data == "correcto"){
 
