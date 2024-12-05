@@ -17,8 +17,7 @@
                         <span class="input-group-addon" id="grupo_user"></span>
                     </div>
                     <span id="text_user"></span>
-                    <br>
-
+                    
                     <div class="input-group mb-3">
                         <input class="form-control" style="color:black" type="password" id="contrasena" name="contrasena" placeholder="Contraseña"><br>
                         <button class="btn btn-outline-secondary" type="button" id="che" onclick="mostrar()">
