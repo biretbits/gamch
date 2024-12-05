@@ -115,7 +115,6 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
      ,1,
      'activo'
    )";
-   $cod_usuario = 2;
       $resul = $this->con->query($sql);
       $ultimo_id = $this->con->insert_id;
       $cod_usuario = $ultimo_id;
@@ -124,6 +123,7 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    $fechaActual = date("Y-m-d");
    $horaActual = date("H:i:s");
 
+   $cod_usuario = 2;
    $sql33 = "insert into registro_diario(
     fecha_rd,
    hora_rd,
