@@ -86,7 +86,7 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
 
  public function insertarNewpacientes($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
  $historiaclinica,$signos_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria){
-   if($cod_usuario ==""){
+   if($cod_usuario =="" || $cod_usuario == NULL){
      $sql = "insert into usuario(ci_usuario,
      usuario,
      nombre_usuario,
@@ -140,13 +140,13 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
        $cod_usuario = $ultimo_id;
      }
   }
-    $sql = '';
+    $sql33 = '';
    $fechaActual = date("Y-m-d");
    $horaActual = date("H:i:s");
 
    trigger_error("cod_usuario: $cod_usuario", E_USER_ERROR);
 
-   $sql = "insert into registro_diario(
+   $sql33 = "insert into registro_diario(
     fecha_rd,
    hora_rd,
    servicio_rd,
@@ -158,8 +158,8 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    paciente_rd,
    cod_cds,
    estado)values('$fechaActual','$horaActual',
-   $servicio,'$signos_sintomas','no','$fechaderetornodeHistoria',$personalatencion,$respadmision,$cod_usuario,1,'activo');";
-   $resu = $this->con->query($sql);#ejecutamos y ya existe esta fila con el campo no
+   $servicio,'$signos_sintomas','no','$fechaderetornodeHistoria',$personalatencion,$respadmision,$cod_usuario,1,'activo')";
+   $resu = $this->con->query($sql33);#ejecutamos y ya existe esta fila con el campo no
    $sql_consu = "select *from historial where paciente_rd = $cod_usuario";#buscamos si el usuario tiene historial registrado si o no
    $res = $this->con->query($sql_consu);
    $si = "no";#luego realizamos esta consulta
