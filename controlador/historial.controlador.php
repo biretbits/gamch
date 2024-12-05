@@ -520,6 +520,7 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
         }
       } else {
           echo "Error al mover el archivo.";
+          var_dump(error_get_last());
       }
     }
   }

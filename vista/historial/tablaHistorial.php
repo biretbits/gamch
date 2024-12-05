@@ -1375,7 +1375,7 @@ function RegistroImagen(){
       contentType: false, // Deshabilitar la codificación de tipo MIME
       processData: false, // Deshabilitar la codificación de datos
       success: function(data) {
-        //alert(data);
+        alert(data);
         //console.log(data);
         data=$.trim(data);
         if(data == "correcto"){
