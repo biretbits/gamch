@@ -165,7 +165,13 @@ $respadmision,$fechaderetornodeHistoria){
   $resu = $this->con->query($sql);
   if($resu != ""){
     $sql = "update registro_diario set servicio_rd = $servicio,signo_sintomas_rd = '$signos_sintomas',
-    fecha_retorno_historia_rd='$fechaderetornodeHistoria', pe_brinda_atencion_rd = $personalatencion, resp_admision_rd = $respadmision
+    fecha_retorno_historia_rd=";
+    if($fechaderetornodeHistoria == ''||$fechaderetornodeHistoria == NULL){
+      $sql.="NULL";
+    }else{
+      $sql.="'$fechaderetornodeHistoria'";
+    }
+    $sql.=",pe_brinda_atencion_rd = $personalatencion, resp_admision_rd = $respadmision
     where paciente_rd = $cod_usuario and cod_rd = $cod_rd";
     $resus = $this->con->query($sql);
   }
