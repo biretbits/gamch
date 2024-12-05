@@ -677,7 +677,7 @@ function crearTablaHistorial($conn){
     `hoja` int(11) DEFAULT NULL,
     `titulo` char(100),
     `subtitulo` char(100),
-    `tipoHistorial` char(15) DEFAULT NULL,
+    `tipoHistorial` char(50) DEFAULT NULL,
     `fecha` date DEFAULT NULL,
     `hora` time DEFAULT NULL,
     `estado` char(20) DEFAULT NULL,
