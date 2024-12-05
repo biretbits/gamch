@@ -120,7 +120,6 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    $fechaActual = date("Y-m-d");
    $horaActual = date("H:i:s");
 
-   $cod_usuario = 2;
    $sql33 = "insert into registro_diario(
     fecha_rd,
    hora_rd,
