@@ -212,6 +212,7 @@ class Usuario
     $sql = '';
     if (is_numeric($session_id)) {
     // Si session_id es numérico, se realiza un UPDATE
+
     $sql = "UPDATE sessiones
             SET
                 cod_usuario = $cod_usuario,
@@ -226,9 +227,9 @@ class Usuario
     } else {
         // Si session_id no es numérico, se realiza un INSERT
         $sql = "INSERT INTO sessiones (
-                    cod_usuario, usuario, nombre_usuario, ap_usuario, am_usuario, tipo_usuario, session_start, session_end
+                    session_id, cod_usuario, usuario, nombre_usuario, ap_usuario, am_usuario, tipo_usuario, session_start, session_end
                 ) VALUES (
-                     $cod_usuario, '$usuario', '$nombre_usuario', '$ap_usuario', '$am_usuario', '$tipo_usuario', NOW(), '$session_end'
+                    '$session_id', $cod_usuario, '$usuario', '$nombre_usuario', '$ap_usuario', '$am_usuario', '$tipo_usuario', NOW(), '$session_end'
                 )";
     }
 
