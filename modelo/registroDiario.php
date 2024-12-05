@@ -90,32 +90,20 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    {
      $fechaderetornodeHistoria = '0000-00-00';
    }
+   $sql='';
    if($cod_usuario =="" || $cod_usuario == NULL){
      $sql = "insert into usuario(ci_usuario,
      usuario,
-     nombre_usuario,
      ap_usuario,
      am_usuario,
      fecha_nac_usuario,
      edad_usuario,
      telefono_usuario,
      direccion_usuario,
-     profesion_usuario,
-     especialidad_usuario,
-     ocupacion_usuario,
-     comunidad_usuario,
-     estado_civil_usuario,
-     escolaridad_usuario,
-     autoidentificacion_usuario,
-     nro_seguro_usuario,
-     nro_car_form_usuario,
-     sexo_usuario,
      tipo_usuario,
-     contrasena_usuario,
      cod_cds,
      estado)values(
        0,
-       '',
        '$nombre',
        '$ap_usuario',
        '$am_usuario',
@@ -123,31 +111,18 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
        $edad,
        0,
        '$direccion_usuario',
-     '',
-     '',
-     '',
-     '',
-     '',
-     '',
-     '',
-     '',
-     '',
-     '',
      'paciente'
-     ,''
      ,1,
      'activo'
    )";
+   $cod_usuario = 0;
       $resul = $this->con->query($sql);
       $ultimo_id = $this->con->insert_id;
       $cod_usuario = $ultimo_id;
-
-  }
+    }
     $sql33 = '';
    $fechaActual = date("Y-m-d");
    $horaActual = date("H:i:s");
-
-   trigger_error("cod_usuario: $cod_usuario", E_USER_ERROR);
 
    $sql33 = "insert into registro_diario(
     fecha_rd,
