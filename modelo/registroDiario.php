@@ -140,12 +140,24 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
        $cod_usuario = $ultimo_id;
      }
   }
-
-
+    $sql = '';
    $fechaActual = date("Y-m-d");
    $horaActual = date("H:i:s");
-   $sql = "insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,
-   fecha_retorno_historia_rd,pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,estado)values('$fechaActual','$horaActual',
+
+   trigger_error("Fecha: $fechaActual | Hora: $horaActual | Servicio: $servicio | Síntomas: $signos_sintomas | Fecha de Retorno: $fechaderetornodeHistoria | Personal de Atención: $personalatencion | Respuesta de Admisión: $respadmision | cod_usuario: $cod_usuario", E_USER_ERROR);
+
+   $sql = "insert into registro_diario(
+    fecha_rd,
+   hora_rd,
+   servicio_rd,
+   signo_sintomas_rd,
+   historial_clinico_rd,
+   fecha_retorno_historia_rd,
+   pe_brinda_atencion_rd,
+   resp_admision_rd,
+   paciente_rd,
+   cod_cds,
+   estado)values('$fechaActual','$horaActual',
    $servicio,'$signos_sintomas','no','$fechaderetornodeHistoria',$personalatencion,$respadmision,$cod_usuario,1,'activo');";
    $resu = $this->con->query($sql);#ejecutamos y ya existe esta fila con el campo no
    $sql_consu = "select *from historial where paciente_rd = $cod_usuario";#buscamos si el usuario tiene historial registrado si o no
