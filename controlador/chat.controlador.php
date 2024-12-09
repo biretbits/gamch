@@ -39,7 +39,7 @@ class ChatControlador{
       $resul = $ch->SeleccionarChat($buscar,$inicioList,$listarDeCuanto);
       echo "<div class='row'>
         <div class='col'>
-          <div class='table-responsive'>
+          <div class='table-responsive' style='font-size:12px'>
           <table class='table'  style='font-size:12px'>
             <thead style='font-size:12px'>
               <tr>

@@ -55,7 +55,7 @@
                         </button>
                       </div>
                       <div class="col-auto mb-2" title="Registro o actualizar">
-                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','','','',0,0,0,0,'')">
+                        <button type="button" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro" onclick="ActualizarNombreGenerico('','','','',0,0,0,'','')">
                           <img src='../imagenes/new.ico' style='height: 25px;width: 25px;'>
                         </button>
                       </div>
@@ -77,7 +77,7 @@
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h6 class="modal-title" id="miModalRegistro">Registro o Actualización de producto farmaceutico</h6>
+                          <h6 class="modal-title" id="miModalRegistro">Registro de producto farmacéutico</h6>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Contenido del modal -->
@@ -86,12 +86,16 @@
                            <div class="card-body">
                              <h6 class="card-title text-center"></h6>
                              <form>
+                               <input type="hidden" name="" id='codigo2' value="">
                                  <div class="mb-3">
-                                   <label for="name" class="form-label">Codigo</label>
-                                   <input type="text" class="form-control" id="codigo" name='codigo' placeholder="Codigo del producto">
+                                   <label for="name" class="form-label">Código</label>
+                                   <input type="text" class="form-control" id="codigo" value='' name='codigo' placeholder="Código del producto" onkeyup="verificarDuplicados()">
+                                   <div id='mensaje_texto'>
+
+                                   </div>
                                  </div>
                                <div class="mb-3">
-                                 <label for="name" class="form-label">Nombre nuevo generico</label>
+                                 <label for="name" class="form-label">Nombre genérico</label>
                                  <input type="text" class="form-control" id="generico" name='generico' placeholder="Nombre generico">
                                </div>
                                <div class="mb-3">
@@ -103,7 +107,7 @@
                                  <input type="text" class="form-control" id="vitrina" name='vitrina' placeholder="Vitrina o lugar">
                                </div>
                                <div class="mb-3">
-                                 <label for="name" class="form-label">Stock minimo</label>
+                                 <label for="name" class="form-label">Stock mínimo</label>
                                  <input type="number" class="form-control" id="stockmin" min='0'name='stockmin' value='0' placeholder="stock minimo">
                                </div>
                               <!-- <div class="mb-3">
@@ -123,9 +127,9 @@
                                   </select>
                               </div>
                               <div class="mb-3">
-                                 <label for="cod_conc" class="form-label">Concentración unidad de medida</label>
+                                 <label for="cod_conc" class="form-label">Concentración unidad de médida</label>
                                   <select id='cod_conc' name="cod_conc" class="form-select">
-                                      <option value="">Seleccione Concentración unidad de medida</option>
+                                      <option value="">Seleccione Concentración unidad de médida</option>
                                    <?php
                                     while($row=mysqli_fetch_array($rc)){
                                        echo "<option value='".$row['cod_conc']."'>".$row['concentracion']."</option>";
@@ -366,10 +370,49 @@
 
        }
       </style>
-
-
- <!-- modal de seleccion de fechas-->
 <script type="text/javascript">
+var si8 = '';
+//function para verificar si hay registros deobles en la base de datos del codigo del Productos
+function verificarDuplicados() {
+  var codigo = document.getElementById("codigo").value;
+  var codigo2 = document.getElementById("codigo2").value;
+
+  var datos = new FormData(); // Crear un objeto FormData vacío
+  datos.append('codigo', codigo);
+
+  $.ajax({
+    url: "../controlador/farmacia.controlador.php?accion=VerCod",
+    type: "POST",
+    data: datos,
+    contentType: false, // Deshabilitar la codificación de tipo MIME
+    processData: false, // Deshabilitar la codificación de datos
+    success: function(data) {
+      //alert(data);
+      data = $.trim(data);  // Eliminar espacios en blanco innecesarios
+      // Verificar si el código ya está registrado
+      if(data === "no_hay") {
+        si8 = 'correcto';
+        $("#mensaje_texto").html("<div class='alert alert-success' role='alert'>Código de producto correcto.</div>");
+      } else {
+        if(codigo == codigo2 && codigo !='' && codigo2 !=''){
+          si8='correcto';
+          $("#mensaje_texto").html("<div class='alert alert-success' role='alert'>Código de producto correcto.</div>");
+        }else{
+          si8 = 'incorrecto';
+          $("#mensaje_texto").html("<div class='alert alert-danger' role='alert'>El código de producto ya se encuentra registrado en el sistema.</div>");
+        }
+      }
+      existeOno();
+    }
+  });
+}
+
+function existeOno(){
+  setTimeout(function() {
+    $("#mensaje_texto").html("");
+  }, 8000);
+}
+
 function Buscar(page){
     var obt_lis = document.getElementById("selectList").value;
     var listarDeCuanto = verificarList(obt_lis);
@@ -412,6 +455,11 @@ function Buscar(page){
     var stockmax=0;
     var cod_forma = document.getElementById("cod_forma").value;
     var cod_conc = document.getElementById("cod_conc").value;
+    var codigo2 = document.getElementById("codigo2").value;
+    if(si8 == 'incorrecto'){
+      verificarDuplicados();
+      return;
+    }
     if(generico == ''){
       Vacio();
       return;
@@ -538,6 +586,7 @@ function Buscar(page){
     document.getElementById("vitrina").value=vitrina;
     document.getElementById("stockmin").value=stockmin;
     document.getElementById("codigo").value=codigo;
+    document.getElementById("codigo2").value=codigo;
     if(cod_forma == 0){
       document.getElementById("cod_forma").selectedIndex = 0;
     }else{
@@ -608,5 +657,6 @@ function reporte(){
  document.body.appendChild(form);
  form.submit();
 }
+
 </script>
 <?php require("../librerias/footeruni.php"); ?>

@@ -43,7 +43,7 @@ class FarmaciaControlador{
       echo "<div class='row'>
         <div class='col'>
           <div class='table-responsive'>
-          <table class='table'>
+          <table class='table' style='font-size:12px'>
             <thead style='font-size:12px'>
               <tr>
                 <th>N°</th>
@@ -179,7 +179,7 @@ class FarmaciaControlador{
     echo "<div class='row'>
       <div class='col'>
         <div class='table-responsive'>
-        <table class='table'>
+        <table class='table' style='font-size:12px'>
           <thead style='font-size:12px'>
             <tr>
               <th>N°</th>
@@ -376,7 +376,7 @@ class FarmaciaControlador{
     echo "<div class='row'>
       <div class='col'>
         <div class='table-responsive'>
-        <table class='table'>
+        <table class='table' style='font-size:12px'>
           <thead style='font-size:12px'>
             <tr>
               <th>N°</th>
@@ -518,7 +518,7 @@ class FarmaciaControlador{
   public function registrarNombreGenerico($generico,$cod_generico,$enfermedad,$vitrina,$stockmin,$stockmax,$cod_forma,$cod_conc,$codigo){
     $fa =new Farmacia();
     $usuario=$_SESSION["cod_usuario"];
-    $resul = $fa->InsertarActualizarNombreGenerico($generico,$cod_generico,$enfermedad,$vitrina,$stockmin,$stockmax,$cod_forma,$cod_conc,$usuario,$codigo);
+    $resul = $fa->InsertarActualizarNombreGenerico(ucfirst($generico),$cod_generico,ucfirst($enfermedad),$vitrina,$stockmin,$stockmax,$cod_forma,$cod_conc,$usuario,strtoupper($codigo));
     if($resul != ""){
         echo "correcto";
     } else{
@@ -735,7 +735,7 @@ function ActualizarCantidadProducto($fa){
       echo "<div class='row'>
         <div class='col'>
           <div class='table-responsive'>
-          <table class='table'>
+          <table class='table' style='font-size:12px'>
             <thead style='font-size:12px'>
               <tr>
               <th>N°</th>
@@ -1014,7 +1014,7 @@ function ActualizarCantidadProducto($fa){
         echo "<div class='row'>
           <div class='col'>
             <div class='table-responsive'>
-            <table class='table'>
+            <table class='table' style='font-size:12px'>
               <thead style='font-size:12px'>
                 <tr>
                   <th>N°</th>
@@ -1659,7 +1659,7 @@ function ActualizarCantidadProducto($fa){
           echo "<div class='row'>
             <div class='col'>
               <div class='table-responsive'>
-              <table class='table'>
+              <table class='table' style='font-size:12px'>
                 <thead style='font-size:12px'>
                   <tr>
                   <th>N°</th>
@@ -1861,7 +1861,7 @@ function ActualizarCantidadProducto($fa){
           echo "<div class='row'>
             <div class='col'>
               <div class='table-responsive'>
-              <table class='table'>
+              <table class='table' style='font-size:12px'>
                 <thead style='font-size:12px'>
                   <tr>
                   <th>N°</th>
@@ -2110,6 +2110,20 @@ function ActualizarCantidadProducto($fa){
       $rp=$fa->seleccionarP();
       require("../vista/farmacia/ReportefarmaciaSalida.php");
     }
+
+    public function VerificarEnBaseDeDatosCodigo($codigo){
+      $fa =new Farmacia();
+      $res = $fa->SeleccionarSihayDobleEnBd(strtoupper($codigo));
+      if($res != ''){
+        if(mysqli_num_rows($res)>0){
+          echo 'si_hay';
+        }else{
+          echo 'no_hay';
+        }
+      }else{
+          echo "no_hay";
+      }
+    }
   }
 
   $f = new FarmaciaControlador();
@@ -2288,6 +2302,9 @@ function ActualizarCantidadProducto($fa){
   	}
     if(isset($_GET["accion"]) && $_GET["accion"]=="Rts"){
   		$f->VisualizarSalidaFarmaciaReporte($_POST['fechai'],$_POST["fechaf"],$_POST["buscar"]);
+  	}
+    if(isset($_GET["accion"]) && $_GET["accion"]=="VerCod"){
+  		$f->VerificarEnBaseDeDatosCodigo($_POST['codigo']);
   	}
 
   }else{

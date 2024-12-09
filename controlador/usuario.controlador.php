@@ -224,7 +224,7 @@ class UsuarioControlador{
   public function insertarUsuario($usuario,$nombre_usuario,$ap_usuario,$am_usuario,$ci,$telefono_usuario,$direccion_usuario,$profesion_usuario,
   $especialidad_usuario,$tipo_usuario,$contraseña_usuario,$cod_usuario,$accion){
     $usu = new Usuario();
-    $resp = $usu->insertarUpdateUsuarios($usuario,$nombre_usuario,$ap_usuario,$am_usuario,$telefono_usuario,$direccion_usuario,$profesion_usuario,
+    $resp = $usu->insertarUpdateUsuarios($usuario,ucfirst($nombre_usuario),ucfirst($ap_usuario),ucfirst($am_usuario),$telefono_usuario,$direccion_usuario,$profesion_usuario,
     $especialidad_usuario,$tipo_usuario,$contraseña_usuario,$ci,$cod_usuario,$accion);
     if($resp != ""){
         if($accion == 1){

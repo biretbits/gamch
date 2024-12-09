@@ -82,7 +82,7 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fech
   <div class='row'>
     <div class='col'>
       <div class='table-responsive'>
-      <table class='table'>
+      <table class='table' style='font-size:12px'>
         <thead style='font-size:12px'>
           <tr>
           <th>N°</th>
@@ -307,7 +307,7 @@ echo "<div class='row'>
   $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria){
     $rnp= new RegistroDiario();
     //echo $cod_usuario;
-    $resp = $rnp->insertarNewpacientes($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
+    $resp = $rnp->insertarNewpacientes($cod_usuario,ucfirst($nombre),ucfirst($ap_usuario),ucfirst($am_usuario),$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
     $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria);
     //echo $cod_usuario;
     if($resp != ""){
@@ -324,7 +324,7 @@ echo "<div class='row'>
     /*$respA = $rnp->insertarNewpacientes($cod_rd,$paciente,$buscar,$pagina,$listarDeCuanto,$fecha,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
     $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria);*/
     //echo $cod_usuario;
-    $resul = $rnp->UpdateDatosRegistroDiario($cod_rd,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,
+    $resul = $rnp->UpdateDatosRegistroDiario($cod_rd,$cod_usuario,ucfirst($nombre),ucfirst($ap_usuario),ucfirst($am_usuario),$fecha_nacimiento,$edad,
     $direccion_usuario,$servicio,$signos_sintomas,$historiaclinica,$personalatencion,
     $respadmision,$fechaderetornodeHistoria);
     if($resul!= ""){
@@ -467,7 +467,7 @@ echo "<div class='row'>
     $resulHistorialDato = $h->seleccionarHisotialDatoTodo($fechainicio,$fechafinal);
     $resultadoTotal = $this->contarPacientesPorEnfermedad($resul,$resulHistorialDato);
     echo "<div class='table-responsive' style='width: 60%; margin: auto;'>
-    <table class='table table-bordered' style='font-size: 12px;'>
+    <table class='table table-bordered' style='font-size: 12px;' >
       <thead style='text-align:center'>
         <tr>
           <th>N°</th>

@@ -869,6 +869,12 @@ class Farmacia
      }
      return $datos;
     }
+
+    public function SeleccionarSihayDobleEnBd($codigo){
+      $sql= "select *from producto where codigo='$codigo'";
+      $resul = $this->con->query($sql);
+      return $resul;
+    }
 }
 
 

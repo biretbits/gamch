@@ -40,7 +40,7 @@ class PatologiaControlador{
       echo "<div class='row'>
         <div class='col'>
           <div class='table-responsive'>
-          <table class='table'>
+          <table class='table' style='font-size:12px'>
             <thead style='font-size:12px'>
               <tr>
                 <th>N°</th>
