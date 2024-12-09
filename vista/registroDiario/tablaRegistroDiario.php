@@ -122,7 +122,7 @@ $_SESSION["diario"] = $RegistroDiario;?>
               <th>Edad</th>
               <th>Dirección</th>
               <th>Servicio</th>
-              <th>Signos y Sintomas</th>
+              <th>Signos y Síntomas</th>
               <th>Personal que Brinda la atención</th>
               <th>Historial Clínica</th>
               <th>Responsable de Admisión</th>

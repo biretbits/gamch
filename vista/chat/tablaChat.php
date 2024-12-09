@@ -9,7 +9,7 @@
 
    ?>
 
-<h4>Registros del Chatbot</h4>
+<h4>Registros Chatbot</h4>
 <div class="row" >
      <div class="col-12">
        <hr>
@@ -31,7 +31,7 @@
                     <input type="hidden" name="cod_generico" id="cod_generico" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
                     <input type="hidden" name="paginas" id='paginas' value="">
                     <div class="row align-items-center">
-                      <label for="selectPage" class="form-label col-auto mb-2">Page</label>
+                      <label for="selectPage" class="form-label col-auto mb-2">Página</label>
                       <div class="col-auto mb-2">
                         <select class="form-select" id="selectList" name="selectList" onchange="Buscar(1)">
                           <option>--</option>
@@ -77,7 +77,7 @@
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h6 class="modal-title" id="miModalRegistro">Registro o Actualización de preguntas y respuestas del chatbot</h6>
+                          <h6 class="modal-title" id="miModalRegistro">Registro de preguntas y respuestas Chatbot</h6>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Contenido del modal -->
@@ -126,7 +126,7 @@
                       <div class="row">
                         <div class="col">
                           <div class="table-responsive">
-                          <table class="table">
+                          <table class="table" style="font-size:12px">
                             <thead style="font-size:12px">
                               <tr>
                                 <th>N°</th>

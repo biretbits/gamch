@@ -9,7 +9,7 @@
 
    ?>
 
-<h4>Registros de Representantes</h4>
+<h4>Registro de Representantes</h4>
 <div class="row" >
      <div class="col-12">
        <hr>
@@ -31,7 +31,7 @@
                     <input type="hidden" name="cod_generico" id="cod_generico" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
                     <input type="hidden" name="paginas" id='paginas' value="">
                     <div class="row align-items-center">
-                      <label for="selectPage" class="form-label col-auto mb-2">Page</label>
+                      <label for="selectPage" class="form-label col-auto mb-2">Listar</label>
                       <div class="col-auto mb-2">
                         <select class="form-select" id="selectList" name="selectList" onchange="Buscar(1)">
                           <option>--</option>
@@ -137,7 +137,7 @@
                               <tr>
                                 <th>N°</th>
                                 <th>Nombre y Apellidos</th>
-                                <th>Telefono</th>
+                                <th>Teléfono</th>
                                 <th>Cargo</th>
                                 <th>Acción</th>
                               </tr>

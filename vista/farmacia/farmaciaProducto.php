@@ -75,7 +75,7 @@
                     <input type="hidden" name="cod_generico" id="cod_generico" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
                     <input type="hidden" name="paginas" id='paginas' value="">
                     <div class="row align-items-center">
-                      <label for="selectPage" class="form-label col-auto mb-2">Pagina</label>
+                      <label for="selectPage" class="form-label col-auto mb-2">Listar</label>
                       <div class="col-auto mb-2">
                         <select class="form-select" id="selectList" name="selectList" onchange="Buscar(1)">
                           <option>--</option>
@@ -240,7 +240,7 @@
                       <div class="row">
                         <div class="col">
                           <div class="table-responsive">
-                          <table class="table">
+                          <table class="table" style='font-size:12px'>
                             <thead style="font-size:12px">
                               <tr>
                                 <th>N°</th>
@@ -249,10 +249,10 @@
                                 <th>Forma farmaceútica</th>
                                 <th>Concentración</th>
                                 <th>N° de Lote</th>
-                                <th>Fecha Vto</th>
+                                <th>Fecha Vencimiento</th>
                                 <th>Cantidad</th>
-                                <th>C./Unitario</th>
-                                <th>C./Total</th>
+                                <th>Costo/Unitario</th>
+                                <th>Costo/Total</th>
                                 <th>Fecha</th>
                                 <th>Estado producto</th>
                                 <th>Encargado</th>

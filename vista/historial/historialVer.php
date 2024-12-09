@@ -35,7 +35,7 @@
   <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
   <input type="hidden" name="cod_his_original" id='cod_his_original' value="<?php $ms = (isset($cod_his_original) && is_numeric($cod_his_original))? $cod_his_original:""; echo $ms; ?>">
   <div class="row align-items-center">
-    <label for="selectPage" class="form-label col-auto mb-2">Page</label>
+    <label for="selectPage" class="form-label col-auto mb-2">Listar</label>
     <div class="col-auto mb-2">
       <select class="form-select" id="selectList" name="selectList" onchange="BuscarRegistrosHistorial(1)">
         <option>--</option>

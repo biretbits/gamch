@@ -142,12 +142,12 @@
                       <div class="row">
                         <div class="col">
                           <div class="table-responsive">
-                          <table class="table">
+                          <table class="table"style='font-size:12px'>
                             <thead style="font-size:12px">
                               <tr>
                                 <th>N°</th>
                                 <th>Nombre</th>
-                                <th>Telefono</th>
+                                <th>Teléfono</th>
                                 <th>Correo</th>
                                 <th>Representante</th>
                                 <th>Acción</th>

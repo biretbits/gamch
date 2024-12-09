@@ -23,7 +23,7 @@
                     <input type="hidden" name="cod_generico" id="cod_generico" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
                     <input type="hidden" name="paginas" id='paginas' value="">
                     <div class="row align-items-center">
-                      <label for="selectPage" class="form-label col-auto mb-2">Pagina</label>
+                      <label for="selectPage" class="form-label col-auto mb-2">Listar</label>
                       <div class="col-auto mb-2">
                         <select class="form-select" id="selectList" name="selectList" onchange="Buscar(1)">
                           <option>--</option>
@@ -114,10 +114,10 @@
                                  <button title='Agrega y Guarda el producto'type="button" id='btnr'class="btn btn-primary" onclick="registrar()"><img src='../imagenes/guardar.ico' style='height: 25px;width: 25px;'> Agregar producto</button>
                                </div>
                                <div class="table-responsive">
-                                <table class="table" id="tablaProductos">
+                                <table class="table" id="tablaProductos" style='font-size:12px'>
                                   <thead>
                                     <tr style="font-size:11px">
-                                      <th>Codigo</th>
+                                      <th>Código</th>
                                       <th>Producto</th>
                                       <th>Cantidad</th>
                                       <th>Costo Total</th>

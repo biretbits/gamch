@@ -58,16 +58,16 @@ class UsuarioControlador{
     <div class='row'>
       <div class='col'>
         <div class='table-responsive'>
-        <table class='table' style='font-size:11px'>
+        <table class='table' style='font-size:12px'>
           <thead>
             <tr>
               <th>N°</th>
-              <th>Cedula de Identidad</th>
+              <th>Cédula de Identidad</th>
               <th>Usuario</th>
               <th>Nombre</th>
               <th>Apellido Paterno</th>
               <th>Apellido Materno</th>
-              <th>Telefono</th>
+              <th>Teléfono</th>
               <th>Dirección</th>
               <th>Profesión</th>
               <th>Especialidad</th>
@@ -94,7 +94,7 @@ class UsuarioControlador{
           echo "<td>".$fi['especialidad_usuario']."</td>";
           echo "<td>".$fi['tipo_usuario']."</td>";
           echo "<td>";
-            echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+          echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
               echo "<button type='button' class='btn btn-info' title='Editar' onclick='accionBtnEditar(".$pagina.",".$listarDeCuanto.",\"".$fi["cod_usuario"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
               if($fi["estado"] == "activo" && $fi["tipo_usuario"] !='admin'){
                 echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";

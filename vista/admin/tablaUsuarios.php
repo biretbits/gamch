@@ -4,7 +4,7 @@
 <div class="container">
   <h2>Usuarios</h2>
   <div class="row">
-      <label for="selectPage" class="form-label">Page</label>
+      <label for="selectPage" class="form-label">Página</label>
       <div class="col-2">
         <select class="form-select" id="selectList" onchange="BuscarUsuarios(1)" name="selectList">
           <option>--</option>
@@ -18,7 +18,7 @@
           <option>1000</option>
         </select>
       </div>
-      <div class="col-2" title="Registro de nuevo usuario">
+      <div class="col-2" title="Registro de usuario">
         <button type="button" class="form-control btn btn-primary" onclick="visforUsuario()"><img src='../imagenes/nuevo_student.ico'style='height: 25px;width: 25px;'></button>
       </div>
       <div class="col-3">
@@ -33,16 +33,16 @@
     <div class="row">
       <div class="col">
         <div class="table-responsive">
-        <table class="table" style='font-size:11px'>
+        <table class="table" style='font-size:12px'>
           <thead>
             <tr>
               <th>N°</th>
-              <th>Cedula de Identidad</th>
+              <th>Cédula de Identidad</th>
               <th>Usuario</th>
               <th>Nombre</th>
               <th>Apellido Paterno</th>
               <th>Apellido Materno</th>
-              <th>Telefono</th>
+              <th>Teléfono</th>
               <th>Dirección</th>
               <th>Profesión</th>
               <th>Especialidad</th>

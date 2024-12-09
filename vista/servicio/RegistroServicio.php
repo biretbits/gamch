@@ -37,7 +37,7 @@
     <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
     <input type="hidden" name="paginas" id='paginas' value="">
     <div class="row align-items-center">
-      <label for="selectList" class="form-label col-auto mb-2">Page</label>
+      <label for="selectList" class="form-label col-auto mb-2">Listar</label>
       <div class="col-auto mb-2">
         <select class="form-select" id="selectList" name="selectList" onchange="buscar(1)">
           <option>--</option>
@@ -86,7 +86,7 @@
     <div class="verDatos" id="verDatos">
       <div class="row">
         <div class="col">
-          <div class="table-responsive">
+          <div class="table-responsive" style='font-size:12px'>
           <table class="table">
             <thead style="font-size:12px">
               <tr>
