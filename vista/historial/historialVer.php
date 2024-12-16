@@ -133,7 +133,7 @@
                   <input type="number" class="form-control" id="peso" value='<?php $ms = (isset($peso_paciente1) && ($peso_paciente1)!='')? $peso_paciente1:""; echo $ms; ?>' placeholder="Ingrese el peso">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">IMC</label>
+                  <label  class="form-label">Índice de Masa Corporal</label>
                   <input type="text" class="form-control" id="imc" placeholder="Ingrese IMC">
                 </div>
 
@@ -142,15 +142,15 @@
                   <input type="text" class="form-control" id="temperatura" placeholder="Ingrese la temperatura">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">F.C.</label>
+                  <label  class="form-label">Frecuencia Cardíaca</label>
                   <input type="text" class="form-control" id="fc" placeholder="Ingrese fc">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">P.A.</label>
+                  <label  class="form-label">Presión Arterial</label>
                   <input type="text" class="form-control" id="pa" placeholder="Ingrese el pa">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">F.R.</label>
+                  <label  class="form-label">Frecuencia Respiratoria</label>
                   <input type="text" class="form-control" id="fr" placeholder="Ingrese el fr">
                 </div>
                 <div class="col-md-8 mb-3">
@@ -172,7 +172,7 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label  class="form-label">Analisis</label>
+                  <label  class="form-label">Análisis</label>
                   <textarea class='form-control' id='analisis'></textarea>
                 </div>
 
@@ -195,7 +195,7 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Medico responsable</label>
+                  <label  class="form-label">Médico responsable</label>
                   <input type="text" class="form-control" id="medico_responsable" placeholder="Medico responsable" onkeyup="buscarMedico()">
                   <div id="resultado13" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'></div>
                 </div>
@@ -221,7 +221,7 @@
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">Registro o Actualización del historial del paciente</h6>
+        <h6 class="modal-title" id="miModalRegistro">REGISTRO HISTORIAL DEL PACIENTE</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -244,7 +244,7 @@
                   </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Apellido paterno del Responsable</label>
+                  <label  class="form-label">Apellido paterno Responsable</label>
                   <input type="text" class="form-control" id="ap_responsable" placeholder="Ingresa Apellido paterno">
                 </div>
                 <div class="col-md-4 mb-3">
@@ -252,7 +252,7 @@
                   <input type="text" class="form-control" id="am_responsable" placeholder="Ingresa Apellido materno">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Fecha de Nacimiento del Responsable</label>
+                  <label  class="form-label">Fecha de Nacimiento Responsable</label>
                   <input type="date" class="form-control" id="fecha_nacimiento_responsable" placeholder="Fecha de Nacimiento" onchange="calcularEdad()">
                 </div>
                 <div class="col-md-4 mb-3">
@@ -265,31 +265,31 @@
                   </select>
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Ocupacion del Responsable</label>
+                  <label  class="form-label">Ocupación Responsable</label>
                   <input type="text" class="form-control" id="ocupacion_responsable" placeholder="ocupacion">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Dirección del Responsable</label>
+                  <label  class="form-label">Dirección Responsable</label>
                   <input type="text" class="form-control" id="direccion_responsable" placeholder="Dirección ">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Telefono del Responsable</label>
+                  <label  class="form-label">Telefono Responsable</label>
                   <input type="number" class="form-control" id="telefono_resposable" placeholder="Telefono">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Comunidad del Responsable</label>
+                  <label  class="form-label">Comunidad Responsable</label>
                   <input type="text" class="form-control" id="comunidad_responsable" placeholder="Comunidad">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">C.I.</label>
+                  <label  class="form-label">Cedula de Identidad</label>
                   <input type="number" class="form-control" id="ci" placeholder="ci">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Numero de Seguro</label>
+                  <label  class="form-label">Número de Seguro</label>
                   <input type="text" class="form-control" id="n_seguro" placeholder="Numero de Seguro">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Numero de Carp Fam</label>
+                  <label  class="form-label">Número de Carp Fam</label>
                   <input type="text" class="form-control" id="n_carp_fam" placeholder="Numero Carp Fam">
                 </div>
                 <div class="col-md-4 mb-3">
