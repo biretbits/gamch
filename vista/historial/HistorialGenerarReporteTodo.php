@@ -220,6 +220,8 @@ include("../librerias/globales.php");
       $fecha_actual_consulta = '';$hora_consulta='';$talla_usuario = '';$peso_usuario='';
       $fc_usuario = '';$fr_usuario='';$imc_usuario='';$pa_usuario = '';$temp_usuario = '';
       $motivo_consulta = '';$objetivo = '';$subjetivo='';$analisis='';$tratamiento='';$evaluacion_seguimiento='';
+      $idioma_paciente = '';$idioma_hablado_paciente = '';
+
       foreach ($resul as $fi){
           $tipoDocumento = $fi['tipoDato'];
           $datospaciente = $fi['paciente_rd_nombre'];
@@ -232,6 +234,8 @@ include("../librerias/globales.php");
             $telefono_paciente = $datos["telefono_usuario_re"];
             $direccion_paciente = $datos["direccion_usuario_re"];
             $talla_usuario = $datos["talla_usuario"];$peso_usuario=$datos["peso_usuario"];
+            $idioma_paciente = $datos["autoidentificacion_usuario"];
+            $idioma_hablado_paciente = $datos["idioma_usuario"];
           }
           if($tipoDocumento == 1){
             $datosResponsable = $fi['datos_responsable_familia'];
@@ -369,10 +373,10 @@ include("../librerias/globales.php");
       </tr>
       <tr>
         <td class="derechoBorde" colspan="3"style="padding: 0;">
-          <div id='datos'>Idioma</div>
+          <div id='datos'>Idioma:&nbsp;&nbsp;&nbsp;<?php $m = (isset($idioma_paciente) && is_string($idioma_paciente))?$idioma_paciente:'';echo $m; ?></div>
         </td>
         <td colspan="3"style="padding: 0;">
-          <div id='datos'>Idiomas hablados</div>
+          <div id='datos'>Idiomas hablados&nbsp;&nbsp;&nbsp;<?php $m = (isset($idioma_hablado_paciente) && is_string($idioma_hablado_paciente))?$idioma_hablado_paciente:'';echo $m; ?></div>
         </td>
       </tr>
 

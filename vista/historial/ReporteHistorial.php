@@ -93,11 +93,13 @@ th {
         <?php
           if ($resul && count($resul) > 0){
               $i = 0;
+              $idioma_paciente = '';$idioma_hablado_paciente = '';
             foreach ($resul as $fi)
                   $datosResponsable = $fi['datos_responsable_familia'];
                   $nombre_resp= "";$ap_resp = '';$am_resp = '';$cod_resp='';$fecha_nac = '';$sexo_resp = '';$ocupacion_resp='';
                   $direccion_responsable  = '';$telefono_resposable='';$comunidad_responsable='';
                   $ci_resp = '';$nro_seguro_resp='';$nro_car_form_resp='';
+
                   foreach ($datosResponsable as $resFamiliar) {
                     $cod_resp=$resFamiliar["cod_usuario"];
                     $nombre_resp = $resFamiliar["nombre_usuario_re"];
@@ -118,6 +120,9 @@ th {
                     $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
                     $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
                     $nombre_usuario=$datos["nombre_usuario_re"];$ap_usuario=$datos["ap_usuario_re"];$am_usuario=$datos["am_usuario_re"];
+                    $idioma_paciente = $datos["autoidentificacion_usuario"];
+                    $idioma_hablado_paciente = $datos["idioma_usuario"];
+
                   }
           ?>
 
@@ -241,12 +246,13 @@ th {
               </div>
             </div>
             <div style="clear:both;"></div>
+
             <div style="width:100%" id='linea saltoLinea2'>
               <div style="width:50%"id='enLineaPoner'>
-                <h1 id='datos'>Idioma</h1>
+                <h1 id='datos'>Idioma:&nbsp;&nbsp;&nbsp;<?php $m = (isset($idioma_paciente) && is_string($idioma_paciente))?$idioma_paciente:'';echo $m; ?></h1>
               </div>
               <div style="width:50%"id='enLineaPoner'>
-                <h1 id='datos'>Idiomas hablados</h1>
+                <h1 id='datos'>Idiomas hablados&nbsp;&nbsp;&nbsp;<?php $m = (isset($idioma_hablado_paciente) && is_string($idioma_hablado_paciente))?$idioma_hablado_paciente:'';echo $m; ?></h1>
               </div>
             </div>
           </div><!--fin cuadro-->
