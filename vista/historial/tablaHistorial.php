@@ -74,6 +74,15 @@
       </div>
     </div>-->
 
+    <div class="col-auto mb-2" title="Registro de Consulta">
+        <button type="button" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal"
+        data-bs-target="#ModalRegistroMotivoConsulta" onclick="registroActualizarConsultaHistorial('','','',''
+        ,'','','','','','','',
+        '','','','','','','','','','','','','',
+        '','')">
+          <img src='../imagenes/historialClinico.ico' style='height: 25px;width: 25px;'>
+        </button>
+    </div>
     <div class="col-auto mb-2" title="Registro de archivo">
         <button type="button" class="d-sm-inline-block btn btn-sm btn-info shadow-sm" data-bs-toggle="modal"
         data-bs-target="#ModalRegistroDocumentos"
@@ -109,7 +118,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="miModalLabel">Registro o actualización de un nuevo Historial</h5>
+          <h5 class="modal-title" id="miModalLabel">Registro de nuevo Historial</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!-- Contenido del modal -->
@@ -140,12 +149,13 @@
     </div>
   </div>
 
+
   <!--Modal de registro de motivos de consultas-->
   <div class="modal fade" id="ModalRegistroMotivoConsulta" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">Registro o Actualización de motivo de consulta</h6>
+        <h6 class="modal-title" id="miModalRegistro">Registro de Consulta</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -159,18 +169,21 @@
 
               <input type="hidden" name="cod_usuario_consulta"  id = "cod_usuario_medico" value="">
               <input type="hidden" name="cod_historial_consulta" id='cod_historial_consulta' value="">
+              <input type="hidden" name="cod_patologia" id='cod_patologia' value="">
+              <input type="hidden" name="cod_dat" id='cod_dat' value="">
+              <input type="hidden" name="cod_historial_original" id='cod_historial_original' value="">
               <div class="row">
 
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Talla</label>
-                  <input type="number" class="form-control" id="talla" placeholder="Ingrese la talla">
+                  <input type="number" class="form-control" id="talla" value='<?php $ms = (isset($talla_paciente1) && ($talla_paciente1)!='')? $talla_paciente1:""; echo $ms; ?>' placeholder="Ingrese la talla">
                 </div>
                 <div class="col-md-4 mb-3">
                   <label  class="form-label">Peso</label>
-                  <input type="number" class="form-control" id="peso" placeholder="Ingrese el peso">
+                  <input type="number" class="form-control" id="peso" value='<?php $ms = (isset($peso_paciente1) && ($peso_paciente1)!='')? $peso_paciente1:""; echo $ms; ?>' placeholder="Ingrese el peso">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">IMC</label>
+                  <label  class="form-label">Índice de Masa Corporal</label>
                   <input type="text" class="form-control" id="imc" placeholder="Ingrese IMC">
                 </div>
 
@@ -179,24 +192,25 @@
                   <input type="text" class="form-control" id="temperatura" placeholder="Ingrese la temperatura">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">F.C.</label>
+                  <label  class="form-label">Frecuencia Cardíaca</label>
                   <input type="text" class="form-control" id="fc" placeholder="Ingrese fc">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">P.A.</label>
+                  <label  class="form-label">Presión Arterial</label>
                   <input type="text" class="form-control" id="pa" placeholder="Ingrese el pa">
                 </div>
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">F.R.</label>
+                  <label  class="form-label">Frecuencia Respiratoria</label>
                   <input type="text" class="form-control" id="fr" placeholder="Ingrese el fr">
                 </div>
-
-                <div class="col-md-4 mb-3">
+                <div class="col-md-8 mb-3">
                 </div>
                 <div class="col-md-6 mb-3">
-                  <label  class="form-label">Motivo de consulta</label>
-                  <textarea class='form-control' id='motivo_consulta'></textarea>
-                </div>
+                 <label for="motivo_consulta" class="form-label">Motivo de consulta</label>
+                 <input type="text" class="form-control" id="motivo_consulta" placeholder="Busque el motivo de consulta" onkeyup="buscarMotivoDeConsulta()" autocomplete="off">
+                 <div id="resultadoMotivo" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
+                 </div>
+               </div>
                 <div class="col-md-6 mb-3">
                   <label  class="form-label">Subjetivo</label>
                   <textarea class='form-control' id='subjetivo'></textarea>
@@ -208,7 +222,7 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label  class="form-label">Analisis</label>
+                  <label  class="form-label">Análisis</label>
                   <textarea class='form-control' id='analisis'></textarea>
                 </div>
 
@@ -231,7 +245,7 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                  <label  class="form-label">Medico responsable</label>
+                  <label  class="form-label">Médico responsable</label>
                   <input type="text" class="form-control" id="medico_responsable" placeholder="Medico responsable" onkeyup="buscarMedico()">
                   <div id="resultado13" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'></div>
                 </div>
@@ -246,18 +260,15 @@
          <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><img src='../imagenes/drop.ico' style='height: 25px;width: 25px;'></button>
         </div>
       </div><!--fin del modal-->
-
       </div>
-
     </div>
-
-
   <!--end-->
+
   <div class="modal fade" id="ModalRegistro" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">Registro o Actualización del historial del paciente</h6>
+        <h6 class="modal-title" id="miModalRegistro">Registro historial del paciente</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -439,7 +450,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <h6 class="modal-title" id="miModalRegistro">REGISTRO O ACTUALIZACIÓN DE RECIBOS DEL PACIENTE EN IMAGEN</h6>
+      <h6 class="modal-title" id="miModalRegistro">REGISTRO DE RECIBOS</h6>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <!-- Contenido del modal -->
@@ -552,13 +563,17 @@
               }
               $datospaciente = $fi['paciente_rd_nombre'];
               echo "<td>";
+
               $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
-              $estado_civil_paciente = '';$escolaridad_paciente = '';
+              $estado_civil_paciente = '';$escolaridad_paciente = '';$peso_paciente='';$talla_paciente='';
+              $idioma_paciente = '';$autoidentificacion_paciente = '';
               foreach ($datospaciente as $datos) {
                 $fecha_nac_paciente=$datos["fn_usuario_re"];
                 $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
                 $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
+                $idioma_paciente = $datos["idioma_usuario"];$autoidentificacion_paciente=$datos["autoidentificacion_usuario"];
                 echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
+                $peso_paciente = $datos["peso_usuario"];$talla_paciente = $datos["talla_usuario"];
               }
               echo "</td>";
 
@@ -575,20 +590,64 @@
                     <img src='../imagenes/ojo.ico' height='17' width='17' class='rounded-circle'></button>";
 
                   }else{
-                    $datoEs = $fi["datos"];
-                    $cod_his_dat='';$cod_rd='';$paciente_rd='';$cod_cds='';$zona_his='';
-                    $descripcion='';$hoja='';$nombre_imagen='';$ruta_imagen='';$tipoDato = '';
-                    foreach ($datoEs as $dimagen) {
-                      $cod_his_dat=$dimagen["cod_his_dat"];$cod_rd=$dimagen["cod_rd"];$paciente_rd=$dimagen["paciente_rd"];$cod_cds=$dimagen["cod_cds"];$zona_his=$dimagen["zona_his"];
-                      $descripcion=$dimagen["descripcion"];$hoja=$dimagen["hoja"];$nombre_imagen=$dimagen["nombre_imagen"];$ruta_imagen=$dimagen["ruta_imagen"];
-                      $tipoDato=$dimagen["tipoDato"];
+                    if($fi["tipoDato"]==3){
+
+                        $nombre_medico = '';$apellidoP='';$apellidoM='';
+                        foreach ($fi["datos_responsable_medico"] as $da) {
+                          $nombre_medico = $da["nombre_usuario_re"];
+                          $apellidoP = $da["ap_usuario_re"];
+                          $apellidoM = $da["am_usuario_re"];
+                        }
+                        $unir = $nombre_medico." ".$apellidoP." ".$apellidoM;
+                        $patologia = '';$cod_patologia='';
+                        foreach ($fi["motivo_consulta"] as $da2) {
+                          $patologia = $da2["nombre"];
+                          $cod_patologia = $da2["cod_pat"];
+                        }
+                        $cod_his_dat='';  $cod_rd='';$paciente_rd='';$cod_cds='';$descripcion='';
+                        $imc='';  $temp='';  $fc='';  $pa='';  $fr='';  $subjetivo='';  $objetivo='';  $analisis='';  $tratamiento='';
+                        $evaluacion_de_seguimiento='';$tipoDato='';
+                        foreach ($fi["datosConsulta"] as $d) {
+                          $cod_his_dat=trim($d["cod_his_dat"]);
+                          $cod_rd=trim($d["cod_rd"]);$paciente_rd=trim($d["paciente_rd"]);$cod_cds=trim($d["cod_cds"]);$descripcion=trim($d["descripcion"]);
+                          $imc=trim($d["imc"]);$temp=trim($d["temp"]);$fc=trim($d["fc"]);
+                          $pa=trim($d["pa"]);$fr=trim($d["fr"]);$subjetivo=trim($d["subjetivo"]);$objetivo=trim($d["objetivo"]);$analisis=trim($d["analisis"]);$tratamiento=trim($d["tratamiento"]);
+                          $evaluacion_de_seguimiento=trim($d["evaluacion_de_seguimiento"]);$cod_responsable_medico=trim($d["cod_responsable_medico"]);
+                          $fecha=$d["fecha"];$hora=$d["hora"];$cod_his_dat = $d["cod_his_dat"];
+                          $tipoDato = $d["tipoDato"];
+                        }
+                        echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroMotivoConsulta' title='Editar'
+                        onclick='registroActualizarConsultaHistorial(\"".$peso_paciente."\",\"".$talla_paciente."\",
+                        ".$cod_his_dat.",".$cod_rd.",
+                        ".$paciente_rd.",".$cod_cds."
+                        ,\"".$descripcion."\",\"".$imc."\"
+                        ,\"".$temp."\",\"".$fc."\",\"".$pa."\",
+                        \"".$fr."\",\"".$subjetivo."\",\"".$objetivo."\"
+                        ,\"".$analisis."\",
+                        \"".$tratamiento."\",\"".$evaluacion_de_seguimiento."\",
+                        ".$cod_responsable_medico.",".$fi["cod_his"].",
+                        \"".$fecha."\",\"".$hora."\",\"".$unir."\",".$cod_his_dat.",
+                        \"".$patologia."\",\"".$cod_patologia."\")'>
+                        <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                        echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimirConsulta(".$cod_his_dat.",\"".$tipoDato."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+
+                    }else if($fi["tipoDato"]==2){
+                      $datoEs = $fi["datos"];
+                      $cod_his_dat='';$cod_rd='';$paciente_rd='';$cod_cds='';$zona_his='';
+                      $descripcion='';$hoja='';$nombre_imagen='';$ruta_imagen='';$tipoDato = '';
+                      foreach ($datoEs as $dimagen) {
+                        $cod_his_dat=$dimagen["cod_his_dat"];$cod_rd=$dimagen["cod_rd"];$paciente_rd=$dimagen["paciente_rd"];$cod_cds=$dimagen["cod_cds"];$zona_his=$dimagen["zona_his"];
+                        $descripcion=$dimagen["descripcion"];$hoja=$dimagen["hoja"];$nombre_imagen=$dimagen["nombre_imagen"];$ruta_imagen=$dimagen["ruta_imagen"];
+                        $tipoDato=$dimagen["tipoDato"];
+                      }
+                      //si no se mostrar el boton de editar la imagen y imprimir la imagen
+                      echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
+                      onclick='actualizarImagen(\"".$fi['cod_his']."\",\"".$cod_his_dat."\"
+                     ,\"".$descripcion."\",\"".$nombre_imagen."\",\"".$ruta_imagen."\",\"".$fi["titulo"]."\")'>
+                     <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                     echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$cod_his_dat.",\"".$tipoDato."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+
                     }
-                    //si no se mostrar el boton de editar la imagen y imprimir la imagen
-                    echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-secondary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
-                    onclick='actualizarImagen(\"".$fi['cod_his']."\",\"".$cod_his_dat."\"
-                   ,\"".$descripcion."\",\"".$nombre_imagen."\",\"".$ruta_imagen."\",\"".$fi["titulo"]."\")'>
-                   <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                   echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$cod_his_dat.",\"".$tipoDato."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
 
                   }
                     //echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
@@ -1234,6 +1293,36 @@ function imprimir(cod_his,tipoDato){
    document.body.appendChild(form);
    form.submit();
 }
+//esto funciona para imprimir el reporte de la consulta del paciente
+function imprimirConsulta(cod_his,tipoDato){
+  var paciente_rd=document.getElementById("paciente_rd").value;
+  var cod_rd=document.getElementById("cod_rd").value;
+  var cod_his_original = document.getElementById("cod_historial_consulta").value;
+    var form = document.createElement('form');
+     form.method = 'post';
+     form.action = '../controlador/historial.controlador.php?accion=ihure'; // Coloca la URL de destino correcta
+     // Agregar campos ocultos para cada dato
+     var datos = {
+         paciente_rd:paciente_rd,
+         cod_historial:cod_his,
+         cod_rd:cod_rd,
+         tipoDato:tipoDato,
+         cod_his_original:cod_his_original
+     };
+     for (var key in datos) {
+         if (datos.hasOwnProperty(key)) {
+             var input = document.createElement('input');
+             input.type = 'hidden';
+             input.name = key;
+             input.value = datos[key];
+             form.appendChild(input);
+         }
+     }
+   // Agregar el formulario al cuerpo del documento y enviarlo
+   document.body.appendChild(form);
+   form.submit();
+}
+
 
 function calcularEdad(){
   const hoy = new Date();
@@ -1604,5 +1693,173 @@ function verHistorial(cod_historial){
 function datosDeImpresion(){
   document.getElementById("hoja").value=document.getElementById("paginaMin").value+"-"+document.getElementById("paginaMax").value;
 }
+
+
+function buscarMotivoDeConsulta(){
+//  vaciarDESPUESdeUNtiempo();
+  var motivo_consulta = document.getElementById("motivo_consulta").value;
+
+  if(motivo_consulta != ""){
+  $.ajax({
+    url: "../controlador/registroDiario.controlador.php?accion=BmC",
+    type: "POST",
+    data: {motivo_consulta:motivo_consulta},
+    dataType: "json",
+    success: function(data) {
+
+     if(data!=""){
+        var unir="";
+        for (let i = 0; i < data.length; i++) {
+          var usuario = data[i];
+          unir+="<div><div id='u' style=' display: inline-block;display:none;'>"+(data[i].cod_pat)+"</div> ";
+          unir+="<div id='ap' style=' display: inline-block;'> "+(data[i].nombre)+"</div> ";
+          unir+="<div id='am' style=' display: inline-block;display:none;'> "+(data[i].descripcion)+"</div> ";
+          unir+="<div id='am' style=' display: inline-block;display:none;'> "+(data[i].tratamiento)+"</div> ";
+          unir+="<div id='c' style=' display: inline-block;display:none;'>"+data[i].sintomas+"</div></div>";
+        }
+        visualizarMotivo(unir);
+        $('#resultadoMotivo div').on('click', function() {
+                //obtenemos los datos del usuario div resultado
+          var cod_pat = $(this).children().eq(0).text();
+          var nombre = $(this).children().eq(1).text();
+          var descripcion = $(this).children().eq(2).text();
+          var tratamiento = $(this).children().eq(3).text();
+          var sintomas = $(this).children().eq(4).text();
+            if(nombre != ""){
+              document.getElementById("cod_patologia").value=cod_pat;
+              document.getElementById("motivo_consulta").value = nombre;
+              $('#resultadoMotivo').html(""); //para vaciar
+            }
+        });
+      }else{
+        $('#resultadoMotivo').html("<div class='alert alert-light' role='alert'>No se encontro resultados</div>");
+      }
+      }
+    });
+  }else{
+    $('#resultadoMotivo').html("");
+  }
+}
+
+
+function visualizarMotivo(unir){
+
+$('#resultadoMotivo').html(unir);
+//colocamos un color de css
+$('#resultadoMotivo').css({
+ 'cursor': 'pointer',
+ 'font-size':'15px'
+ });
+ // Obtener el elemento div con el id "results"
+/* const divResults = document.getElementById('results');   // Cambiar la clase del div
+divResults.setAttribute('class', 'alert alert-primary mb-0 py-0 border-0');
+*/
+}
+//funcion para el registro de una nueva consulta
+function registrarHistorialConsulta(){
+  var talla = document.getElementById("talla").value;
+  var peso = document.getElementById("peso").value;
+  var imc = document.getElementById("imc").value;
+  var temperatura = document.getElementById("temperatura").value;
+  var fc = document.getElementById("fc").value;
+  var pa = document.getElementById("pa").value;
+  var fr = document.getElementById("fr").value;
+  var cod_patologia = document.getElementById("cod_patologia").value;
+  var subjetivo = document.getElementById("subjetivo").value;
+  var objetivo = document.getElementById("objetivo").value;
+  var analisis = document.getElementById("analisis").value;
+  var tratamiento = document.getElementById("tratamiento").value;
+  var evaluacion_seguimiento = document.getElementById("evaluacion_seguimiento").value;
+  var medico_responsable = document.getElementById("medico_responsable").value;
+  var cod_usuario_medico = document.getElementById("cod_usuario_medico").value;
+  var cod_historial_consulta = document.getElementById("cod_historial_consulta").value;
+  var paciente_rd = document.getElementById("paciente_rd").value;
+  var cod_rd = document.getElementById("cod_rd").value;
+
+  var fecha_consulta = document.getElementById("fecha_consulta").value;
+  var hora_consulta = document.getElementById("hora_consulta").value;
+  var cod_his_original = document.getElementById("cod_historial_consulta").value;
+  var cod_his_dat = document.getElementById("cod_dat").value;
+  var formData = new FormData();
+  formData.append("talla",talla);
+  formData.append("peso",peso);
+  formData.append("imc",imc);
+  formData.append("temperatura",temperatura);
+  formData.append("fc",fc);
+  formData.append("pa",pa);
+  formData.append("fr",fr);
+  formData.append("subjetivo",subjetivo);
+  formData.append("objetivo",objetivo);
+  formData.append("analisis",analisis);
+  formData.append("tratamiento",tratamiento);
+  formData.append("evaluacion_seguimiento",evaluacion_seguimiento);
+  formData.append("medico_responsable",medico_responsable);
+  formData.append("cod_usuario_medico",cod_usuario_medico);
+  formData.append("cod_historial_consulta",cod_historial_consulta);
+  formData.append("paciente_rd",paciente_rd);
+  formData.append("cod_rd",cod_rd);
+  formData.append("fecha_consulta",fecha_consulta);
+  formData.append("hora_consulta",hora_consulta);
+  formData.append("cod_his_original",cod_his_original);
+  formData.append("cod_his_dat",cod_his_dat);
+  formData.append("cod_patologia",cod_patologia);
+  //alert(cod_patologia);
+  alert(cod_patologia);
+  $.ajax({
+    url: "../controlador/historial.controlador.php?accion=regcht",
+    type: "POST",
+    data: formData,
+    contentType: false, // Deshabilitar la codificación de tipo MIME
+    processData: false, // Deshabilitar la codificación de datos
+    success: function(data) {
+    //alert(data);
+      data=$.trim(data);
+    //  alert(data);
+        if(data == "correcto"){
+          alertCorrecto();
+          setTimeout(() => {
+            $('#ModalRegistroMotivoConsulta').modal('hide');
+            ActualizarResultados();
+          }, 2000);
+        }else {
+          error();
+        }
+    }
+  });
+}
+function registroActualizarConsultaHistorial(peso,talla,
+  cod_his_dat,cod_rd,
+  paciente_rd,cod_cds,
+  descripcion,imc,
+  temp,fc,pa,
+fr,subjetivo,objetivo,
+analisis,
+tratamiento,evaluacion_de_seguimiento,
+cod_responsable_medico,cod_his,
+fecha,hora,responsable,cod_his_dat,
+patologia,cod_patologia){
+  //alert(9999);
+  document.getElementById("talla").value=peso;
+  document.getElementById("peso").value=talla;
+  document.getElementById("imc").value=imc;
+  document.getElementById("temperatura").value=temp;
+  document.getElementById("fc").value=fc;
+  document.getElementById("pa").value=pa;
+  document.getElementById("fr").value=fr;
+  document.getElementById("motivo_consulta").value=patologia;
+  document.getElementById("subjetivo").value=subjetivo;
+  document.getElementById("objetivo").value=objetivo;
+  document.getElementById("analisis").value=analisis;
+  document.getElementById("tratamiento").value=tratamiento;
+  document.getElementById("evaluacion_seguimiento").value=evaluacion_de_seguimiento;
+  document.getElementById("medico_responsable").value=responsable;
+  document.getElementById("cod_usuario_medico").value=cod_responsable_medico;
+  document.getElementById("cod_historial_consulta").value=cod_his;
+  document.getElementById("fecha_consulta").value=fecha;
+  document.getElementById("hora_consulta").value=hora;
+  document.getElementById("cod_dat").value=cod_his_dat;
+  document.getElementById("cod_patologia").value=cod_patologia;
+}
+
 </script>
 <?php require("../librerias/footeruni.php"); ?>

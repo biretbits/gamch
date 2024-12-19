@@ -34,8 +34,10 @@ class HistorialControlador{
     while ($fi = mysqli_fetch_array($resul)) {
       // Añadir cada fila al array con una estructura correcta
       $entry = [
+
         "cod_his" => $fi["cod_his"],
-        "hoja" => $fi["hoja"],  // Se mantuvo solo una clave "hoja"
+        "cod_rd" => $fi["cod_rd"],
+        "tipoDato" => $fi["tipoDato"],  // Se mantuvo solo una clave "hoja"
         "titulo" => $fi["titulo"],
         "subtitulo" => $fi["subtitulo"],
         "tipoHistorial" => $fi["tipoHistorial"],
@@ -45,7 +47,10 @@ class HistorialControlador{
         "cod_cds" => $fi["cod_cds"],
         "estado_h" => $fi["estado"],
         "fecha" => $fi["fecha"],
-        "hora" => $fi["hora"]
+        "hora" => $fi["hora"],
+        "datos_responsable_medico"=>$rdi->seleccionarDatosHistorial($fi["cod_his"]),
+        "motivo_consulta"=>$rdi->seleccionarDatosHistorialMOtivoConsulta($fi["cod_his"]),
+        "datosConsulta"=>$rdi->seleccionarDatosConsulta($fi["cod_his"])
       ];
 
 
@@ -160,7 +165,7 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
               <th>N°</th>
               <th>Fecha</th>
               <th>N° historial</th>
-              <th>Titulo</th>
+              <th>Título</th>
               <th>Paciente</th>
               <th>Acción</th>
             </tr>
@@ -173,45 +178,91 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
           $ms1 = (isset($minPag) && is_numeric($minPag))? $minPag:"";
           echo "<input type='hidden' name='paginaMax' id='paginaMax' value='".$ms."'>
           <input type='hidden' name='paginaMin' id='paginaMin' value='".$ms1."'>";
+          if ($resul && count($resul) > 0){
+              $i = 0;
 
-                if ($resul && count($resul) > 0){
-                  $i = 0;
-                foreach ($resul as $fi){
-                    echo "<tr>";
-                      echo "<td>".($i+1)."</td>";
-                      echo "<td>".$fi['fecha']."</td>";
-                      echo "<td>".$fi['titulo']."</td>";
+            foreach ($resul as $fi){
+                echo "<tr>";
+                  echo "<td>".($i+1)."</td>";
+                  echo "<td>".$fi['fecha']."</td>";
+                  echo "<td>".$fi['titulo']."</td>";
+                  if($fi["tipoHistorial"]=='tiene_herencia')
+                  {
+                    echo "<td><a href='#'  onclick='verHistorial(".$fi["cod_his"].")'>".$fi['subtitulo']."</a></td>";
+                  }else {
+                    echo "<td>".$fi['subtitulo']."</td>";
+                  }
+                  $datospaciente = $fi['paciente_rd_nombre'];
+                  echo "<td>";
+
+                  $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
+                  $estado_civil_paciente = '';$escolaridad_paciente = '';$peso_paciente='';$talla_paciente='';
+                  $idioma_paciente = '';$autoidentificacion_paciente = '';
+                  foreach ($datospaciente as $datos) {
+                    $fecha_nac_paciente=$datos["fn_usuario_re"];
+                    $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
+                    $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
+                    $idioma_paciente = $datos["idioma_usuario"];$autoidentificacion_paciente=$datos["autoidentificacion_usuario"];
+                    echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
+                    $peso_paciente = $datos["peso_usuario"];$talla_paciente = $datos["talla_usuario"];
+                  }
+                  echo "</td>";
+
+                  echo "<td>";
+                    echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                       if($fi["tipoHistorial"]=='tiene_herencia')
-                      {
-                        echo "<td><a href='#'  onclick='verHistorial(".$fi["cod_his"].")'>".$fi['subtitulo']."</a></td>";
-                      }else {
-                        echo "<td>".$fi['subtitulo']."</td>";
-                      }
-                      $datospaciente = $fi['paciente_rd_nombre'];
-                      echo "<td>";
-                      $fecha_nac_paciente = '';$sexo_paciente = '';$ocupacion_paciente='';
-                      $estado_civil_paciente = '';$escolaridad_paciente = '';
-                      foreach ($datospaciente as $datos) {
-                        $fecha_nac_paciente=$datos["fn_usuario_re"];
-                        $sexo_paciente=$datos["sexo_usuario"];$ocupacion_paciente=$datos["ocupacion_usuario"];
-                        $estado_civil_paciente=$datos["estado_civil_usuario"];$escolaridad_paciente=$datos["escolaridad_usuario"];
-                        echo $datos["nombre_usuario_re"]." ".$datos["ap_usuario_re"]." ".$datos["am_usuario_re"];
-                      }
-                      echo "</td>";
+                      {//si el historial tiene herencia entonces se mostrara el boton editar y vidualizar la herencia
+                        echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalReporteNuevoHistorial' title='Editar'
+                         onclick='actualizarhistorialNuevo(".$fi['cod_his']."
+                        ,\"".$fi["subtitulo"]."\",\"".$fi["titulo"]."\")'>
+                        <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                        echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalReporteNuevoHistorial' title='Vizualizar historial'
+                         onclick='verHistorial(".$fi['cod_his'].")'>
+                        <img src='../imagenes/ojo.ico' height='17' width='17' class='rounded-circle'></button>";
 
-                      echo "<td>";
-                        echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                        if($fi["tipoHistorial"]=='tiene_herencia')
-                        {//si el historial tiene herencia entonces se mostrara el boton editar y vidualizar la herencia
-                          echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalReporteNuevoHistorial' title='Editar'
-                           onclick='actualizarhistorialNuevo(".$fi['cod_his']."
-                          ,\"".$fi["subtitulo"]."\",\"".$fi["titulo"]."\")'>
-                          <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                          echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalReporteNuevoHistorial' title='Vizualizar historial'
-                           onclick='verHistorial(".$fi['cod_his'].")'>
-                          <img src='../imagenes/ojo.ico' height='17' width='17' class='rounded-circle'></button>";
+                      }else{
+                        if($fi["tipoDato"]==3){
 
-                        }else{
+                            $nombre_medico = '';$apellidoP='';$apellidoM='';
+                            foreach ($fi["datos_responsable_medico"] as $da) {
+                              $nombre_medico = $da["nombre_usuario_re"];
+                              $apellidoP = $da["ap_usuario_re"];
+                              $apellidoM = $da["am_usuario_re"];
+                            }
+                            $unir = $nombre_medico." ".$apellidoP." ".$apellidoM;
+                            $patologia = '';$cod_patologia='';
+                            foreach ($fi["motivo_consulta"] as $da2) {
+                              $patologia = $da2["nombre"];
+                              $cod_patologia = $da2["cod_pat"];
+                            }
+                            $cod_his_dat='';  $cod_rd='';$paciente_rd='';$cod_cds='';$descripcion='';
+                            $imc='';  $temp='';  $fc='';  $pa='';  $fr='';  $subjetivo='';  $objetivo='';  $analisis='';  $tratamiento='';
+                            $evaluacion_de_seguimiento='';$tipoDato='';
+                            foreach ($fi["datosConsulta"] as $d) {
+                              $cod_his_dat=trim($d["cod_his_dat"]);
+                              $cod_rd=trim($d["cod_rd"]);$paciente_rd=trim($d["paciente_rd"]);$cod_cds=trim($d["cod_cds"]);$descripcion=trim($d["descripcion"]);
+                              $imc=trim($d["imc"]);$temp=trim($d["temp"]);$fc=trim($d["fc"]);
+                              $pa=trim($d["pa"]);$fr=trim($d["fr"]);$subjetivo=trim($d["subjetivo"]);$objetivo=trim($d["objetivo"]);$analisis=trim($d["analisis"]);$tratamiento=trim($d["tratamiento"]);
+                              $evaluacion_de_seguimiento=trim($d["evaluacion_de_seguimiento"]);$cod_responsable_medico=trim($d["cod_responsable_medico"]);
+                              $fecha=$d["fecha"];$hora=$d["hora"];$cod_his_dat = $d["cod_his_dat"];
+                              $tipoDato = $d["tipoDato"];
+                            }
+                            echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroMotivoConsulta' title='Editar'
+                            onclick='registroActualizarConsultaHistorial(\"".$peso_paciente."\",\"".$talla_paciente."\",
+                            ".$cod_his_dat.",".$cod_rd.",
+                            ".$paciente_rd.",".$cod_cds."
+                            ,\"".$descripcion."\",\"".$imc."\"
+                            ,\"".$temp."\",\"".$fc."\",\"".$pa."\",
+                            \"".$fr."\",\"".$subjetivo."\",\"".$objetivo."\"
+                            ,\"".$analisis."\",
+                            \"".$tratamiento."\",\"".$evaluacion_de_seguimiento."\",
+                            ".$cod_responsable_medico.",".$fi["cod_his"].",
+                            \"".$fecha."\",\"".$hora."\",\"".$unir."\",".$cod_his_dat.",
+                            \"".$patologia."\",\"".$cod_patologia."\")'>
+                            <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                            echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimirConsulta(".$cod_his_dat.",\"".$tipoDato."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+
+                        }else if($fi["tipoDato"]==2){
                           $datoEs = $fi["datos"];
                           $cod_his_dat='';$cod_rd='';$paciente_rd='';$cod_cds='';$zona_his='';
                           $descripcion='';$hoja='';$nombre_imagen='';$ruta_imagen='';$tipoDato = '';
@@ -221,21 +272,24 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
                             $tipoDato=$dimagen["tipoDato"];
                           }
                           //si no se mostrar el boton de editar la imagen y imprimir la imagen
-                          echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-secondary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
+                          echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
                           onclick='actualizarImagen(\"".$fi['cod_his']."\",\"".$cod_his_dat."\"
                          ,\"".$descripcion."\",\"".$nombre_imagen."\",\"".$ruta_imagen."\",\"".$fi["titulo"]."\")'>
                          <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                          echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$cod_his_dat.",\"".$tipoDato."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
 
                         }
-                            //echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
-                            //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
-                        echo "</div>";
-                      echo "</td>";
 
-                    echo "</tr>";
-                    $i++;
-                  }
+                      }
+                        //echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-warning' title='Imprimir' onclick='imprimir(".$fi['cod_his'].",\"".$fi["tipoDato"]."\")'><img src='../imagenes/imprimir.png' height='17' width='17' class='rounded-circle'></button>";
+                        //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                    echo "</div>";
+                  echo "</td>";
+
+                echo "</tr>";
+                $i++;
+              }
+
                 }else{
                   echo "<tr>";
                   echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
@@ -564,7 +618,21 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
     }
   }
 
+//funcion para registrar una nueva consulta que mostrara en la tabla principal del historial del paciente
+  public function InsertarConsultaHistorialPrincipal($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$subjetivo,$objetivo,
+  $analisis,$tratamiento,$evaluacion_seguimiento,$medico_responsable,$cod_usuario_medico,$cod_historial_consulta,$paciente_rd,
+  $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat,$cod_patologia){
+    $rdi =new Historial();
+    $resul = $rdi->insertarDatosHistorialConsultaPrincipal($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$subjetivo,$objetivo,
+    $analisis,$tratamiento,$evaluacion_seguimiento,$medico_responsable,$cod_usuario_medico,$cod_historial_consulta,$paciente_rd,
+    $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat,$cod_patologia,'no_tiene_herencia');
 
+    if($resul != ''){
+      echo "correcto";
+    }else{
+      echo "error";
+    }
+  }
   public function buscarBDMedicoResponsable($nombre){
     $h =new Historial();
     $re = $h->buscarBDMedicoResponsablesql($nombre);
@@ -628,10 +696,11 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
       // Verificar si la consulta devuelve resultados
       $minHoja = $rdi->seleccionarhojaMinimo($cod_rd,$paciente_rd,$cod_his_original);
       $maxHoja = $rdi->seleccionarhojaMaximo($cod_rd,$paciente_rd,$cod_his_original);
-      $res = $rdi->SelecccionarDatosDelHistorial($inicioList,$listarDeCuanto,false,$paciente_rd,$cod_his_original,$cod_rd,
-      false,false);
+      $res = $rdi->SelecccionarDatosDelHistorial($inicioList,$listarDeCuanto,false,$paciente_rd,$cod_his_original,$cod_rd,false,false);
+      $res22 = $rdi->SelecccionarDatosDelHistorial($inicioList,$listarDeCuanto,false,$paciente_rd,$cod_his_original,$cod_rd,false,false);
+
       $resul = $this->UniendoDatoHistorial($res,$rdi);
-      $resul7 = $this->UniendoDatoHistorial($res,$rdi);
+      $resul7 = $rdi->seleccionarTodoElHistorial($cod_his_original);
       $re = $rdi->selectNombreUsuario($paciente_rd);
 
       require ("../vista/historial/historialVer.php");
@@ -674,7 +743,7 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
           "hora"=>$fi["hora"],
           "tipoDato"=>$fi["tipoDato"],
           "estado"=>$fi["estado"]
-      ];
+        ];
 
         $ar[] = $entry; // Agregar la entrada al array principal
     }
@@ -784,14 +853,14 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
                     echo "<td>";
                       echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                         if($fi["nombre_imagen"]!=""){
-                           echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
+                           echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
                            onclick='actualizarImagen(".$fi['cod_his_dat']."
                           ,\"".$fi["descripcion"]."\",\"".$fi["nombre_imagen"]."\",\"".$fi["ruta_imagen"]."\")'>
                           <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                         }else{
                           if($fi["tipoDato"]==1)
                           {
-                            echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
+                            echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
                             onclick='ActualizarHistorial(".$fi['cod_his_dat']."
                             ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
                             ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",
@@ -1215,7 +1284,32 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
     $_POST["cod_his_dat"],
     $_POST["cod_patologia"]);
   }
-
+  //esto registra una nueva consulta y muestra en la tabla principal del historial del paciente donde no se muestra o no tiene herencia
+  if(isset($_GET["accion"]) && $_GET["accion"] == 'regcht'){
+    $hc->InsertarConsultaHistorialPrincipal(
+    $_POST["talla"],
+    $_POST["peso"],
+    $_POST["imc"],
+    $_POST["temperatura"],
+    $_POST["fc"],
+    $_POST["pa"],
+    $_POST["fr"],
+    $_POST["subjetivo"],
+    $_POST["objetivo"],
+    $_POST["analisis"],
+    $_POST["tratamiento"],
+    $_POST["evaluacion_seguimiento"],
+    $_POST["medico_responsable"],
+    $_POST["cod_usuario_medico"],
+    $_POST["cod_historial_consulta"],
+    $_POST["paciente_rd"],
+    $_POST["cod_rd"],
+    $_POST["fecha_consulta"],
+    $_POST["hora_consulta"],
+    $_POST["cod_his_original"],
+    $_POST["cod_his_dat"],
+    $_POST["cod_patologia"]);
+  }
 
   if(isset($_GET["accion"]) && $_GET["accion"]=="rhgt"){
     $hc->buscarBDMedicoResponsable($_POST['nombre']);

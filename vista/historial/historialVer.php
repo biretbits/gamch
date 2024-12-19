@@ -15,6 +15,7 @@
         $i = 0;
         foreach ($resul7 as $fi){
           $zona_his1 = $fi["zona_his"];
+          $titulo_historial ='';
           $titulo_historial = $fi["titulo"];
         }
       }
@@ -23,13 +24,8 @@
 
 <div class="container main-content">
 <div class="container">
-  <div class="row" >
-     <div class="col-12">
-       <hr>
-     </div>
-   </div>
 
-  <h4>Historial Información <?php echo $titulo_historial; ?></h4>
+  <h4>Ficha Médica <?php echo $titulo_historial; ?></h4>
   <input type="hidden" name="paginas" id='paginas' value="">
   <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
   <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
@@ -106,7 +102,7 @@
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">Registro o Actualización de motivo de consulta</h6>
+        <h6 class="modal-title" id="miModalRegistro">Registro de Consulta</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -394,7 +390,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <h6 class="modal-title" id="miModalRegistro">REGISTRO O ACTUALIZACIÓN DE RECIBOS DEL PACIENTE EN IMAGEN</h6>
+      <h6 class="modal-title" id="miModalRegistro">REGISTRO DE RECIBOS DEL PACIENTE EN IMAGEN</h6>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <!-- Contenido del modal -->
@@ -474,8 +470,8 @@
     <div class="row">
       <div class="col">
         <div class="table-responsive">
-        <table class="table">
-          <thead style="font-size:12px">
+        <table class="table" style="font-size:12px">
+          <thead>
             <tr>
               <th>N°</th>
               <th>Fecha</th>
@@ -551,14 +547,14 @@
               echo "<td>";
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
                   if($fi["nombre_imagen"]!=""){
-                     echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-success shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
+                     echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistroDocumentos' title='Editar'
                      onclick='actualizarImagen(".$fi['cod_his_dat']."
                     ,\"".$fi["descripcion"]."\",\"".$fi["nombre_imagen"]."\",\"".$fi["ruta_imagen"]."\")'>
                     <img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
                   }else{
                     if($fi["tipoDato"]==1)
                     {
-                      echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-info shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
+                      echo "<button type='button' class='d-sm-inline-block btn btn-sm btn-primary shadow-sm' data-bs-toggle='modal' data-bs-target='#ModalRegistro' title='Editar'
                       onclick='ActualizarHistorial(".$fi['cod_his_dat']."
                       ,\"".$nombre_resp."\",\"".$ap_resp."\",\"".$am_resp."\",".$cod_resp.",\"".$fecha_nac."\",\"".$sexo_resp."\"
                       ,\"".$ocupacion_resp."\",\"".$direccion_responsable."\",\"".$telefono_resposable."\",

@@ -674,7 +674,7 @@ function crearTablaHistorial($conn){
     `cod_rd` int(11) DEFAULT NULL,
     `paciente_rd` int(11) DEFAULT NULL,
     `cod_cds` int(11) DEFAULT NULL,
-    `hoja` int(11) DEFAULT NULL,
+    `tipoDato` int(11) DEFAULT NULL,
     `titulo` char(100),
     `subtitulo` char(100),
     `tipoHistorial` char(50) DEFAULT NULL,

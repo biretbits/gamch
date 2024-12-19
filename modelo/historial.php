@@ -441,9 +441,9 @@ class Historial
      } else {
          // Si cod_his_original no es numérico, se realiza un INSERT
          $sql = "INSERT INTO historial (
-                     cod_rd, paciente_rd, cod_cds, titulo, subtitulo, tipoHistorial, fecha, hora, estado
+                     cod_rd, paciente_rd, cod_cds,tipoDato,titulo, subtitulo, tipoHistorial, fecha, hora, estado
                  ) VALUES (
-                    '$cod_rd', '$paciente_rd', '1', '$titulo_historial', '$nombre_imagen', '$tipoHistorial', '$fecha', '$hora', 'activo'
+                    '$cod_rd', '$paciente_rd', '1','2','$titulo_historial', '$nombre_imagen', '$tipoHistorial', '$fecha', '$hora', 'activo'
                  )";
      }
 
@@ -740,7 +740,7 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
           "cod_rd"=>$fi["cod_rd"],
           "paciente_rd"=>$fi["paciente_rd"],
           "cod_cds"=>$fi["cod_cds"],
-          "hoja"=>$fi["hoja"],
+          "tipoDato"=>$fi["tipoDato"],
           "titulo"=>$fi["titulo"],
           "subtitulo"=>$fi["subtitulo"],
           "tipoHistorial"=>$fi["tipoHistorial"],
@@ -803,6 +803,209 @@ function SelectHistorialMinimo($cod_rd,$paciente_rd){
     }
   }
 
+
+    function insertarDatosHistorialConsultaPrincipal($talla,$peso,$imc,$temperatura,$fc,$pa,$fr,$subjetivo,$objetivo,
+    $analisis,$tratamiento,$evaluacion_seguimiento,$medico_responsable,$cod_usuario_medico,$cod_historial_consulta,$paciente_rd,
+    $cod_rd,$fecha_consulta,$hora_consulta,$cod_his_original,$cod_his_dat,$cod_patologia,$tipoHistorial){
+      // Escapar las entradas
+      //si hay el tipo historial eso quiere decir que biene desde el historial del paciente si no de lo contrario es una herencia
+      $ultimoId='';
+      $fecha='';
+      $hora='';
+        if(($cod_his_original)=='')
+        {
+          $fecha = date("Y-m-d");
+          $hora = date("H:i:s");
+          $numero = $this->seleccionarHistorialcontar($paciente_rd,$cod_rd);
+          $titulo_historial = "Historial ".$numero;
+
+        }
+
+        $sql = '';
+        if (is_numeric($cod_his_original)) {
+            // Si cod_his_original es numérico, se realiza un UPDATE
+            $sql = "UPDATE historial
+                    SET
+                        subtitulo = 'Consulta del paciente'
+                    WHERE cod_his = '$cod_his_original'";
+        } else {
+            // Si cod_his_original no es numérico, se realiza un INSERT
+            $sql = "INSERT INTO historial (
+                        cod_rd, paciente_rd, cod_cds,tipoDato,titulo,subtitulo, tipoHistorial, fecha, hora, estado
+                    ) VALUES (
+                       '$cod_rd', '$paciente_rd', '1','3','$titulo_historial','Consulta del paciente', '$tipoHistorial', '$fecha', '$hora', 'activo'
+                    )";
+        }
+
+
+      // Ejecutar la consulta
+      $resul12 = $this->con->query($sql);
+      if($resul12!=''){
+        $ultimoId = $this->con->insert_id;
+      }
+    $talla = $this->con->real_escape_string($talla);
+     $peso = $this->con->real_escape_string($peso);
+     $this->insertarTallaPesoUsuario($talla,$peso,$paciente_rd);
+     $imc = $this->con->real_escape_string($imc);
+     $temperatura = $this->con->real_escape_string($temperatura);
+     $fc = $this->con->real_escape_string($fc);
+     $pa = $this->con->real_escape_string($pa);
+     $fr = $this->con->real_escape_string($fr);
+
+     $subjetivo = $this->con->real_escape_string($subjetivo);
+     $objetivo = $this->con->real_escape_string($objetivo);
+     $analisis = $this->con->real_escape_string($analisis);
+     $tratamiento = $this->con->real_escape_string($tratamiento);
+     $evaluacion_seguimiento = $this->con->real_escape_string($evaluacion_seguimiento);
+     $medico_responsable = $this->con->real_escape_string($medico_responsable);
+     //echo $motivo_consulta."    ".$subjetivo."     ".$objetivo."      ".$analisis."       ".$tratamiento."      ".$evaluacion_seguimiento."      ".$medico_responsable;
+     $cod_usuario_medico = $this->con->real_escape_string($cod_usuario_medico);
+     $cod_his = $this->con->real_escape_string($cod_his_original);
+     $paciente_rd = $this->con->real_escape_string($paciente_rd);
+     $cod_rd = $this->con->real_escape_string($cod_rd);
+     $fecha_consulta = $this->con->real_escape_string($fecha_consulta);
+     $hora_consulta = $this->con->real_escape_string($hora_consulta);
+     $cod_his_dat = $this->con->real_escape_string($cod_his_dat);
+
+     if($cod_his_original==''){
+       $cod_his_original=$ultimoId;
+     }
+
+     $sql3 = "UPDATE usuario
+           SET
+               peso_usuario = '$peso',
+               talla_usuario = '$talla'
+           WHERE cod_usuario = '$paciente_rd'";
+
+      $resul = $this->con->query($sql3);
+
+     //echo "<br>".$cod_usuario_medico."    c".$cod_his."c     ".$paciente_rd."     ".$cod_rd."     ".$fecha_consulta."     ".$hora_consulta;
+      // Verificación de datos (opcional: imprimir para debugging)
+      //echo $cod_paciente . "  " . $cod_rd . "   " . $cod_his . "   " . $uploadDir . "   " . $fileName . "    " . $nombre_imagen . "    " . $fecha . "   " . $hora;
+      // Construir la consulta de inserción con actualización en caso de duplicado
+      $maxi = $this->seleccionarMaximo($cod_rd,$paciente_rd,$cod_his);
+      $max = $this->seleccionarMaximoHistorialDato($cod_rd,$paciente_rd);
+      //echo "cod_rd".$cod_rd."   paciente_rd ".$paciente_rd."    cod_his  ".$cod_his;
+      $sql = '';
+      if (is_numeric($cod_his_dat)) {
+                  $sql = "UPDATE historial_dato
+                          SET
+                              imc = '$imc',
+                              temp = '$temperatura',
+                              fc = '$fc',
+                              pa = '$pa',
+                              fr = '$fr',
+                              cod_patologia = '$cod_patologia',
+                              subjetivo = '$subjetivo',
+                              objetivo = '$objetivo',
+                              analisis = '$analisis',
+                              tratamiento = '$tratamiento',
+                              evaluacion_de_seguimiento = '$evaluacion_seguimiento',
+                              cod_responsable_medico = '$cod_usuario_medico',
+                              fecha = '$fecha_consulta',
+                              hora = '$hora_consulta'
+                          WHERE cod_his_dat = '$cod_his_dat'";
+              } else {
+                  $sql = "INSERT INTO historial_dato(
+                               cod_rd, paciente_rd, cod_cds,descripcion,
+                              hoja, paginas, imc, temp, fc, pa, fr, cod_patologia,
+                              subjetivo, objetivo, analisis, tratamiento, evaluacion_de_seguimiento,
+                              cod_responsable_medico, cod_his, fecha, hora, tipoDato, estado
+                          ) VALUES (
+                               '$cod_rd', '$paciente_rd', '1', 'Documento de consulta',
+                              '$maxi', '$max', '$imc', '$temperatura', '$fc', '$pa', '$fr', '$cod_patologia',
+                              '$subjetivo', '$objetivo', '$analisis', '$tratamiento', '$evaluacion_seguimiento',
+                              '$cod_usuario_medico', '$cod_his_original', '$fecha_consulta', '$hora_consulta', '3', 'activo'
+                          )";
+              }
+
+
+      // Ejecutar la consulta
+      //echo $sql;
+      $resul = $this->con->query($sql);
+      //echo $this->con->error;
+      return $resul;
+    }
+
+    public function seleccionarDatosHistorial($cod_his) {
+        if (!is_numeric($cod_his)) {
+            return ''; // Validar que el ID sea numérico
+        }
+
+        $cod_his = intval($cod_his); // Sanitizar el ID
+        $sql = "SELECT cod_responsable_medico FROM historial_dato WHERE cod_his = $cod_his";
+        $res = $this->con->query($sql);
+
+        if ($res && $res->num_rows > 0) {
+            $f = mysqli_fetch_array($res, MYSQLI_ASSOC); // Asegurarse de usar un fetch asociativo
+            if (isset($f["cod_responsable_medico"])) {
+                $resul = $this->selectDatosUsuarios($f["cod_responsable_medico"]);
+            } else {
+                $resul = ''; // Si no existe el campo, retorna vacío
+            }
+        } else {
+            $resul = ''; // Si no hay resultados, retorna vacío
+        }
+
+        return $resul;
+    }
+    public function seleccionarDatosHistorialMotivoConsulta($cod_his) {
+        if (!is_numeric($cod_his)) {
+            return ''; // Validar que el ID sea numérico
+        }
+
+        $cod_his = intval($cod_his); // Sanitizar el ID
+        $sql = "SELECT cod_patologia FROM historial_dato WHERE cod_his = $cod_his";
+        $res = $this->con->query($sql);
+
+        if ($res && $res->num_rows > 0) {
+            $f = mysqli_fetch_array($res, MYSQLI_ASSOC); // Usar un array asociativo
+            if (isset($f["cod_patologia"])) {
+                $resul = $this->seleccionarPatologia($f["cod_patologia"]);
+            } else {
+                $resul = ''; // Retorna vacío si el campo no existe
+            }
+        } else {
+            $resul = ''; // Retorna vacío si no hay resultados
+        }
+
+        return $resul;
+    }
+
+
+
+
+        public function seleccionarDatosConsulta($cod_his) {
+          if (!is_numeric($cod_his)) {
+              return []; // Validar que el ID sea numérico
+          }
+
+          $cod_his = intval($cod_his); // Sanitizar el ID
+          $sql = "SELECT * FROM historial_dato WHERE cod_his = $cod_his";
+          $res = $this->con->query($sql);
+
+          if ($res && $res->num_rows > 0) {
+              return $res->fetch_all(MYSQLI_ASSOC); // Devuelve todas las filas en formato asociativo
+          }
+
+          return []; // Retornar array vacío en caso de error o sin resultados
+      }
+
+      public function seleccionarTodoElHistorial($cod_his) {
+        if (!is_numeric($cod_his)) {
+            return []; // Validar que el ID sea numérico
+        }
+
+        $cod_his = intval($cod_his); // Sanitizar el ID
+        $sql = "SELECT * FROM historial WHERE cod_his = $cod_his";
+        $res = $this->con->query($sql);
+
+        if ($res && $res->num_rows > 0) {
+            return $res->fetch_all(MYSQLI_ASSOC); // Devuelve todas las filas en formato asociativo
+        }
+
+        return []; // Retornar array vacío en caso de error o sin resultados
+    }
 }
 
 
