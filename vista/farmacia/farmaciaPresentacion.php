@@ -9,7 +9,9 @@
 
    ?>
 
-<h4>Forma de presentación</h4>
+<div class="col-auto mb-2" style="color:gray">
+  <h5>Forma de presentación</h5>
+</div>
 <div class="row" >
      <div class="col-12">
        <hr>
@@ -72,7 +74,7 @@
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h6 class="modal-title" id="miModalRegistro">Registro y Actualización de forma de presentación</h6>
+                          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">REGISTRO FORMA DE PRESENTACIÓN</h6>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Contenido del modal -->

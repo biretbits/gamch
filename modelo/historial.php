@@ -190,7 +190,6 @@ class Historial
     $resul = $this->con->query($sql);
     // Retornar el resultado
     return $resul;
-    mysqli_close($this->con);
   }
 
   public function buscarBDpacienteResponsablesql($nombre){

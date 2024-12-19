@@ -700,6 +700,8 @@ public function buscarHistorial($pagina,$listarDeCuanto,$fecha,$paciente_rd,$cod
       $res22 = $rdi->SelecccionarDatosDelHistorial($inicioList,$listarDeCuanto,false,$paciente_rd,$cod_his_original,$cod_rd,false,false);
 
       $resul = $this->UniendoDatoHistorial($res,$rdi);
+
+      $resul9 = $this->UniendoDatoHistorial($res22,$rdi);
       $resul7 = $rdi->seleccionarTodoElHistorial($cod_his_original);
       $re = $rdi->selectNombreUsuario($paciente_rd);
 

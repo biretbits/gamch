@@ -1067,7 +1067,7 @@ function crearTablaUsuario($conn){
       `tipo_usuario` char(60) DEFAULT NULL,
       `contrasena_usuario` char(250) DEFAULT NULL,
       `cod_cds` int(11) DEFAULT NULL,
-      `estado` char(15) DEFAULT NULL,
+      `estado` char(15) DEFAULT 'activo',
       `control_acceso` char(15) DEFAULT '',
       `configControlAcceso` char(3) DEFAULT 'si',
       `notificacionEjecutar` char(3) DEFAULT 'no',

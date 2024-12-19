@@ -17,12 +17,10 @@
 
 <div class="container main-content">
 <div class="container">
-  <div class="row" >
-     <div class="col-12">
-       <hr>
-     </div>
-   </div>
-  <h4>Historial Clinico</h4>
+
+  <div class="col-auto mb-2" style="color:gray">
+    <h5>Historial Clínico</h5>
+  </div>
   <input type="hidden" name="paginas" id='paginas' value="">
   <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
   <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
@@ -118,7 +116,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="miModalLabel">Registro de nuevo Historial</h5>
+          <h6 class="modal-title" id="miModalLabel" style="color:dimgray" >REGISTRO DE FICHA CLÍNICA</h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!-- Contenido del modal -->
@@ -155,7 +153,7 @@
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">Registro de Consulta</h6>
+        <h6 class="modal-title" id="miModalRegistro"  style="color:dimgray" >REGISTRO DE CONSULTA</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -268,7 +266,7 @@
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">Registro historial del paciente</h6>
+        <h6 class="modal-title" id="miModalRegistro"  style="color:dimgray" >Registro historial del paciente</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -450,7 +448,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <h6 class="modal-title" id="miModalRegistro">REGISTRO DE RECIBOS</h6>
+      <h6 class="modal-title" id="miModalRegistro" style="color:dimgray" >REGISTRO DE ARCHIVOS IMAGENES</h6>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <!-- Contenido del modal -->

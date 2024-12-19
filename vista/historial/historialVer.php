@@ -1,31 +1,39 @@
 <?php require("../librerias/headeradmin1.php"); ?>
-<?php $tablahis=$_SERVER["REQUEST_URI"];
-      $diario = $_SESSION["diario"];
-      $_SESSION['this']=$tablahis;
-      $fi = mysqli_fetch_array($re);
-      $peso_paciente1 = $fi["peso_usuario"];
-      $talla_paciente1 = $fi["talla_usuario"];
-      $fecha_nac_paciente1 = $fi['fecha_nac_usuario'];$sexo_paciente1 = $fi["sexo_usuario"];$ocupacion_paciente1=$fi["ocupacion_usuario"];
-      $estado_civil_paciente1 = $fi["estado_civil_usuario"];$escolaridad_paciente1 = $fi["escolaridad_usuario"];
-      $idioma_nuevo = $fi["idioma_usuario"];$auto_nuevo = $fi["autoidentificacion_usuario"];
-      //echo "<br><br><br><br>".$idioma_nuevo."     ".$auto_nuevo;
-      $zona_his1='';
-      $titulo_historial = '';
-      if ($resul7 && count($resul7) > 0){
-        $i = 0;
-        foreach ($resul7 as $fi){
-          $zona_his1 = $fi["zona_his"];
-          $titulo_historial ='';
-          $titulo_historial = $fi["titulo"];
-        }
-      }
-
-?>
-
+<?php $filaU = mysqli_fetch_array($re);
+//  echo mysqli_num_rows($re)."   dddd ".$filaU["nombre_usuario"];
+ ?>
 <div class="container main-content">
 <div class="container">
+  <?php $tablahis=$_SERVER["REQUEST_URI"];
+        $diario = $_SESSION["diario"];
+        $_SESSION['this']=$tablahis;
 
-  <h4>Ficha Médica <?php echo $titulo_historial; ?></h4>
+        $peso_paciente1 = $filaU["peso_usuario"];
+        $talla_paciente1 = $filaU["talla_usuario"];
+        $fecha_nac_paciente1 = $filaU['fecha_nac_usuario'];$sexo_paciente1 = $filaU["sexo_usuario"];$ocupacion_paciente1=$filaU["ocupacion_usuario"];
+        $estado_civil_paciente1 = $filaU["estado_civil_usuario"];$escolaridad_paciente1 = $filaU["escolaridad_usuario"];
+        $idioma_nuevo = $filaU["idioma_usuario"];$auto_nuevo = $filaU["autoidentificacion_usuario"];
+        //echo "<br><br><br><br>".$idioma_nuevo."     ".$auto_nuevo;
+        $zona_his1='';
+        $titulo_historial = '';
+        if ($resul7 && count($resul7) > 0){
+          $i = 0;
+          foreach ($resul7 as $fi){
+            $titulo_historial ='';
+            $titulo_historial = $fi["titulo"];
+          }
+        }
+        if ($resul9 && count($resul9) > 0){
+          $i = 0;
+          foreach ($resul9 as $fi){
+            $zona_his1 = $fi["zona_his"];
+          }
+        }
+  ?>
+
+  <div class="col-auto mb-2" style="color:gray">
+    <h5>Ficha Médica <?php echo $titulo_historial; ?></h5>
+  </div>
   <input type="hidden" name="paginas" id='paginas' value="">
   <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
   <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
@@ -102,7 +110,7 @@
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">Registro de Consulta</h6>
+        <h6 class="modal-title" id="miModalRegistro"  style="color:dimgray" >REGISTRO DE CONSULTA</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -217,7 +225,7 @@
   <div class="modal-dialog  modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title" id="miModalRegistro">REGISTRO HISTORIAL DEL PACIENTE</h6>
+        <h6 class="modal-title" id="miModalRegistro"  style="color:dimgray" >REGISTRO DE DATOS DEL PACIENTE</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <!-- Contenido del modal -->
@@ -299,7 +307,7 @@
           <div class="card">
           <div class="card-header">
            IDENTIFICACION DEL PACIENTE/USUARIO
-            <h6>Complete los datos del paciente <?php echo $fi["nombre_usuario"]." ".$fi["ap_usuario"]." ".$fi["am_usuario"]; ?></h6>
+            <h6  style="color:dimgray" >Complete los datos del paciente <?php echo $filaU["nombre_usuario"]." ".$filaU["ap_usuario"]." ".$filaU["am_usuario"]; ?></h6>
           </div>
           <div class="card-body">
             <form>
@@ -390,7 +398,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <h6 class="modal-title" id="miModalRegistro">REGISTRO DE RECIBOS DEL PACIENTE EN IMAGEN</h6>
+      <h6 class="modal-title" id="miModalRegistro" style="color:dimgray">REGISTRO DE ARCHIVO IMAGEN</h6>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <!-- Contenido del modal -->

@@ -234,6 +234,16 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+#texto-bonito {
+      color: darkslategray; /* Verde inicial */
+      font-size: 20px;
+      font-weight: bold;
+      transition: color 0.3s ease; /* Suaviza el cambio de color */
+    }
+
+    #texto-bonito:hover {
+      color: #FF5733; /* Naranja bonito al pasar el ratón */
+    }
   </style>
 <body  id="page-top">
   <button type="button" class="btn btn-primary" id="openChatbot">💬</button>
@@ -248,7 +258,7 @@ input[type=number] {
 
   echo "<nav style=' border-bottom: 1px solid silver;' class='navbar navbar-expand-lg navbar-light fixed-top shadow-sm' id='mainNav'>
     <div class='container px-5'>
-        <a href='#' class='navbar-brand fw-bold'><img src='imagenes/cds.ico' height='30' width='30' class='rounded-circle'> Centro De Salud</a>
+        <a href='#' class='navbar-brand' id='texto-bonito' ><img src='imagenes/cds.ico' height='30' width='30' class='rounded-circle'> Centro De Salud</a>
 
         <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>

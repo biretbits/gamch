@@ -62,7 +62,9 @@
 
 </style>
 
-<h4>Entrada de Productos Farmacéuticos</h4>
+<div class="col-auto mb-2" style="color:gray">
+  <h5>Entrada de Productos Farmacéuticos</h5>
+</div>
 <div class="row" >
      <div class="col-12">
        <hr>
@@ -131,7 +133,7 @@
                     <div class="modal-dialog modal-xl">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h6 class="modal-title" id="miModalRegistro">Registro o Actualización, Entrada de productos farmaceuticos</h6>
+                          <h6 class="modal-title" id="miModalRegistro" style="color:dimgray">REGISTRO ENTRADA DE PRODUCTOS FARMACÉUTICOS</h6>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <!-- Contenido del modal -->

@@ -9,15 +9,17 @@
 
    ?>
 
-<h4>Configurar el control de acceso</h4>
+<div class="col-auto mb-2" style="color:gray">
+  <h5>Configurar el control de acceso</h5>
+</div>
 <div class="row" >
      <div class="col-12">
        <hr>
      </div>
    </div>
 <p>Nota:</p>
-<p>Si la configuración esta en "si" todos los usuarios tendran que esperar que inicie el sistema el administrador, para poder ingresar al sistema.</p>
-<p>Si la configuración esta en "no" todos los usuarios pueden ingresar al sistema si necesidad de espera de inicio el administrador</p>
+<p>Si la configuración esta en "si" todos los usuarios tendran que esperar el inicio del sistema por el administrador, para poder ingresar al sistema.</p>
+<p>Si la configuración esta en "no" todos los usuarios pueden ingresar al sistema si necesidad de espera de inicio del administrador</p>
 <p>Tenga en cuenta que si el control de acceso lo configura a "si" todos los usuarios seran afectados, por eso esta accion debe de realizarse fuera de horarios de trabajo, tenga en cuenta.</p>
     <div class="row">
       <div class="col-lg-12">

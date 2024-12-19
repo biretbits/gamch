@@ -2,7 +2,9 @@
 
 <div class="container main-content">
 <div class="container">
-  <h2>Usuarios</h2>
+  <div class="col-auto mb-2" style="color:gray">
+    <h5>USUARIOS</h5>
+  </div>
   <div class="row">
       <label for="selectPage" class="form-label">Página</label>
       <div class="col-2">

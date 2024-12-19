@@ -5,12 +5,8 @@ $_SESSION["diario"] = $RegistroDiario;?>
 <div class="container main-content">
 <div class="container">
   <?php
-  echo "<div id='color1'><a href='$RegistroDiario'id='co'>Registro Diario</a>></div>"; ?>
-  <div class="row" >
-     <div class="col-12">
-       <hr>
-     </div>
-   </div>
+//  echo "<div id='color1'><a href='$RegistroDiario'id='co'>Registro Diario</a>></div>"; ?>
+  
    <div class="row">
      <div class="col-auto mb-2" style="color:gray">
          <h5>Registro Diario de Pacientes</h5>

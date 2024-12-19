@@ -32,7 +32,9 @@
          <hr>
        </div>
      </div>
-    <h4>Servicios</h4>
+    <div class="col-auto mb-2" style="color:gray">
+      <h5>Servicios</h5>
+    </div>
     <input type="hidden" name="paciente_rd" id="paciente_rd" value="<?php $ms = (isset($paciente_rd) && is_numeric($paciente_rd))? $paciente_rd:""; echo $ms; ?>">
     <input type="hidden" name="cod_rd" id= "cod_rd" value="<?php $ms = (isset($cod_rd) && is_numeric($cod_rd))? $cod_rd:""; echo $ms; ?>">
     <input type="hidden" name="paginas" id='paginas' value="">
