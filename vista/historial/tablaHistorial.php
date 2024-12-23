@@ -1802,7 +1802,6 @@ function registrarHistorialConsulta(){
   formData.append("cod_his_dat",cod_his_dat);
   formData.append("cod_patologia",cod_patologia);
   //alert(cod_patologia);
-  alert(cod_patologia);
   $.ajax({
     url: "../controlador/historial.controlador.php?accion=regcht",
     type: "POST",

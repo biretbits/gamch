@@ -75,6 +75,7 @@
                 <input type="text" class="form-control" id="personalatencion" placeholder="personal que brinda la atencion" onkeyup= "atencionMedico()" autocomplete="off">
                 <div id="resultadomedico" align='left' class='alert alert-light mb-0 py-0 border-0 encimaElTexto'>
               </div>
+
               </div>
               <div class="col-md-4 mb-3">
                 <label for="resp. admision" class="form-label">Responsable de admisión</label>
@@ -103,16 +104,6 @@
   </div>
 </div>
 </div>
-<style media="screen">
-#resultado,#resultadoadmision,#resultadomedico{
-position: absolute;
-z-index: 999;
-color: black;
-overflow-y: auto;
-width: 30%;
-transform: translateY(-5px);
-}
-</style>
 <script type="text/javascript">
 //funcion para buscar si existe el Paciente
   function buscarExitepaciente(){
