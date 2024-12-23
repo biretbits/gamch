@@ -40,10 +40,10 @@ table {
     width: 60px;
   }
   table td:nth-child(3) {
-    width: 60px;
+    width: 30px;
   }
   table td:nth-child(4) {
-    width: 125px;
+    width: 80px;
   }
   table td:nth-child(10) {
     width: 80px;

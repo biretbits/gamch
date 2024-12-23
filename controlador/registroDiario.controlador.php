@@ -23,6 +23,8 @@ class RegistroDiarioControlador{
     // Verificar si la consulta devuelve resultados
     $res = $rdi->SelectPorBusquedaRegistroDiario("",$inicioList,$listarDeCuanto,false);
     $resul = $this->Uniendo($res,$rdi);
+    $ser = new Servicio();
+   $servicios = $ser->Selecionar_servicios();
     require ("../vista/registroDiario/tablaRegistroDiario.php");
   }
   //funciones para encontrar los nombres de los usuarios como doctor y el de admision
@@ -50,6 +52,7 @@ class RegistroDiarioControlador{
             "cod_rd" => $fi["cod_rd"],
             "fecha_rd" => $fi["fecha_rd"],
             "hora_rd" => $fi["hora_rd"],
+            "cod_servicio"=>$fi["servicio_rd"],
             "servicio_rd" => $rdi->selectServicio($fi["servicio_rd"]),
             "signo_sintomas_rd" => $fi["signo_sintomas_rd"],
             "historial_clinico_rd" => $fi["historial_clinico_rd"],
@@ -105,47 +108,59 @@ public function BuscarRegistrosDiarioTabla($buscar,$pagina,$listarDeCuanto,$fech
 
 
       if ($resul && count($resul) > 0) {
-          $i = 0;
-        foreach ($resul as $fi){
-            echo "<tr>";
-              echo "<td>".($i+1)."</td>";
-              echo "<td>".$fi['fecha_rd']."</td>";
-              echo "<td>".$fi['hora_rd']."</td>";
-              echo "<td>".$fi['nombre_usuario']." ".$fi['ap_usuario']." ".$fi['am_usuario']."</td>";
-              echo "<td>".$fi['fecha_nac_usuario']."</td>";
-              echo "<td>".$fi['edad_usuario']."</td>";
-              echo "<td>".$fi['direccion_usuario']."</td>";
-              echo "<td>".$fi['servicio_rd']."</td>";
-              echo "<td>".$fi['signo_sintomas_rd']."</td>";
-              echo "<td>".$fi['medico_nombre']."</td>";
-              echo "<td>";
-              if(isset($fi['historial_clinico_rd']) && $fi['historial_clinico_rd'] == "no"){
-                    echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                      echo "<button type='button' class='btn btn-dark' title='Sin historial' style='font-size:10px'onclick='accionHitorialVer(".$fi["paciente_rd"].",".$fi["cod_rd"].")'>Sin historial</button>";
-                    echo "</div>";
-              }else{
-                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
-                onclick='accionHitorialVer(".$fi["paciente_rd"].",".$fi["cod_rd"].")'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
+            $i = $inicioList;
+          foreach ($resul as $fi){
+              echo "<tr>";
+                echo "<td>".($i+1)."</td>";
+                echo "<td>".$fi['fecha_rd']."</td>";
+                echo "<td>".$fi['hora_rd']."</td>";
+                echo "<td>".$fi['nombre_usuario']." ".$fi['ap_usuario']." ".$fi['am_usuario']."</td>";
+                echo "<td>".$fi['fecha_nac_usuario']."</td>";
+                echo "<td>".$fi['edad_usuario']."</td>";
+                echo "<td>".$fi['direccion_usuario']."</td>";
+                echo "<td>".$fi['servicio_rd']."</td>";
+                echo "<td>".$fi['signo_sintomas_rd']."</td>";
+                echo "<td>".$fi['medico_nombre']."</td>";
+                echo "<td>";
+                if(isset($fi['historial_clinico_rd']) && $fi['historial_clinico_rd'] == "no"){
 
-                echo "</div>";
-              }
-              echo "</td>";
+                      echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                        echo "<button type='button' class='btn btn-dark' title='Sin historial' style='font-size:10px' onclick='accionHitorialVer(".$fi["paciente_rd"].",".$fi["cod_rd"].")'>Sin historial</button>";
+                      echo "</div>";
 
-              echo "<td>".$fi['admision_nombre']."</td>";
-              echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
-              echo "<td>";
-                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
-                echo "<button type='button' class='btn btn-info' title='Editar' onclick = 'editarpaciente(".$fi["cod_rd"].",".$fi["paciente_rd"].",\"".$buscar."\",".$pagina.",".$listarDeCuanto.",\"".$fecha."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
-                    //  echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
+                }else{
+                  echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                    echo "<button type='button' class='btn btn-success' title='Hay historiales del paciente' style='font-size:10px'
+                    onclick='accionHitorialVer(".$fi["paciente_rd"].",".$fi["cod_rd"].")'><img src='../imagenes/evaluacion.ico' style='height: 25px;width: 25px;'> His.</button>";
 
-                echo "</div>";
-              echo "</td>";
+                  echo "</div>";
+                }
+                echo "</td>";
+
+                echo "<td>".$fi['admision_nombre']."</td>";
+                if($fi["fecha_retorno_historia_rd"]=='0000-00-00'){
+                  echo "<td style='font-size:13px;color:blue'>Sin fecha de retorno</td>";
+                }else{
+                  echo "<td>".$fi['fecha_retorno_historia_rd']."</td>";
+                }
+                echo "<td>";
+                  echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>";
+                    echo "<button type='button' class='btn btn-info' title='Editar' data-bs-toggle='modal' data-bs-target='#registroDiarioModal'
+                    onclick = 'editarpaciente(".$fi["cod_rd"].",".$fi["paciente_rd"].",
+                    \"".$fi["nombre_usuario"]."\",\"".$fi["ap_usuario"]."\",\"".$fi["am_usuario"]."\"
+                      ,\"".$fi["fecha_nac_usuario"]."\",\"".$fi["edad_usuario"]."\",\"".$fi["direccion_usuario"]."\",\"".$fi["cod_servicio"]."\"
+                      ,\"".$fi["signo_sintomas_rd"]."\",\"".$fi["historial_clinico_rd"]."\",\"".$fi["pe_brinda_atencion_rd"]."\",\"".$fi["resp_admision_rd"]."\"
+                      ,\"".$fi["fecha_retorno_historia_rd"]."\",\"".$fi["medico_nombre"]."\",\"".$fi["admision_nombre"]."\")'><img src='../imagenes/edit.ico' height='17' width='17' class='rounded-circle'></button>";
+                      //echo "<button type='button' class='btn btn-danger' title='Desactivar Usuario' onclick='accionBtnActivar(\"activo\",".$pagina.",".$listarDeCuanto.",".$fi["cod_usuario"].")'><img src='../imagenes/drop.ico' height='17' width='17' class='rounded-circle'></button>";
 
 
-            echo "</tr>";
-            $i++;
-          }
+                  echo "</div>";
+                echo "</td>";
+
+
+              echo "</tr>";
+              $i++;
+            }
         }else{
           echo "<tr>";
           echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
@@ -268,7 +283,7 @@ echo "<div class='row'>
           //calculamos el registro inicial
     $inicioList = ($pagina - 1) * $listarDeCuanto;
     // Verificar si la consulta devuelve resultados
-    $res = $rdi->SelectPorBusquedaRegistroDiario($buscar,$inicioList,$listarDeCuanto,false,$fechai,$fechaf);
+    $res = $rdi->SelectPorBusquedaRegistroDiario($buscar,false,false,false,$fechai,$fechaf);
     $num_filas_total = mysqli_num_rows($res);
     //echo "numero de fillas".$num_filas_total;
     $resul = $this->Uniendo($res,$rdi);
@@ -303,31 +318,14 @@ echo "<div class='row'>
     }
   }
 
-  public function insertarNewpaciente($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
+  public function insertarNewpaciente($cod_rd,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
   $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria){
     $rnp= new RegistroDiario();
     //echo $cod_usuario;
-    $resp = $rnp->insertarNewpacientes($cod_usuario,ucfirst($nombre),ucfirst($ap_usuario),ucfirst($am_usuario),$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
+    $resp = $rnp->insertarNewpacientes($cod_rd,$cod_usuario,ucfirst($nombre),ucfirst($ap_usuario),ucfirst($am_usuario),$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
     $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria);
     //echo $cod_usuario;
     if($resp != ""){
-        echo "correcto";
-    } else{
-        echo "error";
-    }
-  }
-  public function insertarActualizacionPaciente($cod_rd,$cod_usuario,
-  $nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,$signos_sintomas,$historiaclinica,$personalatencion,
-  $respadmision,$fechaderetornodeHistoria){
-    $rnp= new RegistroDiario();
-    //echo $cod_usuario;
-    /*$respA = $rnp->insertarNewpacientes($cod_rd,$paciente,$buscar,$pagina,$listarDeCuanto,$fecha,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
-    $historiaclinica,$signo_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria);*/
-    //echo $cod_usuario;
-    $resul = $rnp->UpdateDatosRegistroDiario($cod_rd,$cod_usuario,ucfirst($nombre),ucfirst($ap_usuario),ucfirst($am_usuario),$fecha_nacimiento,$edad,
-    $direccion_usuario,$servicio,$signos_sintomas,$historiaclinica,$personalatencion,
-    $respadmision,$fechaderetornodeHistoria);
-    if($resul!= ""){
         echo "correcto";
     } else{
         echo "error";
@@ -524,6 +522,7 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
 
   if(isset($_GET["accion"]) && $_GET["accion"]=="rNp"){
       		$rd->insertarNewpaciente(
+            $_POST["cod_rd"],
             $_POST["cod_usuario"],
             $_POST["nombre"],
             $_POST["ap_usuario"],
@@ -577,27 +576,8 @@ if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]=='admision')
            }
        }
       }
-      if(isset($_GET["accion"]) && $_GET["accion"]=="rNpA"){
-          		$rd->insertarActualizacionPaciente(
-                $_POST["cod_rd"],
-                $_POST["cod_usuario"],
-                $_POST["nombre"],
-                $_POST["ap_usuario"],
-                $_POST["am_usuario"],
-                $_POST["fecha_nacimiento"],
-                $_POST["edad"],
-                $_POST["direccion_usuario"],
-                $_POST["servicio"],
-                $_POST["signos_sintomas"],
-                $_POST["historiaclinica"],
-                $_POST["personalatencion"],
-                $_POST["respadmision"],
-                $_POST["fechaderetornodeHistoria"]);
-    }
 
-    if(isset($_GET["accion"]) && $_GET["accion"]=="taR"){
-  		$rd->BuscarRegistrosDiarioTablaDespuesDeActualizar($_POST["buscar"],$_POST["page"],$_POST["listarDeCuanto"],$_POST["fecha"]);
-  	}
+
     if(isset($_GET["accion"]) && $_GET["accion"]=="rpd"){
   		$rd->reportesRegistroDiario();
   	}

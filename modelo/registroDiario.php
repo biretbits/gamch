@@ -50,11 +50,11 @@ class RegistroDiario
     return $resul;
   }
   public function selectNombreUsuario($id){
-    $sql = "select nombre_usuario,ap_usuario,am_usuario from usuario where cod_usuario = $id";
+    $sql = "select nombre_usuario,ap_usuario,am_usuario,tipo_usuario from usuario where cod_usuario = $id";
     $resul = $this->con->query($sql);
     // Retornar el resultado
     $fi = mysqli_fetch_array($resul);
-    return $fi["nombre_usuario"]." ".$fi["ap_usuario"]." ".$fi["am_usuario"];
+    return $fi["nombre_usuario"]." ".$fi["ap_usuario"]." ".$fi["am_usuario"]."  ".ucfirst($fi["tipo_usuario"]);
   }
 
 
@@ -84,71 +84,60 @@ public function buscarpersonalAtencionsql($personalquebrindalaatencion){
    return $resul;
  }
 
- public function insertarNewpacientes($cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
+ public function insertarNewpacientes($cod_rd,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,$direccion_usuario,$servicio,
  $historiaclinica,$signos_sintomas,$personalatencion,$respadmision,$fechaderetornodeHistoria){
-
-   $sql='';
-   if($cod_usuario =="" || $cod_usuario == NULL){
-     $sql = "insert into usuario(ci_usuario,
-     nombre_usuario,
-     ap_usuario,
-     am_usuario,
-     fecha_nac_usuario,
-     edad_usuario,
-     telefono_usuario,
-     direccion_usuario,
-     tipo_usuario,
-     cod_cds,
-     estado)values(
-       0,
-       '$nombre',
-       '$ap_usuario',
-       '$am_usuario',
-       '$fecha_nacimiento',
-       $edad,
-       0,
-       '$direccion_usuario',
-     'paciente'
-     ,1,
-     'activo'
-   )";
-      $resul = $this->con->query($sql);
-      $ultimo_id = $this->con->insert_id;
-      $cod_usuario = $ultimo_id;
-    }
-    $sql33 = '';
-   $fechaActual = date("Y-m-d");
-   $horaActual = date("H:i:s");
-
-   $sql33 = "insert into registro_diario(
-    fecha_rd,
-   hora_rd,
-   servicio_rd,
-   signo_sintomas_rd,
-   historial_clinico_rd,
-   fecha_retorno_historia_rd,
-   pe_brinda_atencion_rd,
-   resp_admision_rd,
-   paciente_rd,
-   cod_cds,
-   estado)values('$fechaActual','$horaActual',
-   $servicio,'$signos_sintomas','no',";
-   if($fechaderetornodeHistoria == '')
-   {
-     $sql33.="NULL";
+   if(is_numeric($cod_rd)){
+     $sql = "update usuario set nombre_usuario = '$nombre', ap_usuario = '$ap_usuario', am_usuario='$am_usuario',fecha_nac_usuario = '$fecha_nacimiento',
+     edad_usuario = '$edad', direccion_usuario='$direccion_usuario' where cod_usuario = $cod_usuario";
+     $resu = $this->con->query($sql);
+     if($resu != ""){
+       $sql = "update registro_diario set servicio_rd = $servicio,signo_sintomas_rd = '$signos_sintomas',
+       fecha_retorno_historia_rd=";
+       if($fechaderetornodeHistoria == ''||$fechaderetornodeHistoria == NULL){
+         $sql.="NULL";
+       }else{
+         $sql.="'$fechaderetornodeHistoria'";
+       }
+       $sql.=",pe_brinda_atencion_rd = $personalatencion, resp_admision_rd = $respadmision
+       where paciente_rd = $cod_usuario and cod_rd = $cod_rd";
+       $resus = $this->con->query($sql);
+     }
+     return $resus;
    }else{
-     $sql33.="'$fechaderetornodeHistoria'";
-   }
-   $sql33.=",$personalatencion,$respadmision,$cod_usuario,1,'activo')";
-   $resu = $this->con->query($sql33);#ejecutamos y ya existe esta fila con el campo no
-   $sql_consu = "select *from historial where paciente_rd = $cod_usuario";#buscamos si el usuario tiene historial registrado si o no
-   $res = $this->con->query($sql_consu);
-   $si = "no";#luego realizamos esta consulta
-   if(mysqli_num_rows($res) > 0) {
-     $sqlnew = "update registro_diario set historial_clinico_rd = 'si' where paciente_rd = $cod_usuario";
-     $re78 = $this->con->query($sqlnew);
-   }
-  return $resu;
+     $sql='';
+     if($cod_usuario =="" || $cod_usuario == NULL){
+       $sql = "insert into usuario(ci_usuario,nombre_usuario,ap_usuario,am_usuario,fecha_nac_usuario,edad_usuario,telefono_usuario,direccion_usuario,
+       tipo_usuario,cod_cds,estado)values(
+         0,'$nombre','$ap_usuario','$am_usuario','$fecha_nacimiento',$edad,0,'$direccion_usuario','paciente',1,'activo'
+     )";
+        $resul = $this->con->query($sql);
+        $ultimo_id = $this->con->insert_id;
+        $cod_usuario = $ultimo_id;
+      }
+      $sql33 = '';
+     $fechaActual = date("Y-m-d");
+     $horaActual = date("H:i:s");
+
+     $sql33 = "insert into registro_diario(fecha_rd,hora_rd,servicio_rd,signo_sintomas_rd,historial_clinico_rd,fecha_retorno_historia_rd,pe_brinda_atencion_rd,resp_admision_rd,paciente_rd,cod_cds,
+     estado)values('$fechaActual','$horaActual',
+     $servicio,'$signos_sintomas','no',";
+     if($fechaderetornodeHistoria == '')
+     {
+       $sql33.="NULL";
+     }else{
+       $sql33.="'$fechaderetornodeHistoria'";
+     }
+     $sql33.=",$personalatencion,$respadmision,$cod_usuario,1,'activo')";
+     $resu = $this->con->query($sql33);#ejecutamos y ya existe esta fila con el campo no
+     $sql_consu = "select *from historial where paciente_rd = $cod_usuario";#buscamos si el usuario tiene historial registrado si o no
+     $res = $this->con->query($sql_consu);
+     $si = "no";#luego realizamos esta consulta
+     if(mysqli_num_rows($res) > 0) {
+       $sqlnew = "update registro_diario set historial_clinico_rd = 'si' where paciente_rd = $cod_usuario";
+       $re78 = $this->con->query($sqlnew);
+     }
+     return $resu;
+  }
 }
 
 public function seleccionarDatos($cod_rd,$paciente_rd){
@@ -157,26 +146,6 @@ public function seleccionarDatos($cod_rd,$paciente_rd){
   return $resu;
 }
 
-public function UpdateDatosRegistroDiario($cod_rd,$cod_usuario,$nombre,$ap_usuario,$am_usuario,$fecha_nacimiento,$edad,
-$direccion_usuario,$servicio,$signos_sintomas,$historiaclinica,$personalatencion,
-$respadmision,$fechaderetornodeHistoria){
-  $sql = "update usuario set nombre_usuario = '$nombre', ap_usuario = '$ap_usuario', am_usuario='$am_usuario',fecha_nac_usuario = '$fecha_nacimiento',
-  edad_usuario = '$edad', direccion_usuario='$direccion_usuario' where cod_usuario = $cod_usuario";
-  $resu = $this->con->query($sql);
-  if($resu != ""){
-    $sql = "update registro_diario set servicio_rd = $servicio,signo_sintomas_rd = '$signos_sintomas',
-    fecha_retorno_historia_rd=";
-    if($fechaderetornodeHistoria == ''||$fechaderetornodeHistoria == NULL){
-      $sql.="NULL";
-    }else{
-      $sql.="'$fechaderetornodeHistoria'";
-    }
-    $sql.=",pe_brinda_atencion_rd = $personalatencion, resp_admision_rd = $respadmision
-    where paciente_rd = $cod_usuario and cod_rd = $cod_rd";
-    $resus = $this->con->query($sql);
-  }
-  return $resus;
-}
 public function selectServicio($id){
   $lis = "select *from servicio where cod_servicio=$id";
   $resul = $this->con->query($lis);
