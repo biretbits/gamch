@@ -13,75 +13,66 @@
     </div>
     </div>
 </div>
-<?php
-// Datos inventados
-$documentos = [
-    [
-        'titulo' => 'Informe de Gestión 2023',
-        'descripcion' => 'Resumen de actividades y resultados obtenidos durante la gestión municipal del año 2023.',
-        'archivo' => 'informe_gestion_2023.pdf',
-        'fecha' => '2024-01-15',
-        'cod' => 'IG-2023'
-    ],
-    [
-        'titulo' => 'Auditoría Interna - Julio 2023',
-        'descripcion' => 'Reporte detallado de la auditoría interna realizada en el mes de julio.',
-        'archivo' => 'auditoria_julio_2023.pdf',
-        'fecha' => '2023-07-30',
-        'cod' => 'AUD-0723'
-    ],
-    [
-        'titulo' => 'Decreto Municipal N°012/2024',
-        'descripcion' => 'Establece nuevas normas de circulación en la zona urbana de Challapata.',
-        'archivo' => 'decreto_012_2024.pdf',
-        'fecha' => '2024-02-05',
-        'cod' => 'DM-012'
-    ],
-    [
-        'titulo' => 'Resolución Administrativa N°045',
-        'descripcion' => 'Aprobación del presupuesto para la gestión 2024.',
-        'archivo' => 'resolucion_adm_045.pdf',
-        'fecha' => '2024-03-01',
-        'cod' => 'RA-045'
-    ]
-];
-
-// Mostrar documentos
-echo '<div class="container">
-        <div class="row wrap-feature45-box">
-            <div class="col-lg-12">
-                <div class="row m-t-40 m-b-30" style="padding: 0px 6px;">';
-
-foreach ($documentos as $doc) {
-    echo '
-        <div class="col-md-6 wrap-feature5-box buscar">
-            <div class="card card-shadow" data-aos="fade-right" data-aos-duration="1200">
-                <div class="card-body d-flex flex-wrap">
-                    <div class="col-md-12 col-lg-9">
-                        <h6 class="font-medium">'. $doc['titulo'] .'</h6>
-                        <hr>
-                        <p class="m-t-20" style="color: grey;">'. $doc['descripcion'] .'</p>
-                    </div>
-                    <div class="col-md-12 col-lg-3 text-center">
-                        <a href="/archivos/'. $doc['archivo'] .'" target="_blank">
-                            <img src="/imagenes/pdf.png" alt="PDF" style="max-width: 50px;">
-                        </a>
-                        <h6 style="font-size: 11px;" class="font-medium">'. $doc['fecha'] .'</h6>
-                        <a href="/archivos/'. $doc['archivo'] .'" download="'. $doc['cod'] .'">
-                            <i class="fa fa-download fa-2x" style="color: red;"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>';
-}
-
-echo '      </div>
-        </div>
+<nav class="nav f45-tab" id="myTab4">
+          <!-- Tabs -->
+    <a class="nav-item nav-link show active" id="wp-tab" data-toggle="tab" href="#wp-hos"  aria-expanded="true">
+        <i class="hidden-sm-up icon-Monitor-4"></i> <span class="hidden-sm-down">RESOLUCIONES MUNICIPALES ADMINISTRATIVAS</span>
+    </a>
+</nav>
+<div class="my-4">
+    <div class="d-flex justify-content-center">
+        <input type="text" name="buscar" placeholder="Buscar..." class="form-control w-50">
     </div>
-</div>';
-?>
+</div>
 
+<div class="tabla-view">
+  <div class="container-fluid">
+      <div class="row mt-4 mb-4">
+          <?php
+          if ($resul && mysqli_num_rows($resul) > 0) {
+              while($doc = mysqli_fetch_array($resul)) {
+                  echo '
+                  <div class="col-md-6 mb-4">
+                      <div class="card card-shadow h-100" data-aos="fade-right" data-aos-duration="1200">
+                          <div class="card-body">
+                              <div class="row">
+                                  <div class="col-8">
+                                      <h6 class="font-medium">'. $doc['nombre_documento'] .'</h6>
+                                      <hr>
+                                      <p class="text-muted mt-3">'. $doc['descripcion'] .'</p>
+                                  </div>
+                                  <div class="col-4 text-center">
+                                      <a href="'. $doc['archivo'] .'" target="_blank">
+                                          <img src="/imagenes/pdf.png" alt="PDF" style="max-width: 50px;">
+                                      </a>
+                                      <h6 class="font-medium mt-2" style="font-size: 11px;">'. $doc['fecha_creacion'] .'</h6>
+                                      <a href="'. $doc['archivo'] .'" download="'. $doc['nombre_documento'] .'.pdf">
+                                          <i class="fa fa-download fa-2x text-danger mt-2"></i>
+                                      </a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>';
+              }
+          } else {
+              echo '
+              <div class="col-md-6 mb-4">
+                  <div class="card card-shadow h-100" data-aos="fade-right" data-aos-duration="1200">
+                      <div class="card-body text-center">
+                          <p class="text-muted mb-0">NO SE ENCONTRARON DOCUMENTOS</p>
+                      </div>
+                  </div>
+              </div>';
+          }
+          ?>
+      </div>
+  </div>
+
+  </div>
+
+
+</div>
 
 
 <?php require("vista/esquema/footeruni.php"); ?>

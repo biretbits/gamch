@@ -26,15 +26,15 @@
             <?php
             // Arreglo de documentos
             $documentos = [
-                ['titulo' => 'LEYES MUNICIPALES', 'descripcion' => 'Documento Referente a Leyes Municipales.', 'ruta' => 'leyes_municipales'],
-                ['titulo' => 'RESOLUCIONES MUNICIPALES', 'descripcion' => 'Documento Referente a Resoluciones Municipales.', 'ruta' => 'resoluciones_municipales'],
-                ['titulo' => 'RESOLUCIONES MUNICIPALES ADMINISTRATIVOS', 'descripcion' => 'Documento Referente a R.A.M.', 'ruta' => 'resoluciones_mun_adm'],
-                ['titulo' => 'DECRETOS EDILES', 'descripcion' => 'Documento Referente a Decretos Ediles.', 'ruta' => 'decretos_ediles'],
-                ['titulo' => 'DECRETOS MUNICIPALES', 'descripcion' => 'Documento Referente a Decretos Municipales.', 'ruta' => 'decretos_municipales'],
-                ['titulo' => 'TRANSPARENCIA', 'descripcion' => 'Documento Referente a Transparencia.', 'ruta' => 'transparencia'],
-                ['titulo' => 'AUDITORIA INTERNA', 'descripcion' => 'Documento Referente a Auditoria Interna.', 'ruta' => 'auditoria_interna'],
-                ['titulo' => 'INFORME DE GESTION', 'descripcion' => 'Documento Referente a Informes de Gestion.', 'ruta' => 'informes_gestion'],
-                ['titulo' => 'DOCUMENTOS IMPORTANTES', 'descripcion' => 'Documentos importantes del municipio.', 'ruta' => 'documentos_importantes'],
+                ['titulo' => 'LEYES MUNICIPALES', 'descripcion' => 'Documento Referente a Leyes Municipales.', 'ruta' => 'LEYES-MUNICIPALES'],
+                ['titulo' => 'RESOLUCIONES MUNICIPALES', 'descripcion' => 'Documento Referente a Resoluciones Municipales.', 'ruta' => 'RESOLUCIONES-MUNICIPALES'],
+                ['titulo' => 'RESOLUCIONES MUNICIPALES ADMINISTRATIVOS', 'descripcion' => 'Documento Referente a R.A.M.', 'ruta' =>  'RESOLUCIONES-MUNICIPALES-ADMINISTRATIVOS'],
+                ['titulo' => 'DECRETOS EDILES', 'descripcion' => 'Documento Referente a Decretos Ediles.', 'ruta' => 'DECRETOS-EDILES'],
+                ['titulo' => 'DECRETOS MUNICIPALES', 'descripcion' => 'Documento Referente a Decretos Municipales.', 'ruta' => 'DECRETOS-MUNICIPALES'],
+                ['titulo' => 'TRANSPARENCIA', 'descripcion' => 'Documento Referente a Transparencia.', 'ruta' =>  'TRANSPARENCIA'],
+                ['titulo' => 'AUDITORIA INTERNA', 'descripcion' => 'Documento Referente a Auditoria Interna.', 'ruta' => 'AUDITORIA-INTERNA'],
+                ['titulo' => 'INFORME DE GESTION', 'descripcion' => 'Documento Referente a Informes de Gestion.', 'ruta' =>  'INFORME-DE-GESTION'],
+                ['titulo' => 'DOCUMENTOS IMPORTANTES', 'descripcion' => 'Documentos importantes del municipio.', 'ruta' => 'DOCUMENTOS-IMPORTANTES'],
             ];
 
             // Animaciones alternadas para efecto visual

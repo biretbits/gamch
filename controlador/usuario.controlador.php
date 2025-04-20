@@ -198,6 +198,9 @@ echo "</div>
     require("vista/usuario/rol_usuario.php");
   }
 
+  public static function CrearTablaUsuarioGamch(){
+    require("vista/esquema/bd/crear/tablas.php");
+  }
 }
 
 

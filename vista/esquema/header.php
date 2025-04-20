@@ -8,7 +8,9 @@
      		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script src="/vista/activos/jquery-3.5.1.min.js"></script>
         <!-- Bootstrap CSS (solo una vez) -->
-
+        <script src="/vista/pdfjss/build/pdf.js"></script>
+        <script src="/vista/pdfjss/web/pdf_viewer.js"></script>
+        <link rel="stylesheet" href="/vista/pdfjss/web/pdf_viewer.css">
         <link rel="stylesheet" type="text/css" href="/vista/activos/bootstrap.css'; ?>">
         <!-- Select2 CSS -->
 

@@ -28,8 +28,8 @@ require_once('vista/esquema/header.php');
       </div>
       <div class="col-2" title="Registro de nuevo Rol">
 
-        <button type="button" class="form-control btn btn-primary" onclick="accionBtnEditar('','','',''
-        ,'')" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro">
+        <button type="button" class="form-control btn btn-primary" onclick="onclick='accionBtnEditar("","","","","","","","","","","")'
+        " class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro">
           <i class="fas fa-plus-circle"></i>
         </button>
       </div>
@@ -44,7 +44,7 @@ require_once('vista/esquema/header.php');
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">Datos de Hoja de Ruta</h6>
+          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">DOCUMENTO</h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!-- Contenido del modal -->
@@ -54,23 +54,62 @@ require_once('vista/esquema/header.php');
              <form>
 
                <input type="hidden" name="id" id='id' value="">
-               <div class="mb-3">
-                 <input type="text" class="form-control" id="nombre" name='nombre' placeholder="Ponga el nombre">
-               </div>
-               <div class="mb-3">
-                  <input type="text" class="form-control" id="slug" name='slug' placeholder="Ponga slug">
-               </div>
 
                <div class="mb-3">
-                  <input type="text" class="form-control" id="descripcion" name='descripcion' placeholder="Ponga la Descripción">
-               </div>
-
-               <div class="mb-3">
-                  <select class="form-control" name="especial" id='especial'>
-                    <option value="">--</option>
-                    <option value="acceso-total">acceso-total</option>
-                    <option value="sin-acceso">sin-acceso</option>
+                  <select class="form-control" name="categoria" id='categoria' required>
+                    <option value="">Seleccione categoria</option>
+                    <option value="RESOLUCIONES-MUNICIPALES">RESOLUCIONES MUNICIPALES</option>
+                     <option value="AUDITORIA-INTERNA">AUDITORIA INTERNA</option>
+                     <option value="DOCUMENTOS-IMPORTANTES">DOCUMENTOS IMPORTANTES</option>
+                     <option value="LEYES-MUNICIPALES">LEYES MUNICIPALES</option>
+                     <option value="DECRETOS-EDILES">DECRETOS EDILES</option>
+                     <option value="DECRETOS-MUNICIPALES">DECRETOS MUNICIPALES</option>
+                     <option value="INFORME-DE-GESTION">INFORME DE GESTION</option>
+                     <option value="TRANSPARENCIA">TRANSPARENCIA</option>
+                     <option value="RESOLUCIONES-MUNICIPALES-ADMINISTRATIVOS">RESOLUCIONES MUNICIPALES ADMINISTRATIVOS</option>
                   </select>
+               </div>
+               <div class="mb-3">
+                 <input type="text" class="form-control" id="ruta" name='ruta' placeholder="">
+               </div>
+               <div class="mb-3">
+                 <input type="text" class="form-control" id="cod" name='cod' placeholder="Ponga codigo documento" required>
+               </div>
+               <div class="mb-3">
+                 <input type="text" class="form-control" id="entidad" name='entidad' placeholder="Ponga entidad Opcional">
+               </div>
+               <div class="mb-3">
+                  <input type="text" class="form-control" id="descripcion" name='descripcion' placeholder="Ponga descripción" required>
+               </div>
+               <div class="mb-3">
+                  <input type="file"  accept="application/pdf"class="form-control" id="archivo" name='archivo' placeholder="Ponga archivo">
+               </div>
+
+               <div class="mb-3">
+                 <label for="">Fecha de creación</label>
+                  <input type="date" class="form-control" id="fecha_creacion" name='fecha_creacion' placeholder="Ponga fecha de creación" required>
+               </div>
+               <div class="mb-3">
+                  <input type="text" class="form-control" id="nombre_documento" name='nombre_documento' placeholder="Ponga nombre del Documento" required>
+               </div>
+               <div class="mb-3">
+                  <input type="text" class="form-control" id="dato_documento" name='dato_documento' placeholder="Ponga datos del documento" required>
+               </div>
+               <div class="mb-3">
+                 <select class="form-control" name="estado" id='estado' required>
+                   <option value="">Seleccione estado</option>
+                   <option value="vigente">vigente</option>
+                   <option value="no vigente">no vigente</option>
+
+                 </select>
+               </div>
+               <div class="mb-3">
+                 <select class="form-control" name="publicar" id='publicar' required>
+                   <option value="">Seleccione publicar</option>
+                   <option value="1">Si</option>
+                   <option value="0">No</option>
+
+                 </select>
                </div>
 
              </form>
@@ -114,25 +153,35 @@ require_once('vista/esquema/header.php');
               echo "<td>".($i+1)."</td>";
               echo "<td>".$fi['categoria']."</td>";
               echo "<td>".$fi['nombre_documento']."</td>";
-              echo "<td>".$fi['dato_documento']."</td>";
+              echo "<td>".$fi['datos_documento']."</td>";
               echo "<td>".$fi['descripcion']."</td>";
-              echo "<td>".$fi['usuario']."</td>";
+              echo "<td>".$fi['usuario_id']."</td>";
               echo "<td>".$fi['fecha_creacion']."</td>";
               echo "<td>";
               $id_u = '';
-                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                <button type='button'
-             class='btn btn-info btn-sm shadow-sm'
-             title='Editar'
-             data-bs-toggle='modal'
-             data-bs-target='#ModalRegistro'
-             onclick='accionBtnEditar(
+              echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+              <button type='button'
+                  class='btn btn-info btn-sm shadow-sm'
+                  title='Editar'
+                  data-bs-toggle='modal'
+                  data-bs-target='#ModalRegistro'
+                  onclick='accionBtnEditar(
+                      \"" . $fi["id"] . "\",
+                      \"" . addslashes($fi["categoria"]) . "\",
+                      \"" . addslashes($fi["cod"]) . "\",
+                      \"" . addslashes($fi["entidad"]) . "\",
+                      `" . addslashes($fi["descripcion"]) . "`,
+                      \"" . $fi["fecha_creacion"] . "\",
+                      \"" . addslashes($fi["nombre_documento"]) . "\",
+                      \"" . addslashes($fi["datos_documento"]) . "\",
+                      \"" . addslashes($fi["estado"]) . "\",
+                      \"" . addslashes($fi["publicar"],) . "\",
+                      \"" . addslashes($fi["archivo"]) . "\",
+                  )'>
+                  <i class='fas fa-edit'></i>
+              </button>
+          </div>";
 
-                   \"".$fi["id"]."\",
-                 \"".$fi["rol_id"]."\",
-                 \"".$fi["usuario_id"]."\",
-                 \"".$fi["rol_descripcion"]."\")'>
-         <i class='fas fa-edit'></i></button>";
 
                 echo "</div>";
               echo "</td>";
@@ -258,7 +307,7 @@ function BuscarUsuarios(page){
     datos.append('listarDeCuanto',listarDeCuanto);
     datos.append("buscar",buscar);
       $.ajax({
-        url: "/index.php/bpth",
+        url: "/buscarDoc",
         type: "POST",
         data: datos,
         contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -322,13 +371,20 @@ function BuscarUsuarios(page){
 
  //funcion para verificar si el usuario existe o no y despues poder editar sus datos
 
-   function accionBtnEditar(id,nombre,slug,descripcion,especial){
-      document.getElementById("id").value=id;
-      document.getElementById("nombre").value=nombre;
-      document.getElementById("slug").value=slug;
-      document.getElementById("descripcion").value=descripcion;
-      document.getElementById("especial").value=especial;
-     }
+ function accionBtnEditar(id,categoria,cod,entidad,descripcion,fecha_creacion,nombre_documento,datos_documento,estado,publicar,archivo
+ ) {
+     document.getElementById('id').value = id;
+     document.getElementById('categoria').value = categoria;
+     document.getElementById('cod').value = cod;
+     document.getElementById('entidad').value = entidad;
+     document.getElementById('descripcion').value = descripcion;
+     document.getElementById('fecha_creacion').value = fecha_creacion;
+     document.getElementById('nombre_documento').value = nombre_documento;
+     document.getElementById('dato_documento').value = datos_documento;
+     document.getElementById('estado').value = estado;
+     document.getElementById('publicar').value = publicar;
+     document.getElementById("ruta").value=archivo;
+ }
 
    function formularioSubmit(pagina,listarDeCuanto,cod_usuario,buscar){
      var form = document.createElement('form');
@@ -366,23 +422,38 @@ function BuscarUsuarios(page){
    }
 
    function registrar(){
-      var id = document.getElementById("id").value;
-      var nombre = document.getElementById("nombre").value;
-      var slug = document.getElementById("slug").value;
-      var descripcion = document.getElementById("descripcion").value;
-      var especial = document.getElementById("especial").value;
-      registrarDatos(id,nombre,slug,descripcion,especial);
+     var id = document.getElementById("id").value;
+     var categoria = document.getElementById("categoria").value;
+     var cod = document.getElementById("cod").value;
+     var entidad = document.getElementById("entidad").value;
+     var descripcion = document.getElementById("descripcion").value;
+     var archivo = document.getElementById("archivo");
+     var fecha_creacion = document.getElementById("fecha_creacion").value;
+     var nombre_documento = document.getElementById("nombre_documento").value;
+     var dato_documento = document.getElementById("dato_documento").value;
+     var publicar = document.getElementById("publicar").value;
+     var estado = document.getElementById("estado").value;
+     var ruta = document.getElementById("ruta").value;
+      registrarDatos(id,categoria,cod,entidad,descripcion,archivo,fecha_creacion,nombre_documento,dato_documento,publicar,estado,ruta);
    }
 
-   function registrarDatos(id,nombre,slug,descripcion,especial){
+   function registrarDatos(id,categoria,cod,entidad,descripcion,input,fecha_creacion,nombre_documento,dato_documento,publicar,estado,ruta){
      var datos = new FormData(); // Crear un objeto FormData vacío
-      datos.append("id",id);
-      datos.append("nombre",nombre);
-      datos.append("slug",slug);
+     var archivo = input.files[0];
+     datos.append("id",id);
+      datos.append("categoria",categoria);
+      datos.append("cod",cod);
+      datos.append("entidad",entidad);
       datos.append("descripcion",descripcion);
-      datos.append("especial",especial);
+      datos.append("archivo",archivo);
+      datos.append("fecha_creacion",fecha_creacion);
+      datos.append("nombre_documento",nombre_documento);
+      datos.append("dato_documento",dato_documento);
+      datos.append("publicar",publicar);
+      datos.append("estado",estado);
+      datos.append("ruta",ruta);
      $.ajax({
-       url: "/index.php/RolReg",
+       url: "/regDoc",
        type: "POST",
        data: datos,
        contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -392,8 +463,10 @@ function BuscarUsuarios(page){
          //alert(data);
          if(data == "correcto"){
            alert("accion realizada con exito");
-        }else{
+        }else if(data == "error"){
            alert("ocurio un error al insertar datos");
+        }else{
+          alert(data);
         }
         IRalLink(id);
        }
@@ -411,7 +484,7 @@ function BuscarUsuarios(page){
        }, 1500);
      }else{
        setTimeout(() => {
-         location.href="/index.php/rol";
+         location.href="/Doc";
            $('#ModalRegistro').modal('hide');
        }, 1500);
      }

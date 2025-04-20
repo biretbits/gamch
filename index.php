@@ -35,11 +35,29 @@ if (isset($_SESSION["usuario"]) && $_SESSION["nombre_role"] == 'Admin') {
         );
         UsuarioControlador::RegistrarRol($a); return;
     } else if ($_GET["accion"] == "bpth") {
-        UsuarioControlador::BuscarUsuarioTabla($_GET["pagina"], $_GET["listarDeCuanto"], $_GET["buscar"]); return;
+        UsuarioControlador::BuscarUsuarioTabla($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"]); return;
     } else if ($_GET["accion"] == "Doc") {
         DocumentoControlador::registroDocumento(); return;
     } else if ($_GET["accion"] == "rolU") {
         UsuarioControlador::visualizarRolUsuario(); return;
+    } else if($_GET["accion"] == "regDoc"){
+       $a=array("id"=>$_POST["id"],
+       "categoria"=>$_POST["categoria"],
+       "cod"=>$_POST["cod"],
+       "entidad"=>$_POST["entidad"],
+       "descripcion"=>$_POST["descripcion"],
+       "fecha_creacion"=>$_POST["fecha_creacion"],
+       "nombre_documento"=>$_POST["nombre_documento"],
+       "dato_documento"=>$_POST["dato_documento"],
+       "publicar"=>$_POST["publicar"],
+        "estado"=> $_POST["estado"],
+        "ruta"=>$_POST["ruta"]);
+       DocumentoControlador::registrarDocumentos($a);return;
+    }else if($_GET["accion"] == "CrearTablasDeNuevo"){
+      UsuarioControlador::CrearTablaUsuarioGamch();
+      return;
+    }else if($_GET["accion"] == "buscarDoc"){
+      DocumentoControlador::BuscarDoc($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"]); return;
     }
 }
 
@@ -62,17 +80,17 @@ if ($_GET["accion"] == "salir") {
 else if ($_GET["accion"] == "gac") {
     GacetaControlador::gaceta();
 } else if (
-    $_GET["accion"] == "leyes_municipales" ||
-    $_GET["accion"] == "resoluciones_municipales" ||
-    $_GET["accion"] == "resoluciones_mun_adm" ||
-    $_GET["accion"] == "decretos_ediles" ||
-    $_GET["accion"] == "decretos_municipales" ||
-    $_GET["accion"] == "transparencia" ||
-    $_GET["accion"] == "auditoria_interna" ||
-    $_GET["accion"] == "informes_gestion" ||
-    $_GET["accion"] == "documentos_importantes"
+    $_GET["accion"] == "RESOLUCIONES-MUNICIPALES" ||
+    $_GET["accion"] == "AUDITORIA-INTERNA" ||
+    $_GET["accion"] == "DOCUMENTOS-IMPORTANTES" ||
+    $_GET["accion"] == "LEYES-MUNICIPALES" ||
+    $_GET["accion"] == "DECRETOS-EDILES" ||
+    $_GET["accion"] == "DECRETOS-MUNICIPALES" ||
+    $_GET["accion"] == "INFORME-DE-GESTION" ||
+    $_GET["accion"] == "TRANSPARENCIA" ||
+    $_GET["accion"] == "RESOLUCIONES-MUNICIPALES-ADMINISTRATIVOS"
 ) {
-    GacetaControlador::documentos_visualizar($_GET["accion"]);
+    DocumentoControlador::documentos_visualizar($_GET["accion"]);
 } else {
     IndexControlador::visualizarPrincipal();
 }
