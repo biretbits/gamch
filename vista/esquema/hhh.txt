@@ -1,0 +1,121 @@
+<div class="content">
+  <header>
+      <img src="/imagenes/gamch/Escudo%20Challapata%20Blanco.webp" width="120" height="10" style="height: 120px;" />
+    <h1>Gobierno Autónomo Municipal de Challapata</h1>
+  </header>
+<?php
+//localhost/gamch/
+$ruta_dominio = 'http://gampch.wuaze.com/';
+$name = "";
+
+
+echo "<nav style='border-bottom: 1px solid red;background-color:#2a378d' class='navbar navbar-expand-lg navbar-light fixed-top shadow-sm' id='mainNav'>
+    <div class='container px-5'>
+        <a href='#' class='navbar-brand' id='texto-bonito'>
+            <img src='/imagenes/gamch/challapata.jpg' height='30' width='30' class='rounded-circle'>
+            GAMCH
+        </a>
+
+        <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive'
+                aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation'>
+            <span class='navbar-toggler-icon'></span>
+        </button>
+
+        <div class='collapse navbar-collapse' id='navbarResponsive'>
+            <ul class='navbar-nav ms-auto me-4 my-3 my-lg-0'>
+                <li class='nav-item' title='INICIO'>
+                    <a class='nav-link btn btn-outline-primary'style='color:white' href='/index.php'>
+                        <i class='fas fa-home'></i> INICIO
+                    </a>
+                </li>
+
+                <li class='nav-item dropdown' title='Municipio'>
+                  <a class='nav-link dropdown-toggle btn btn-outline-primary'style='color:white' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                    Municipio
+                  </a>
+                  <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                      <li  class='nav-item ' title='Gobierno municipal' style='color:green'>
+                        <a class='nav-link text-black' href='/index.php/nst'>Gobierno Municipal</a>
+                      </li>
+                      <li><hr class='dropdown-divider'></li>
+                      <li  class='nav-item' title='Historia' style='color:green'>
+                        <a class='nav-link text-black' href='/index.php/his'>Historia</a>
+                      </li>
+                      <li><hr class='dropdown-divider'></li>
+                      <li class='nav-item ' title='Mapa de Challapata' style='color:green'>
+                        <a class='nav-link text-black' href='/index.php/map'>Mapa de Challapata</a>
+                      </li>
+                    </ul>
+                </li>
+
+                <li class='nav-item dropdown' title='Despacho'>
+                  <a class='nav-link dropdown-toggle btn btn-outline-primary'style='color:white' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                    Despacho
+                  </a>
+                  <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                      <li  class='nav-item ' title='Alcalde Municipal' style='color:green'>
+                        <a class='nav-link text-black' href='/index.php/nst'>Alcalde Municipal</a>
+                      </li>
+                      <li><hr class='dropdown-divider'></li>
+                      <li  class='nav-item' title='Dirección de Recursos Humanos' style='color:green'>
+                        <a class='nav-link text-black' href='/index.php/his'>Dirección de Recursos Humanos</a>
+                      </li>
+                      <li><hr class='dropdown-divider'></li>
+                      <li class='nav-item ' title='Mapa de Challapata' style='color:green'>
+                        <a class='nav-link text-black' href='/index.php/map'>Dirección de planificacion Integral</a>
+                      </li>
+                    </ul>
+                </li>
+                ";
+
+                if(isset($_SESSION["id"]) && $_SESSION["id"] != "" && isset($_SESSION["especial"]) && $_SESSION["especial"] == "acceso-total"
+                  && isset($_SESSION["nombre_role"]) && $_SESSION["nombre_role"] == "Admin"){
+                    echo "<li class='nav-item dropdown' title='Despacho'>
+                    <a class='nav-link dropdown-toggle btn btn-outline-primary'style='color:white' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                      Usuario
+                    </a>
+                    <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                        <li  class='nav-item ' title='ROLES' style='color:green'>
+                          <a class='nav-link text-black' href='/index.php/rol'>ROLES</a>
+                        </li>
+                        <li><hr class='dropdown-divider'></li>
+                        <li  class='nav-item' title='ROLES USUARIO' style='color:green'>
+                          <a class='nav-link text-black' href='/index.php/rolU'>ROLES USUARIO</a>
+                        </li>
+                        <li><hr class='dropdown-divider'></li>
+                        <li class='nav-item ' title='Mapa de Challapata' style='color:green'>
+                          <a class='nav-link text-black' href='/index.php/map'>Dirección de planificacion Integral</a>
+                        </li>
+                      </ul>
+                  </li>
+                  ";
+
+                }
+
+                if(isset($_SESSION["id"]) && $_SESSION["id"] != ""){
+                  $name = $_SESSION["usuario"];
+                  //echo $_SESSION["tipo_usuario"];
+                }
+                if(isset($_SESSION["especial"]) && $_SESSION["especial"] != ""){
+                  echo "<li class='nav-item dropdown' title='Nombre Usuario'>
+                    <a class='nav-link dropdown-toggle btn btn-outline-success'  style='color:white'href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                        hola ".$name."
+                    </a>
+                    <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                        <li><hr class='dropdown-divider'></li>
+                        <li class='nav-item ' title='Cerrar sesión' style='color:green'>
+                          <a class='nav-link text-primary btn btn-outline-danger' style='color:white' href='index.php/salir'><i class='fas fa-power-off'></i>
+</a>
+                        </li>
+                    </ul>
+                    </li>";
+                }else{
+                  echo"<li class='nav-item'>
+                    <a class='nav-link' style='color:white' href='/index.php/is'>Iniciar sesión</a>
+                  </li>";
+                }
+echo "
+            </ul>
+        </div>
+    </div>
+</nav>";

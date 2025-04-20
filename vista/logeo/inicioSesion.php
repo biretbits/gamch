@@ -1,42 +1,44 @@
 
-<?php require("../librerias/headeradmin1.php"); ?>
-<div class="container main-content">
-<div class="container">
-<div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
-    <div class="row w-100">
-        <div class="col-lg-4 col-md-6 col-12 mx-auto">
-            <div class="modal-content" style="padding: 20px 15px; background: linear-gradient(to right, gray, white);border-radius:20px">
-                <div class="text-center">
-                    <h3 style="color: blue; text-shadow: 2px 2px 2px black;">Acceso</h3>
-                    <img src="../imagenes/acceso.png" class="img-circle" height="100" width="110"/>
-                </div>
-                <br>
-                <form method="POST">
-                    <div class="input-group mb-3">
-                        <input class="form-control" style="color:black" type="text" id="usuario" name="usuario" placeholder="Nombre usuario">
-                        <span class="input-group-addon" id="grupo_user"></span>
-                    </div>
-                    <span id="text_user"></span>
-                    
-                    <div class="input-group mb-3">
-                        <input class="form-control" style="color:black" type="password" id="contrasena" name="contrasena" placeholder="Contraseña"><br>
-                        <button class="btn btn-outline-secondary" type="button" id="che" onclick="mostrar()">
-                            <img src="../imagenes/ojo.ico" style="height: 25px; width: 25px;">
-                        </button>
-                    </div>
-                    <br>
-                    <button type="button" class="btn btn-warning w-100" id="submit" value="Ingresar" onclick="VerificarDatos();">
-                        <img src="../imagenes/entrar.ico" height="25" width="25" alt="Imagen centrada"> Ingresar
-                    </button>
-                    <br>
-                </form>
-                <br>
+<?php require("vista/esquema/header.php"); ?>
+<div class="container-mt">
+  <div class="d-flex flex-column justify-content-center" id="login-box">
+          <div class="login-box-header">
+              <h4 style="color:rgb(139,139,139);margin-bottom:0px;font-weight:400;font-size:27px;">Login</h4>
+          </div>
+          <div class="login-box-content">
+              <div class="fb-login box-shadow"><a class="d-flex flex-row align-items-center social-login-link" href="#"><i class="fa fa-facebook" style="margin-left:0px;padding-right:20px;padding-left:22px;width:56px;"></i>Login with Facebook</a></div>
+              <div class="gp-login box-shadow"><a class="d-flex flex-row align-items-center social-login-link" style="margin-bottom:10px;" href="#"><i class="fa fa-google" style="color:rgb(255,255,255);width:56px;"></i>Login with Google+</a></div>
+          </div>
+          <div class="d-flex flex-row align-items-center login-box-seperator-container">
+              <div class="login-box-seperator"></div>
+              <div class="login-box-seperator-text">
+                  <p style="margin-bottom:0px;padding-left:10px;padding-right:10px;font-weight:400;color:rgb(201,201,201);">or</p>
+              </div>
+              <div class="login-box-seperator"></div>
+          </div>
+          <div class="email-login" style="background-color:#ffffff;">
+            <div class="input-group mb-3">
+                <input class="form-control" style="color:black" type="text" id="usuario" name="usuario" placeholder="Usuario">
+                <span class="input-group-addon" id="grupo_user"></span>
             </div>
-        </div>
-    </div>
-</div>
-</div>
-</div>
+            <span id="text_user"></span>
+
+            <div class="input-group mb-3">
+                <input class="form-control" style="color:black" type="password" id="contrasena" name="contrasena" placeholder="Contraseña"><br>
+                <button class="btn btn-outline-secondary" type="button" id="che" onclick="mostrar()">
+                  <i class="fas fa-eye"></i> <!-- Icono de ojo -->
+                </button>
+            </div>
+          <div class="submit-row" style="margin-bottom:8px;padding-top:0px;"><a class="btn btn-primary d-block box-shadow w-100" role="button" id="submit-id-submit"  onclick="VerificarDatos();">Login</a>
+              <div class="d-flex justify-content-between">
+                  <div class="form-check form-check-inline" id="form-check-rememberMe"><input class="form-check-input" type="checkbox" id="formCheck-1" for="remember" style="cursor:pointer;" name="check"><label class="form-check-label" for="formCheck-1"><span class="label-text">Remember Me</span></label></div><a id="forgot-password-link" href="#">Forgot Password?</a>
+              </div>
+          </div>
+          <div id="login-box-footer" style="padding:10px 20px;padding-bottom:23px;padding-top:18px;">
+              <p style="margin-bottom:0px;">Don't you have an account?<a id="register-link" href="#">Sign Up!</a></p>
+          </div>
+      </div>
+
 
 <script type="text/javascript">
 
@@ -74,30 +76,17 @@
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "../controlador/logeo.controlador.php?accion=vcu", //destination
+        url: "/vcu", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
         processData:false,
         success: function(r){
-        //alert(r);
           r=$.trim(r);
-          if(r == "admin"){
+          //alert(r);
+          console.log(r);
+          if(r == "correcto"){
             alertCorrecto();
-          }else if(r == "medico"){
-            alertCorrecto();
-          }else if(r == "admision"){
-            alertCorrecto();
-          }else if(r == "farmacia"){
-            alertCorrecto();
-          }else if(r == 'Falta_inicio_sesion_admin'){
-            Swal.fire({
-             icon: 'info',
-             title: '¡Información!',
-             text: '¡Espere a que inicie sesión el Administrador!',
-             showConfirmButton: false,
-             timer: 2000
-           });
           }else{
             Swal.fire({
              icon: 'error',
@@ -127,7 +116,7 @@
   //funcion para ir al index cuando ingrese un usuario del sistema
   function IRalLink(){
     setTimeout(() => {
-      location.href="../index.php";
+      location.href="/";
      }, 1500);
   }
   /*function close(){
@@ -141,7 +130,7 @@
 
 <style>
 	body{
-    background: url(../imagenes/bosque.jpg) no-repeat center center fixed;
+    background: url(imagenes/bosque.jpg) no-repeat center center fixed;
     background-size: cover;
   }
 
@@ -151,4 +140,4 @@
 <?php
 //require_once "../view/footer.php";
 ?>
-<?php require("../librerias/footeruni.php"); ?>
+<?php require("vista/esquema/footeruni.php"); ?>

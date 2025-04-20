@@ -1,85 +1,66 @@
 <?php
-require '../modelo/usuario.php';
-require "sesion.controlador.php";
-$ins=new sesionControlador();
-$ins->StarSession();
+require 'modelo/usuario.php';
 
 class LogeoControlador{
 
-	public function visualizarInicioSession(){
+	public static function visualizarInicioSession(){
 		if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"] !=""){
 			//hay un usuario en session
-			$this->v_index();
+			 self::v_index();
 		}else{
-			require("../vista/logeo/inicioSesion.php");
+			require("vista/logeo/inicioSesion.php");
 		}
   }
 
-	public function verificarLogin($usuario,$contrasena){
+	public static function verificarLogin($usuario,$contrasena){
 		$us=new Usuario();
-		$rad = $us->seleccionarAdminInicioSesion();
-		$fila3 = mysqli_fetch_array($rad);
-		$administrador = $fila3['usuario'];$tipoAdmin = $fila3["tipo_usuario"];
-		$acceso = $fila3["control_acceso"];$configuracion = $fila3["configControlAcceso"];
-		$resul1 = $us->validarBD($usuario);
-			$fila1 = mysqli_fetch_array($resul1);
-			if ($fila1['count(*)'] == 0) {
-	        echo "error";
-	    } else {
-					$resul = $us->validarBDTodo($usuario);
-	        $fila = mysqli_fetch_array($resul);
+		$resul = $us->validarBDTodo($usuario);
+	   $fila = mysqli_fetch_array($resul);
 					if ($fila === null) {
 	            echo "error";
 	        } else {
-	          //  echo "Contraseña de la base de datos: ".$fila["contrasena_usuario"]." usuario ".$contrasena;
-						//validar el usuario
-						if($configuracion=="si")
-						{
-							$esAdmin = 0;
-							if($administrador == $fila["usuario"] and $tipoAdmin == $fila['tipo_usuario'] and $tipoAdmin=='admin'){
-								$esAdmin=1;
-							}
-						 $ingresar = "no";
-							if($esAdmin == 0){//si es cero quiere decir que es otro usuario no es admin y se tiene que validar
-								if($acceso == 'activo'){
-									$ingresar='si';
-								}else{
-									$ingresar='no';
-								}
-							}else{//es el admin quien quere ingresar al sistema
-									$us->CambiarEstadoAdminAcceso('activo');
-									$ingresar = 'si';
-							}
-						}else{
-							//si esta en no esto quiere decir que no se necesita control de acceso
-							$ingresar = 'si';
-						}
-						if($ingresar == 'si'){//si ingresar es igual a 1 entonces validamos la contraseña si es correcto o no
-							if (password_verify($contrasena, $fila['contrasena_usuario'])) {
-									$_SESSION['cod_usuario'] = $fila['cod_usuario'];
-	                $_SESSION["usuario"] = $fila["usuario"];
-	                $_SESSION["nombre_usuario"] = $fila["nombre_usuario"];
-	                $_SESSION["ap_usuario"] = $fila["ap_usuario"];
-	                $_SESSION["am_usuario"] = $fila["am_usuario"];
-	                $_SESSION["tipo_usuario"] = $fila["tipo_usuario"];
-
-									$session_id = session_id();
-									$_SESSION["session_id"] = $session_id;
-
-										$session_start = date('Y-m-d H:i:s');
-										$sessionEnd = "abierto";
-										$us->insertarDatosSession($session_id,$session_start,$fila['cod_usuario'],$fila["usuario"],$fila["nombre_usuario"],$fila["ap_usuario"],$fila["am_usuario"],$fila["tipo_usuario"],$sessionEnd);
-
-									echo $fila["tipo_usuario"];
-
+	  					if (password_verify($contrasena, $fila['contrasena'])) {
+								$id_usuario = $fila["id"];
+									//obtener las credenciales de tipo de usuario y tambien de permisos
+									$resu = $us->rolePermisos($id_usuario);
+									$fi = mysqli_fetch_array($resu);
+									$rr=$us->DatosEmpleado($id_usuario);
+									$fii = mysqli_fetch_array($rr);
+									$_SESSION["nivel_id_emp "]=$fii["nivel_id"];
+									$_SESSION["cargo_id_emp "]=$fii["cargo_id"];
+									$_SESSION["tipo_empleado_emp "]=$fii["tipo_empleado"];
+									$_SESSION["nombre_emp"]=$fii["nombre"];
+									$_SESSION["apellido_p_emp"]=$fii["apellido_p"];
+									$_SESSION["apellido_m_emp"]=$fii["apellido_m"];
+									$_SESSION["sexo_emp"]=$fii["sexo"];
+									$_SESSION["direccion_emp"]=$fii["direccion"];
+									$_SESSION["telefono_emp"]=$fii["telefono"];
+									$_SESSION["correo_electronico_emp"]=$fii["correo_electronico"];
+									$_SESSION["id"]=$fi["id"];
+									$_SESSION["empleado_id"]=$fi["empleado_id"];
+									$_SESSION["usuario"]=$fi["usuario"];
+									$_SESSION["contrasena"]=$fi["contrasena"];
+									$_SESSION["estado"]=$fi["estado"];
+									$_SESSION["token_recordar"]=$fi["token_recordar"];
+									$_SESSION["creado_en"]=$fi["creado_en"];
+									$_SESSION["actualizado_en"]=$fi["actualizado_en"];
+									$_SESSION["id"]=$fi["id"];
+									$_SESSION["rol_id"]=$fi["rol_id"];
+									$_SESSION["usuario_id"]=$fi["usuario_id"];
+									$_SESSION["creado_en"]=$fi["creado_en"];
+									$_SESSION["actualizado_en"]=$fi["actualizado_en"];
+									$_SESSION["id"]=$fi["id"];
+									$_SESSION["nombre_role"]=$fi["nombre"];
+									$_SESSION["slug"]=$fi["slug"];
+									$_SESSION["descripcion"]=$fi["descripcion"];
+									$_SESSION["creado_en"]=$fi["creado_en"];
+									$_SESSION["actualizado_en"]=$fi["actualizado_en"];
+									$_SESSION["especial"]=$fi["especial"];
+									echo "correcto";
 	            } else {
-	                echo 'error';
+	                echo 'error'.$usuario."  ".$contrasena;
 	            }
-						}else{
-							echo "Falta_inicio_sesion_admin";
 						}
-	        }
-	    }
 	}
 
 	public function Drop_usuario(){
@@ -87,8 +68,8 @@ class LogeoControlador{
 		$in->Destroy();
 	}
 
-	public function v_index(){
-	    header("location: ../index.php");
+	public static function v_index(){
+	    header("location: index.php");
 	}
 
 	public function validar_usuario_si_existe($usuario){
@@ -102,36 +83,5 @@ class LogeoControlador{
 		}
 	}
 }
-
-	$lc=new  LogeoControlador();
-
-	if(isset($_GET["accion"]) && $_GET["accion"]=="is"){
-		$lc->visualizarInicioSession();
-	}else
-
-	if(isset($_GET["accion"]) && $_GET["accion"]=="vcu"){
-		$lc->verificarLogin($_POST["usuario"],$_POST["contrasena"]);
-	}else
-	if(isset($_GET["accion"])&&$_GET["accion"]=="salir"){
-		$lc->Drop_usuario();
-	}else
-	if(isset($_GET["accion"])&&$_GET["accion"]=="vsx")
-	{
-		$lc->validar_usuario_si_existe($_POST['usuario']);
-	}else
-	if(isset($_SESSION["tipo_usuario"]) && $_SESSION["tipo_usuario"]!=''){
-		if(isset($_GET["accion"])&&$_GET["accion"]=="ix")
-		{
-			$abi = $ins->verificarSession();
-			//echo "<br><br><br><br><br><br><br><br><br><br><br><br>".$abi;
-			if($abi!='' and $abi=='cerrar'){
-			  $ins->Destroy();
-			  //$ins->Redireccionar_inicio();
-			}
-			$ins->Redireccionar_inicio();
-		}
-	}else{
-		$ins->Redireccionar_inicio();
-	}
 
 ?>

@@ -1,0 +1,33 @@
+/*******************
+Animación para .wrap-feature5-box
+*******************/
+.wrap-feature5-box {
+  padding: 0px 6px;
+  transition: transform 0.3s ease-in-out;
+}
+.wrap-feature5-box:hover {
+  transform: scale(1.05); /* efecto de zoom al pasar el mouse */
+}
+
+.wrap-feature5-box .card-body {
+  padding: 15px;
+  border: 1px solid #EDE6E5;
+}
+.wrap-feature5-box .card-body .icon-space {
+  padding: 0px 30px 20px 0px;
+  font-size: 45px;
+  margin: 0px;
+  color: green;
+}
+.wrap-feature5-box .card-body h6 {
+  font-size: 15px;
+  margin-bottom: 0px;
+}
+.wrap-feature5-box .card-body img {
+  width: 70px;
+  height: 85px;
+}
+.wrap-feature5-box .card-body p {
+  margin-bottom: 0px;
+  font-size: 14px;
+}

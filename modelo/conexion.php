@@ -8,8 +8,8 @@ class Conexion{
 	private $cnmysql;
 
 	public function __construct(){
-    $this->database="cds";
-		$this->pass="";
+    $this->database="gamch";
+		$this->pass="1234";
 		$this->user="root";
 		$this->host="localhost";
 		$this->cnmysql=null;

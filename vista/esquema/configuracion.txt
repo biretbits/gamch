@@ -1,0 +1,17 @@
+1- No se muestra la imagen con dompdf
+  configuracion para imagenes de tipo png
+  ir a php.ini y habilitar
+  ;extension=gd
+  quitar el ;
+  y al realizar este paso ya se mostraran o visualizaran las imagenes
+
+
+
+  | IMPORTANTES                              |
+  | INFORMES DE AUDITORIA                    |
+  | RESOLUCIONES MUNICIPALES                 |
+  | LEYES MUNICIPALES                        |
+  | DECRETOS EDILES                          |
+  | INFORMES DE GESTION                      |
+  | INFORMES DE TRANSPARENCIA                |
+  | RESOLUCIONES MUNICIPALES ADMINISTRATIVOS

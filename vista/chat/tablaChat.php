@@ -1,4 +1,4 @@
-<?php require("../librerias/headeradmin1.php"); ?>
+<?php require("vista/esquema/header.php"); ?>
 
 <div class="container main-content">
 <div class="container">
@@ -435,4 +435,4 @@ function Buscar(page){
           });
     }
   </script>
-<?php require("../librerias/footeruni.php"); ?>
+<?php require("vista/esquema/footeruni.php"); ?>
