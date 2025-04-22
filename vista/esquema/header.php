@@ -47,40 +47,72 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
+<body style="background: #222222;">
+    <header style="background: rgb(34,34,34);"><!DOCTYPE html>
+<html>
+<head>
+    <title>Imagen Protegida</title>
+</head>
 <body>
-  <header id='header'>
-        <img src="/imagenes/gamch/EscudoChallapata2024mediano2.png" style="height: 120px;" />
-      <h1>Gobierno Autónomo Municipal de Challapata</h1>
-    </header>
+    <div class="image-container">
+        <img id="escudo"
+            src="/imagenes/gamch/Escudo%20Challapata%202025.webp"
+            width="105"
+            height="140"
+            class="protected-image"
+            alt="Escudo Challapata 2025"
+        />
+        <div class="overlay"></div>
+    </div>
+
+</body>
+</html></header>
+    <div>
+        <h1 style="font-size: 21px;font-family: Aldrich, sans-serif;text-align: center;line-height: 31.6px;color: rgb(255,255,255);">GOBIERNO AUTÓNOMO MUNICIPAL DE CHALLAPATA</h1>
+        <hr class="mt-0">
+    </div><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gobierno Autónomo Municipal de Challapata</title>
+
+</head>
+<body>
+
     <nav id="navbar">
+      <div class="handle" aria-expanded="false">☰ MENÚ</div>
       <?php
       echo "<ul>
-          <li class='nav-item' title='INICIO'>
-              <a style='color:white' href='/'>
+          <li title='INICIO'>
+              <a href='/'>
                   <i class='fas fa-home'></i> INICIO
               </a>
           </li>
-          <li class='nav-item' title='GACETA'>
-              <a style='color:white' href='/gac'>
-                  <i class='fas fa-home'></i> GACETA
-              </a>
-          </li>";
+          <li><a href='#'><i class='fa fa-users'></i> NOSOTROS</a></li>
+          <li><a href='#'><i class='fa fa-newspaper-o'></i> NOTICIAS</a></li>
+          <li><a href='#'><i class='fa fa-cogs'></i> SERVICIOS</a></li>
+          <li><a href='/gac'>
+              <i class='fas fa-file'></i> GACETA
+          </a></li>
+          <li><a href='#'><i class='fa fa-envelope'></i> CONTACTOS</a></li>
+          ";
 
           if(isset($_SESSION["id"]) && $_SESSION["id"] != "" && isset($_SESSION["especial"]) && $_SESSION["especial"] == "acceso-total"
             && isset($_SESSION["nombre_role"]) && $_SESSION["nombre_role"] == "Admin"){
               echo "<li class='has-submenu' title='Despacho'>
-                      <a href='#'style='color:white'>
+                      <a href='#'>
                         USUARIO
                       </a>
                       <ul class='submenu'>
                           <li title='ROLES'>
-                            <a style='color:white' href='/rol'>ROLES</a>
+                            <a  href='/rol'>ROLES</a>
                           </li>
                           <li title='ROLES USUARIO'>
-                            <a style='color:white' href='/rolU'>ROLES USUARIO</a>
+                            <a  href='/rolU'>ROLES USUARIO</a>
                           </li>
                           <li title='CRUD DOCUMENTO'>
-                            <a style='color:white' href='/Doc'>DOCUMENTOS</a>
+                            <a  href='/Doc'>DOCUMENTOS</a>
                           </li>
                         </ul>
                     </li>
@@ -111,10 +143,9 @@
             echo "
       </ul>";
       ?>
-      <div class="handle">
-        Menu
-      </div>
+
     </nav>
+  </body>
     <script>
     // Mostrar u ocultar menú en móviles
     $('.handle').on('click', function () {
@@ -150,41 +181,42 @@
 
   </script>
 <script>
-  // Obtenemos el elemento con id="navbar" (el menú)
-const navbar = document.getElementById("navbar");
-const header = document.getElementById("header");
+// Menú móvil
+const handle = document.querySelector('.handle');
+const navUl = document.querySelector('nav ul');
 
-// Variable de control para saber si el menú ya está fijado o no
-let navbarFixed = false;
+handle.addEventListener('click', () => {
+  navUl.classList.toggle('showing');
+  const isExpanded = handle.getAttribute('aria-expanded') === 'true';
+  handle.setAttribute('aria-expanded', !isExpanded);
+  handle.textContent = isExpanded ? '☰ MENÚ' : '✕ CERRAR';
+});
 
-// Esta función se ejecuta cada vez que el usuario hace scroll
-window.onscroll = function () {
-// Obtenemos el número de píxeles que se ha desplazado la ventana hacia abajo
-const scrollTop = window.scrollY;
-// Si el menú aún no está fijado y el scroll ha superado la altura del header
-if (!navbarFixed && scrollTop >= header.offsetHeight+5) {
-  // Agrega la clase "pre-fixed" para que el menú esté oculto inicialmente
-  navbar.classList.add("pre-fixed");
-  // Luego agrega la clase "fixed" para posicionarlo fijo en la parte superior
-  navbar.classList.add("fixed");
-  console.log(header.offsetHeight);
-  // Esperamos 10 milisegundos para que el navegador aplique la clase anterior,
-  // y luego quitamos "pre-fixed" para activar la transición visual (suavidad)
-  setTimeout(() => {
-    navbar.classList.remove("pre-fixed");
-  }, 10);
-  // Marcamos que el menú ya está fijado para evitar repetir este bloque
-  navbarFixed = true;
-}
-
-// Si el menú está fijado y el usuario hace scroll hacia arriba por encima del header
-if (navbarFixed && scrollTop < header.offsetHeight) {
-  // Quitamos la clase "fixed" para que el menú vuelva a su posición normal
-  navbar.classList.remove("fixed");
-  // Por si acaso, también quitamos "pre-fixed" si aún estuviera presente
-  navbar.classList.remove("pre-fixed");
-  // Indicamos que el menú ya no está fijado
-  navbarFixed = false;
-}
-};
+// Activar estado de botón
+document.querySelectorAll('nav ul li a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('nav ul li a').forEach(a => a.classList.remove('active'));
+    e.target.classList.add('active');
+  });
+});
 </script>
+
+    <script>
+        // Bloquear menú contextual
+        document.getElementById('escudo').addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Bloquear arrastre de la imagen
+        document.getElementById('escudo').addEventListener('dragstart', function(e) {
+            e.preventDefault();
+        });
+
+        // Bloquear selección de texto/imagen
+        document.addEventListener('selectstart', function(e) {
+            if (e.target.id === 'escudo') {
+                e.preventDefault();
+            }
+        });
+    </script>
