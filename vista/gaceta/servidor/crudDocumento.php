@@ -3,292 +3,322 @@
 
 require_once('vista/esquema/header.php');
 ?>
-
-<div class="container-md"><br>
-  <div class="col-auto mb-2" style="color:gray">
-    <h5>DOCUMENTOS</h5>
-  </div>
-  <div class="border rounded shadow-sm p-3 bg-white">
-
-  <input type="hidden" name="paginas" id='paginas' value="">
-  <div class="row">
-      <label for="selectPage" class="form-label">Página</label>
-      <div class="col-2">
-        <select class="form-select" id="selectList" onchange="BuscarUsuarios(1)" name="selectList">
-          <option>--</option>
-          <option>5</option>
-          <option>10</option>
-          <option>25</option>
-          <option>50</option>
-          <option>100</option>
-          <option>250</option>
-          <option>500</option>
-          <option>1000</option>
-        </select>
-      </div>
-      <div class="col-2" title="Registro de nuevo Rol">
-
-        <button type="button" class="form-control btn btn-primary" onclick="onclick='accionBtnEditar("","","","","","","","","","","")'
-        " class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro">
-          <i class="fas fa-plus-circle"></i>
-        </button>
-      </div>
-      <div class="col-3">
-
-      </div>
-      <div class="col-5">
-        <input type="text" class="form-control mb-3" placeholder="Buscar..." id='buscar' onkeyup="BuscarUsuarios(1)">
-      </div>
-    </div>
-  <div class="modal fade" id="ModalRegistro" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">DOCUMENTO</h6>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="navbar navbar-expand-lg navbar-dark" style="background-color:orange">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-primary d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
+            MENU PANEL
+          </button>
         </div>
-        <!-- Contenido del modal -->
-        <div class="modal-body">
-          <div class="card shadow-lg">
-           <div class="card-body">
-             <form>
+        <div class="d-flex align-items-center">
 
-               <input type="hidden" name="id" id='id' value="">
-
-               <div class="mb-3">
-                  <select class="form-control" name="categoria" id='categoria' required>
-                    <option value="">Seleccione categoria</option>
-                    <option value="RESOLUCIONES-MUNICIPALES">RESOLUCIONES MUNICIPALES</option>
-                     <option value="AUDITORIA-INTERNA">AUDITORIA INTERNA</option>
-                     <option value="DOCUMENTOS-IMPORTANTES">DOCUMENTOS IMPORTANTES</option>
-                     <option value="LEYES-MUNICIPALES">LEYES MUNICIPALES</option>
-                     <option value="DECRETOS-EDILES">DECRETOS EDILES</option>
-                     <option value="DECRETOS-MUNICIPALES">DECRETOS MUNICIPALES</option>
-                     <option value="INFORME-DE-GESTION">INFORME DE GESTION</option>
-                     <option value="TRANSPARENCIA">TRANSPARENCIA</option>
-                     <option value="RESOLUCIONES-MUNICIPALES-ADMINISTRATIVOS">RESOLUCIONES MUNICIPALES ADMINISTRATIVOS</option>
-                  </select>
-               </div>
-               <div class="mb-3">
-                 <input type="text" class="form-control" id="ruta" name='ruta' placeholder="">
-               </div>
-               <div class="mb-3">
-                 <input type="text" class="form-control" id="cod" name='cod' placeholder="Ponga codigo documento" required>
-               </div>
-               <div class="mb-3">
-                 <input type="text" class="form-control" id="entidad" name='entidad' placeholder="Ponga entidad Opcional">
-               </div>
-               <div class="mb-3">
-                  <input type="text" class="form-control" id="descripcion" name='descripcion' placeholder="Ponga descripción" required>
-               </div>
-               <div class="mb-3">
-                  <input type="file"  accept="application/pdf"class="form-control" id="archivo" name='archivo' placeholder="Ponga archivo">
-               </div>
-
-               <div class="mb-3">
-                 <label for="">Fecha de creación</label>
-                  <input type="date" class="form-control" id="fecha_creacion" name='fecha_creacion' placeholder="Ponga fecha de creación" required>
-               </div>
-               <div class="mb-3">
-                  <input type="text" class="form-control" id="nombre_documento" name='nombre_documento' placeholder="Ponga nombre del Documento" required>
-               </div>
-               <div class="mb-3">
-                  <input type="text" class="form-control" id="dato_documento" name='dato_documento' placeholder="Ponga datos del documento" required>
-               </div>
-               <div class="mb-3">
-                 <select class="form-control" name="estado" id='estado' required>
-                   <option value="">Seleccione estado</option>
-                   <option value="vigente">vigente</option>
-                   <option value="no vigente">no vigente</option>
-
-                 </select>
-               </div>
-               <div class="mb-3">
-                 <select class="form-control" name="publicar" id='publicar' required>
-                   <option value="">Seleccione publicar</option>
-                   <option value="1">Si</option>
-                   <option value="0">No</option>
-
-                 </select>
-               </div>
-
-             </form>
-           </div>
-         </div>
-        <!-- Pie de página del modal -->
-      </div>
-        <div class="modal-footer">
-          <button title='Guardar'type="button" class="btn btn-primary" onclick="registrar()"><i class="fas fa-save"></i></button>
-         <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+          <h1 class="navbar-brand mb-0 h4">Alcaldía Municipal de Challapata</h1>
         </div>
-      </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-2"></i><span id="username">Administrador</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#" id="logout"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
-
-
-  <div class="verDatos" id="verDatos">
-    <div class="row">
-      <div class="col">
-        <div class="table-responsive">
-        <table class="table" style='font-size:12px'>
-          <thead>
-
-            <tr>
-              <th>N°</th>
-              <th>Categoria</th>
-              <th>Nombre Documento</th>
-              <th>Datos Documento</th>
-              <th>descripción</th>
-              <th>Usuario</th>
-              <th>Fecha creación</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-      <?php
-      if ($resul && mysqli_num_rows($resul) > 0) {
-        $i = $inicioList;
-         while($fi = mysqli_fetch_array($resul)){
-            echo "<tr>";
-              echo "<td>".($i+1)."</td>";
-              echo "<td>".$fi['categoria']."</td>";
-              echo "<td>".$fi['nombre_documento']."</td>";
-              echo "<td>".$fi['datos_documento']."</td>";
-              echo "<td>".$fi['descripcion']."</td>";
-              echo "<td>".$fi['usuario_id']."</td>";
-              echo "<td>".$fi['fecha_creacion']."</td>";
-              echo "<td>";
-              $id_u = '';
-              echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-              <button type='button'
-                  class='btn btn-info btn-sm shadow-sm'
-                  title='Editar'
-                  data-bs-toggle='modal'
-                  data-bs-target='#ModalRegistro'
-                  onclick='accionBtnEditar(
-                      \"" . $fi["id"] . "\",
-                      \"" . addslashes($fi["categoria"]) . "\",
-                      \"" . addslashes($fi["cod"]) . "\",
-                      \"" . addslashes($fi["entidad"]) . "\",
-                      `" . addslashes($fi["descripcion"]) . "`,
-                      \"" . $fi["fecha_creacion"] . "\",
-                      \"" . addslashes($fi["nombre_documento"]) . "\",
-                      \"" . addslashes($fi["datos_documento"]) . "\",
-                      \"" . addslashes($fi["estado"]) . "\",
-                      \"" . addslashes($fi["publicar"],) . "\",
-                      \"" . addslashes($fi["archivo"]) . "\",
-                  )'>
-                  <i class='fas fa-edit'></i>
-              </button>
-          </div>";
-
-
-                echo "</div>";
-              echo "</td>";
-            echo "</tr>";
-            $i++;
-          }
-        }else{
-          echo "<tr>";
-          echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
-          echo "</tr>";
-        }
-
-         ?>
-        </tbody>
-      </table>
-      </div>
-    </div>
-  </div>
-  <?php
-  if($TotalPaginas!=0){
-    $adjacents=1;
-    $anterior = "&lsaquo; Anterior";
-    $siguiente = "Siguiente &rsaquo;";
-echo "<div class='row'>
-      <div class='col'>";
-
-    echo "<div class='d-flex flex-wrap flex-sm-row justify-content-between'>";
-      echo '<ul class="pagination">';
-        echo "pagina &nbsp;".$pagina."&nbsp;con&nbsp;";
-          $total=$inicioList+$pagina;
-          if($TotalPaginas > $num_filas_total){
-            $TotalPaginas = $num_filas_total;
-          }
-        echo '<li class="page-item active"><a class=" href="#"> '.($TotalPaginas).' </a></li> ';
-        echo " &nbsp;de&nbsp;".$num_filas_total." registros";
-      echo '</ul>';
-
-      echo '<ul class="pagination d-flex flex-wrap">';
-
-      // previous label
-      if ($pagina != 1) {
-        echo "<li class='page-item'><a class='page-link'  onclick=\"BuscarUsuarios(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
-      }
-      if($pagina==1) {
-        echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
-      } else if($pagina==2) {
-        echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarUsuarios(1)\" class='page-link'>$anterior</a></li>";
-      }else {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarUsuarios($pagina-1)\">$anterior</a></li>";
-
-      }
-      // first label
-      if($pagina>($adjacents+1)) {
-        echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"BuscarUsuarios(1)\">1</a></li>";
-      }
-      // interval
-      if($pagina>($adjacents+2)) {
-        echo"<li class='page-item'><a class='page-link'>...</a></li>";
-      }
-
-      // pages
-
-      $pmin = ($pagina>$adjacents) ? ($pagina-$adjacents) : 1;
-      $pmax = ($pagina<($TotalPaginas-$adjacents)) ? ($pagina+$adjacents) : $TotalPaginas;
-      for($i=$pmin; $i<=$pmax; $i++) {
-        if($i==$pagina) {
-          echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
-        }else if($i==1) {
-          echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"BuscarUsuarios(1)\">$i</a></li>";
-        }else {
-          echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarUsuarios(".$i.")\" class='page-link'>$i</a></li>";
-        }
-      }
-
-      // interval
-
-      if($pagina<($TotalPaginas-$adjacents-1)) {
-        echo "<li class='page-item'><a class='page-link'>...</a></li>";
-      }
-      // last
-
-      if($pagina<($TotalPaginas-$adjacents)) {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarUsuarios($TotalPaginas)\">$TotalPaginas</a></li>";
-      }
-      // next
-
-      if($pagina<$TotalPaginas) {
-        echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarUsuarios($pagina+1)\">$siguiente</a></li>";
-      }else {
-        echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
-      }
-      if ($pagina != $TotalPaginas) {
-        echo "<li class='page-item'><a class='page-link' onclick=\"BuscarUsuarios($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
-      }
-
-      echo "</ul>";
-      echo "</div>";
-
-echo "</div>
-    </div>";
-
-  }
-   ?>
- </div>
 </div>
- </div>
 
+<div class="content">
+  <div class="container1">
+    <div class="col-auto" style="color:white">
+      <h5>DOCUMENTOS</h5>
+    </div>
+    <div class="border rounded shadow-sm p-3 bg-white">
+    <input type="hidden" name="paginas" id='paginas' value="">
+    <div class="row">
+        <label for="selectPage" class="form-label">Página</label>
+        <div class="col-2">
+          <select class="form-select" id="selectList" onchange="BuscarUsuarios(1)" name="selectList">
+            <option>--</option>
+            <option>5</option>
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+            <option>250</option>
+            <option>500</option>
+            <option>1000</option>
+          </select>
+        </div>
+        <div class="col-2" title="Registro de nuevo Rol">
+
+          <button type="button" class="form-control btn btn-primary" onclick='accionBtnEditar("","","","","","","","","","","")'
+          class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro">
+            <i class="fas fa-plus-circle"></i>
+          </button>
+        </div>
+        <div class="col-3">
+
+        </div>
+        <div class="col-5">
+          <input type="text" class="form-control mb-3" placeholder="Buscar..." id='buscar' onkeyup="BuscarUsuarios(1)">
+        </div>
+      </div>
+    <div class="modal fade" id="ModalRegistro" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">DOCUMENTO</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <!-- Contenido del modal -->
+          <div class="modal-body">
+            <div class="card shadow-lg">
+             <div class="card-body">
+               <form>
+
+                 <input type="hidden" name="id" id='id' value="">
+
+                 <div class="mb-3">
+                    <select class="form-control" name="categoria" id='categoria' required>
+                      <option value="">Seleccione categoria</option>
+                      <option value="RESOLUCIONES-MUNICIPALES">RESOLUCIONES MUNICIPALES</option>
+                       <option value="AUDITORIA-INTERNA">AUDITORIA INTERNA</option>
+                       <option value="DOCUMENTOS-IMPORTANTES">DOCUMENTOS IMPORTANTES</option>
+                       <option value="LEYES-MUNICIPALES">LEYES MUNICIPALES</option>
+                       <option value="DECRETOS-EDILES">DECRETOS EDILES</option>
+                       <option value="DECRETOS-MUNICIPALES">DECRETOS MUNICIPALES</option>
+                       <option value="INFORME-DE-GESTION">INFORME DE GESTION</option>
+                       <option value="TRANSPARENCIA">TRANSPARENCIA</option>
+                       <option value="RESOLUCIONES-MUNICIPALES-ADMINISTRATIVOS">RESOLUCIONES MUNICIPALES ADMINISTRATIVOS</option>
+                    </select>
+                 </div>
+                 <div class="mb-3">
+                   <input type="text" class="form-control" id="ruta" name='ruta' placeholder="">
+                 </div>
+                 <div class="mb-3">
+                   <input type="text" class="form-control" id="cod" name='cod' placeholder="Ponga codigo documento" required>
+                 </div>
+                 <div class="mb-3">
+                   <input type="text" class="form-control" id="entidad" name='entidad' placeholder="Ponga entidad Opcional">
+                 </div>
+                 <div class="mb-3">
+                    <input type="text" class="form-control" id="descripcion" name='descripcion' placeholder="Ponga descripción" required>
+                 </div>
+                 <div class="mb-3">
+                    <input type="file"  accept="application/pdf"class="form-control" id="archivo" name='archivo' placeholder="Ponga archivo">
+                 </div>
+
+                 <div class="mb-3">
+                   <label for="">Fecha de creación</label>
+                    <input type="date" class="form-control" id="fecha_creacion" name='fecha_creacion' placeholder="Ponga fecha de creación" required>
+                 </div>
+                 <div class="mb-3">
+                    <input type="text" class="form-control" id="nombre_documento" name='nombre_documento' placeholder="Ponga nombre del Documento" required>
+                 </div>
+                 <div class="mb-3">
+                    <input type="text" class="form-control" id="dato_documento" name='dato_documento' placeholder="Ponga datos del documento" required>
+                 </div>
+                 <div class="mb-3">
+                   <select class="form-control" name="estado" id='estado' required>
+                     <option value="">Seleccione estado</option>
+                     <option value="vigente">vigente</option>
+                     <option value="no vigente">no vigente</option>
+
+                   </select>
+                 </div>
+                 <div class="mb-3">
+                   <select class="form-control" name="publicar" id='publicar' required>
+                     <option value="">Seleccione publicar</option>
+                     <option value="1">Si</option>
+                     <option value="0">No</option>
+
+                   </select>
+                 </div>
+
+               </form>
+             </div>
+           </div>
+          <!-- Pie de página del modal -->
+        </div>
+          <div class="modal-footer">
+            <button title='Guardar'type="button" class="btn btn-primary" onclick="registrar()"><i class="fas fa-save"></i></button>
+           <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="verDatos" id="verDatos">
+      <div class="row">
+        <div class="col">
+          <div class="table-responsive">
+          <table class="table" style='font-size:12px'>
+            <thead>
+
+              <tr>
+                <th>N°</th>
+                <th>Categoria</th>
+                <th>Nombre Documento</th>
+                <th>Datos Documento</th>
+                <th>descripción</th>
+                <th>Usuario</th>
+                <th>Publicar</th>
+                <th>Fecha creación</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+        <?php
+        if ($resul && mysqli_num_rows($resul) > 0) {
+          $i = $inicioList;
+           while($fi = mysqli_fetch_array($resul)){
+              echo "<tr>";
+                echo "<td>".($i+1)."</td>";
+                echo "<td>".$fi['categoria']."</td>";
+                echo "<td>".$fi['nombre_documento']."</td>";
+                echo "<td>".$fi['datos_documento']."</td>";
+                echo "<td>".$fi['descripcion']."</td>";
+                echo "<td>".$fi['usuario_id']."</td>";
+                $publica = $fi["publicar"];
+                if($publica == 1){
+                  echo "<td>Si</td>";
+                }else{
+                  echo "<td>No</td>";
+                }
+                echo "<td>".$fi['fecha_creacion']."</td>";
+                echo "<td>";
+                $id_u = '';
+                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+                <button type='button'
+                    class='btn btn-info btn-sm shadow-sm'
+                    title='Editar'
+                    data-bs-toggle='modal'
+                    data-bs-target='#ModalRegistro'
+                    onclick='accionBtnEditar(
+                        \"" . $fi["id"] . "\",
+                        \"" . addslashes($fi["categoria"]) . "\",
+                        \"" . addslashes($fi["cod"]) . "\",
+                        \"" . addslashes($fi["entidad"]) . "\",
+                        `" . addslashes($fi["descripcion"]) . "`,
+                        \"" . $fi["fecha_creacion"] . "\",
+                        \"" . addslashes($fi["nombre_documento"]) . "\",
+                        \"" . addslashes($fi["datos_documento"]) . "\",
+                        \"" . addslashes($fi["estado"]) . "\",
+                        \"" . addslashes($fi["publicar"],) . "\",
+                        \"" . addslashes($fi["archivo"]) . "\",
+                    )'>
+                    <i class='fas fa-edit'></i>
+                </button>
+            </div>";
+
+
+                  echo "</div>";
+                echo "</td>";
+              echo "</tr>";
+              $i++;
+            }
+          }else{
+            echo "<tr>";
+            echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+            echo "</tr>";
+          }
+
+           ?>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+    <?php
+    if($TotalPaginas!=0){
+      $adjacents=1;
+      $anterior = "&lsaquo; Anterior";
+      $siguiente = "Siguiente &rsaquo;";
+  echo "<div class='row'>
+        <div class='col'>";
+
+      echo "<div class='d-flex flex-wrap flex-sm-row justify-content-between'>";
+        echo '<ul class="pagination">';
+          echo "pagina &nbsp;".$pagina."&nbsp;con&nbsp;";
+            $total=$inicioList+$pagina;
+            if($TotalPaginas > $num_filas_total){
+              $TotalPaginas = $num_filas_total;
+            }
+          echo '<li class="page-item active"><a class=" href="#"> '.($TotalPaginas).' </a></li> ';
+          echo " &nbsp;de&nbsp;".$num_filas_total." registros";
+        echo '</ul>';
+
+        echo '<ul class="pagination d-flex flex-wrap">';
+
+        // previous label
+        if ($pagina != 1) {
+          echo "<li class='page-item'><a class='page-link'  onclick=\"BuscarUsuarios(1)\"><span aria-hidden='true'>&laquo;</span></a></li>";
+        }
+        if($pagina==1) {
+          echo "<li class='page-item'><a class='page-link text-muted'>$anterior</a></li>";
+        } else if($pagina==2) {
+          echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarUsuarios(1)\" class='page-link'>$anterior</a></li>";
+        }else {
+          echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarUsuarios($pagina-1)\">$anterior</a></li>";
+
+        }
+        // first label
+        if($pagina>($adjacents+1)) {
+          echo "<li class='page-item'><a href='javascript:void(0);' class='page-link' onclick=\"BuscarUsuarios(1)\">1</a></li>";
+        }
+        // interval
+        if($pagina>($adjacents+2)) {
+          echo"<li class='page-item'><a class='page-link'>...</a></li>";
+        }
+
+        // pages
+
+        $pmin = ($pagina>$adjacents) ? ($pagina-$adjacents) : 1;
+        $pmax = ($pagina<($TotalPaginas-$adjacents)) ? ($pagina+$adjacents) : $TotalPaginas;
+        for($i=$pmin; $i<=$pmax; $i++) {
+          if($i==$pagina) {
+            echo "<li class='page-item active'><a class='page-link'>$i</a></li>";
+          }else if($i==1) {
+            echo"<li class='page-item'><a href='javascript:void(0);' class='page-link'onclick=\"BuscarUsuarios(1)\">$i</a></li>";
+          }else {
+            echo "<li class='page-item'><a href='javascript:void(0);' onclick=\"BuscarUsuarios(".$i.")\" class='page-link'>$i</a></li>";
+          }
+        }
+
+        // interval
+
+        if($pagina<($TotalPaginas-$adjacents-1)) {
+          echo "<li class='page-item'><a class='page-link'>...</a></li>";
+        }
+        // last
+
+        if($pagina<($TotalPaginas-$adjacents)) {
+          echo "<li class='page-item'><a href='javascript:void(0);'class='page-link ' onclick=\"BuscarUsuarios($TotalPaginas)\">$TotalPaginas</a></li>";
+        }
+        // next
+
+        if($pagina<$TotalPaginas) {
+          echo "<li class='page-item'><a href='javascript:void(0);'class='page-link' onclick=\"BuscarUsuarios($pagina+1)\">$siguiente</a></li>";
+        }else {
+          echo "<li class='page-item'><a class='page-link text-muted'>$siguiente</a></li>";
+        }
+        if ($pagina != $TotalPaginas) {
+          echo "<li class='page-item'><a class='page-link' onclick=\"BuscarUsuarios($TotalPaginas)\"><span aria-hidden='true'>&raquo;</span></a></li>";
+        }
+
+        echo "</ul>";
+        echo "</div>";
+
+  echo "</div>
+      </div>";
+
+    }
+     ?>
+   </div>
+  </div>
+   </div>
+
+
+</div>
 
  <?php
  // Incluir el archivo footer.php desde la carpeta diseno
@@ -460,6 +490,7 @@ function BuscarUsuarios(page){
        processData: false, // Deshabilitar la codificación de datos
        success: function(data) {
          data = $.trim(data);
+         console.log(data);
          //alert(data);
          if(data == "correcto"){
            alert("accion realizada con exito");

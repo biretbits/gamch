@@ -13,15 +13,17 @@
     </div>
     </div>
 </div>
-<div class="bg-light spacer feature5">
-    <div class="container">
-        <!-- Título -->
-        <div class="row justify-content-center">
-            <div class="col-md-7 text-center">
-                <h2 class="title">Elija un Tipo de Documento</h2>
-            </div>
-        </div>
-        <!-- Cartas -->
+<div style='background-color:white'>
+  <div class="container-sm">
+      <!-- Título -->
+      <div class="row justify-content-center">
+          <div class="col-md-7 text-center">
+              <h2 class="title">Elija un Tipo de Documento</h2>
+          </div>
+      </div>
+  </div>
+      <!-- Cartas -->
+      <div class="container-sm">
         <div class="row m-t-40">
             <?php
             // Arreglo de documentos
@@ -44,22 +46,28 @@
             foreach ($documentos as $doc) {
                 $anim = $animaciones[$i % count($animaciones)];
                 echo '
-                <div class="col-md-4 wrap-feature5-box">
-                    <div class="card card-shadow" data-aos="' . $anim . '" data-aos-duration="1200">
-                        <div class="card-body d-flex">
-                            <div class="icon-space me-3"><i class="fa-solid fa-file-lines text-success fa-4x"></i></div> <!-- Espacio entre el icono y el texto -->
-                            <div class="">
-                                <h6 class="font-medium"><a href="/'.$doc["ruta"].'" class="linking text-success">' . $doc['titulo'] . '</a></h6>
-                                <p class="m-t-20" style="color:grey">' . $doc['descripcion'] . '</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>';
+                  <div class="col-md-4 wrap-feature5-box" data-aos="fade-right" data-aos-duration="1200">
+                      <div class="card card-shadow">
+                          <div class="card-body d-flex">
+                              <div class="icon-space me-3">
+                                  <i class="fa-solid fa-file-lines text-success fa-4x"></i>
+                              </div> <!-- Espacio entre el icono y el texto -->
+                              <div>
+                                  <h6 class="font-medium">
+                                      <a href="/' . $doc["ruta"] . '" class="linking text-success">' . $doc["titulo"] . '</a>
+                                  </h6>
+                                  <p class="m-t-20" style="color:grey">' . $doc["descripcion"] . '</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>';
+
                 $i++;
             }
             ?>
         </div>
-    </div>
+      </div>
+
 </div>
 
 <?php require("vista/esquema/footeruni.php"); ?>

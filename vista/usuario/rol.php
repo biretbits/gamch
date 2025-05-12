@@ -3,8 +3,29 @@
 
 require_once('vista/esquema/header.php');
 ?>
+<div class="navbar navbar-expand-lg navbar-dark" style="background-color:orange">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-primary d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
+            MENU PANEL
+          </button>
+        </div>
+        <div class="d-flex align-items-center">
 
-<div class="container-md"><br>
+          <h1 class="navbar-brand mb-0 h4">Alcaldía Municipal de Challapata</h1>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-2"></i><span id="username">Administrador</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#" id="logout"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content">
+  <div class="container1">
   <div class="col-auto mb-2" style="color:gray">
     <h5>ROLES</h5>
   </div>
@@ -240,6 +261,7 @@ echo "</div>
    ?>
  </div>
 </div>
+</div>
 <script type="text/javascript">
 function BuscarUsuarios(page){
   var obt_lis = document.getElementById("selectList").value;
@@ -253,7 +275,7 @@ function BuscarUsuarios(page){
     datos.append('listarDeCuanto',listarDeCuanto);
     datos.append("buscar",buscar);
       $.ajax({
-        url: "/index.php/bpth",
+        url: "/bpth",
         type: "POST",
         data: datos,
         contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -377,7 +399,7 @@ function BuscarUsuarios(page){
       datos.append("descripcion",descripcion);
       datos.append("especial",especial);
      $.ajax({
-       url: "/index.php/RolReg",
+       url: "/RolReg",
        type: "POST",
        data: datos,
        contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -406,7 +428,7 @@ function BuscarUsuarios(page){
        }, 1500);
      }else{
        setTimeout(() => {
-         location.href="/index.php/rol";
+         location.href="/rol";
            $('#ModalRegistro').modal('hide');
        }, 1500);
      }

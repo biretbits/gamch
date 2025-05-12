@@ -139,13 +139,13 @@ class Usuario
 
       // Filtro por búsqueda si se proporciona
       if (!empty($buscar)) {
-          $sql .= " WHERE CONCAT(empleados.nombre, ' ', empleados.apellido_p, ' ', empleados.apellido_m) LIKE ?";
+          $sql .= " WHERE CONCAT(empleados.nombre, ' ', empleados.apellido_p, ' ', empleados.apellido_m, roles.nombre) LIKE ?";
           $tipos .= 's';
           $parametros[] = '%' . $buscar . '%';
       }
 
       // Ordenamiento por ID de empleado
-      $sql .= " ORDER BY empleados.id DESC";
+      $sql .= " ORDER BY rol_usuario.id DESC";
 
       // Paginación si es válida
       if (is_numeric($inicioList) && is_numeric($listarDeCuanto)) {
@@ -447,6 +447,327 @@ class Usuario
     $sql = "update usuario set notificacionEjecutar='$si' where tipo_usuario = 'admin'";
     $resul = $this->con->query($sql);
   }
+
+
+    public function SelectPorBusquedaPer($buscar="",$inicioList=false,$listarDeCuanto=false) {
+      // Convertir $buscar a minúsculas si está definido
+        $buscar = strtolower(trim($buscar));
+        // Base SQL
+        $sql = "SELECT * FROM permisos";
+        // Parámetros dinámicos
+        $tipos = '';         // Tipos para bind_param (s: string, i: integer)
+        $parametros = [];    // Valores a enlazar
+        if ($buscar !== "") {
+          $sql .= " WHERE LOWER(nombre) LIKE ?";
+          $tipos .= 's';
+          $parametros[] = '%' . $buscar . '%';
+        }
+        $sql .= " ORDER BY id DESC";
+
+        if (is_numeric($inicioList) && is_numeric($listarDeCuanto)) {
+          $sql .= " LIMIT ? OFFSET ?";
+          $tipos .= 'ii';
+          $parametros[] = (int)$listarDeCuanto;
+          $parametros[] = (int)$inicioList;
+        }
+        // Preparar la consulta
+        $stmt = $this->con->prepare($sql);
+        // Verifica si la preparación fue exitosa
+        if ($stmt === false) {
+          die("Error al preparar la consulta: " . $this->con->error);
+        }
+        // Enlazar parámetros si existen
+        if (!empty($parametros)) {
+          $stmt->bind_param($tipos, ...$parametros);
+        }
+
+        // Ejecutar y obtener resultados
+        $stmt->execute();
+        $resul = $stmt->get_result();
+        // Retornar el resultado
+        return $resul;
+
+      }
+
+      public function registrarPermisos($a){
+        $id_usuario = $a["id"];
+        if($id_usuario != ""){
+          //actualizar
+          $sql= "update permisos set nombre='".$a["nombre"]."',slug = '".$a["slug"]."',descripcion='".$a["descripcion"]."',actualizado_en=NOW() where id = $id_usuario";
+          $resul = $this->con->query($sql);
+          return $resul;
+        }else{
+            //insertar datos
+            $sql = "insert into permisos(nombre,slug,descripcion,creado_en,actualizado_en)VALUES
+            ('".$a["nombre"]."','".$a["slug"]."','".$a["descripcion"]."',NOW(),NOW())";
+            $resul = $this->con->query($sql);
+            return $resul;
+        }
+      }
+      public function SelectPorBusquedaPerUser($buscar = "", $inicioList = false, $listarDeCuanto = false) {
+          $buscar = strtolower(trim($buscar));
+
+          // Base SQL con INNER JOIN
+          $sql = "SELECT
+                    permiso_usuario.*,
+                    permisos.nombre AS permiso_nombre,
+                    permisos.slug,
+                    permisos.descripcion,
+                    empleados.nombre AS usuario_nombre,
+                    empleados.apellido_p,
+                    empleados.apellido_m,
+                    usuarios.usuario
+                  FROM permiso_usuario
+                  INNER JOIN permisos ON permiso_usuario.permiso_id = permisos.id
+                  INNER JOIN usuarios ON permiso_usuario.usuario_id = usuarios.id
+                  INNER JOIN empleados ON usuarios.empleado_id = empleados.id";
+
+          // Parámetros dinámicos
+          $tipos = '';
+          $parametros = [];
+
+          if ($buscar !== "") {
+              $sql .= " WHERE LOWER(empleados.nombre) LIKE ?
+                        OR LOWER(empleados.apellido_p) LIKE ?
+                        OR LOWER(empleados.apellido_m) LIKE ?";
+              $tipos .= 'sss';  // Tres parámetros de tipo string
+              $parametros[] = '%' . $buscar . '%';
+              $parametros[] = '%' . $buscar . '%';
+              $parametros[] = '%' . $buscar . '%';
+          }
+
+          $sql .= " ORDER BY permiso_usuario.id DESC";
+
+          // Paginación
+          if (is_numeric($inicioList) && is_numeric($listarDeCuanto)) {
+              $sql .= " LIMIT ? OFFSET ?";
+              $tipos .= 'ii';  // Dos parámetros de tipo integer para paginación
+              $parametros[] = (int)$listarDeCuanto;
+              $parametros[] = (int)$inicioList;
+          }
+
+          // Preparar la consulta
+          $stmt = $this->con->prepare($sql);
+
+          if ($stmt === false) {
+              die("Error al preparar la consulta: " . $this->con->error);
+          }
+
+          if (!empty($parametros)) {
+              $stmt->bind_param($tipos, ...$parametros);  // Enlazar los parámetros
+          }
+
+          $stmt->execute();
+          $resul = $stmt->get_result();
+
+          return $resul;
+      }
+
+    public function buscarInformacion($buscar) {
+      // Convierte la búsqueda a minúsculas
+      $min = strtolower($buscar);
+
+      // SQL con INNER JOIN entre usuarios y empleados, solo seleccionando los campos requeridos
+      $sql = "SELECT
+                  u.id AS usuario_id,
+                  u.usuario,
+                  e.id AS empleado_id,
+                  CONCAT(e.nombre, ' ', e.apellido_p, ' ', e.apellido_m) AS usuario_nombre_completo
+              FROM usuarios AS u
+              INNER JOIN empleados AS e ON u.empleado_id = e.id
+              WHERE u.estado = 'activo'
+              AND (
+                  LOWER(e.nombre) LIKE '%$min%'
+                  OR LOWER(e.apellido_p) LIKE '%$min%'
+                  OR LOWER(e.apellido_m) LIKE '%$min%'
+                  OR LOWER(u.usuario) LIKE '%$min%'
+              )
+              LIMIT 5 OFFSET 0";  // Puedes ajustar el OFFSET si lo necesitas
+
+      // Ejecutar la consulta
+      $resul = $this->con->query($sql);
+
+      return $resul;
+  }
+
+
+      public function buscarInformacionPermisos($buscar) {
+        // Convierte la búsqueda a minúsculas
+        $min = strtolower($buscar);
+
+        // SQL con INNER JOIN entre usuarios y empleados, solo seleccionando los campos requeridos
+        $sql = "SELECT
+                *
+                FROM permisos
+                WHERE  (
+                    LOWER(nombre) LIKE '%$min%'
+                    OR LOWER(slug) LIKE '%$min%'
+                )
+                LIMIT 5 OFFSET 0";  // Puedes ajustar el OFFSET si lo necesitas
+
+        // Ejecutar la consulta
+        $resul = $this->con->query($sql);
+
+        return $resul;
+    }
+
+
+          public function registrarPermisosUsuarios($a){
+            $id_usuario = $a["id"];
+            if($id_usuario != ""){
+              //actualizar
+              $sql= "update permiso_usuario set permiso_id='".$a["id_permiso"]."',usuario_id = '".$a["id_usuario"]."',actualizado_en=NOW() where id = $id_usuario";
+              $resul = $this->con->query($sql);
+              return $resul;
+            }else{
+                //insertar datos
+                $sql = "insert into permiso_usuario(permiso_id,usuario_id,creado_en,actualizado_en)VALUES
+                ('".$a["id_permiso"]."','".$a["id_usuario"]."',NOW(),NOW())";
+                $resul = $this->con->query($sql);
+                return $resul;
+            }
+          }
+
+          public function SelectPorBusquedaListarUsuario($buscar = "", $inicioList = false, $listarDeCuanto = false) {
+              $buscar = strtolower(trim($buscar));
+
+              $sql = "SELECT
+              usuarios.id AS usuario_id,
+           usuarios.usuario,
+           usuarios.contrasena,
+           usuarios.estado AS usuario_estado,
+           usuarios.token_recordar,
+           usuarios.creado_en AS usuario_creado,
+           usuarios.actualizado_en AS usuario_actualizado,
+           usuarios.empleado_id,
+
+           empleados.id AS empleado_id,
+           empleados.nombre,
+           empleados.apellido_p,
+           empleados.apellido_m,
+           empleados.tipo_empleado,
+           empleados.sexo,
+           empleados.direccion,
+           empleados.telefono,
+           empleados.correo_electronico,
+           empleados.foto,
+           empleados.estado AS empleado_estado,
+           empleados.creado_en AS empleado_creado,
+           empleados.actualizado_en AS empleado_actualizado
+                      FROM usuarios
+                      INNER JOIN empleados ON usuarios.empleado_id = empleados.id";
+
+              $tipos = '';
+              $parametros = [];
+
+              if ($buscar !== "") {
+                  $sql .= " WHERE LOWER(usuarios.usuario) LIKE ?
+                            OR LOWER(empleados.nombre) LIKE ?
+                            OR LOWER(empleados.apellido_p) LIKE ?
+                            OR LOWER(empleados.apellido_m) LIKE ?";
+                  $tipos .= 'ssss';
+                  $parametros[] = '%' . $buscar . '%';
+                  $parametros[] = '%' . $buscar . '%';
+                  $parametros[] = '%' . $buscar . '%';
+                  $parametros[] = '%' . $buscar . '%';
+              }
+
+              $sql .= " ORDER BY usuarios.id DESC";
+
+              if (is_numeric($inicioList) && is_numeric($listarDeCuanto)) {
+                  $sql .= " LIMIT ? OFFSET ?";
+                  $tipos .= 'ii';
+                  $parametros[] = (int)$listarDeCuanto;
+                  $parametros[] = (int)$inicioList;
+              }
+
+              $stmt = $this->con->prepare($sql);
+              if ($stmt === false) {
+                  die("Error al preparar la consulta: " . $this->con->error);
+              }
+
+              if (!empty($parametros)) {
+                  $stmt->bind_param($tipos, ...$parametros);
+              }
+
+              $stmt->execute();
+              $resul = $stmt->get_result();
+              return $resul;
+          }
+
+          public function buscarEmpleadoNuevo($buscar){
+            $min = strtolower($buscar);
+
+            // SQL con INNER JOIN entre usuarios y empleados, solo seleccionando los campos requeridos
+            $sql = "SELECT * from empleados
+                    LIMIT 5 OFFSET 0";  // Puedes ajustar el OFFSET si lo necesitas
+
+            // Ejecutar la consulta
+            $resul = $this->con->query($sql);
+
+            return $resul;
+          }
+
+          public function registrarUsuario($a){
+            $id_usuario = $a["id"];
+            if($id_usuario != ""){
+              //actualizar
+              $contrasena=password_hash($a["contrasena"], PASSWORD_DEFAULT);
+              $sql= "update  usuarios set empleado_id=".$a["id_empleado"].",usuario='".$a["usuario"]."',contrasena = '".$contrasena."',actualizado_en=NOW() where id = $id_usuario";
+              $resul = $this->con->query($sql);
+              return $resul;
+            }else{
+                //insertar datos
+                $contrasena=password_hash($a["contrasena"], PASSWORD_DEFAULT);
+                $sql = "insert into usuarios(empleado_id,usuario,contrasena,estado,token_recordar,creado_en,actualizado_en)VALUES
+                ('".$a["id_empleado"]."','".$a["usuario"]."','".$contrasena."','activo','',NOW(),NOW())";
+                $resul = $this->con->query($sql);
+                return $resul;
+            }
+          }
+
+          public function buscarInformacionRolUsuario($buscar) {
+    $min = '%' . strtolower($buscar) . '%'; // Añadir comodines aquí para usar en el LIKE
+
+    // Preparar la consulta con parámetros
+    $sql = "SELECT * FROM roles
+            WHERE (LOWER(nombre) LIKE ? OR LOWER(slug) LIKE ?)
+            LIMIT 5 OFFSET 0";
+
+    $stmt = $this->con->prepare($sql);
+
+    if ($stmt) {
+        // Asignar los parámetros (2 veces el mismo porque se usa 2 veces)
+        $stmt->bind_param("ss", $min, $min);
+
+        $stmt->execute();
+
+        // Obtener el resultado
+        $resul = $stmt->get_result();
+
+        return $resul;
+    } else {
+        // Manejo de error en caso de fallo al preparar
+        return false;
+    }
+}
+
+
+public function registrarRolesUsuarios($a){
+  $id_usuario = $a["id"];
+  if($id_usuario != ""){
+    //actualizar
+    $sql= "update rol_usuario set rol_id='".$a["id_rol"]."',usuario_id = '".$a["usuario_id"]."',actualizado_en=NOW() where id = $id_usuario";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }else{
+      //insertar datos
+      $sql = "insert into rol_usuario(rol_id,usuario_id,creado_en,actualizado_en)VALUES
+      ('".$a["id_rol"]."','".$a["usuario_id"]."',NOW(),NOW())";
+      $resul = $this->con->query($sql);
+      return $resul;
+  }
+}
 
 }
 

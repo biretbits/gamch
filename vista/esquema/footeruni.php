@@ -1,6 +1,7 @@
+
 <footer class="footer bg-dark text-center">
   <!-- Redes sociales -->
-  <div class="container-fluid p-4 pb-0">
+  <div class="container-fluid ">
     <!-- Section: Social media -->
     <section class="mb-1">
       <a
@@ -36,7 +37,24 @@
       <span class="text-white">Gobierno Autónomo Municipal de Challapata</span>
     </div>
 </footer>
+<!-- jQuery (debe ir antes que Select2) -->
+ <script src="/vista/activos/jquery-3.5.1.min.js"></script>
 
+ <!-- Bootstrap JS -->
+ <script src="/vista/activos/bootstrap/bootstrap.min.js"></script>
+
+ <!-- Select2 JS -->
+ <script src="/vista/activos/select2/js/select2.min.js"></script>
+
+ <!-- PDF.js scripts -->
+ <script src="/vista/pdfjss/build/pdf.js"></script>
+ <script src="/vista/pdfjss/web/pdf_viewer.js"></script>
+
+ <!-- SweetAlert2 JS -->
+ <script src="/vista/activos/sweetAlert2/sweetalert2.min.js"></script>
+
+ <!-- Tu archivo JS personalizado -->
+ <script src="/vista/activos/app.js"></script>
 </body>
 
 </html>

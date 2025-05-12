@@ -116,7 +116,7 @@
   //funcion para ir al index cuando ingrese un usuario del sistema
   function IRalLink(){
     setTimeout(() => {
-      location.href="/";
+      location.href="/panel";
      }, 1500);
   }
   /*function close(){

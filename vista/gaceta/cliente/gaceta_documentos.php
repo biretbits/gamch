@@ -13,27 +13,28 @@
     </div>
     </div>
 </div>
-<nav class="nav f45-tab" id="myTab4">
+
+<div class="bg-light spacer feature5">
+<div class="nav f45-tab" id="myTab4">
           <!-- Tabs -->
     <a class="nav-item nav-link show active" id="wp-tab" data-toggle="tab" href="#wp-hos"  aria-expanded="true">
-        <i class="hidden-sm-up icon-Monitor-4"></i> <span class="hidden-sm-down">RESOLUCIONES MUNICIPALES ADMINISTRATIVAS</span>
+        <i class="hidden-sm-up icon-Monitor-4"></i> <span class="hidden-sm-down"><?php echo $ruta; ?></span>
     </a>
-</nav>
-<div class="my-4">
-    <div class="d-flex justify-content-center">
-        <input type="text" name="buscar" placeholder="Buscar..." class="form-control w-50">
-    </div>
 </div>
 
-<div class="tabla-view">
-  <div class="container-fluid">
+<div class="container-sm">
+    <input type="text" id='buscar'name="buscar" placeholder="Buscar..." class="form-control" onkeyup="buscando()">
+</div>
+<div id="verDatos">
+  <div class="container-sm">
       <div class="row mt-4 mb-4">
           <?php
           if ($resul && mysqli_num_rows($resul) > 0) {
               while($doc = mysqli_fetch_array($resul)) {
+                if($doc["publicar"] == 1){
                   echo '
-                  <div class="col-md-6 mb-4">
-                      <div class="card card-shadow h-100" data-aos="fade-right" data-aos-duration="1200">
+                  <div class="col-md-6 mb-4" data-aos="fade-right" data-aos-duration="1200">
+                      <div class="card card-shadow h-100">
                           <div class="card-body">
                               <div class="row">
                                   <div class="col-8">
@@ -54,6 +55,8 @@
                           </div>
                       </div>
                   </div>';
+
+                }
               }
           } else {
               echo '
@@ -70,9 +73,33 @@
   </div>
 
   </div>
+</div>
 
 
 </div>
 
+<script type="text/javascript">
+  function buscando(){
+    var buscar = document.getElementById("buscar").value;
+    var datos = new FormData(); // Crear un objeto FormData vacío
+    datos.append("buscar",buscar);
 
+    $.ajax({
+      url: "/buscando",
+      type: "POST",
+      data: datos,
+      contentType: false, // Deshabilitar la codificación de tipo MIME
+      processData: false, // Deshabilitar la codificación de datos
+      success: function(data) {
+        //alert(data+"dasdas");
+        data=$.trim(data);
+        if(data == "error"){
+          error();
+        }else{
+          $("#verDatos").html(data);
+        }
+      }
+    });
+  }
+</script>
 <?php require("vista/esquema/footeruni.php"); ?>

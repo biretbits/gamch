@@ -3,13 +3,34 @@
 
 require_once('vista/esquema/header.php');
 ?>
+<div class="navbar navbar-expand-lg navbar-dark" style="background-color:orange">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-primary d-flex align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
+            MENU PANEL
+          </button>
+        </div>
+        <div class="d-flex align-items-center">
 
-<div class="container-md"><br>
+          <h1 class="navbar-brand mb-0 h4">Alcaldía Municipal de Challapata</h1>
+        </div>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-2"></i><span id="username">Administrador</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#" id="logout"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content">
+  <div class="container1">
   <div class="col-auto mb-2" style="color:gray">
     <h5>ROLES DE USUARIOS</h5>
   </div>
   <div class="border rounded shadow-sm p-3 bg-white">
-  
+
   <input type="hidden" name="paginas" id='paginas' value="">
   <div class="row">
       <label for="selectPage" class="form-label">Página</label>
@@ -44,7 +65,7 @@ require_once('vista/esquema/header.php');
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">Datos de Hoja de Ruta</h6>
+          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">ROLES DE USUARIOS</h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!-- Contenido del modal -->
@@ -54,23 +75,17 @@ require_once('vista/esquema/header.php');
              <form>
 
                <input type="hidden" name="id" id='id' value="">
-               <div class="mb-3">
-                 <input type="text" class="form-control" id="nombre" name='nombre' placeholder="Ponga el nombre">
+               <input type="hidden" name="usuario_id" id='usuario_id' value="">
+                <input type="hidden" name="id_rol" id='id_rol' value="">
+               <div class="input-group input-group-sm mb-3">
+                 <select id="nombreUsuario" class="form-select select2" required>
+                   <option value=""></option>
+                 </select>
                </div>
-               <div class="mb-3">
-                  <input type="text" class="form-control" id="slug" name='slug' placeholder="Ponga slug">
-               </div>
-
-               <div class="mb-3">
-                  <input type="text" class="form-control" id="descripcion" name='descripcion' placeholder="Ponga la Descripción">
-               </div>
-
-               <div class="mb-3">
-                  <select class="form-control" name="especial" id='especial'>
-                    <option value="">--</option>
-                    <option value="acceso-total">acceso-total</option>
-                    <option value="sin-acceso">sin-acceso</option>
-                  </select>
+               <div class="input-group input-group-sm mb-3">
+                 <select id="rolTipo" class="form-select select2" required>
+                   <option value=""></option>
+                 </select>
                </div>
 
              </form>
@@ -245,7 +260,7 @@ echo "</div>
  </div>
 </div>
  </div>
-
+ </div>
 
  <?php
  // Incluir el archivo footer.php desde la carpeta diseno
@@ -264,7 +279,7 @@ function BuscarUsuarios(page){
     datos.append('listarDeCuanto',listarDeCuanto);
     datos.append("buscar",buscar);
       $.ajax({
-        url: "/index.php/bpth",
+        url: "/buscandoRolesUsuario",
         type: "POST",
         data: datos,
         contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -372,23 +387,19 @@ function BuscarUsuarios(page){
    }
 
    function registrar(){
-      var id = document.getElementById("id").value;
-      var nombre = document.getElementById("nombre").value;
-      var slug = document.getElementById("slug").value;
-      var descripcion = document.getElementById("descripcion").value;
-      var especial = document.getElementById("especial").value;
-      registrarDatos(id,nombre,slug,descripcion,especial);
+     var id = document.getElementById("id").value;
+     var usuario_id = document.getElementById("usuario_id").value;
+     var id_rol = document.getElementById("id_rol").value;
+      registrarDatos(id,usuario_id,id_rol);
    }
 
-   function registrarDatos(id,nombre,slug,descripcion,especial){
+   function registrarDatos(id,usuario_id,id_rol){
      var datos = new FormData(); // Crear un objeto FormData vacío
       datos.append("id",id);
-      datos.append("nombre",nombre);
-      datos.append("slug",slug);
-      datos.append("descripcion",descripcion);
-      datos.append("especial",especial);
+      datos.append("usuario_id",usuario_id);
+      datos.append("id_rol",id_rol);
      $.ajax({
-       url: "/index.php/RolReg",
+       url: "/RolUsuarioReg",
        type: "POST",
        data: datos,
        contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -417,64 +428,97 @@ function BuscarUsuarios(page){
        }, 1500);
      }else{
        setTimeout(() => {
-         location.href="/index.php/rol";
+         location.href="/rolU";
            $('#ModalRegistro').modal('hide');
        }, 1500);
      }
    }
 
-   $(document).ready(function() {
-       $('#para').select2({
-         theme: "bootstrap-5", // Aplicar el tema de Bootstrap 5 a Select2
-        dropdownParent: $('#miModalRemision3'), // Mantiene el dropdown dentro del modal
-        placeholder: "Buscar para .......",
-        width: '100%',
-        ajax: {
-               url: "index.php?accion=buhr", // Archivo PHP que procesará la búsqueda
-               type: 'POST',
-               dataType: 'json',
-               delay: 250, // Tiempo de espera en ms para la solicitud AJAX
-               data: function(params) {
-                   return {
-                       buscar: params.term // Término de búsqueda ingresado por el usuario
-                   };
-               },
-               processResults: function(data) {
-                   return {
-                       results: $.map(data, function(item) {
-                           return {
-                               id: item.id_usuario, // ID correcto
-                               text: item.nombres+" "+item.ap_usuario+" "+item.am_usuario+" - "+item.tipo_cargo, // Nombre visible en el select
-                               id_cargo:item.id_cargo
-                           };
-                       })
-                   };
-               },
 
-               cache: true,
-               success: function(response) {
-               console.log("Respuesta recibida desde el servidor:", response);
-             },
-             error: function(xhr, status, error) {
-               console.error("Error en la solicitud:", error);
-               console.log("Detalles del error:", xhr.responseText);
-                           //alert("Ocurrió un error al obtener los datos. Revisa la consola para más detalles.");
-           }
-           },
-           minimumInputLength: 1 // Mínimo de caracteres antes de hacer la búsqueda
-       }).on('select2:select', function(e) {
-           var selectedData = e.params.data;
+      $(document).ready(function() {
+        $('#nombreUsuario').select2({
+          theme: "bootstrap-5",
+          dropdownParent: $('#ModalRegistro'),
+          placeholder: "Buscar usuario",
+          width: '100%',
+
+          ajax: {
+            url: "/buscandoNombre",
+            type: 'POST',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+              return {
+                buscar: params.term
+              };
+            },
+            processResults: function(data) {
+              return {
+                results: $.map(data, function(item) {
+                  return {
+                    id: item.usuario_id,
+                    text: item.usuario_nombre_completo + " - " + item.usuario,
+                    id_empleado: item.empleado_id
+                  };
+                })
+              };
+            },
+            cache: true
+          },
+          minimumInputLength: 1
+        }).on('select2:select', function(e) {
+          var selectedData = e.params.data;
           console.log("Seleccionado:", selectedData);
-          $("#id_usuario").val(selectedData.id);
-          $("#id_cargo2").val(selectedData.id_cargo);
-       });
-       // Agregar el borde de select2 si es necesario
-    $('.select2-container .select2-selection--single').css({
-        'border': '1px solid #ced4da',
-        'border-radius': '.375rem',
-    });
-   });
+          $("#usuario_id").val(selectedData.id);
+        });
 
+        $('.select2-container .select2-selection--single').css({
+          'border': '1px solid #ced4da',
+          'border-radius': '.375rem',
+        });
+      });
+
+      $(document).ready(function() {
+        $('#rolTipo').select2({
+          theme: "bootstrap-5",
+          dropdownParent: $('#ModalRegistro'),
+          placeholder: "Buscar rol usuario",
+          width: '100%',
+
+          ajax: {
+            url: "/buscandoRolUsuario",
+            type: 'POST',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+              return {
+                buscar: params.term
+              };
+            },
+            processResults: function(data) {
+              return {
+                results: $.map(data, function(item) {
+                  return {
+                    id: item.id,
+                    text: item.nombre + " - " + item.slug
+                  };
+                })
+              };
+            },
+            cache: true
+          },
+          minimumInputLength: 1
+        }).on('select2:select', function(e) {
+          var selectedData = e.params.data;
+          console.log("Seleccionado:", selectedData);
+          $("#id_rol").val(selectedData.id);
+        });
+
+        $('.select2-container .select2-selection--single').css({
+          'border': '1px solid #ced4da',
+          'border-radius': '.375rem',
+        });
+      });
 
 function vaciarRemision(){
 }

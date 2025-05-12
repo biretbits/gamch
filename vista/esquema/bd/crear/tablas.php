@@ -51,6 +51,8 @@ function crearDataBase(){
   crearTablaClases($conn);
   crearTablaSalcats($conn);
   crearTablaSalarios($conn);
+  crearTablaTurismo($conn);
+  crearTableCultura($conn);
 
 echo "Se completo las acciones correctamente, se creo todo";
   // Cerrar conexión
@@ -294,42 +296,42 @@ function crearTablasPermisos($conn){
   }
 
   $permissions = [
-      ['Crear Usuarios', 'users.create', 'Crea Usuarios para la administracion del sistema'],
-      ['Navegar Usuarios', 'users.index', 'Lista y navega por todos los usuarios del sistema'],
-      ['Ver detalle de usuarios', 'users.show', 'muestra en detalle cada usuario del sistema'],
-      ['Editar usuarios', 'users.edit', 'Edita cualquier dato de un usuario del sistema'],
-      ['Elimina usuario', 'users.destroy', 'Eliminina cualquier usuario de sistema'],
-      ['Crear Roles', 'roles.create', 'Crea un rol del sistema'],
-      ['Navegar Roles', 'roles.index', 'Lista y navega por todos los roles del sistema'],
-      ['Ver detalle de Roles', 'roles.show', 'muestra en detalle cada rol del sistema'],
-      ['Editar Roles', 'roles.edit', 'Edita cualquier dato de un rol del sistema'],
-      ['Elimina Roles', 'roles.destroy', 'Eliminina cualquier rol de sistema'],
-      ['Crear Documentos', 'doc.create', 'Crea un document del sistema'],
-      ['Navegar Documents', 'doc.index', 'Lista y navega por todos los documents del sistema'],
-      ['Ver detalle de Documents', 'doc.show', 'muestra en detalle cada document del sistema'],
-      ['Editar Documents', 'doc.edit', 'Edita cualquier dato de un document del sistema'],
-      ['Elimina Documents', 'doc.destroy', 'Eliminina cualquier document de sistema'],
-      ['Crear Empleados', 'employees.create', 'Crea un Empleados del sistema'],
-      ['Navegar Empleados', 'employees.index', 'Lista y navega por todos los Empleados del sistema'],
-      ['Ver detalle de Empleados', 'employees.show', 'muestra en detalle cada Empleados del sistema'],
-      ['Editar Empleados', 'employees.edit', 'Edita cualquier dato de un Empleados del sistema'],
-      ['Elimina Empleados', 'employees.destroy', 'Eliminina cualquier Empleados de sistema'],
-      ['Crear Salarios', 'salaries.create', 'Crea un Salarios del sistema'],
-      ['Navegar Salarios', 'salaries.index', 'Lista y navega por todos los Salarios del sistema'],
-      ['Ver detalle de Salarios', 'salaries.show', 'muestra en detalle cada Salarios del sistema'],
-      ['Editar Salarios', 'salaries.edit', 'Edita cualquier dato de un Salarios del sistema'],
-      ['Elimina Salarios', 'salaries.destroy', 'Eliminina cualquier Salarios de sistema'],
-      ['Crear Noticias', 'newpages.create', 'Crea un Noticias del sistema'],
-      ['Navegar Noticias', 'newpages.index', 'Lista y navega por todos los Noticias del sistema'],
-      ['Ver detalle de Noticias', 'newpages.show', 'muestra en detalle cada Noticias del sistema'],
-      ['Editar Noticias', 'newpages.edit', 'Edita cualquier dato de un Noticias del sistema'],
-      ['Elimina Noticias', 'newpages.destroy', 'Eliminina cualquier Noticias de sistema'],
-      ['Crear Proyectos', 'projects.create', 'Crea un Niveles del sistema'],
-      ['Navegar Proyectos', 'projects.index', 'Lista y navega por todos los Niveles del sistema'],
-      ['Ver detalle de Proyectos', 'projects.show', 'muestra en detalle cada Niveles del sistema'],
-      ['Editar Proyectos', 'projects.edit', 'Edita cualquier dato de un Niveles del sistema'],
-      ['Elimina Proyectos', 'projects.destroy', 'Eliminina cualquier Niveles de sistema'],
-      ['Todos los privilegios', 'todo.*', 'control del sistema'],
+      ['Crear', 'users.create', 'Crea Usuarios para la administracion del sistema'],
+      ['Navegar', 'users.index', 'Lista y navega por todos los usuarios del sistema'],
+      ['detalle', 'users.show', 'muestra en detalle cada usuario del sistema'],
+      ['Editar', 'users.edit', 'Edita cualquier dato de un usuario del sistema'],
+      ['Eliminar', 'users.destroy', 'Eliminina cualquier usuario de sistema'],
+      ['Crear', 'roles.create', 'Crea un rol del sistema'],
+      ['Navegar', 'roles.index', 'Lista y navega por todos los roles del sistema'],
+      ['detalle', 'roles.show', 'muestra en detalle cada rol del sistema'],
+      ['Editar', 'roles.edit', 'Edita cualquier dato de un rol del sistema'],
+      ['Eliminar', 'roles.destroy', 'Eliminina cualquier rol de sistema'],
+      ['Crear', 'doc.create', 'Crea un document del sistema'],
+      ['Navegar', 'doc.index', 'Lista y navega por todos los documents del sistema'],
+      ['detalle', 'doc.show', 'muestra en detalle cada document del sistema'],
+      ['Editar', 'doc.edit', 'Edita cualquier dato de un document del sistema'],
+      ['Eliminar', 'doc.destroy', 'Eliminina cualquier document de sistema'],
+      ['Crear', 'employees.create', 'Crea un Empleados del sistema'],
+      ['Navegar', 'employees.index', 'Lista y navega por todos los Empleados del sistema'],
+      ['detalle', 'employees.show', 'muestra en detalle cada Empleados del sistema'],
+      ['Editar', 'employees.edit', 'Edita cualquier dato de un Empleados del sistema'],
+      ['Eliminar', 'employees.destroy', 'Eliminina cualquier Empleados de sistema'],
+      ['Crear', 'salaries.create', 'Crea un Salarios del sistema'],
+      ['Navegar', 'salaries.index', 'Lista y navega por todos los Salarios del sistema'],
+      ['detalle', 'salaries.show', 'muestra en detalle cada Salarios del sistema'],
+      ['Editar', 'salaries.edit', 'Edita cualquier dato de un Salarios del sistema'],
+      ['Eliminar', 'salaries.destroy', 'Eliminina cualquier Salarios de sistema'],
+      ['Crear', 'newpages.create', 'Crea un Noticias del sistema'],
+      ['Navegar', 'newpages.index', 'Lista y navega por todos los Noticias del sistema'],
+      ['detalle', 'newpages.show', 'muestra en detalle cada Noticias del sistema'],
+      ['Editar', 'newpages.edit', 'Edita cualquier dato de un Noticias del sistema'],
+      ['Eliminar', 'newpages.destroy', 'Eliminina cualquier Noticias de sistema'],
+      ['Crear', 'projects.create', 'Crea un Niveles del sistema'],
+      ['Navegar', 'projects.index', 'Lista y navega por todos los Niveles del sistema'],
+      ['detalle', 'projects.show', 'muestra en detalle cada Niveles del sistema'],
+      ['Editar', 'projects.edit', 'Edita cualquier dato de un Niveles del sistema'],
+      ['Eliminar', 'projects.destroy', 'Eliminina cualquier Niveles de sistema'],
+      ['Todo', 'todo.*', 'control del sistema'],
   ];
 
   foreach ($permissions as $permission) {
@@ -681,6 +683,81 @@ function crearTablaSalarios($conn) {
     } else {
         echo "Error al ejecutar el SQL: " . $conn->error;
     }
+}
+
+function crearTablaTurismo($conn){
+  $sql = "
+      DROP TABLE IF EXISTS turismo;
+
+      CREATE TABLE turismo (
+          id INT AUTO_INCREMENT PRIMARY KEY,            -- ID del destino turístico
+          nombre_destino VARCHAR(255) NOT NULL,          -- Nombre del destino
+          descripcion TEXT NOT NULL,                     -- Descripción del destino
+          tipo_destino VARCHAR(255) NOT NULL,            -- Tipo de destino (ej. playa, montaña)
+          actividades_disponibles TEXT NOT NULL,         -- Actividades disponibles en el destino
+          ubicacion VARCHAR(255) NOT NULL,               -- Ubicación del destino
+          contacto VARCHAR(255),                         -- Información de contacto
+          enlace_web VARCHAR(255),                       -- URL del sitio web del destino
+          imagen_url VARCHAR(255),                       -- URL de la imagen representativa del destino
+          creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de creación
+          actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Fecha de actualización
+      );
+
+      -- Crear índice para mejorar el rendimiento de las consultas por tipo_destino.
+      CREATE INDEX idx_tipo_destino ON turismo(tipo_destino);
+  ";
+
+  if ($conn->multi_query($sql)) {
+      do {
+          if ($result = $conn->store_result()) {
+              $result->free();
+          }
+          if ($conn->error) {
+              echo "Error: " . $conn->error;
+          }
+      } while ($conn->more_results() && $conn->next_result());
+  } else {
+      echo "Error al ejecutar el SQL: " . $conn->error;
+  }
+
+}
+
+function crearTableCultura($conn){
+  $sql = "
+    DROP TABLE IF EXISTS cultura;
+
+    CREATE TABLE cultura (
+        id INT AUTO_INCREMENT PRIMARY KEY,            -- ID de la actividad cultural
+        nombre_actividad VARCHAR(255) NOT NULL,        -- Nombre de la actividad
+        descripcion TEXT NOT NULL,                     -- Descripción de la actividad
+        tipo_actividad VARCHAR(255) NOT NULL,          -- Tipo de actividad (ej. festival, exposición)
+        fecha_inicio DATE NOT NULL,                    -- Fecha de inicio de la actividad
+        fecha_fin DATE,                                -- Fecha de fin de la actividad
+        ubicacion VARCHAR(255) NOT NULL,               -- Ubicación donde se realiza
+        contacto VARCHAR(255),                         -- Información de contacto
+        enlace_web VARCHAR(255),                       -- URL del sitio web relacionado con la actividad
+        imagen_url VARCHAR(255),                       -- URL de la imagen representativa de la actividad
+        creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de creación
+        actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Fecha de actualización
+    );
+
+    -- Crear índice para mejorar el rendimiento de las consultas por tipo_actividad.
+    CREATE INDEX idx_tipo_actividad ON cultura(tipo_actividad);
+";
+
+if ($conn->multi_query($sql)) {
+    do {
+        if ($result = $conn->store_result()) {
+            $result->free();
+        }
+        if ($conn->error) {
+            echo "Error: " . $conn->error;
+        }
+    } while ($conn->more_results() && $conn->next_result());
+} else {
+    echo "Error al ejecutar el SQL: " . $conn->error;
+}
+
 }
 
 ?>
