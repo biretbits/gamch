@@ -16,6 +16,7 @@ header {
 #navbar {
   transition: transform 0.3s ease, opacity 0.3s ease;
   will-change: transform, opacity;
+
 }
 
 #navbar.fixed {
@@ -60,7 +61,7 @@ nav ul {
 }
 
 nav ul li {
-  margin: 10px 0;
+  margin: -2px 0;
   text-align: center;
   cursor: pointer;
   position: relative;
@@ -68,8 +69,8 @@ nav ul li {
 
 nav ul li a {
   text-decoration: none;
-  font-size: 1rem;
-  padding: 15px;
+  font-size: 0.85rem;/*tamaño de letras del menu*/
+  padding: 10px;
   display: block;
   color: white;
   transition: color 0.3s ease;
@@ -100,7 +101,7 @@ section {
   display: none;
   background: grey;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 @media (max-width: 768px) {
@@ -118,13 +119,11 @@ i {
   display: none;
   position: absolute;
   background: #4c4c4c;
-  list-style: none;
-  margin: 0;
-  padding: 0;
   z-index: 100;
   top: 100%;
   left: 0;
-  min-width: 180px;
+  min-width: 250px;
+  font-size: 12px
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
@@ -147,9 +146,9 @@ i {
 /* Estilo de los ítems dentro del submenú */
 .submenu li a {
   color: white;
-  padding: 9px 20px;
+  padding: 3px 13px;
   transition: background-color 0.3s ease, color 0.3s ease;
-  font-size: 0.83rem; /* Cambia el tamaño del texto aquí */
+  font-size: 0.75rem; /* Cambia el tamaño del texto aquí */
 }
 
 
@@ -186,4 +185,133 @@ i {
     position: static;
     width: 100%;
   }
+}
+
+/*css de conteo de numeros de poblacion altitud*/
+
+  .counter {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #007bff;
+  }
+  .counter-box {
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .unit {
+    font-size: 1.5rem;
+    margin-left: 5px;
+    color: #555;
+  }
+  .card-hover:hover {
+    transform: translateY(-10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+  /*end*/
+
+  /*codigo del pergamino del himno a challapata*/
+  .pergamino {
+    background: #fff8dc;
+    border: 10px solid #deb887;
+    border-radius: 30px;
+    padding: 2rem;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    margin-top: 50px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    max-height: 500px; /* Altura máxima para mostrar el scroll */
+    overflow: hidden;
+  }
+
+  .scroll-contenido {
+    max-height: 100%;
+    overflow-y: auto;
+    padding-right: 1rem; /* espacio para el scroll */
+  }
+
+  .pergamino::before,
+  .pergamino::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: #deb887;
+    border-radius: 50%;
+    top: -30px;
+  }
+
+  .pergamino::after {
+    right: -30px;
+  }
+
+  .pergamino::before {
+    left: -30px;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+  }
+
+  .autor {
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+
+  .estrofa {
+    max-width: 500px;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    white-space: pre-line;
+  }
+
+  .izquierda {
+    text-align: left;
+    margin-right: auto;
+  }
+
+  .derecha {
+    text-align: right;
+    margin-left: auto;
+  }
+  /*fin*/
+
+  /*fondo imagen*/
+  .fondoPergamino {
+    background-image: url('imagenes/img-challapata/frontisALEJADO.jpg'); /* Ruta de tu imagen */
+    background-size: cover;      /* Hace que la imagen cubra toda la sección */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* No se repite la imagen */
+  }
+  .logo-fixed {
+position: fixed;
+top: 10px;
+left: 20px; /* Por defecto a la izquierda */
+z-index: 9999;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* Cuando tenga clase show, se muestra */
+.logo-fixed.show {
+opacity: 1;
+visibility: visible;
+}
+
+/* En pantallas pequeñas (dispositivos), posicionar a la derecha */
+@media (max-width: 767.98px) {
+.logo-fixed {
+left: auto;      /* quitar left */
+right: 20px;     /* posicionar a la derecha */
+}
 }

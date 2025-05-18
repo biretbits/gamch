@@ -4,7 +4,7 @@ require 'modelo/cultura.php';
 class CulturaControlador{
 
   public static function ViewCultura(){
-    $us = new Cultura(); 
+    $us = new Cultura();
     $resul = $us->SeleccionarCultura();
     require("vista/cultura/cliente/cultura.php");
   }
@@ -151,27 +151,27 @@ class CulturaControlador{
                 echo "<td>" . htmlspecialchars($fi['actualizado_en']) . "</td>";
 
                 // Botón de acción
+                $descripcion = addslashes($fi["descripcion"]);
+                $datos = [
+                    "id" => $fi["id"],
+                    "nombre_actividad" => addslashes($fi["nombre_actividad"]),
+                    "tipo_actividad" => addslashes($fi["tipo_actividad"]),
+                    "descripcion" => $descripcion,
+                    "fecha_inicio" => addslashes($fi["fecha_inicio"]),
+                    "fecha_fin" => addslashes($fi["fecha_fin"]),
+                    "ubicacion" => addslashes($fi["ubicacion"]),
+                    "contacto" => addslashes($fi["contacto"]),
+                    "enlace_web" => addslashes($fi["enlace_web"])
+                ];
                 echo "<td>";
-                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                    <button type='button'
-                        class='btn btn-info btn-sm shadow-sm'
-                        title='Editar'
-                        data-bs-toggle='modal'
-                        data-bs-target='#ModalRegistro'
-                        onclick='accionBtnEditar(
-                            \"" . $fi["id"] . "\",
-                            \"" . addslashes($fi["nombre_actividad"]) . "\",
-                            \"" . addslashes($fi["tipo_actividad"]) . "\",
-                            \"" . addslashes($fi["descripcion"]) . "\",
-                            \"" . addslashes($fi["fecha_inicio"]) . "\",
-                            \"" . addslashes($fi["fecha_fin"]) . "\",
-                            \"" . addslashes($fi["ubicacion"]) . "\",
-                            \"" . addslashes($fi["contacto"]) . "\",
-                            \"" . addslashes($fi["enlace_web"]) . "\",
-                        )'>
-                        <i class='fas fa-edit'></i>
-                    </button>
-                </div>";
+                echo '<div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                  <button type="button" class="btn btn-info btn-sm shadow-sm" title="Editar"
+                      data-bs-toggle="modal" data-bs-target="#ModalRegistro"
+                      onclick=\'accionBtnEditar(' . json_encode($datos) . ')\'>
+                      <i class="fas fa-edit"></i>
+                  </button>
+              </div>';
+
                 echo "</td>";
 
 

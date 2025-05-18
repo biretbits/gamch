@@ -48,8 +48,16 @@ require_once('vista/esquema/header.php');
           </select>
         </div>
         <div class="col-2" title="Registro de nuevo Rol">
-          <button type="button" class="form-control btn btn-primary" onclick='accionBtnEditar("","","","","")'
-          class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro">
+          <button type="button" class="form-control btn btn-primary"onclick="accionBtnEditar({
+            'id': '',
+            'titulo': '',
+            'contenido': '',
+            'foto': '',
+            'fechas': ''
+          })"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#ModalRegistro">
             <i class="fas fa-plus-circle"></i>
           </button>
         </div>
@@ -75,7 +83,7 @@ require_once('vista/esquema/header.php');
 
                  <input type="hidden" name="id" id='id' value="">
                  <div class="mb-3">
-                   <input type="text" class="form-control" id="ruta" name='ruta' placeholder="">
+                   <input type="hidden" class="form-control" id="ruta" name='ruta' placeholder="">
                  </div>
                  <div class="mb-3">
                    <input type="text" class="form-control" id="titulo" name='titulo' placeholder="Ponga Titulo">
@@ -119,8 +127,8 @@ require_once('vista/esquema/header.php');
                 <th>Contenido</th>
                 <th>Foto</th>
                 <th>Usuario</th>
-                <th>Fecha</th>
-                <th>Fecha creación</th>
+                <th>Fecha Creación</th>
+                <th>Fecha Registro</th>
                 <th>Fecha Actualización</th>
                 <th>Acción</th>
               </tr>
@@ -142,19 +150,22 @@ require_once('vista/esquema/header.php');
                 echo "<td>".$fi['actualizado_en']."</td>";
                 echo "<td>";
                 $id_u = '';
+                $datos = [
+                    "id" => $fi["id"],
+                    "titulo" => addslashes($fi["titulo"]),
+                    "contenido" => addslashes($fi["contenido"]),
+                    "foto" => addslashes($fi["foto"]),
+                    "fechas" => ($fi["fecha"])
+                ];
+
                 echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                <button type='button' class='btn btn-info btn-sm shadow-sm' title='Editar' data-bs-toggle='modal'
-                    data-bs-target='#ModalRegistro'
-                        onclick='accionBtnEditar(
-                        \"" . $fi["id"] . "\",
-                        \"" . addslashes($fi["titulo"]) . "\",
-                        `" . addslashes($fi["contenido"]) . "`,
-                        \"" . addslashes($fi["foto"]) . "\",
-                        \"" . $fi["fecha"] . "\"
-                      )'>
-                    <i class='fas fa-edit'></i>
-                </button>
-            </div>";
+                    <button type='button' class='btn btn-info btn-sm shadow-sm' title='Editar'
+                        data-bs-toggle='modal'
+                        data-bs-target='#ModalRegistro'
+                        onclick='accionBtnEditar(" . json_encode($datos) . ")'>
+                        <i class='fas fa-edit'></i>
+                    </button>
+                </div>";
 
 
                   echo "</div>";
@@ -347,14 +358,15 @@ function BuscarUsuarios(page){
 
  //funcion para verificar si el usuario existe o no y despues poder editar sus datos
 
- function accionBtnEditar(id,titulo,contenido,foto,fecha
- ) {
-     document.getElementById('id').value = id;
-     document.getElementById('titulo').value = titulo;
-     document.getElementById('contenido').value = contenido;
-     document.getElementById('fecha').value = fecha;
-     document.getElementById("ruta").value=foto;
+ function accionBtnEditar(data) {
+     // Asignar los valores a los camposs}
+     document.getElementById('id').value = data.id;
+     document.getElementById('titulo').value = data.titulo;
+     document.getElementById('contenido').value = data.contenido;
+     document.getElementById('ruta').value = data.foto;
+      document.getElementById('fecha').value = data.fechas;
  }
+
 
 
    function error(){

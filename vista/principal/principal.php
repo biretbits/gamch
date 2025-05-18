@@ -36,6 +36,7 @@ window.onload = function() {
   });
 };
 </script>
+
 <section class="bg-white">
     <div class="container-fluid" data-aos="fade-right" data-aos-duration="1200">
         <div class="row" >
@@ -78,28 +79,10 @@ window.onload = function() {
         </div>
     </div>
 </section>
-<style>
-  .counter {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #007bff;
-  }
-  .counter-box {
-    padding: 2rem;
-    background: #f8f9fa;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-  .unit {
-    font-size: 1.5rem;
-    margin-left: 5px;
-    color: #555;
-  }
-</style>
-<section class="container-md py-5">
+
+<section class="container-md">
   <div class="row text-center">
-    <div class="col-md-4">
+    <div class="col-md-4  card-hover">
       <div class="counter-box">
         <div>
           <span class="counter" data-target="35339">0</span>
@@ -107,7 +90,7 @@ window.onload = function() {
         <p>POBLACIÓN</p>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4  card-hover">
       <div class="counter-box">
         <div>
           <span class="counter" data-target="3738">0</span><span class="unit"> Msnm</span>
@@ -115,7 +98,7 @@ window.onload = function() {
         <p>ALTITUD</p>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4  card-hover">
       <div class="counter-box">
         <div>
           <span class="counter" data-target="2815">0</span><span class="unit"> km²</span>
@@ -125,6 +108,108 @@ window.onload = function() {
     </div>
   </div>
 </section>
+
+<div class="container-fluid" style="background-image: url('imagenes/img-challapata/frontisALEJADO.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+  <div class="row">
+    <!-- Columna del pergamino -->
+    <div class="col-12 col-lg-6">
+      <div class="features-boxed container-fluid">
+        <div class="container" data-aos="fade-up">
+          <div class="pergamino">
+            <div class="scroll-contenido">
+              <h2>Himno a Challapata</h2>
+              <div class="autor">Letra: Saturnino Barre &nbsp;&nbsp;&nbsp; Música: Enrique Pérez</div>
+
+              <div class="estrofa izquierda">
+                Somos hijos de Eduardo Abaroa
+                que desde el Topater nos llegó
+                bello ejemplo de hombría y coraje
+                al morir sin rendirse jamás.
+              </div>
+
+              <div class="estrofa derecha">
+                En la inmensidad del altiplano
+                muy celoso guardamos su mensaje
+                trabajando ahínco por su gloria
+                por la patria, la pobreza y la unión.
+              </div>
+
+              <div class="estrofa izquierda">
+                Con cerebro y corazón
+                centinelas son tus hijos
+                con el cóndor de nuestro escudo
+                vigilando el Mapocho y al ladrón.
+              </div>
+
+              <div class="estrofa derecha">
+                Noble pueblo de Challapata
+                la vanguardia vengadora
+                de su sangre aún caliente
+                llama al mar a nuestro bello litoral.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna de audios -->
+    <div class="col-12 col-lg-6">
+      <div class="features-boxed container-fluid" style="background: rgba(45,45,89,0.5);">
+        <div class="container-md">
+          <h3 class="mb-4 text-white text-center" style="border-radius: 10px;">
+            Melodías de Nuestra Tierra
+          </h3>
+
+          <div class="d-flex flex-wrap justify-content-center gap-4">
+            <!-- Tarjeta 3 -->
+            <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up">
+              <div class="card-body">
+                <h5 class="card-title">Himno a Challapata</h5>
+                <p class="card-text">Himno a Challapata - BANDA F.F.E.E. 24 RANGER de Challapata</p>
+              </div>
+              <div class="card-footer bg-white border-top-0">
+                <audio controls class="w-100">
+                  <source src="imagenes/audios/himno%20a%20challapata.mp3" type="audio/mpeg">
+                  Tu navegador no soporta el elemento de audio.
+                </audio>
+              </div>
+            </div>
+            <!-- Tarjeta de audio -->
+            <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up">
+              <div class="card-body">
+                <h5 class="card-title">Mi Challapata Querida</h5>
+                <p class="card-text">Kalchas - Mi Challapata Querida</p>
+              </div>
+              <div class="card-footer">
+                <audio controls class="w-100">
+                  <source src="imagenes/audios/kalchas%20-%20Mi%20Challapata%20querida.mp3" type="audio/mpeg">
+                  Tu navegador no soporta el elemento de audio.
+                </audio>
+              </div>
+            </div>
+
+            <!-- Tarjeta 2 -->
+            <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up">
+              <div class="card-body">
+                <h5 class="card-title">Mi Challapata Querida</h5>
+                <p class="card-text">kilapaya - Mi Challapata Querida</p>
+              </div>
+              <div class="card-footer bg-white border-top-0">
+                <audio controls class="w-100">
+                  <source src="imagenes/audios/kilapaya%20-%20Mi%20Challapata%20querida.mp3" type="audio/mpeg">
+                  Tu navegador no soporta el elemento de audio.
+                </audio>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="features-boxed container-fluid" style="background: rgb(44,49,52);">
     <div class="">
         <div></div>
@@ -140,15 +225,7 @@ window.onload = function() {
         <i class="fas fa-users icon" style="color: var(--bs-orange); font-size: 50px;"></i>
         <h3 class="name">Desarrollo Humano y Social</h3>
         <p class="description"></p>
-        <a class="learn-more" href="#" style="color: var(--bs-orange);">Ver más »</a>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
-      <div class="box text-center">
-        <i class="la la-money icon" style="color: var(--bs-orange); font-size: 50px;"></i>
-        <h3 class="name">Pago de Impuestos</h3>
-        <p class="description"></p>
-        <a class="learn-more" href="#" style="color: var(--bs-orange);">Ver más »</a>
+        <a class="learn-more" href="/SDHS" style="color: var(--bs-orange);">Ver más »</a>
       </div>
     </div>
     <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
@@ -156,7 +233,7 @@ window.onload = function() {
         <i class="la la-cloud-upload icon" style="color: var(--bs-orange); font-size: 50px;"></i>
         <h3 class="name">Desarrollo Productivo</h3>
         <p class="description"></p>
-        <a class="learn-more" href="#" style="color: var(--bs-orange);">Ver más »</a>
+        <a class="learn-more" href="/SDP" style="color: var(--bs-orange);">Ver más »</a>
       </div>
     </div>
     <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
@@ -164,7 +241,7 @@ window.onload = function() {
         <i class="fa fa-leaf icon" style="color: var(--bs-orange); font-size: 50px;"></i>
         <h3 class="name">Obras Públicas</h3>
         <p class="description"></p>
-        <a class="learn-more" href="#" style="color: var(--bs-orange);">Ver más »</a>
+        <a class="learn-more" href="SOP" style="color: var(--bs-orange);">Ver más »</a>
       </div>
     </div>
     <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
@@ -183,18 +260,9 @@ window.onload = function() {
         <a class="learn-more" href="/cultura" style="color: var(--bs-orange);">Ver más »</a>
       </div>
     </div>
-    <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
-      <div class="box text-center">
-        <i class="fa fa-plane icon" style="color: var(--bs-orange); font-size: 50px;"></i>
-        <h3 class="name">Eventos</h3>
-        <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu.</p>
-        <a class="learn-more" href="#" style="color: var(--bs-orange);">Ver más »</a>
-      </div>
-    </div>
   </div>
 </div>
   </div>
-
 
 
 

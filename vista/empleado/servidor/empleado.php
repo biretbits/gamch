@@ -50,8 +50,7 @@ require_once('vista/esquema/header.php');
       </div>
       <div class="col-2" title="Registro de nuevo Rol">
 
-        <button type="button" class="form-control btn btn-primary" onclick="accionBtnEditar('','','',''
-        ,'')" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro">
+        <button type="button" class="form-control btn btn-primary" onclick="accionBtnEditar('','','','','','','','','','','')" class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro">
           <i class="fas fa-plus-circle"></i>
         </button>
       </div>

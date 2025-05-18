@@ -43,6 +43,9 @@ function crearDataBase(){
   crearTablasPermisos($conn);
   crearTablaPermisosUsuario($conn);
   crearTablaDocumentos($conn);
+  crearTablaNormativas($conn);
+  crearTablaGestionTransparente($conn);
+  crearTablaDocumentos($conn);
   crearTablaNuevasPaginas($conn);
   crearTablaBorradores($conn);
   crearTablaRoles($conn);
@@ -163,7 +166,11 @@ function crearTablaCargos($conn){
 
   // Insertar un cargo
   $sql_insert = "INSERT INTO `cargos` (nivel_id, cargo_empleado, creado_en, actualizado_en)
-                 VALUES (6, 'TECNICO DE SISTEMAS Y MANTENIMIENTO', NOW(), NOW())";
+               VALUES
+               (6, 'TECNICO DE SISTEMAS Y MANTENIMIENTO', NOW(), NOW()),
+               (6, 'RESPONSABLE DE CULTURA Y TURISMO', NOW(), NOW()),
+               (6, 'ENCARGADO CANAL DE TELEVISIÓN MUNICIPAL', NOW(), NOW())";
+
 
   if ($conn->query($sql_insert) === TRUE) {
       echo "Datos insertados correctamente en cargos.\n";
@@ -389,6 +396,50 @@ function crearTablaDocumentos($conn){
 
 }
 
+
+function crearTablaNormativas($conn){
+  // Eliminar la tabla si ya existe
+  $sql = "CREATE TABLE IF NOT EXISTS `normas` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `usuario_id` INT NOT NULL,
+    `categoria` VARCHAR(255),
+    `cod` VARCHAR(255) UNIQUE,
+    `descripcion` MEDIUMTEXT,
+    `fecha_creacion` DATE,
+    `archivo` VARCHAR(255),
+    `nombre_documento` VARCHAR(255),
+    `estado` VARCHAR(255),
+    `publicar` VARCHAR(255),
+    `creado_en` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `actualizado_en` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`)
+  ) ENGINE=InnoDB;";if (!$conn->query($sql)) {
+      die("Error al crear la tabla: " . $conn->error);
+  }
+}
+
+
+function crearTablaGestionTransparente($conn){
+  // Eliminar la tabla si ya existe
+  $sql = "CREATE TABLE IF NOT EXISTS `gestionTransparente` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `usuario_id` INT NOT NULL,
+    `categoria` VARCHAR(255),
+    `cod` VARCHAR(255) UNIQUE,
+    `descripcion` MEDIUMTEXT,
+    `fecha_creacion` DATE,
+    `archivo` VARCHAR(255),
+    `nombre_documento` VARCHAR(255),
+    `estado` VARCHAR(255),
+    `publicar` VARCHAR(255),
+    `creado_en` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `actualizado_en` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`usuario_id`) REFERENCES `usuarios`(`id`)
+  ) ENGINE=InnoDB;";if (!$conn->query($sql)) {
+      die("Error al crear la tabla: " . $conn->error);
+  }
+}
+
 function crearTablaNuevasPaginas($conn){
   // Eliminar la tabla si ya existe
   $sql = "CREATE TABLE IF NOT EXISTS `nuevas_paginas` (
@@ -600,7 +651,7 @@ function crearTablaClases($conn){
 }
 
 function crearTablaSalcats($conn){
-  // SQL para crear la tabla salcats
+  // SQL para crear la tabla salcatsf
   $sql = "
       DROP TABLE IF EXISTS salcats;
 

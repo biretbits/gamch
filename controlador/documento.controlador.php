@@ -80,8 +80,8 @@ class DocumentoControlador{
             <th>Nombre Documento</th>
             <th>Datos Documento</th>
             <th>descripción</th>
-            <th>Usuario</th>
-            <th>Fecha creación</th>
+            <th>Fecha Creación</th>
+            <th>Fecha Registro</th>
             <th>Acción</th>
             </tr>
           </thead>
@@ -353,46 +353,50 @@ echo "</div>
             <th>Acción</th>
             </tr>
           </thead>
-          <tbody>";  if ($resul && mysqli_num_rows($resul) > 0) {
-              $i = $inicioList;
-               while($fi = mysqli_fetch_array($resul)){
-                  echo "<tr>";
-                    echo "<td>".($i+1)."</td>";
-                    echo "<td>".$fi['titulo']."</td>";
-                    echo "<td>".$fi['contenido']."</td>";
-                    echo "<td><img src='" . $fi['foto'] . "' alt='Foto' style='width: 80px; height: auto;'></td>";
-
-                    echo "<td>".$fi['usuario_usuario']."</td>";
-                    echo "<td>".$fi['fecha']."</td>";
-                    echo "<td>".$fi['creado_en']."</td>";
-                    echo "<td>".$fi['actualizado_en']."</td>";
-                    echo "<td>";
-                    $id_u = '';
-                    echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                    <button type='button' class='btn btn-info btn-sm shadow-sm' title='Editar' data-bs-toggle='modal'
-                        data-bs-target='#ModalRegistro'
-                            onclick='accionBtnEditar(
-                            \"" . $fi["id"] . "\",
-                            \"" . addslashes($fi["titulo"]) . "\",
-                            `" . addslashes($fi["contenido"]) . "`,
-                            \"" . addslashes($fi["foto"]) . "\",
-                            \"" . $fi["fecha"] . "\"
-                          )'>
-                        <i class='fas fa-edit'></i>
-                    </button>
-                </div>";
-
-
-                      echo "</div>";
-                    echo "</td>";
-                  echo "</tr>";
-                  $i++;
-                }
-              }else{
+          <tbody>";
+          if ($resul && mysqli_num_rows($resul) > 0) {
+            $i = $inicioList;
+             while($fi = mysqli_fetch_array($resul)){
                 echo "<tr>";
-                echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+                  echo "<td>".($i+1)."</td>";
+                  echo "<td>".$fi['titulo']."</td>";
+                  echo "<td>".$fi['contenido']."</td>";
+                  echo "<td><img src='" . $fi['foto'] . "' alt='Foto' style='width: 80px; height: auto;'></td>";
+
+                  echo "<td>".$fi['usuario_usuario']."</td>";
+                  echo "<td>".$fi['fecha']."</td>";
+                  echo "<td>".$fi['creado_en']."</td>";
+                  echo "<td>".$fi['actualizado_en']."</td>";
+                  echo "<td>";
+                  $id_u = '';
+                  $datos = [
+                      "id" => $fi["id"],
+                      "titulo" => addslashes($fi["titulo"]),
+                      "contenido" => addslashes($fi["contenido"]),
+                      "foto" => addslashes($fi["foto"]),
+                      "fechas" => ($fi["fecha"])
+                  ];
+
+                  echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+                      <button type='button' class='btn btn-info btn-sm shadow-sm' title='Editar'
+                          data-bs-toggle='modal'
+                          data-bs-target='#ModalRegistro'
+                          onclick='accionBtnEditar(" . json_encode($datos) . ")'>
+                          <i class='fas fa-edit'></i>
+                      </button>
+                  </div>";
+
+
+                    echo "</div>";
+                  echo "</td>";
                 echo "</tr>";
+                $i++;
               }
+            }else{
+              echo "<tr>";
+              echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
+              echo "</tr>";
+            }
 
         echo "
         </tbody>
@@ -488,7 +492,13 @@ echo "</div>
 
   public static function ViewNoticias(){
     $us = new Documento();
-    $resul = $us->SeleccionarNoticiasNuevas();
+    $listarDeCuanto = 5;$pagina = 1;
+    $resultodoUsuarios = $us->SeleccionarNoticiasNuevas(false,false);
+    $num_filas_total = mysqli_num_rows($resultodoUsuarios);
+    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+            //calculamos el registro inicial
+    $inicioList = ($pagina - 1) * $listarDeCuanto;
+    $resul = $us->SeleccionarNoticiasNuevas($inicioList,$listarDeCuanto);
     require("vista/noticia/cliente/noticias.php");
   }
 
@@ -496,6 +506,149 @@ echo "</div>
     $us = new Documento();
     $resul = $us->SeleccionarNoticiasNuevasID($id);
     require("vista/noticia/cliente/SeguirLeyendo.php");
+
+  }
+
+  public static function ListarNoticasNuevas($pagina,$listarDeCuanto){
+    $us = new Documento();
+    $resultodoUsuarios = $us->SeleccionarNoticiasNuevas(false,false);
+    $num_filas_total = mysqli_num_rows($resultodoUsuarios);
+    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+            //calculamos el registro inicial
+    $inicioList = ($pagina - 1) * $listarDeCuanto;
+    $resul = $us->SeleccionarNoticiasNuevas($inicioList,$listarDeCuanto);
+    echo '<div class="container-sm">';
+    echo '<br>';
+
+    if ($resul && $resul->num_rows > 0) {
+        while ($newpage = $resul->fetch_object()) {
+            echo '<div class="row justify-content-center mb-5">';
+
+            // Imagen
+            echo '<div class="col-md-5">';
+            echo '<div class="mb-4">';
+            echo '<a href="#">';
+            echo '<div style="width: 100%; height: 250px; overflow: hidden;">';
+            echo '<img src="' . htmlspecialchars($newpage->foto) . '" alt="noticia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">';
+            echo '</div>';
+            echo '</a>';
+            echo '</div>';
+            echo '</div>';
+
+            // Texto
+            echo '<div class="col-md-5">';
+            echo '<ul class="list-inline text-uppercase text-muted small mb-2">';
+            echo '<li class="list-inline-item"><a href="#">Publicado</a></li>';
+            echo '<li class="list-inline-item"><a href="#">' . htmlspecialchars($newpage->fecha) . '</a></li>';
+            echo '</ul>';
+
+            echo '<h3 class="fw-light">';
+            echo '<a href="#" onclick="SeguirLeyendo(' . $newpage->id . ')" class="text-decoration-none">';
+            echo htmlspecialchars($newpage->titulo);
+            echo '</a>';
+            echo '</h3>';
+
+            echo '<p class="my-3">';
+            echo substr(strip_tags($newpage->contenido), 0, 200) . '...';
+            echo '</p>';
+
+            echo '<a href="#" onclick="SeguirLeyendo(' . $newpage->id . ')" class="text-primary small text-decoration-none">Seguir Leyendo Más</a>';
+            echo '</div>';
+
+            echo '</div>'; // row
+            echo '<hr>';
+        }
+    } else {
+        echo '<div class="text-center">';
+        echo '<p class="text-white">No se encontraron noticias.</p>';
+        echo '</div>';
+    }
+
+    if ($TotalPaginas != 0) {
+        $adjacents = 1;
+        $anterior = "&lsaquo; Anterior";
+        $siguiente = "Siguiente &rsaquo;";
+
+        echo '<div class="row mt-3">';
+        echo '<div class="col">';
+        echo '<nav>';
+        echo '<ul class="pagination justify-content-center flex-wrap" style="background:white">';
+
+        // Primera página
+        if ($pagina > 1) {
+            echo '<li class="page-item">';
+            echo '<a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(1)" aria-label="Primera">';
+            echo '<span aria-hidden="true">&laquo;</span>';
+            echo '</a>';
+            echo '</li>';
+        }
+
+        // Anterior
+        if ($pagina == 1) {
+            echo '<li class="page-item disabled">';
+            echo '<span class="page-link rounded-0">' . $anterior . '</span>';
+            echo '</li>';
+        } else {
+            echo '<li class="page-item">';
+            echo '<a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . ($pagina - 1) . ')">' . $anterior . '</a>';
+            echo '</li>';
+        }
+
+        // Páginas
+        if ($pagina > ($adjacents + 1)) {
+            echo '<li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(1)">1</a></li>';
+        }
+
+        if ($pagina > ($adjacents + 2)) {
+            echo '<li class="page-item disabled"><span class="page-link rounded-0">...</span></li>';
+        }
+
+        $pmin = ($pagina > $adjacents) ? ($pagina - $adjacents) : 1;
+        $pmax = ($pagina < ($TotalPaginas - $adjacents)) ? ($pagina + $adjacents) : $TotalPaginas;
+
+        for ($i = $pmin; $i <= $pmax; $i++) {
+            if ($i == $pagina) {
+                echo '<li class="page-item active"><span class="page-link rounded-0 bg-success border-success">' . $i . '</span></li>';
+            } else {
+                echo '<li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $i . ')">' . $i . '</a></li>';
+            }
+        }
+
+        if ($pagina < ($TotalPaginas - $adjacents - 1)) {
+            echo '<li class="page-item disabled"><span class="page-link rounded-0">...</span></li>';
+        }
+
+        if ($pagina < ($TotalPaginas - $adjacents)) {
+            echo '<li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $TotalPaginas . ')">' . $TotalPaginas . '</a></li>';
+        }
+
+        // Siguiente
+        if ($pagina < $TotalPaginas) {
+            echo '<li class="page-item">';
+            echo '<a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . ($pagina + 1) . ')">' . $siguiente . '</a>';
+            echo '</li>';
+        } else {
+            echo '<li class="page-item disabled">';
+            echo '<span class="page-link rounded-0">' . $siguiente . '</span>';
+            echo '</li>';
+        }
+
+        // Última página
+        if ($pagina != $TotalPaginas) {
+            echo '<li class="page-item">';
+            echo '<a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $TotalPaginas . ')" aria-label="Última">';
+            echo '<span aria-hidden="true">&raquo;</span>';
+            echo '</a>';
+            echo '</li>';
+        }
+
+        echo '</ul>';
+        echo '</nav>';
+        echo '</div>';
+        echo '</div>';
+    }
+
+    echo '</div>';
 
   }
 }

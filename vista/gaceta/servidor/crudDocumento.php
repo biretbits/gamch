@@ -49,10 +49,26 @@ require_once('vista/esquema/header.php');
         </div>
         <div class="col-2" title="Registro de nuevo Rol">
 
-          <button type="button" class="form-control btn btn-primary" onclick='accionBtnEditar("","","","","","","","","","","")'
-          class="d-sm-inline-block btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#ModalRegistro">
-            <i class="fas fa-plus-circle"></i>
-          </button>
+          <button type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#ModalRegistro"
+    onclick='accionBtnEditar({
+        "id": "",
+        "categoria": "",
+        "cod": "",
+        "entidad": "",
+        "descripcion": "",
+        "fecha_creacion": "",
+        "nombre_documento": "",
+        "datos_documento": "",
+        "estado": "",
+        "publicar": "",
+        "archivo": ""
+    })'>
+    <i class="fas fa-plus"></i> Nuevo
+</button>
+
         </div>
         <div class="col-3">
 
@@ -91,7 +107,7 @@ require_once('vista/esquema/header.php');
                     </select>
                  </div>
                  <div class="mb-3">
-                   <input type="text" class="form-control" id="ruta" name='ruta' placeholder="">
+                   <input type="hidden" class="form-control" id="ruta" name='ruta' placeholder="">
                  </div>
                  <div class="mb-3">
                    <input type="text" class="form-control" id="cod" name='cod' placeholder="Ponga codigo documento" required>
@@ -187,28 +203,30 @@ require_once('vista/esquema/header.php');
                 echo "<td>".$fi['fecha_creacion']."</td>";
                 echo "<td>";
                 $id_u = '';
-                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                <button type='button'
-                    class='btn btn-info btn-sm shadow-sm'
-                    title='Editar'
-                    data-bs-toggle='modal'
-                    data-bs-target='#ModalRegistro'
-                    onclick='accionBtnEditar(
-                        \"" . $fi["id"] . "\",
-                        \"" . addslashes($fi["categoria"]) . "\",
-                        \"" . addslashes($fi["cod"]) . "\",
-                        \"" . addslashes($fi["entidad"]) . "\",
-                        `" . addslashes($fi["descripcion"]) . "`,
-                        \"" . $fi["fecha_creacion"] . "\",
-                        \"" . addslashes($fi["nombre_documento"]) . "\",
-                        \"" . addslashes($fi["datos_documento"]) . "\",
-                        \"" . addslashes($fi["estado"]) . "\",
-                        \"" . addslashes($fi["publicar"],) . "\",
-                        \"" . addslashes($fi["archivo"]) . "\",
-                    )'>
-                    <i class='fas fa-edit'></i>
-                </button>
-            </div>";
+                $datos = [
+                  "id" => $fi["id"],
+                  "categoria" => addslashes($fi["categoria"]),
+                  "cod" => addslashes($fi["cod"]),
+                  "entidad" => addslashes($fi["entidad"]),
+                  "descripcion" => addslashes($fi["descripcion"]),
+                  "fecha_creacion" => $fi["fecha_creacion"],
+                  "nombre_documento" => addslashes($fi["nombre_documento"]),
+                  "datos_documento" => addslashes($fi["datos_documento"]),
+                  "estado" => addslashes($fi["estado"]),
+                  "publicar" => addslashes($fi["publicar"]),
+                  "archivo" => addslashes($fi["archivo"])
+              ];
+
+              echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+                  <button type='button'
+                      class='btn btn-info btn-sm shadow-sm'
+                      title='Editar'
+                      data-bs-toggle='modal'
+                      data-bs-target='#ModalRegistro'
+                      onclick='accionBtnEditar(" . json_encode($datos) . ")'>
+                      <i class='fas fa-edit'></i>
+                  </button>
+              </div>";
 
 
                   echo "</div>";
@@ -401,20 +419,20 @@ function BuscarUsuarios(page){
 
  //funcion para verificar si el usuario existe o no y despues poder editar sus datos
 
- function accionBtnEditar(id,categoria,cod,entidad,descripcion,fecha_creacion,nombre_documento,datos_documento,estado,publicar,archivo
- ) {
-     document.getElementById('id').value = id;
-     document.getElementById('categoria').value = categoria;
-     document.getElementById('cod').value = cod;
-     document.getElementById('entidad').value = entidad;
-     document.getElementById('descripcion').value = descripcion;
-     document.getElementById('fecha_creacion').value = fecha_creacion;
-     document.getElementById('nombre_documento').value = nombre_documento;
-     document.getElementById('dato_documento').value = datos_documento;
-     document.getElementById('estado').value = estado;
-     document.getElementById('publicar').value = publicar;
-     document.getElementById("ruta").value=archivo;
+ function accionBtnEditar(data) {
+     document.getElementById('id').value = data.id;
+     document.getElementById('categoria').value = data.categoria;
+     document.getElementById('cod').value = data.cod;
+     document.getElementById('entidad').value = data.entidad;
+     document.getElementById('descripcion').value = data.descripcion;
+     document.getElementById('fecha_creacion').value = data.fecha_creacion;
+     document.getElementById('nombre_documento').value = data.nombre_documento;
+     document.getElementById('dato_documento').value = data.datos_documento;
+     document.getElementById('estado').value = data.estado;
+     document.getElementById('publicar').value = data.publicar;
+     document.getElementById('ruta').value = data.archivo;
  }
+
 
    function formularioSubmit(pagina,listarDeCuanto,cod_usuario,buscar){
      var form = document.createElement('form');

@@ -219,12 +219,21 @@ class Documento
                 return $resul;
             }
           }
-
-          public function SeleccionarNoticiasNuevas(){
-            $sql = "select *from nuevas_paginas order by id desc";
-            $resul = $this->con->query($sql);
-            return $resul;
+          public function SeleccionarNoticiasNuevas($inicioList = false, $listarDeCuanto = false) {
+              if (is_numeric($inicioList) && is_numeric($listarDeCuanto)) {
+                  $sql = "SELECT * FROM nuevas_paginas ORDER BY id DESC LIMIT ? OFFSET ?";
+                  $stmt = $this->con->prepare($sql);
+                  $stmt->bind_param("ii", $listarDeCuanto, $inicioList);
+                  $stmt->execute();
+                  $resul = $stmt->get_result();
+                  return $resul;
+              } else {
+                  // Si no hay paginación, traer todo
+                  $sql = "SELECT * FROM nuevas_paginas ORDER BY id DESC";
+                  return $this->con->query($sql);
+              }
           }
+
 
           public function SeleccionarNoticiasNuevasID($id){
             $sql = "select *from nuevas_paginas where id=$id";

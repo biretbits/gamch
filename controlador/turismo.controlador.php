@@ -115,6 +115,7 @@ class TurismoControlador{
             </tr>
           </thead>
           <tbody>";
+
           if ($resul && mysqli_num_rows($resul) > 0) {
             $i = $inicioList;
              while($fi = mysqli_fetch_array($resul)){
@@ -138,25 +139,28 @@ class TurismoControlador{
                   echo "<td>" . $fi['actualizado_en'] . "</td>";
                   echo "<td>";
                   $id_u = '';
-                  echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                  <button type='button'
-                      class='btn btn-info btn-sm shadow-sm'
-                      title='Editar'
-                      data-bs-toggle='modal'
-                      data-bs-target='#ModalRegistro'
-                      onclick='accionBtnEditar(
-                        \"" . $fi["id"] . "\",
-                        \"" . addslashes($fi["nombre_destino"]) . "\",
-                        \"" . addslashes($fi["tipo_destino"]) . "\",
-                        \"" . addslashes($fi["descripcion"]) . "\",
-                        \"" . addslashes($fi["ubicacion"]) . "\",
-                        \"" . addslashes($fi["contacto"]) . "\",
-                        \"" . addslashes($fi["enlace_web"]) . "\",
-                        \"" . addslashes($fi["actividades_disponibles"]) . "\",
-                      )'>
-                      <i class='fas fa-edit'></i>
-                  </button>
-              </div>";
+                  $datos = [
+                    "id" => $fi["id"],
+                    "nombre_destino" => addslashes($fi["nombre_destino"]),
+                    "tipo_destino" => addslashes($fi["tipo_destino"]),
+                    "descripcion" => addslashes($fi["descripcion"]),
+                    "actividades_disponibles" => addslashes($fi["actividades_disponibles"]),
+                    "ubicacion" => addslashes($fi["ubicacion"]),
+                    "contacto" => addslashes($fi["contacto"]),
+                    "enlace_web" => addslashes($fi["enlace_web"]),
+                    "imagen_url" => addslashes($fi["imagen_url"])
+                ];
+
+                              echo "<td>";
+                echo '<div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-info btn-sm shadow-sm" title="Editar"
+                            data-bs-toggle="modal" data-bs-target="#ModalRegistro"
+                            onclick=\'accionBtnEditar(' . json_encode($datos) . ')\' >
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>';
+                echo "</td>";
+
 
 
                     echo "</div>";
@@ -169,6 +173,7 @@ class TurismoControlador{
               echo "<td colspan='15' align='center'>No se encontraron resultados</td>";
               echo "</tr>";
             }
+
   echo "
  </tbody>
 </table>

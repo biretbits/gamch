@@ -1,13 +1,34 @@
 
 <?php require("vista/esquema/header.php"); ?>
-<div class="banner-innerpage" style="background-image:url(/imagenes/gamch/fondo.jpg)">
+<style media="screen">
+.encabezado-municipal {
+    background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); /* textura suave */
+    background-color: #fdf6e3; /* tono pergamino */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .encabezado-municipal h1,
+  .encabezado-municipal h6 {
+    font-family: 'Georgia', serif; /* Fuente profesional y clásica */
+  }
+
+</style>
+<div class="banner-innerpage" style="  background-image: url('imagenes/img-challapata/frontisALEJADO.jpg'); /* Ruta de tu imagen */
+  background-size: cover;      /* Hace que la imagen cubra toda la sección */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* No se repite la imagen */">
     <div class="container">
     <!-- Row  -->
     <div class="row justify-content-center ">
     <!-- Column -->
-    <div class="col-md-6 align-self-center text-center aos-init aos-animate" data-aos="fade-down" data-aos-duration="1200">
-    <h1 class="title">GACETA MUNICIPAL</h1>
-    <h6 class="subtitle op-8">Gobierno Autonomo Municipal de Challapata</h6>
+    <div class="col-auto align-self-center text-center aos-init aos-animate" data-aos="fade-down" data-aos-duration="1200">
+      <div class="encabezado-municipal">
+        <h1 class="display-5 fw-bold text-uppercase text-dark">Gaceta Municipal</h1>
+        <h6 class="fs-5 text-muted fst-italic">Gobierno Autónomo Municipal de Challapata</h6>
+      </div>
+    </div>
     </div>
     <!-- Column -->
     </div>

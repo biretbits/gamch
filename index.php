@@ -15,6 +15,10 @@ require_once "controlador/contacto.controlador.php";
 require_once "controlador/empleado.controlador.php";
 require_once "controlador/turismo.controlador.php";
 require_once "controlador/cultura.controlador.php";
+require_once "controlador/servicio.controlador.php";
+require_once "controlador/normativa.controlador.php";
+require_once "controlador/transparente.controlador.php";
+require_once "controlador/secretaria.controlador.php";
     //require('vista/principal/sql.php');
     //include('vista/principal/principalClinica.php');
 
@@ -25,12 +29,36 @@ $_GET["accion"]=$_GET["accion"];
   $_GET["accion"]="";
 }
 
-//phpinfo();
-if (isset($_SESSION["usuario"]) && $_SESSION["nombre_role"] == 'Admin') {
-    if($_GET["accion"] == "panel"){
-      UsuarioControlador::panelUsuario();return;
-    }
-    else if($_GET["accion"] == "usuarios"){
+if (isset($_SESSION["usuario"]) && $_SESSION["usuario"] !='') {
+  if($_GET["accion"] == "panel"){
+    UsuarioControlador::panelUsuario();return;
+  }else if($_GET["accion"] == "Normas"){
+    NormativaControlador::DatosDeTablaNormativa();return;
+  } else if($_GET["accion"] == "regDocNormativa"){
+     $a=array("id"=>$_POST["id"],
+     "categoria"=>$_POST["categoria"],
+     "cod"=>$_POST["cod"],
+     "descripcion"=>$_POST["descripcion"],
+     "fecha_creacion"=>$_POST["fecha_creacion"],
+     "nombre_documento"=>$_POST["nombre_documento"],
+     "publicar"=>$_POST["publicar"],
+      "estado"=> $_POST["estado"],);
+     NormativaControlador::registrarNormativas($a);return;
+  }
+  else if($_GET["accion"] == "Transparente"){
+    TransparenteControlador::DatosDeTablaTransparente();return;
+  } else if($_GET["accion"] == "regDocTransparente"){
+     $a=array("id"=>$_POST["id"],
+     "categoria"=>$_POST["categoria"],
+     "cod"=>$_POST["cod"],
+     "descripcion"=>$_POST["descripcion"],
+     "fecha_creacion"=>$_POST["fecha_creacion"],
+     "nombre_documento"=>$_POST["nombre_documento"],
+     "publicar"=>$_POST["publicar"],
+      "estado"=> $_POST["estado"],);
+     TransparenteControlador::registrarTransparente($a);return;
+  }
+  else if($_GET["accion"] == "usuarios"){
       UsuarioControlador::listraUsuarios();return;
     }
     else
@@ -90,9 +118,14 @@ if (isset($_SESSION["usuario"]) && $_SESSION["nombre_role"] == 'Admin') {
        UsuarioControlador::RegistrarPermisosUsuario($a); return;
    }
 
-else if ($_GET["accion"] == "BuscarEmpleadoB") {
-    EmpleadoControlador::BuscarEmpleadoTodo($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"]); return;
-}
+    else if ($_GET["accion"] == "buscarDocNormas") {
+        NormativaControlador::BuscarNormativas($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"]); return;
+    }else if ($_GET["accion"] == "buscarDocTransparente") {
+        TransparenteControlador::BuscarTransparente($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"]); return;
+    }
+    else if ($_GET["accion"] == "BuscarEmpleadoB") {
+        EmpleadoControlador::BuscarEmpleadoTodo($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"]); return;
+    }
     else if ($_GET["accion"] == "bpth") {
         UsuarioControlador::BuscarUsuarioTabla($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"]); return;
     }
@@ -220,6 +253,19 @@ else if ($_GET["accion"] == "BuscarEmpleadoB") {
     }
 }
 
+
+if($_GET["accion"] == "listarNoticias"){
+  DocumentoControlador::ListarNoticasNuevas($_POST["pagina"], $_POST["listarDeCuanto"]); return;
+}else
+if($_GET["accion"] == "buscarViewTransparente"){
+  TransparenteControlador::buscarTransrenciaNuevo($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"],$_POST["categoria"]); return;
+}else
+if($_GET["accion"] == "buscarViewNormas"){
+  NormativaControlador::buscarNomativaNuevo($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"],$_POST["categoria"]); return;
+}else
+if($_GET["accion"] == "Servicios"){
+    ServicioControlador::ViewServicios();
+}else
 if($_GET["accion"] == "cultura"){
     CulturaControlador::ViewCultura();
 }else
@@ -276,7 +322,36 @@ else if ($_GET["accion"] == "gac") {
     $_GET["accion"] == "RESOLUCIONES-MUNICIPALES-ADMINISTRATIVOS"
 ) {
     DocumentoControlador::documentos_visualizar($_GET["accion"]);
-} else {
+}else
+if (
+    $_GET["accion"] == "REGLAMENTOS-ESPECIFICOS" ||
+    $_GET["accion"] == "GESTION-DE-PERSONAL" ||
+    $_GET["accion"] == "GESTION-TECNICA" ||
+    $_GET["accion"] == "GESTION-NORMATIVA" ||
+    $_GET["accion"] == "GESTION-ADMINISTRATIVA" ||
+    $_GET["accion"] == "MANUALES-ADMINISTRATIVOS" ||
+    $_GET["accion"] == "MANUAL-DE-ORGANIZACION-FUNCIONES"
+) {
+    NormativaControlador::visualizarNormativa($_GET["accion"]);
+}else if (
+    $_GET["accion"] == "INFORMES-DE-GESTION" ||
+    $_GET["accion"] == "REPORTES-DE-EJECUCION" ||
+    $_GET["accion"] == "BOLETINES-DE-INFORMACION" ||
+    $_GET["accion"] == "PLANES-ESTRATEGICOS" ||
+    $_GET["accion"] == "PRESUPUESTO-POA" ||
+    $_GET["accion"] == "UNIDAD-DE-AUDITORIA-INTERNA"
+) {
+    TransparenteControlador::visualizarTransparencia($_GET["accion"]);
+}else if($_GET["accion"] == "SDHS"){
+  SecretariaControlador::visualizarSDHS();
+}else if($_GET["accion"] == "SDP"){
+  SecretariaControlador::visualizarSDP();
+}else if($_GET["accion"] == "SOP"){
+  SecretariaControlador::visualizarSOP();
+}else if($_GET["accion"] == "SF"){
+  SecretariaControlador::visualizarSF();
+}
+else {
     IndexControlador::visualizarPrincipal();
 }
 
