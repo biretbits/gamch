@@ -37,6 +37,7 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
 }
 
 </style>
+<br>
   <div class="row g-4" style="background:white">
     <input type="hidden" name="paginas" id='paginas' value="">
     <div class="container-md" style="style="padding:20px"">
@@ -49,7 +50,6 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
               <?php echo str_replace("-", " ", $categoria); ?>
             </div>
             <div>
-              <label for="selectList" class="form-label fw-semibold mb-1">Listar</label>
               <select class="form-select form-select-sm" id="selectList" name="selectList" onchange="BuscarUsuarios(1)">
                 <option selected disabled>--</option>
                 <option>5</option>
@@ -65,7 +65,6 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
 
             <!-- Campo de búsqueda -->
             <div>
-              <label for="buscar" class="form-label fw-semibold mb-1">Buscar</label>
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control" id="buscar" name="buscar" placeholder="Buscar..." onkeyup="BuscarUsuarios(1)">
                 <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
@@ -123,7 +122,7 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
         <div class="row mt-3">
           <div class="col">
             <nav aria-label="Paginación de resultados">
-              <ul class="pagination justify-content-center flex-wrap">
+              <ul class="pagination justify-content-center flex-wrap" style="background:white">
 
                 <!-- Primera página -->
                 <?php if ($pagina > 1): ?>

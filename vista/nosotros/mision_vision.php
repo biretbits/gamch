@@ -14,10 +14,10 @@
         <div class="card-body">
           <h3 class="card-title text-primary">Misión</h3>
           <p class="card-text text-justificado">
-            Misión del Gobierno Autónomo Municipal de Challapata
-            "Garantizar el desarrollo integral y sostenible del municipio de Challapata, promoviendo el bienestar social, económico y ambiental de su población.
-            Trabajamos para brindar servicios públicos eficientes, equitativos y de calidad, fortaleciendo la participación ciudadana, preservando el patrimonio cultural y
-            ancestral, e impulsando oportunidades inclusivas que mejoren la calidad de vida en un marco de transparencia, equidad y respeto a los derechos fundamentales."
+            "El Gobierno Autónomo Municipal tiene la misión de representar al municipio de Challapata con pleno
+            ejercicio de su autonomía, con capacidad técnica, administrativa, con gestión financiera sana, políticas
+            públicas y privadas coordinadas con el nivel departamental y nacional con protagonismo en el
+            desarrollo del Estado Plurinacional de Bolivia"
           </p>
         </div>
       </div>
@@ -27,10 +27,12 @@
         <div class="card-body">
           <h3 class="card-title text-success">Visión</h3>
           <p class="card-text text-justificado">
-            Visión del Gobierno Autónomo Municipal de Challapata
-            "Convertir a Challapata en un municipio modelo de desarrollo sostenible y cohesión social, reconocido por su armonía entre el progreso económico, la
-            conservación del medio ambiente y la valoración de su identidad cultural. Aspiramos a ser un gobierno innovador, cercano a la comunidad, que fomente la participación
-            activa de todos sus habitantes, atraiga inversiones responsables, y construya infraestructura resiliente y espacios públicos que reflejen el orgullo de su gente. En 2030, Challapata será un territorio próspero, seguro y equitativo, donde las generaciones presentes y futuras vivan con dignidad y esperanza."
+            "Challapata municipio dinámico mejor posicionado para hacer frente a los desafíos del futuro,
+            habitable, saludable, culto, agrícola, ganadero y próspero con un gobierno municipal responsable,
+            organizado, eficiente, eficaz, transparente, equitativo, impulsor del desarrollo social y económico,
+            armónico y sostenible con una mejora continua que responde a los objetivos de gestión, que
+            permite satisfacer las necesidades y los deseos de la generación presente, sin comprometer la
+            capacidad de las generaciones futuras de satisfacer sus propias necesidades y deseos"
           </p>
         </div>
       </div>

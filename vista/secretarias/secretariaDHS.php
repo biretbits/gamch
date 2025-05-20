@@ -49,7 +49,7 @@ require_once('vista/esquema/header.php');
       <div class="row justify-content-center align-items-center">
         <div class="col-auto">
           <!-- Icono de la secretaría -->
-          <img src="imagenes/secretarias/humano/0.jpeg" alt="Icono Secretaría" width="100" height="100" class="me-3">
+          <img src="imagenes/secretarias/sdhs.png" alt="Icono Secretaría" width="100" height="100" class="me-3">
         </div>
         <div class="col-auto text-start">
           <h1 class="display-6 fw-bold text-white">Secretaría Municipal de Desarrollo Humano Y Social</h1>
@@ -218,7 +218,6 @@ require_once('vista/esquema/header.php');
       </div>
     </div>
   </section>
-
 
 <?php
 // Incluir el archivo footer.php desde la carpeta diseno

@@ -11,31 +11,52 @@ require_once('vista/esquema/header.php');
         }
       </style>
     <!-- Script para mostrar la alerta al cargar la página -->
+    <?php
+    // Simulación de variable que indica si el usuario es admin
+    $esAdmin = true; // o false
 
+    // Generar el HTML/JS
+    ?>
     <script>
-window.onload = function() {
-  // Crear el texto con fecha y hora
-  const dateTimeText = `Fecha y Hora: 12/03/2025 12:02 `;
-  Swal.fire({
-    html: `
-       <div class="swal2-date-time" style="text-align: left;font-size:12px">${dateTimeText}</div>
-       <div style='text-align:center'>LUCHA DE MUJERES</div>
-    `,
-    imageUrl: 'https://i0.wp.com/cebem.org/wp-content/uploads/2020/03/renamat-en-challapata.png?resize=600%2C336&ssl=1', // Imagen en la alerta
-    imageWidth: '100%', // Ancho de la imagen en porcentaje para que ocupe todo el ancho
-    imageHeight: 'auto', // Mantener la proporción de la imagen
-    imageAlt: 'Imagen de alerta',
-    confirmButtonText: 'Cerrar',
-    showConfirmButton: true, // Botón de confirmar
-    heightAuto: false, // Evita que SweetAlert2 ajuste el tamaño automático de la ventana
-    customClass: {
-      htmlContainer: 'swal2-html-container' // Aplicar el estilo personalizado
-    },
-    timer: 5000, // La alerta se cerrará después de 5 segundos
-    timerProgressBar: true, // Muestra la barra de progreso del temporizador
-  });
-};
-</script>
+    window.onload = function() {
+      const dateTimeText = `Fecha y Hora: 12/01/2025 00:00 `;
+
+      // Botones que solo se muestran si es admin
+      let botonesHtml = '';
+      <?php if (isset($_SESSION['nombre_role']) && $_SESSION['nombre_role'] == 'Admin'): ?>
+        botonesHtml = `<button type="button" class="btn btn-primary btn-sm me-2" title="Editar">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" title="Eliminar">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        `;
+      <?php endif; ?>
+
+      Swal.fire({
+        html: `
+          <div class="swal2-date-time" style="text-align: left;font-size:12px">${dateTimeText}</div>
+          <div style='text-align:center'>El pasado año, el Comité Interinstitucional de Defensa del Medio Ambiente de Challapata celebró un importante triunfo: entregaron la Ley Municipal 403/2024, que declara al distrito de Challapata como una zona libre de actividad y contaminación minera.
+
+La visita a las oficinas de la Autoridad Jurisdiccional Administrativa Minera (AJAM) casi coincidió con el 63 aniversario de la Represa de Tacagua, pilar de la actividad agroganadera del municipio de Challapata, la Capital Agrícola, Ganadera e Industrial Lechera del Occidente Boliviano.</div>
+          <div style="margin-top: 15px; text-align:center;">${botonesHtml}</div>
+        `,
+        imageUrl: 'https://www.opinion.com.bo/asset/thumbnail,992,558,center,center/media/opinion/images/2025/01/09/2025010922313656652.jpg',
+        imageWidth: '100%',
+        imageHeight: 'auto',
+        imageAlt: 'Imagen de alerta',
+        confirmButtonText: 'Cerrar',
+        showConfirmButton: true,
+        heightAuto: false,
+        customClass: {
+          htmlContainer: 'swal2-html-container'
+        },
+        timer: 9000,
+        timerProgressBar: true,
+      });
+    };
+    </script>
+
 
 <section class="bg-white">
     <div class="container-fluid" data-aos="fade-right" data-aos-duration="1200">
@@ -109,7 +130,20 @@ window.onload = function() {
   </div>
 </section>
 
-<div class="container-fluid" style="background-image: url('imagenes/img-challapata/frontisALEJADO.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<style media="screen">
+.estrofa {
+text-align: justify;
+font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+.estrofa {
+  font-size: 0.65rem;
+}
+}
+
+</style>
+<div class="container-fluid" style="background-image: url('imagenes/gamch/frontisALEJADO.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
   <div class="row">
     <!-- Columna del pergamino -->
     <div class="col-12 col-lg-6">
@@ -120,28 +154,28 @@ window.onload = function() {
               <h2>Himno a Challapata</h2>
               <div class="autor">Letra: Saturnino Barre &nbsp;&nbsp;&nbsp; Música: Enrique Pérez</div>
 
-              <div class="estrofa izquierda">
+              <div class="estrofa izquierda" class="estrofa">
                 Somos hijos de Eduardo Abaroa
                 que desde el Topater nos llegó
                 bello ejemplo de hombría y coraje
                 al morir sin rendirse jamás.
               </div>
 
-              <div class="estrofa derecha">
+              <div class="estrofa derecha" class="estrofa">
                 En la inmensidad del altiplano
                 muy celoso guardamos su mensaje
                 trabajando ahínco por su gloria
                 por la patria, la pobreza y la unión.
               </div>
 
-              <div class="estrofa izquierda">
+              <div class="estrofa izquierda" class='estrofa'>
                 Con cerebro y corazón
                 centinelas son tus hijos
                 con el cóndor de nuestro escudo
                 vigilando el Mapocho y al ladrón.
               </div>
 
-              <div class="estrofa derecha">
+              <div class="estrofa derecha" class='estrofa'>
                 Noble pueblo de Challapata
                 la vanguardia vengadora
                 de su sangre aún caliente
@@ -158,7 +192,7 @@ window.onload = function() {
       <div class="features-boxed container-fluid" style="background: rgba(45,45,89,0.5);">
         <div class="container-md">
           <h3 class="mb-4 text-white text-center" style="border-radius: 10px;">
-            Melodías de Nuestra Tierra
+            Himno A Challapata
           </h3>
 
           <div class="d-flex flex-wrap justify-content-center gap-4">
@@ -175,35 +209,49 @@ window.onload = function() {
                 </audio>
               </div>
             </div>
-            <!-- Tarjeta de audio -->
-            <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up">
-              <div class="card-body">
-                <h5 class="card-title">Mi Challapata Querida</h5>
-                <p class="card-text">Kalchas - Mi Challapata Querida</p>
-              </div>
-              <div class="card-footer">
-                <audio controls class="w-100">
-                  <source src="imagenes/audios/kalchas%20-%20Mi%20Challapata%20querida.mp3" type="audio/mpeg">
-                  Tu navegador no soporta el elemento de audio.
-                </audio>
-              </div>
-            </div>
 
-            <!-- Tarjeta 2 -->
-            <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up">
-              <div class="card-body">
-                <h5 class="card-title">Mi Challapata Querida</h5>
-                <p class="card-text">kilapaya - Mi Challapata Querida</p>
-              </div>
-              <div class="card-footer bg-white border-top-0">
-                <audio controls class="w-100">
-                  <source src="imagenes/audios/kilapaya%20-%20Mi%20Challapata%20querida.mp3" type="audio/mpeg">
-                  Tu navegador no soporta el elemento de audio.
-                </audio>
-              </div>
-            </div>
 
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-md">
+
+    <h3 class="mb-4 text-white text-center" style="border-radius: 10px;">
+      Melodías de Nuestra Tierra
+    </h3>
+  <div class="row">
+    <!-- Tarjeta de audio 1 -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm card-hover" style="width: 100%;" data-aos="fade-up">
+        <div class="card-body">
+          <h5 class="card-title">Mi Challapata Querida</h5>
+          <p class="card-text">Kalchas - Mi Challapata Querida</p>
+        </div>
+        <div class="card-footer">
+          <audio controls class="w-100">
+            <source src="imagenes/audios/Kalchas%20-%20Mi%20Challapata%20querida.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+          </audio>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarjeta de audio 2 -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm card-hover" style="width: 100%;" data-aos="fade-up">
+        <div class="card-body">
+          <h5 class="card-title">Mi Challapata Querida</h5>
+          <p class="card-text">Kilapaya - Mi Challapata Querida</p>
+        </div>
+        <div class="card-footer bg-white border-top-0">
+          <audio controls class="w-100">
+            <source src="imagenes/audios/Kilapaya%20-%20Mi%20Challapata%20querida.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+          </audio>
         </div>
       </div>
     </div>

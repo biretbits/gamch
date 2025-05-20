@@ -56,6 +56,7 @@ function crearDataBase(){
   crearTablaSalarios($conn);
   crearTablaTurismo($conn);
   crearTableCultura($conn);
+  crearTablaConsultas($conn);
 
 echo "Se completo las acciones correctamente, se creo todo";
   // Cerrar conexión
@@ -808,6 +809,86 @@ if ($conn->multi_query($sql)) {
 } else {
     echo "Error al ejecutar el SQL: " . $conn->error;
 }
+
+}
+
+
+function crearTablaConsultas($conn){
+  $sql = "
+  DROP TABLE IF EXISTS `consultas`;
+  CREATE TABLE `consultas` (
+    `cod_cons` int(11) NOT NULL AUTO_INCREMENT,
+    `consulta` text DEFAULT NULL,
+    `respuesta_consulta` text DEFAULT NULL,
+    PRIMARY KEY (`cod_cons`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  ";
+
+  // Ejecutar consulta
+  if ($conn->multi_query($sql)) {
+      do {
+          // almacenar resultados si hay alguno
+          if ($result = $conn->store_result()) {
+              $result->free();
+          }
+          // imprimir errores
+          if ($conn->error) {
+              echo "Error: " . $conn->error;
+          }
+      } while ($conn->more_results() && $conn->next_result());
+  } else {
+      echo "Error al ejecutar SQL: " . $conn->error;
+  }
+
+  // SQL para insertar datos en la tabla `consultas`
+  $sql_inserts = "
+  LOCK TABLES `consultas` WRITE;
+  /*!40000 ALTER TABLE `consultas` DISABLE KEYS */;
+  INSERT INTO `consultas` VALUES(1, 'hola', 'hola, en que puedo ayudarte');
+  INSERT INTO `consultas` VALUES(2, 'como estas', 'estoy bien y tu');
+  INSERT INTO `consultas` VALUES(3, 'yo estoy bien', 'que bien me alegra escuchar que estes bien');
+  INSERT INTO `consultas` VALUES(4, 'cual es tu nombre', 'mi nombre es chatbot GAMCH');
+  INSERT INTO `consultas` VALUES(5, '', 'en que mas podria ayudarte');
+  INSERT INTO `consultas` VALUES(6, 'Elije una de las opciones en las que te podria ayudar', '');
+  INSERT INTO `consultas` VALUES(7, 'quisiera mas informacion sobre el centro de salud', 'le pido que especifique su consulta');
+  INSERT INTO `consultas` VALUES(8, 'como te llamas', 'me llamo chatbot GAMCH');
+  INSERT INTO `consultas` VALUES(9, 'cual es tu nombre', 'me llamo chatbot cala cala');
+  INSERT INTO `consultas` VALUES(10, 'me podrias dar los horarios de atencion', 'los horarios de atencion son por la mañana desde las 8:00 a 12:00 y por la tarde de 14:00 a 18:00');
+  INSERT INTO `consultas` VALUES(11, 'como te encuentras', 'yo estoy bien');
+  INSERT INTO `consultas` VALUES(12, 'en que lugar se encuentra la ciudad de challapata', 'la ubicacion esta en Challapata');
+  INSERT INTO `consultas` VALUES(13, 'cuantos años tienes', 'No se sabe mi edad porque soy un chatbot');
+  INSERT INTO `consultas` VALUES(14, 'en donde vives', 'soy parte de la alcaldia de challapata');
+  INSERT INTO `consultas` VALUES(15, 'eres persona', 'soy una ia');
+  INSERT INTO `consultas` VALUES(16, 'quien te creo', 'fui creado en la alcaldia de challapata');
+  INSERT INTO `consultas` VALUES(17, 'tiene mujer o esposa', 'no tengo respuesta para esa pregunta');
+  INSERT INTO `consultas` VALUES(18, 'donde te encuentras', 'estoy ubicado en la alcaldia de challapata');
+  INSERT INTO `consultas` VALUES(19, 'que tecnologias se uso para tu creacion', 'no tengo una respuesta para esa pregunta');
+
+  INSERT INTO `consultas` VALUES(20, 'que servicios brindan en la alcandia', 'tenemos los servicios de pagos de impuestos inmubiliarios, pago de vehiculos, compra de terreno en el cementerio, para mas informacion preguntar directamente en la alcaldia de challapata');
+  INSERT INTO `consultas` VALUES(21, 'cuantas secretarias se tiene en la alcaldia', 'se tiene 4 secretarias, de finanzas, de desarrollo productivo, obras publicas, y de desarrollo humano y social');
+  INSERT INTO `consultas` VALUES(22, 'cual es tu sexo', 'no tengo sexo soy una ia chatbot');
+  INSERT INTO `consultas` VALUES(23, 'donde esta ubicado la alcaldia', 'Alcaldía de Challapata, Plaza Eduardo Avaroa, Esquina Av. Mariano Baptista');
+  INSERT INTO `consultas` VALUES(24, 'en que departamento se encuentra challapata', 'en oruro');
+  INSERT INTO `consultas` VALUES(25, 'cuantas sub alcaldias se tiene', 'se cuenta con 9 sub alcaldias');
+  /*!40000 ALTER TABLE `consultas` ENABLE KEYS */;
+  UNLOCK TABLES;
+  ";
+
+  // Ejecutar inserciones
+  if ($conn->multi_query($sql_inserts)) {
+      do {
+          // almacenar resultados si hay alguno
+          if ($result = $conn->store_result()) {
+              $result->free();
+          }
+          // imprimir errores
+          if ($conn->error) {
+              echo "Error: " . $conn->error;
+          }
+      } while ($conn->more_results() && $conn->next_result());
+  } else {
+      echo "Error al ejecutar SQL: " . $conn->error;
+  }
 
 }
 

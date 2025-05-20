@@ -505,7 +505,7 @@ echo "</div>
   public static function SeguirLeyendodOCUMENTO($id){
     $us = new Documento();
     $resul = $us->SeleccionarNoticiasNuevasID($id);
-    require("vista/noticia/cliente/SeguirLeyendo.php");
+    require("vista/noticia/cliente/seguirLeyendo.php");
 
   }
 

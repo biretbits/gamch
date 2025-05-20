@@ -61,6 +61,9 @@
 </head>
 
 <body>
+
+  <button type="button" class="btn btn-primary" id="openChatbot">💬</button>
+
   <div class="col-12 bg-white text-end py-2 px-3">
   <?php
   if (isset($_SESSION['usuario']) && $_SESSION['usuario'] != '') {
@@ -79,57 +82,19 @@
   ?>
 </div>
 
-<header id="header" class="position-relative">
+<header id="header">
   <div class="container-fluid p-0">
+    <div class="banner d-flex align-items-center position-relative">
+      <img id="escudo" src="/imagenes/gamch/Escudo%20Challapata%202025.webp"
+           width="100" height="135" class="protected-image mb-2" alt="Escudo Challapata 2025">
 
-    <!-- Contenedor del carrusel con fondo -->
-    <div class="position-relative">
-
-      <!-- Carrusel Bootstrap -->
-      <div id="carouselHeader" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="/imagenes/img-challapata/frontisALEJADO.jpg"
-                 class="d-block w-100"
-                 style="height: 40vh; object-fit: cover; filter: brightness(0.85);"
-                 alt="Imagen 1">
-          </div>
-          <div class="carousel-item">
-            <img src="/imagenes/img-challapata/monumento3.jpg"
-                 class="d-block w-100"
-                 style="height: 40vh; object-fit: cover; filter: brightness(0.85);"
-                 alt="Imagen 2">
-          </div>
-          <div class="carousel-item">
-            <img src="/imagenes/img-challapata/PLAZA.jpg"
-                 class="d-block w-100"
-                 style="height: 40vh; object-fit: cover; filter: brightness(0.85);"
-                 alt="Imagen 3">
-          </div>
-        </div>
-
-        <!-- Controles -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselHeader" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon"></span>
-          <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselHeader" data-bs-slide="next">
-          <span class="carousel-control-next-icon"></span>
-          <span class="visually-hidden">Siguiente</span>
-        </button>
+      <div class="banner-text ms-3">
+        <h1 class="banner-title text-white mb-2">Gobierno Autónomo Municipal de Challapata</h1>
+        <!--<button class="banner-button btn btn-primary">Iniciar sesión</button>-->
       </div>
 
-      <!-- Escudo y texto sobre el carrusel -->
-      <div class="position-absolute top-50 start-50 translate-middle text-center z-3">
-        <img id="escudo" src="/imagenes/gamch/Escudo%20Challapata%202025.webp"
-             width="100" height="135" class="protected-image mb-2" alt="Escudo Challapata 2025">
-             <h1 class="text-white"
-         style="font-size: 20px; font-family: Aldrich, sans-serif; text-shadow: 2px 2px 5px rgba(0, 0, 0, 1);">
-       GOBIERNO AUTÓNOMO MUNICIPAL DE CHALLAPATA
-     </h1>
-
-      </div>
-
+      <div class="wisp-effect"></div>
+      <div class="gradient-overlay"></div>
     </div>
   </div>
 </header>
@@ -198,9 +163,9 @@
                     <li title='PRESUPUESTO - POA'><a  href='/PRESUPUESTO-POA'>PRESUPUESTO - POA</a></li>
                     <li title='UNIDAD DE AUDITORIA INTERNA'><a  href='/UNIDAD-DE-AUDITORIA-INTERNA'>UNIDAD DE AUDITORIA INTERNA</a></li>
                 </ul>
-            </li>
+            </li>";
 
-            <li><a href='/contacto'><i class='fa fa-envelope'></i> CONTACTOS</a></li>";
+            //<li><a href='/contacto'><i class='fa fa-envelope'></i> CONTACTOS</a></li>";
 
         if (isset($_SESSION['id']) && $_SESSION['id'] != '' &&
             isset($_SESSION['especial']) && $_SESSION['especial'] == 'acceso-total' &&
@@ -282,59 +247,234 @@
 
     <!-- Scripts para menú -->
     <script>
-    // Mostrar u ocultar el menú principal (modo móvil)
-$('.handle').on('click', function () {
-$('nav ul').toggleClass('showing');
-});
+          // Mostrar u ocultar el menú principal (modo móvil)
+      $('.handle').on('click', function () {
+      $('nav ul').toggleClass('showing');
+      });
 
-// Manejar clics en los elementos del menú
-$('nav ul li').on('click', function (e) {
-const hasSubmenu = $(this).hasClass('has-submenu');
+      // Manejar clics en los elementos del menú
+      $('nav ul li').on('click', function (e) {
+      const hasSubmenu = $(this).hasClass('has-submenu');
 
-if (hasSubmenu) {
-    e.preventDefault(); // Evita que se siga el enlace
+      if (hasSubmenu) {
+          e.preventDefault(); // Evita que se siga el enlace
 
-    // Mostrar u ocultar el submenú solo para el elemento actual
-    if ($(this).hasClass('active')) {
-        $(this).removeClass('active');
-        $(this).children('ul').slideUp(); // Oculta submenú
-    } else {
-        // Oculta otros submenús
-        $('.has-submenu').removeClass('active').children('ul').slideUp();
+          // Mostrar u ocultar el submenú solo para el elemento actual
+          if ($(this).hasClass('active')) {
+              $(this).removeClass('active');
+              $(this).children('ul').slideUp(); // Oculta submenú
+          } else {
+              // Oculta otros submenús
+              $('.has-submenu').removeClass('active').children('ul').slideUp();
 
-        // Muestra el submenú actual
-        $(this).addClass('active');
-        $(this).children('ul').slideDown();
-    }
-} else {
-    const link = $(this).find('a').attr('href');
-    if (link && link !== '#') {
-        window.location.href = link;
-    }
-}
-});
+              // Muestra el submenú actual
+              $(this).addClass('active');
+              $(this).children('ul').slideDown();
+          }
+      } else {
+          const link = $(this).find('a').attr('href');
+          if (link && link !== '#') {
+              window.location.href = link;
+          }
+      }
+      });
 
 
-window.addEventListener('scroll', function () {
-    const navbar = document.getElementById('header');
-    const floatingLogo = document.getElementById('floating-logo');
+      window.addEventListener('scroll', function () {
+          const navbar = document.getElementById('header');
+          const floatingLogo = document.getElementById('floating-logo');
 
-    if (!navbar || !floatingLogo) return;
+          if (!navbar || !floatingLogo) return;
 
-    const rect = navbar.getBoundingClientRect();
+          const rect = navbar.getBoundingClientRect();
 
-    if (rect.bottom < 0) {
-      floatingLogo.classList.add('show');
-    } else {
-      floatingLogo.classList.remove('show');
-    }
-  });
+          if (rect.bottom < 0) {
+            floatingLogo.classList.add('show');
+          } else {
+            floatingLogo.classList.remove('show');
+          }
+        });
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const openButton = document.getElementById('openChatbot');
+            const closeButton = document.getElementById('closeChatbot');
+            const chatbotContainer = document.getElementById('chatbotContainer');
+
+            // Función para abrir el chatbot
+            openButton.addEventListener('click', function () {
+                chatbotContainer.classList.remove('d-none');
+                chatbotContainer.classList.add('d-block');
+            });
+
+            // Función para cerrar el chatbot
+            closeButton.addEventListener('click', function () {
+                chatbotContainer.classList.remove('d-block');
+                chatbotContainer.classList.add('d-none');
+            });
+
+            // También puedes hacer que el chatbot se cierre si se hace clic fuera de él, si así lo deseas
+            document.addEventListener('click', function (event) {
+                if (!chatbotContainer.contains(event.target) && !openButton.contains(event.target)) {
+                    chatbotContainer.classList.remove('d-block');
+                    chatbotContainer.classList.add('d-none');
+                }
+            });
+        });
+
+</script>
+<script>
+
+        function enviar() {
+          var va = document.getElementById("data").value;
+          if (va == '') {
+            alertInfo();
+            return;
+          }
+
+          var msg = '<div class="user-inbox inbox"><div class="msg-header"><p>' + va + '</p></div></div>';
+          $(".form").append(msg);
+          $("#data").val('');
+
+          var datos = new FormData();
+          datos.append("mensaje", va);
+
+          $.ajax({
+            cache: false,
+            url: '/msu',
+            datatype: "html",
+            type: 'POST',
+            data: datos,
+            contentType: false,
+            processData: false,
+            success: function(result) {
+              result=$.trim(result);
+              pedirRespuesta(result);
+            }
+          });
+        }
+
+        const apiKey = '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';
+      const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+
+      async function pedirRespuesta(respuesta) {
+        const textoBase = respuesta;
+
+        const prompt = `
+      Eres un asistente oficial del Gobierno Autónomo Municipal de Challapata.
+      Por favor, responde de forma clara, formal y profesional a la siguiente información.
+
+      Información: "${textoBase}"
+      Devuelve únicamente la información reformulada, sin saludos ni despedidas.
+      `;
+
+        const data = {
+          model: "google/gemma-2-9b-it:free",
+          messages: [
+            { role: "user", content: prompt.trim() }
+          ]
+        };
+
+        try {
+          const respuesta = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+              "HTTP-Referer": "https://tusitio.com",
+              "X-Title": "MiAppOpenRouter"
+            },
+            body: JSON.stringify(data)
+          });
+
+          if (!respuesta.ok) {
+            console.warn("Fallo la petición a la IA. Mostrando texto original.");
+            mostrarResultado(textoBase);
+            mostrarResultado("Error: " + data.error);
+            return;
+          }
+
+          const resultado = await respuesta.json();
+          console.log("Respuesta completa de la API:", resultado);
+
+          const contenido = resultado?.choices?.[0]?.message?.content?.trim() || "No hay respuesta disponible";
+          if(contenido == "No hay respuesta disponible"){
+            mostrarResultado(textoBase);
+          }else{
+            mostrarResultado(contenido);
+          }
+        } catch (error) {
+          console.error("Error al consultar la IA:", error);
+          mostrarResultado(`Error: ${error.message}`);
+        }
+      }
+
+            function mostrarResultado(texto) {
+
+                  $(".form").append('<span class="mensaje-espere">....</span>');
+                  $(".form").scrollTop($(".form")[0].scrollHeight);
+                  setTimeout(function() {
+                    $(".mensaje-espere").remove();
+                    var replay = '<div class="bot-inbox inbox"><div class="icon"><img src="imagenes/gamch/chat.png"style="height: 25px;width: 25px; transform: translateY(3px);"></div><div class="msg-header"><p>' + texto + '</p></div></div>';
+                    $(".form").append(replay);
+                    $(".form").scrollTop($(".form")[0].scrollHeight);
+                  }, 1500);
+            }
+      /*
+            document.addEventListener("DOMContentLoaded", () => {
+              pedirRespuesta();
+            });*/
     </script>
 
     <script>
       AOS.init();
     </script>
+
+    <div id="chatbotContainer" class="chatbot-container d-none">
+          <div class="chatbot-header">
+              <h5>Chatbot</h5>
+              <button type="button" class="btn-close" id="closeChatbot"></button>
+          </div>
+          <div class="chatbot-body">
+              <div class="wrapper">
+                  <div class="form">
+                      <div class="bot-inbox inbox">
+                          <div class="icon">
+                              <img src='imagenes/gamch/chat.png'style='height: 25px;width: 25px;'>
+                          </div>
+                          <div class="msg-header">
+                              <p>Hola, Bienvenido</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="chatbot-footer">
+              <input id="data" class='form-control' type="text" onkeydown="checkEnter(event)" placeholder="Escriba su consulta">
+              <button id="send-btn" width='20px' height='20px'class='btn btn-primary' onclick="enviar()" style='background:Teal'>Enviar</button>
+          </div>
+      </div>
+
+  <style media="screen">
+  .mensaje-espere {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #3498db; /* Puedes cambiar el color si lo prefieres */
+    animation: moverTexto 2s linear infinite;
+  }
+
+  @keyframes moverTexto {
+    0% {
+        transform: translateX(0); /* Empieza en la posición original */
+    }
+    50% {
+        transform: translateX(20px); /* Se mueve 20px a la derecha */
+    }
+    100% {
+        transform: translateX(0); /* Regresa a la posición original */
+    }
+  }
+  </style>
     <!--
     <div id="loader">
     <div class="spinner">

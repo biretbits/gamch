@@ -19,6 +19,7 @@ require_once "controlador/servicio.controlador.php";
 require_once "controlador/normativa.controlador.php";
 require_once "controlador/transparente.controlador.php";
 require_once "controlador/secretaria.controlador.php";
+require_once "controlador/chat.controlador.php";
     //require('vista/principal/sql.php');
     //include('vista/principal/principalClinica.php');
 
@@ -350,6 +351,8 @@ if (
   SecretariaControlador::visualizarSOP();
 }else if($_GET["accion"] == "SF"){
   SecretariaControlador::visualizarSF();
+}else if($_GET["accion"] == "msu"){
+  ChatControlador::MensajeUsuario($_POST["mensaje"]);
 }
 else {
     IndexControlador::visualizarPrincipal();

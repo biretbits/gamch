@@ -40,7 +40,7 @@ require_once('vista/esquema/header.php');
 <div class="container-md" >
   <!-- Fila superior -->
   <div class="row">
-    <div class="col-md-4 mb-4">
+    <!--<div class="col-md-4 mb-4">
       <div class="card service-card" data-category="recaudaciones">
         <div class="card-body text-center">
           <h3>Pago de Impuestos</h3>
@@ -50,15 +50,15 @@ require_once('vista/esquema/header.php');
             descripcion: 'es el registro de vehiculos',
           titulo: 'PAGO DE IMPUESTOS',
           requisitos: 'cedula de identidad.solicitud dirigida al alcalde.',
-          documentacion: 'fotocopia de carnet',
+
           contacto:'67788967-73458798',
           correo:'ruat@gmail.com',
-          horario:'Lunes a Viernes, 8:00 AM - 5:00 PM',
+          horario:'Lunes a Viernes, Mañana de 8:00 a 12:00 AM - Tarde 2:00 a 6:00 PM',
           imagen : 'imagenes/img-challapata/monumento.jpg',
           })">Más Información</button>
         </div>
       </div>
-    </div>
+    </div>-->
 
     <div class="col-md-4 mb-4">
       <div class="card service-card" data-category="cementerio">
@@ -67,20 +67,20 @@ require_once('vista/esquema/header.php');
           <p>Espacio en el cementerio municipal.</p>
           <button class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#infoModal"
           onclick="mostrar({
-            descripcion: 'es el registro de vehiculos',
+            descripcion: 'El cementerio Municipal es un espacio físico designado y habilitado oficialmente para la inhumación (entierro), resguardo y recordación de los restos mortales de las personas fallecidas. Su propósito fundamental es ofrecer un lugar digno, ordenado y respetuoso para el descanso eterno de los difuntos, enmarcado en principios de humanidad, cultura, espiritualidad y respeto a la memoria.',
           titulo: 'ESPACIO EN EL CEMENTERIO MUNICIPAL',
-          requisitos: 'cedula de identidad.solicitud dirigida al alcalde.',
-          documentacion: 'fotocopia de carnet',
-          contacto:'67788967-73458798',
-          correo:'ruat@gmail.com',
-          horario:'Lunes a Viernes, 8:00 AM - 5:00 PM',
-          imagen : 'imagenes/img-challapata/monumento.jpg',
+          requisitos: 'Compra de espacio en el cementerio. nichos. otros.',
+
+          contacto:'',
+          correo:'',
+          horario:'Lunes a Viernes, Mañana de 8:00 a 12:00 AM - Tarde 2:00 a 6:00 PM',
+          imagen : 'imagenes/img-challapata/cementerio.jpeg',
           })">Más Información</button>
         </div>
       </div>
     </div>
 
-    <div class="col-md-4 mb-4">
+    <!--<div class="col-md-4 mb-4">
       <div class="card service-card" data-category="aseo">
         <div class="card-body text-center">
           <h3>Recolección de Basura</h3>
@@ -90,19 +90,16 @@ require_once('vista/esquema/header.php');
             descripcion: 'es el registro de vehiculos',
           titulo: 'RECOLECCIÓN DE BASURA',
           requisitos: 'cedula de identidad.solicitud dirigida al alcalde.',
-          documentacion: 'fotocopia de carnet',
+
           contacto:'67788967-73458798',
           correo:'ruat@gmail.com',
-          horario:'Lunes a Viernes, 8:00 AM - 5:00 PM',
+          horario:'Lunes a Viernes, Mañana de 8:00 a 12:00 AM - Tarde 2:00 a 6:00 PM',
           imagen : 'imagenes/img-challapata/monumento.jpg',
           })">Más Información</button>
         </div>
       </div>
-    </div>
-  </div>
+    </div>-->
 
-  <!-- Fila inferior -->
-  <div class="row">
     <div class="col-md-4 mb-4">
       <div class="card service-card" data-category="ruat">
         <div class="card-body text-center">
@@ -110,14 +107,13 @@ require_once('vista/esquema/header.php');
           <p>Realiza trámites relacionados con el RUAT.</p>
           <button class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#infoModal"
           onclick="mostrar({
-          descripcion: 'es el registro de vehiculos',
+          descripcion: 'El RUAT es una Institución Pública Descentralizada, no lucrativa con personería jurídica, patrimonio propio y autonomía de gestión administrativa, financiera, legal y técnica, bajo tuición del Ministerio de Economía y Finanzas, la misma que será ejercida por el Viceministerio de Política Tributaria.',
           titulo: 'REGISTRO DE VEHÍCULOS',
-          requisitos: 'cedula de identidad.solicitud dirigida al alcalde.',
-          documentacion: 'fotocopia de carnet',
-          contacto:'67788967-73458798',
+          requisitos: 'INSCRIPCIÓN VEHÍCULOS AUTOMOTORES.INSCRIPCIÓN VEHÍCULOS ELÉCTRICOS NACIONALES.INSCRIPCIÓN MOTOCICLETAS.INSCRIPCIÓN MAQUINARIA PESADA.CAMBIO DE SERVICIO.TRANSFERENCIA VEHÍCULOS AUTOMOTORES.TRANSFERENCIA MOTOCICLETAS.DUPLICADO CERTIFICADO PROPIETARIO.ACTUALIZACIÓN CRPVA.MODIFICACIÓN DE DATOS TÉCNICOS.MODIFICACIÓN DATOS TÉCNICOS POR CAMBIO DE ESTRUCTURA.DUPLICADO PLAQUETA.DUPLICADO PLACA Y PLAQUETA VEHÍCULO.DUPLICADO PLACA Y PLAQUETA MOTOCICLETA.DUPLICADO PLACA Y PLAQUETA MAQUINARIA PESADA.REGULARIZACIÓN DE INSCRIPCIÓN PLACA ANT (ASIGNACIÓN DE PLACA PTA).CAMBIO DE RADICATORIA.REEMPLAQUE.BAJA.',
+          contacto:'',
           correo:'ruat@gmail.com',
-          horario:'Lunes a Viernes, 8:00 AM - 5:00 PM',
-          imagen : 'imagenes/img-challapata/PERDONAZO.jpg',
+          horario:'Lunes a Viernes, Mañana de 8:00 a 12:00 AM - Tarde 2:00 a 6:00 PM',
+          imagen : 'imagenes/img-challapata/RUAT.jpg',
           })">Más Información</button>
         </div>
       </div>
@@ -127,17 +123,17 @@ require_once('vista/esquema/header.php');
       <div class="card service-card" data-category="eventos">
         <div class="card-body text-center">
           <h3>Unidad de Tributaciones</h3>
-          <p>Consulta los eventos municipales programados.</p>
+          <p>Pago de impuestos.</p>
           <button class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#infoModal"
           onclick="mostrar({
-            descripcion: 'UNIDAD DE TRIBUTACIONES',
+            descripcion: 'Encargada de gestionar, controlar y recaudar los tributos municipales.',
           titulo: 'UNIDAD DE TRIBUTACIONES',
-          requisitos: 'cedula de identidad.solicitud dirigida al alcalde.',
-          documentacion: 'fotocopia de carnet',
-          contacto:'67788967-73458798',
-          correo:'ruat@gmail.com',
-          horario:'Lunes a Viernes, 8:00 AM - 5:00 PM',
-          imagen : 'imagenes/img-challapata/PER.jpg',
+          requisitos: 'Impuesto a la Propiedad de Bienes Inmuebles.',
+
+          contacto:'',
+          correo:'',
+          horario:'Lunes a Viernes, Mañana de 8:00 a 12:00 AM - Tarde 2:00 a 6:00 PM',
+          imagen : 'imagenes/img-challapata/RUAT.jpg',
           })">Más Información</button>
         </div>
       </div>
@@ -192,11 +188,11 @@ require_once('vista/esquema/header.php');
     </ul>-->
 
     <h6><strong>Contacto:</strong></h6>
-    <p id="modalContacto">Celular: (123) 456-7890</p>
-    <p id="modalCorreo">Correo electrónico: contacto@ejemplo.com</p>
+    <p id="modalContacto">Celular: </p>
+    <p id="modalCorreo">Correo electrónico: </p>
 
     <h6><strong>Horario de atención:</strong></h6>
-    <p id="modalHorario">Lunes a Viernes, 8:00 AM - 5:00 PM</p>
+    <p id="modalHorario"></p>
   </div>
 
       <div class="modal-footer">
@@ -224,23 +220,11 @@ require_once('vista/esquema/header.php');
       }
     });
 
-    // Actualiza la documentación
-    let documentacionList = document.getElementById('modalDocumentacion');
-    documentacionList.innerHTML = ''; // Limpia la lista antes de agregar nuevos ítems
-    data.documentacion.split('.').forEach(doc => {
-      if (doc.trim()) {
-        let li = document.createElement('li');
-        li.textContent = doc.trim();
-        documentacionList.appendChild(li);
-      }
-    });
-
     // Actualiza el contacto
     document.getElementById('modalContacto').textContent = `Celular: ${data.contacto}`;
 
     // Actualiza el correo
     document.getElementById('modalCorreo').textContent = `Correo electrónico: ${data.correo}`;
-
     // Actualiza el horario
     document.getElementById('modalHorario').textContent = data.horario;
     document.getElementById('img').src = data.imagen;
