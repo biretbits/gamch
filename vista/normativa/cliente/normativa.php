@@ -37,46 +37,43 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
 }
 
 </style>
-<br>
-  <div class="row g-4" style="background:white">
-    <input type="hidden" name="paginas" id='paginas' value="">
-    <div class="container-md" style="style="padding:20px"">
-      <div class="row justify-content-start">
-        <div class="col-auto">
-          <div class="d-flex align-items-end gap-3">
-            <!-- Select de cantidad -->
-
-            <div class="">
-              <?php echo str_replace("-", " ", $categoria); ?>
-            </div>
-            <div>
-              <select class="form-select form-select-sm" id="selectList" name="selectList" onchange="BuscarUsuarios(1)">
-                <option selected disabled>--</option>
-                <option>5</option>
-                <option>10</option>
-                <option>25</option>
-                <option>50</option>
-                <option>100</option>
-                <option>250</option>
-                <option>500</option>
-                <option>1000</option>
-              </select>
-            </div>
-
-            <!-- Campo de búsqueda -->
-            <div>
-              <div class="input-group input-group-sm">
-                <input type="text" class="form-control" id="buscar" name="buscar" placeholder="Buscar..." onkeyup="BuscarUsuarios(1)">
-                <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+<div class="row justify-content-start" style="background:white;padding:5px">
     <!-- Columna Izquierda: Lista de PDFs -->
     <div class="col-lg-6">
+      <div class="bg-success text-white p-3 rounded">
+     <div class="d-flex align-items-end gap-3 w-100">
+
+       <!-- Texto o categoría -->
+       <div class="flex-grow-1 fw-bold">
+         <?php echo str_replace("-", " ", $categoria); ?>
+       </div>
+
+       <!-- Select de cantidad -->
+       <div style="min-width: 100px;">
+         <select class="form-select form-select-sm" id="selectList" name="selectList" onchange="BuscarUsuarios(1)">
+           <option selected disabled>--</option>
+           <option>5</option>
+           <option>10</option>
+           <option>25</option>
+           <option>50</option>
+           <option>100</option>
+           <option>250</option>
+           <option>500</option>
+           <option>1000</option>
+         </select>
+       </div>
+
+       <!-- Campo de búsqueda -->
+       <div class="flex-grow-1">
+         <div class="input-group input-group-sm">
+           <input type="text" class="form-control" id="buscar" name="buscar" placeholder="Buscar..." onkeyup="BuscarUsuarios(1)">
+           <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+         </div>
+       </div>
+
+     </div>
+   </div>
+     <br>
       <div id='viewTabla'>
         <?php   if ($resul && mysqli_num_rows($resul) > 0) { ?>
           <?php while($fi = mysqli_fetch_array($resul)){ ?>
@@ -322,6 +319,7 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
       </div>
     </div>
   </div>
+</div>
 </div>
 
 

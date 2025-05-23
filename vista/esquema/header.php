@@ -64,27 +64,30 @@
 
   <button type="button" class="btn btn-primary" id="openChatbot">💬</button>
 
-  <div class="col-12 bg-white text-end py-2 px-3">
-  <?php
-  if (isset($_SESSION['usuario']) && $_SESSION['usuario'] != '') {
-      $name = $_SESSION['usuario'];
-      echo "
-        <span class='me-3'>👤 Hola <strong>$name</strong></span>
-        <a href='/salir' class='btn btn-sm btn-outline-danger'>
-          <i class='fas fa-power-off'></i> Cerrar sesión
-        </a>";
-  } else {
-      echo "
-        <a href='/iniciar' class='btn btn-sm btn-primary'>
-          <i class='fas fa-sign-in-alt'></i> Iniciar sesión
-        </a>";
-  }
-  ?>
-</div>
 
 <header id="header">
+
   <div class="container-fluid p-0">
+
     <div class="banner d-flex align-items-center position-relative">
+
+      <div class="position-absolute top-0 end-0  text-end">
+      <?php
+      if (isset($_SESSION['usuario']) && $_SESSION['usuario'] != '') {
+      $name = $_SESSION['usuario'];
+      echo "
+        <span class='me-2' style='font-size:11px'>👤 Hola <strong>$name</strong></span>
+        <a href='/salir' style='font-size:11px' class='btn btn-sm btn-outline-danger'>
+          <i class='fas fa-power-off'></i> Cerrar sesión
+        </a>";
+      } else {
+      echo "
+        <a href='/iniciar' style='font-size:11px' class='btn btn-sm btn-outline-primary'>
+          <i class='fas fa-sign-in-alt'></i> Iniciar sesión
+        </a>";
+      }
+      ?>
+      </div>
       <img id="escudo" src="/imagenes/gamch/Escudo%20Challapata%202025.webp"
            width="100" height="135" class="protected-image mb-2" alt="Escudo Challapata 2025">
 
