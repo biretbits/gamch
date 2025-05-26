@@ -201,9 +201,16 @@ require_once('vista/esquema/header.php');
                       data-bs-toggle='modal'
                       data-bs-target='#ModalRegistro'
                       onclick='accionBtnEditar(" . json_encode($datos) . ")'>
-                      <i class='fas fa-edit'></i>
-                  </button>
-              </div>";
+                      <i class='fas fa-edit'></i> Editar
+                  </button>";
+                  echo "<button type='button'
+                       class='btn btn-danger btn-sm shadow-sm'
+                       title='Eliminar'
+                       onclick='accionBtnActivar(
+                             \"".$fi["id"]."\"
+                           )'>
+                   <i class='fas fa-trash-alt'></i> Eliminar</button>";
+              echo "</div>";
 
 
                   echo "</div>";
@@ -366,33 +373,29 @@ function BuscarUsuarios(page){
   function visforUsuario(){
      location.href="../controlador/usuario.controlador.php?accion=vfu" ;
    }
-   //$pagina,$listarDeCuanto
-   //funcion para activar o desactivar el usuario o dar de baja
-   function accionBtnActivar(accion,pagina,listarDeCuanto,cod_usuario){
-     var buscar = document.getElementById("buscar").value;
-     var datos = new FormData(); // Crear un objeto FormData vacío
-     datos.append('accion', accion);
-     datos.append("pagina",pagina);
-     datos.append("listarDeCuanto",listarDeCuanto);
-     datos.append("buscar",buscar);
-     datos.append("cod_usuario",cod_usuario);
-     $.ajax({
-       url: "index.php?accion=del",
-       type: "POST",
-       data: datos,
-       contentType: false, // Deshabilitar la codificación de tipo MIME
-       processData: false, // Deshabilitar la codificación de datos
-       success: function(data) {
-     //  alert(data+"dasdas");
-     	   data=$.trim(data);
-         if(data == "error"){
-           error();
+   //$pagina,$listarDeCuanto //funcion para activar o desactivar el usuario o dar de baja
+    function accionBtnActivar(id){
+      var datos = new FormData(); // Crear un objeto FormData vacío
+      datos.append('id', id);
+      $.ajax({
+        url: "/eliminarDocumentosTransparente",
+        type: "POST",
+        data: datos,
+        contentType: false, // Deshabilitar la codificación de tipo MIME
+        processData: false, // Deshabilitar la codificación de datos
+        success: function(data) {
+      //  alert(data+"dasdas");
+          data=$.trim(data);
+         // alert(data);
+          if(data == "correcto"){
+            alertaValidacion("success","Acción realizada con éxito","Correcto")
+            IRalLink(id);
          }else{
-           $("#verDatos").html(data);
+           alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
          }
-       }
-     });
-   }
+        }
+      });
+    }
 
  //funcion para verificar si el usuario existe o no y despues poder editar sus datos
 
@@ -477,14 +480,21 @@ function BuscarUsuarios(page){
        success: function(data) {
          data = $.trim(data);
          console.log(data);
-        if(data == "correcto"){
-           alert("accion realizada con exito");
-        }else if(data == "error"){
-           alert("ocurio un error al insertar datos");
-        }else{
-          alert(data);
-        }
-        IRalLink(id);
+         //alert(data);
+         if(data == "correcto"){
+           alertaValidacion("success","Acción realizada con éxito","Correcto")
+           IRalLink(id);
+          }else if(data == "vacio"){
+            alertaValidacion("warning","Algun campo vacio","Complete los campos")
+          }else if(data == "Solo_se_permite_PDF"){
+            alertaValidacion("warning","Error con el archivo Seleccionado","Solo se permite archivos de Tipo PDF.")
+          }else if(data == "No_se_recibio_ningun_archivo"){
+            alertaValidacion("warning","Seleccione un archivo","No se selecciono un archivo")
+          }else if(data == "archivo_pesado"){
+            alertaValidacion("warning","Seleccion un archivo menor a 10 mb","Archivo muy grande")
+          }else{
+            alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
+          }
        }
      });
 
@@ -558,8 +568,13 @@ function BuscarUsuarios(page){
     });
    });
 
-
-function vaciarRemision(){
-}
-
+   function alertaValidacion(icono,texto,titulo){
+    Swal.fire({
+     icon: icono,
+     title: titulo,
+     text: texto,
+     showConfirmButton: false,
+     timer: 2000
+   });
+   }
 </script>

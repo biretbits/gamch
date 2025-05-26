@@ -24,39 +24,42 @@ class DocumentoControlador{
 
   public static function registrarDocumentos($a){
     $us = new Documento();
-    $r = "vista/activos/Documentos/";
+    $r = "";
     $usuario_id = $_SESSION["usuario_id"];
+    $nombreUnico = "";
     if (isset($_FILES['archivo'])) {
       $archivo = $_FILES["archivo"];
-
+      $r = "vista/activos/Documentos/";
         if ($archivo['type'] === 'application/pdf') {
           $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
           $nombreUnico = bin2hex(random_bytes(16)) . '.' . $extension;
             $r = $r.$nombreUnico;
             move_uploaded_file($archivo['tmp_name'], $r);
-            $resul = $us->registrar($a,$r,$usuario_id,$nombreUnico);
-            if($resul){
-              echo "correcto";
-            }else{
-              echo "error";
-            }
         } else {
-            echo "Solo se permite PDF.";
+            echo "Solo_se_permite_PDF";return;
         }
     } else {
       if($a["id"] == ""){
-        echo "No se recibió ningún archivo.";
-      }else{//si no se tiene el id esta actualizando y al actualizar es valido que no haya archivo
-        //no mandamos la ruta nu el nombre_del archivo
-        $resul = $us->registrar($a,'',$usuario_id,"");
-        if($resul){
-          echo "correcto";
-        }else{
-          echo "error";
-        }
+        echo "No_se_recibio_ningun_archivo";
+        return;
       }
     }
 
+    $data = ["categoria", "cod", "descripcion", "fecha_creacion","nombre_documento","publicar","estado"];
+    $vacio = false;
+    foreach ($data as $campo) {
+      if (empty($a[$campo])) {
+        $vacio = true;
+        break;
+      }
+    }
+
+    if ($vacio) {
+      echo "vacio";
+    } else {
+        $resul = $us->registrar($a,$r,$usuario_id,$nombreUnico);
+      echo $resul ? "correcto" : "error";
+    }
   }
 
   public static function BuscarDoc($pagina,$listarDeCuanto,$buscar){
@@ -378,13 +381,22 @@ echo "</div>
                   ];
 
                   echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                      <button type='button' class='btn btn-info btn-sm shadow-sm' title='Editar'
+                      <button type='button'
+                          class='btn btn-info btn-sm shadow-sm'
+                          title='Editar'
                           data-bs-toggle='modal'
                           data-bs-target='#ModalRegistro'
                           onclick='accionBtnEditar(" . json_encode($datos) . ")'>
-                          <i class='fas fa-edit'></i>
-                      </button>
-                  </div>";
+                          <i class='fas fa-edit'></i> Editar
+                      </button>";
+                      echo "<button type='button'
+                           class='btn btn-danger btn-sm shadow-sm'
+                           title='Eliminar'
+                           onclick='accionBtnActivar(
+                                 \"".$fi["id"]."\"
+                               )'>
+                       <i class='fas fa-trash-alt'></i> Eliminar</button>";
+                  echo "</div>";
 
 
                     echo "</div>";
@@ -651,6 +663,17 @@ echo "</div>
     echo '</div>';
 
   }
+
+  public static function eliminarDocumentosGac($id){
+    $us = new Documento();  // Creando una nueva instancia de la clase Usuario
+    $resul = $us->EliminarDocGaceta($id);
+    if($resul){
+      echo "correcto";
+    }else {
+      echo "error";
+    }
+  }
+
 }
 
 

@@ -138,24 +138,40 @@ class TransparenteControlador{
       $archivo = $_FILES["archivo"];
       $r="vista/activos/documento/transparente/";//ruta donde se guardara el archivo
         if ($archivo['type'] === 'application/pdf') {//verificamos si es un pdf
-          $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
-          $nombreUnico = bin2hex(random_bytes(16)) . '.' . $extension;
+          if ($archivo['size'] <= 10485760) {//menor a 10mb
+
+            $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
+            $nombreUnico = bin2hex(random_bytes(16)) . '.' . $extension;
             $r = $r.$nombreUnico;
             move_uploaded_file($archivo['tmp_name'], $r);//movemos el archivo a la ruta $r
+          }else{
+            echo "archivo_pesado";return;
+          }
         } else {
-            echo "Solo se permite PDF.";
+            echo "Solo_se_permite_PDF";return;
         }
     } else {
       if($a["id"] == ""){//si es vacio se quiere registrar
-        echo "No se recibió ningún archivo.";
+        echo "No_se_recibio_ningun_archivo";return;
       }
     }
-    $resul = $us->registrar($a,$usuario_id,$r);
-    if($resul){
-      echo "correcto";
-    }else{
-      echo "error";
-    }
+
+        $data = ["categoria", "cod", "descripcion", "fecha_creacion","nombre_documento","publicar","estado"];
+        $vacio = false;
+
+        foreach ($data as $campo) {
+          if (empty($a[$campo])) {
+            $vacio = true;
+            break;
+          }
+        }
+
+        if ($vacio) {
+          echo "vacio";
+        } else {
+          $resul = $us->registrar($a,$usuario_id,$r);
+          echo $resul ? "correcto" : "error";
+        }
   }
 
   public static function BuscarTransparente($pagina,$listarDeCuanto,$buscar){
@@ -221,9 +237,16 @@ class TransparenteControlador{
                           data-bs-toggle='modal'
                           data-bs-target='#ModalRegistro'
                           onclick='accionBtnEditar(" . json_encode($datos) . ")'>
-                          <i class='fas fa-edit'></i>
-                      </button>
-                  </div>";
+                          <i class='fas fa-edit'></i> Editar
+                      </button>";
+                      echo "<button type='button'
+                           class='btn btn-danger btn-sm shadow-sm'
+                           title='Eliminar'
+                           onclick='accionBtnActivar(
+                                 \"".$fi["id"]."\"
+                               )'>
+                       <i class='fas fa-trash-alt'></i> Eliminar</button>";
+                  echo "</div>";
 
 
                       echo "</div>";
@@ -328,6 +351,17 @@ class TransparenteControlador{
     }
 
   }
+  public static function eliminarDocumentosTra($id){
+    $us = new Transparente();  // Creando una nueva instancia de la clase Usuario
+    $resul = $us->EliminarDocTransaparente($id);
+    if($resul){
+      echo "correcto";
+    }else {
+      echo "error";
+    }
+  }
+
+
 }
 
 

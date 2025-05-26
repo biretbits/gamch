@@ -2,6 +2,53 @@
 require_once('vista/esquema/header.php');
 ?>
 <style>
+  .carousel-container {
+    width: 100vw;
+    height: 90vh;
+    overflow: hidden;
+  }
+
+  .carousel-item img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* En celulares (pantallas de hasta 768px) */
+  @media (max-width: 768px) {
+    .carousel-container {
+      height: 35vh; /* Más bajo en móvil */
+    }
+  }
+</style>
+
+<div class="carousel-container">
+  <div id="carruselBootstrap" class="carousel slide h-100" data-bs-ride="carousel">
+    <div class="carousel-inner h-100">
+      <div class="carousel-item active h-100">
+        <img src="imagenes/img-challapata/frontisALEJADO.jpg" class="d-block" alt="Imagen 1">
+      </div>
+      <div class="carousel-item h-100">
+        <img src="imagenes/img-challapata/monumento.jpg" class="d-block" alt="Imagen 2">
+      </div>
+      <div class="carousel-item h-100">
+        <img src="imagenes/img-challapata/PLAZA1.jpg" class="d-block" alt="Imagen 3">
+      </div>
+    </div>
+
+    <!-- Controles -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carruselBootstrap" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carruselBootstrap" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+</div>
+
+<style>
         /* Estilos adicionales para hacer que la imagen ocupe casi todo el modal */
         .swal2-image {
           width: 100%;

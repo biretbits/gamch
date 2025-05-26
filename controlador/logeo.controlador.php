@@ -36,6 +36,7 @@ class LogeoControlador{
 									$_SESSION["direccion_emp"]=$fii["direccion"];
 									$_SESSION["telefono_emp"]=$fii["telefono"];
 									$_SESSION["correo_electronico_emp"]=$fii["correo_electronico"];
+									$_SESSION["foto"] = $fii["foto"];
 									$_SESSION["id"]=$fi["id"];
 									$_SESSION["empleado_id"]=$fi["empleado_id"];
 									$_SESSION["usuario"]=$fi["usuario"];

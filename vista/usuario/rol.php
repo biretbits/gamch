@@ -65,7 +65,7 @@ require_once('vista/esquema/header.php');
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">Datos de Hoja de Ruta</h6>
+          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">Datos de Roles</h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!-- Contenido del modal -->
@@ -156,6 +156,14 @@ require_once('vista/esquema/header.php');
                  \"".$fi["descripcion"]."\",
                  \"".$fi["especial"]."\")'>
          <i class='fas fa-edit'></i></button>";
+
+         echo "<button type='button'
+              class='btn btn-danger btn-sm shadow-sm'
+              title='Eliminar'
+              onclick='accionBtnActivar(
+                    \"".$fi["id"]."\"
+                  )'>
+          <i class='fas fa-trash-alt'></i> Eliminar</button>";
 
                 echo "</div>";
               echo "</td>";
@@ -311,32 +319,38 @@ function BuscarUsuarios(page){
    }
    //$pagina,$listarDeCuanto
    //funcion para activar o desactivar el usuario o dar de baja
-   function accionBtnActivar(accion,pagina,listarDeCuanto,cod_usuario){
-     var buscar = document.getElementById("buscar").value;
+   function accionBtnActivar(id){
      var datos = new FormData(); // Crear un objeto FormData vacío
-     datos.append('accion', accion);
-     datos.append("pagina",pagina);
-     datos.append("listarDeCuanto",listarDeCuanto);
-     datos.append("buscar",buscar);
-     datos.append("cod_usuario",cod_usuario);
+     datos.append('id', id);
      $.ajax({
-       url: "index.php?accion=del",
+       url: "/eliminarRoles",
        type: "POST",
        data: datos,
        contentType: false, // Deshabilitar la codificación de tipo MIME
        processData: false, // Deshabilitar la codificación de datos
        success: function(data) {
      //  alert(data+"dasdas");
-     	   data=$.trim(data);
-         if(data == "error"){
-           error();
-         }else{
-           $("#verDatos").html(data);
-         }
+         data=$.trim(data);
+        // alert(data);
+         if(data == "correcto"){
+           alertaValidacion("success","Acción realizada con éxito","Correcto")
+           IRalLink(id);
+        }else{
+          alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
+        }
        }
      });
    }
 
+   function alertaValidacion(icono,texto,titulo){
+    Swal.fire({
+     icon: icono,
+     title: titulo,
+     text: texto,
+     showConfirmButton: false,
+     timer: 2000
+   });
+   }
  //funcion para verificar si el usuario existe o no y despues poder editar sus datos
 
    function accionBtnEditar(id,nombre,slug,descripcion,especial){
@@ -408,12 +422,14 @@ function BuscarUsuarios(page){
          data = $.trim(data);
          //alert(data);
          if(data == "correcto"){
-           alert("accion realizada con exito");
+           alertaValidacion("success","Acción realizada con éxito","Correcto")
+           IRalLink(id);
+        }else if(data == "vacio"){
+          alertaValidacion("warning","Algun campo vacio","Complete los campos")
         }else{
-           alert("ocurio un error al insertar datos");
+          alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
         }
-        IRalLink(id);
-       }
+      }
      });
 
    }

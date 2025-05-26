@@ -87,7 +87,9 @@ require_once('vista/esquema/header.php');
                    <option value=""></option>
                  </select>
                </div>
-
+               <div class="input-group input-group-sm mb-3">
+                 <h6 id='edi'></h6>
+              </div>
              </form>
            </div>
          </div>
@@ -151,10 +153,16 @@ require_once('vista/esquema/header.php');
 
                    \"".$fi["id"]."\",
                  \"".$fi["rol_id"]."\",
-                 \"".$fi["usuario_id"]."\",
-                 \"".$fi["rol_descripcion"]."\")'>
+                 \"".$fi["usuario_id"]."\",\"\",   \"\"
+                )'>
          <i class='fas fa-edit'></i></button>";
-
+         echo "<button type='button'
+              class='btn btn-danger btn-sm shadow-sm'
+              title='Eliminar'
+              onclick='accionBtnActivar(
+                    \"".$fi["id"]."\"
+                  )'>
+          <i class='fas fa-trash-alt'></i> Eliminar</button>";
                 echo "</div>";
               echo "</td>";
             echo "</tr>";
@@ -315,16 +323,11 @@ function BuscarUsuarios(page){
    }
    //$pagina,$listarDeCuanto
    //funcion para activar o desactivar el usuario o dar de baja
-   function accionBtnActivar(accion,pagina,listarDeCuanto,cod_usuario){
-     var buscar = document.getElementById("buscar").value;
+   function accionBtnActivar(id){
      var datos = new FormData(); // Crear un objeto FormData vacío
-     datos.append('accion', accion);
-     datos.append("pagina",pagina);
-     datos.append("listarDeCuanto",listarDeCuanto);
-     datos.append("buscar",buscar);
-     datos.append("cod_usuario",cod_usuario);
+     datos.append('id', id);
      $.ajax({
-       url: "index.php?accion=del",
+       url: "/eliminarRolUsuario",
        type: "POST",
        data: datos,
        contentType: false, // Deshabilitar la codificación de tipo MIME
@@ -332,24 +335,35 @@ function BuscarUsuarios(page){
        success: function(data) {
      //  alert(data+"dasdas");
      	   data=$.trim(data);
-         if(data == "error"){
-           error();
-         }else{
-           $("#verDatos").html(data);
-         }
+        // alert(data);
+         if(data == "correcto"){
+           alertaValidacion("success","Acción realizada con éxito","Correcto")
+           IRalLink(id);
+        }else{
+          alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
+        }
        }
      });
    }
-
  //funcion para verificar si el usuario existe o no y despues poder editar sus datos
+ function accionBtnEditar(id, idRol,usuarioId, nombreUsuario, rolTipo) {
+   // Asignar valores simples
+   document.getElementById("id").value = id;
+   document.getElementById("usuario_id").value = usuarioId;
+   document.getElementById("id_rol").value = idRol;
 
-   function accionBtnEditar(id,nombre,slug,descripcion,especial){
-      document.getElementById("id").value=id;
-      document.getElementById("nombre").value=nombre;
-      document.getElementById("slug").value=slug;
-      document.getElementById("descripcion").value=descripcion;
-      document.getElementById("especial").value=especial;
-     }
+   // Asignar texto al Select2 de nombreUsuario
+   $('#nombreUsuario').val(nombreUsuario).trigger('change');
+
+   // Asignar texto al Select2 de rolTipo
+   $('#rolTipo').val(rolTipo).trigger('change');
+   if(id!=''){
+       document.getElementById("edi").innerText = "NOTA: Esta en acción Editar, busque de nuevo un usuario y rol de usuario, si desea actualizar.";
+   }else{
+     document.getElementById("edi").innerText = "";
+    }
+ }
+
 
    function formularioSubmit(pagina,listarDeCuanto,cod_usuario,buscar){
      var form = document.createElement('form');
@@ -407,16 +421,29 @@ function BuscarUsuarios(page){
        success: function(data) {
          data = $.trim(data);
          //alert(data);
+         console.log(data);
          if(data == "correcto"){
-           alert("accion realizada con exito");
+           alertaValidacion("success","Acción realizada con éxito","Correcto")
+           IRalLink(id);
+        }else if(data == "vacio"){
+          alertaValidacion("warning","Algun campo vacio","Complete los campos")
         }else{
-           alert("ocurio un error al insertar datos");
+          alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
         }
-        IRalLink(id);
        }
      });
 
    }
+   function alertaValidacion(icono,texto,titulo){
+    Swal.fire({
+     icon: icono,
+     title: titulo,
+     text: texto,
+     showConfirmButton: false,
+     timer: 2000
+   });
+   }
+
 
    function IRalLink(id_usuario){
      if(id_usuario!=''){

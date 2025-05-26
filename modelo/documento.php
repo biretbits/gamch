@@ -241,6 +241,23 @@ class Documento
             return $resul;
           }
 
+          public function EliminarDocGaceta($id){
+            $sql2 = "select *from documentos where id = $id";
+            $resul2 = $this->con->query($sql2);
+            if ($resul2 && $fila = mysqli_fetch_array($resul2)) {
+              $archivo = $fila["archivo"];
+              if (file_exists($archivo)) {
+                  if (unlink($archivo)) {
+                    //archivo eliminado
+                  }
+                }
+            }
+            $sql= "delete from documentos where id = $id";
+            $resul = $this->con->query($sql);
+            return $resul;
+          }
+
+
 }
 
 

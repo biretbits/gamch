@@ -124,6 +124,24 @@ class Normativa
     return $resul;
   }
 
+  public function EliminarDocNormativa($id){
+    $sql2 = "select *from normas where id = $id";
+    $resul2 = $this->con->query($sql2);
+    if ($resul2 && $fila = mysqli_fetch_array($resul2)) {
+      $archivo = $fila["archivo"];
+      if (file_exists($archivo)) {
+          if (unlink($archivo)) {
+            //archivo eliminado
+          }
+        }
+    }
+    $sql= "delete from normas where id = $id";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+
+
+
 }
 
 

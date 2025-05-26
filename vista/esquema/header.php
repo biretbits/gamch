@@ -76,7 +76,17 @@
       if (isset($_SESSION['usuario']) && $_SESSION['usuario'] != '') {
       $name = $_SESSION['usuario'];
       echo "
-        <span class='me-2' style='font-size:11px'>👤 Hola <strong>$name</strong></span>
+        <span class='me-2' style='font-size:11px'>";
+        if($_SESSION['foto'] == "default.jpg" || $_SESSION['foto'] == ""){
+        echo "<td class='d-flex justify-content-center align-items-center' style='width: 3px; height: 3px;'>
+          <img src='imagenes/user.png' alt='foto' class='img-fluid rounded-circle' style='object-fit: cover; width: 3%; height: 3%;'>
+        </td>";
+      }else{
+        echo "<td class='d-flex justify-content-center align-items-center' style='width: 5px; height: 5px;'>
+          <img src='".$_SESSION['foto']."' alt='foto' class='img-fluid rounded-circle' style='object-fit: cover; width: 3%; height: 3%;'>
+        </td>";
+
+      }echo " Hola <strong>$name</strong></span>
         <a href='/salir' style='font-size:11px' class='btn btn-sm btn-outline-danger'>
           <i class='fas fa-power-off'></i> Cerrar sesión
         </a>";

@@ -65,7 +65,7 @@ require_once('vista/esquema/header.php');
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">Datos de Hoja de Ruta</h6>
+          <h6 class="modal-title" id="miModalRegistro"style="color:dimgray">Datos Usuario</h6>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!-- Contenido del modal -->
@@ -76,7 +76,7 @@ require_once('vista/esquema/header.php');
 
 
                <input type="hidden" name="id_empleado" id='id_empleado' value="">
-               <input type="text" name="id" id='id' value="">
+               <input type="hidden" name="id" id='id' value="">
                <div class="input-group input-group-sm mb-3">
                  <select id="empleado" class="form-select select2" required>
                    <option value=""></option>
@@ -89,9 +89,19 @@ require_once('vista/esquema/header.php');
                   <input type="password" class="form-control" id="contrasena" name='contrasena' placeholder="Ponga la contraseña">
                </div>
 
+                   <div id="passwordHelp" class="mb-3" style="font-size:10px;line-height: 0.2; /* o un valor menor para reducir espacio entre líneas */">
+                     <p id="length" class="invalid">❌ Mínimo 8 caracteres</p>
+                     <p id="lowercase" class="invalid">❌ Al menos una letra minúscula</p>
+                     <p id="uppercase" class="invalid">❌ Al menos una letra mayúscula</p>
+                     <p id="number" class="invalid">❌ Al menos un número</p>
+                     <p id="symbol" class="invalid">❌ Al menos un símbolo (ej: !@#$%)</p>
+                   </div>
                <div class="mb-3">
                   <input type="password" class="form-control" id="contrasena_confirmar" name='contrasena_confirmar' placeholder="Confirme la Contraseña">
                </div>
+               <button class="btn btn-outline-secondary" type="button" id="che" onclick="mostrar()">
+                 <i class="fas fa-eye"></i> Mostrar Contraseña
+               </button>
 
 
              </form>
@@ -100,7 +110,7 @@ require_once('vista/esquema/header.php');
         <!-- Pie de página del modal -->
       </div>
         <div class="modal-footer">
-          <button title='Guardar'type="button" class="btn btn-primary" onclick="registrar()"><i class="fas fa-save"></i></button>
+          <button title='Guardar'type="button" class="btn btn-primary" id='submitBtn' onclick="registrar()" disabled><i class="fas fa-save"></i></button>
          <button title='cerrar'type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
         </div>
       </div>
@@ -155,6 +165,24 @@ require_once('vista/esquema/header.php');
                  \"".$fi["empleado_id"]."\"
                  )'>
          <i class='fas fa-edit'></i></button>";
+         if($fi["usuario_estado"] == "activo"){
+           echo "<button type='button'
+                class='btn btn-danger btn-sm shadow-sm'
+                title='Desactivar'
+                onclick='accionBtnActivar(
+                      \"".$fi["usuario_id"]."\",\"desactivo\"
+                    )'>
+            <i class='fas fa-trash-alt'></i> Desactivar</button>";
+         }else{
+           echo "<button type='button'
+                class='btn btn-warning btn-sm shadow-sm'
+                title='Activar'
+                onclick='accionBtnActivar(
+                      \"".$fi["usuario_id"]."\",\"activo\"
+                    )'>
+            <i class='fas fa-trash-alt'></i> Activar</button>";
+
+         }
 
                 echo "</div>";
               echo "</td>";
@@ -315,32 +343,6 @@ function BuscarUsuarios(page){
      location.href="../controlador/usuario.controlador.php?accion=vfu" ;
    }
    //$pagina,$listarDeCuanto
-   //funcion para activar o desactivar el usuario o dar de baja
-   function accionBtnActivar(accion,pagina,listarDeCuanto,cod_usuario){
-     var buscar = document.getElementById("buscar").value;
-     var datos = new FormData(); // Crear un objeto FormData vacío
-     datos.append('accion', accion);
-     datos.append("pagina",pagina);
-     datos.append("listarDeCuanto",listarDeCuanto);
-     datos.append("buscar",buscar);
-     datos.append("cod_usuario",cod_usuario);
-     $.ajax({
-       url: "index.php?accion=del",
-       type: "POST",
-       data: datos,
-       contentType: false, // Deshabilitar la codificación de tipo MIME
-       processData: false, // Deshabilitar la codificación de datos
-       success: function(data) {
-     //  alert(data+"dasdas");
-     	   data=$.trim(data);
-         if(data == "error"){
-           error();
-         }else{
-           $("#verDatos").html(data);
-         }
-       }
-     });
-   }
 
  //funcion para verificar si el usuario existe o no y despues poder editar sus datos
 
@@ -394,7 +396,7 @@ function BuscarUsuarios(page){
       if(contrasena == contrasena_confirmar && contrasena != '' && contrasena_confirmar != ''){
         registrarDatos(id,id_empleado,usuario,contrasena);
       }else{
-        alert("No coenciden las contraseñas");
+        alertaValidacion('error',"No coinciden las contraseñas","Confirme la contraseña.")
       }
    }
 
@@ -414,15 +416,26 @@ function BuscarUsuarios(page){
          data = $.trim(data);
          console.log(data);
          if(data == "correcto"){
-           alert("accion realizada con exito");
+           alertaValidacion("success","Acción realizada con éxito","Correcto")
+           IRalLink(id);
+        }else if(data == "vacio"){
+          alertaValidacion("warning","Algun campo vacio","Complete los campos")
         }else{
-           alert("ocurio un error al insertar datos");
+          alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
         }
-        IRalLink(id);
        }
      });
-
    }
+
+    function alertaValidacion(icono,texto,titulo){
+   	 Swal.fire({
+   		icon: icono,
+   		title: titulo,
+   		text: texto,
+   		showConfirmButton: false,
+   		timer: 2000
+   	});
+    }
 
    function IRalLink(id_usuario){
      if(id_usuario!=''){
@@ -482,4 +495,83 @@ function BuscarUsuarios(page){
      });
    });
 
+</script>
+
+<script>
+  const password = document.getElementById('contrasena');
+  const submitBtn = document.getElementById('submitBtn');
+
+  const lengthReq = document.getElementById('length');
+  const lowerReq = document.getElementById('lowercase');
+  const upperReq = document.getElementById('uppercase');
+  const numberReq = document.getElementById('number');
+  const symbolReq = document.getElementById('symbol');
+
+  password.addEventListener('input', function () {
+    const val = password.value;
+
+    // Validaciones con expresiones regulares
+    const lengthValid = val.length >= 8;
+    const lowercaseValid = /[a-z]/.test(val);
+    const uppercaseValid = /[A-Z]/.test(val);
+    const numberValid = /[0-9]/.test(val);
+    const symbolValid = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+
+    // Actualizar clases y texto
+    updateValidation(lengthReq, lengthValid);
+    updateValidation(lowerReq, lowercaseValid);
+    updateValidation(upperReq, uppercaseValid);
+    updateValidation(numberReq, numberValid);
+    updateValidation(symbolReq, symbolValid);
+
+    // Activar botón solo si todo es válido
+    submitBtn.disabled = !(lengthValid && lowercaseValid && uppercaseValid && numberValid && symbolValid);
+  });
+
+  function updateValidation(element, isValid) {
+    if (isValid) {
+      element.classList.remove('invalid');
+      element.classList.add('valid');
+      element.textContent = '✔️ ' + element.textContent.slice(2);
+    } else {
+      element.classList.remove('valid');
+      element.classList.add('invalid');
+      element.textContent = '❌ ' + element.textContent.slice(2);
+    }
+  }
+
+  function mostrar() {
+    var contrasena = document.getElementById("contrasena");
+    var bx = document.querySelector(".che");
+    if(contrasena.type === 'password'){
+      contrasena.type = 'text';
+    }else{
+      contrasena.type = 'password';
+    }
+  }
+
+  function accionBtnActivar(id,estado){
+    //alert(estado+" "+id);
+    var datos = new FormData(); // Crear un objeto FormData vacío
+     datos.append("id",id);
+     datos.append("estado",estado);
+    $.ajax({
+      url: "/desabilitasUsuario",
+      type: "POST",
+      data: datos,
+      contentType: false, // Deshabilitar la codificación de tipo MIME
+      processData: false, // Deshabilitar la codificación de datos
+      success: function(data) {
+        data = $.trim(data);
+        console.log(data);
+        //alert(data);
+        if(data == "correcto"){
+          alertaValidacion("success","Acción realizada con éxito","Correcto")
+          IRalLink(id);
+       }else{
+         alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
+       }
+      }
+    });
+  }
 </script>

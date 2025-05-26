@@ -30,18 +30,21 @@ class EmpleadoControlador{
 
   public static function RegistrarDatosEmpleadosNuevo($a) {
       $campos = ["id_nivel", "id_cargo", "empleado", "nombre", "apellido_p", "apellido_m", "sexo", "direccion", "telefono", "gmail"];
+      $vacio = false;
       foreach ($campos as $campo) {
           if (!isset($a[$campo]) || trim($a[$campo]) === '') {
-              echo "campos_vacio";
+              $vacio = true;
               return;
           }
       }
 
       $us = new Empleado();
       $rutaImagen = '';
-
-      // Verificamos si se subió un archivo
-      if (isset($_FILES["file"]) && $_FILES["file"]["error"] !== 4) {
+      if($vacio == true){
+        echo "vacio";
+      }else{
+        // Verificamos si se subió un archivo
+        if (isset($_FILES["file"]) && $_FILES["file"]["error"] !== 4) {
           if ($_FILES["file"]["error"] === 0) {
               $nombreArchivo = basename($_FILES["file"]["name"]);
               $directorioDestino = "vista/activos/FotoUsuario/";
@@ -62,7 +65,7 @@ class EmpleadoControlador{
                       $imagen = imagecreatefromgif($_FILES["file"]["tmp_name"]);
                       break;
                   default:
-                      echo "Tipo de archivo no permitido.";
+                      echo "Tipo_de_archivo_no_permitido";
                       return;
               }
 
@@ -91,13 +94,14 @@ class EmpleadoControlador{
 
               $rutaImagen = $rutaDestino;
           } else {
-              echo "Error al subir el archivo.";
+              echo "Error_al_subir_archivo";
               return;
           }
-      }
+        }
 
-      $re = $us->RegistrarNuevosDatosEmpleado($a, $rutaImagen);
-      echo $re ? "correcto" : "error";
+        $re = $us->RegistrarNuevosDatosEmpleado($a, $rutaImagen);
+        echo $re ? "correcto" : "error";
+      }
   }
 
   public static function  BuscarEmpleadoTodo($pagina, $listarDeCuanto, $buscar){

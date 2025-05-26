@@ -17,12 +17,23 @@ class UsuarioControlador{
 
   public static function RegistrarRol($a){
     $us = new Usuario();  // Creando una nueva instancia de la clase Usuario
-    $resul = $us->registrarRole($a);
-    if ($resul) {
-              echo "correcto";
-          } else {
-              echo "error";
-          }
+
+    $data = ["nombre", "slug", "descripcion", "especial"];
+    $vacio = false;
+
+    foreach ($data as $campo) {
+      if (empty($a[$campo])) {
+        $vacio = true;
+        break;
+      }
+    }
+
+    if ($vacio) {
+      echo "vacio";
+    } else {
+      $resul = $us->registrarRole($a);
+      echo $resul ? "correcto" : "error";
+    }
   }
 
   public static function BuscarUsuarioTabla($pagina,$listarDeCuanto,$buscar){
@@ -80,7 +91,13 @@ class UsuarioControlador{
                            \"".$fi["descripcion"]."\",
                            \"".$fi["especial"]."\")'>
                    <i class='fas fa-edit'></i></button>";
-
+                   echo "<button type='button'
+                        class='btn btn-danger btn-sm shadow-sm'
+                        title='Eliminar'
+                        onclick='accionBtnActivar(
+                              \"".$fi["id"]."\"
+                            )'>
+                    <i class='fas fa-trash-alt'></i> Eliminar</button>";
                           echo "</div>";
                         echo "</td>";
                       echo "</tr>";
@@ -619,12 +636,24 @@ echo "</div>
     }
 
     public static function RegistrarNuevoUsuario($a){
-      $us = new Usuario();  // Creando una nueva instancia de la clase Usuario
-      $resul = $us->registrarUsuario($a);
-      if ($resul) {
-          echo "correcto";
+      $us = new Usuario();  // Crear instancia de la clase Usuario
+
+      // Validar campos requeridos
+      $camposRequeridos = ["id_empleado", "usuario", "contrasena"];
+      $vacio = false;
+
+      foreach ($camposRequeridos as $campo) {
+          if (!isset($a[$campo]) || trim($a[$campo]) === '') {
+              $vacio = true;
+              break;
+          }
+      }
+
+      if (!$vacio) {
+          $resul = $us->registrarUsuario($a);
+          echo $resul ? "correcto" : "error";
       } else {
-          echo "error";
+          echo "vacio";
       }
     }
 
@@ -671,18 +700,36 @@ echo "</div>
                               echo "<td>".$fi['usuario_actualizado']."</td>";
                               echo "<td>";
                               $id_u = '';
-                                echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                                <button type='button'
-                             class='btn btn-info btn-sm shadow-sm'
-                             title='Editar'
-                             data-bs-toggle='modal'
-                             data-bs-target='#ModalRegistro'
-                             onclick='accionBtnEditar(
-                                   \"".$fi["usuario_id"]."\",
-                                 \"".$fi["usuario"]."\",
-                                 \"".$fi["empleado_id"]."\"
-                                 )'>
-                         <i class='fas fa-edit'></i></button>";
+                              echo "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+                              <button type='button'
+                           class='btn btn-info btn-sm shadow-sm'
+                           title='Editar'
+                           data-bs-toggle='modal'
+                           data-bs-target='#ModalRegistro'
+                           onclick='accionBtnEditar(
+                                 \"".$fi["usuario_id"]."\",
+                               \"".$fi["usuario"]."\",
+                               \"".$fi["empleado_id"]."\"
+                               )'>
+                       <i class='fas fa-edit'></i></button>";
+                       if($fi["usuario_estado"] == "activo"){
+                         echo "<button type='button'
+                              class='btn btn-danger btn-sm shadow-sm'
+                              title='Desactivar'
+                              onclick='accionBtnActivar(
+                                    \"".$fi["usuario_id"]."\",\"desactivo\"
+                                  )'>
+                          <i class='fas fa-trash-alt'></i> Desactivar</button>";
+                       }else{
+                         echo "<button type='button'
+                              class='btn btn-warning btn-sm shadow-sm'
+                              title='Activar'
+                              onclick='accionBtnActivar(
+                                    \"".$fi["usuario_id"]."\",\"activo\"
+                                  )'>
+                          <i class='fas fa-trash-alt'></i> Activar</button>";
+
+                       }
 
                                 echo "</div>";
                               echo "</td>";
@@ -804,12 +851,21 @@ echo "</div>
 
     public static function RegistrarRolUsuario($a){
       $us = new Usuario();  // Creando una nueva instancia de la clase Usuario
-      $resul = $us->registrarRolesUsuarios($a);
-      if ($resul) {
-                echo "correcto";
-            } else {
-                echo "error";
-            }
+      $data = ["usuario_id","id_rol"];
+      $vacio = false;
+      if($data[0]==''||$data[1]==''){
+        $vacio = true;
+      }
+      if($vacio == true){
+        echo "vacio";
+      }else{
+        $resul = $us->registrarRolesUsuarios($a);
+        if ($resul) {
+          echo "correcto";
+        } else {
+          echo "error";
+        }
+      }
     }
 
     public static function BuscarRolesUsuarios($pagina,$listarDeCuanto,$buscar){
@@ -869,8 +925,16 @@ echo "</div>
                          \"".$fi["id"]."\",
                        \"".$fi["rol_id"]."\",
                        \"".$fi["usuario_id"]."\",
-                       \"".$fi["rol_descripcion"]."\")'>
+                       \"\",\"\")'>
                <i class='fas fa-edit'></i></button>";
+               echo "<button type='button'
+                    class='btn btn-danger btn-sm shadow-sm'
+                    title='Desactivar'
+                    onclick='accionBtnActivar(
+                          \"".$fi["id"]."\"
+                        )'>
+                <i class='fas fa-trash-alt'></i> Eliminar</button>";
+
 
                       echo "</div>";
                     echo "</td>";
@@ -975,6 +1039,37 @@ echo "</div>
 
       }
     }
+
+    public static function DesabilitarUsuario($id,$estado){
+      $us = new Usuario();  // Creando una nueva instancia de la clase Usuario
+      $resul = $us->desactivarUsuarioTodo($id,$estado);
+      if($resul){
+        echo "correcto";
+      }else {
+        echo "error";
+      }
+    }
+
+    public static function EliminarRolUsuarioo($id){
+      $us = new Usuario();  // Creando una nueva instancia de la clase Usuario
+      $resul = $us->EliminarRolesUsuario($id);
+      if($resul){
+        echo "correcto";
+      }else {
+        echo "error";
+      }
+    }
+    public static function EliminarRolesNuevos($id){
+      $us = new Usuario();  // Creando una nueva instancia de la clase Usuario
+      $resul = $us->EliminarRolesNu($id);
+      if($resul){
+        echo "correcto";
+      }else {
+        echo "error";
+      }
+    }
+
+
 }
 
 

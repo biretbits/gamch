@@ -9,7 +9,7 @@ overflow: hidden; /* Ocultar el texto desbordado */
 text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
 }
 /* Asegura que los botones mantengan un tamaño fijo */
-.btn {
+.btn2{
   padding: 0.375rem 0.75rem; /* Tamaño de padding que corresponde al botón pequeño de Bootstrap */
   font-size: 0.875rem; /* Tamaño de fuente para los botones */
   line-height: 1.5; /* Altura de línea normal para los botones */
@@ -19,7 +19,7 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
 }
 
 /* Asegura que los íconos no estiren los botones */
-.btn i {
+.btn2 i {
   font-size: 1.25rem; /* Tamaño adecuado para los íconos */
   margin-right: 0.5rem; /* Espacio entre el ícono y el texto */
 }
@@ -32,53 +32,49 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
 }
 
 /* Asegura que los botones pequeños no cambien de tamaño inesperadamente */
-.btn-sm {
+.btn2-sm {
   padding: 0.375rem 0.75rem; /* Establecer el tamaño de los botones pequeños */
 }
 
 </style>
-  <div class="row g-4" style="background:white">
-    <input type="hidden" name="paginas" id='paginas' value="">
-    <div class="container-md" style="padding:15px">
 
-      <div class="row justify-content-start">
-
-        <div class="col-auto">
-
-          <div class="d-flex align-items-end gap-3">
-            <!-- Select de cantidad -->
-
-            <div class="">
-              <?php echo str_replace("-", " ", $categoria); ?>
-            </div>
-            <div>
-              <select class="form-select form-select-sm" id="selectList" name="selectList" onchange="BuscarUsuarios(1)">
-                <option selected disabled>--</option>
-                <option>5</option>
-                <option>10</option>
-                <option>25</option>
-                <option>50</option>
-                <option>100</option>
-                <option>250</option>
-                <option>500</option>
-                <option>1000</option>
-              </select>
-            </div>
-
-            <!-- Campo de búsqueda -->
-            <div>
-              <div class="input-group input-group-sm">
-                <input type="text" class="form-control" id="buscar" name="buscar" placeholder="Buscar..." onkeyup="BuscarUsuarios(1)">
-                <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+<div class="row justify-content-start" style="background:white;padding:5px">
     <!-- Columna Izquierda: Lista de PDFs -->
-    <div class="col-lg-6">
+ <div class="col-lg-6">
+ <div class="bg-success text-white p-3 rounded">
+ <div class="d-flex align-items-end gap-3 w-100">
+
+   <!-- Texto o categoría -->
+   <div class="flex-grow-4 fw-bold" style="font-size:13px">
+     <?php echo str_replace("-", " ", $categoria); ?>
+   </div>
+
+   <!-- Select de cantidad -->
+   <div style="min-width: 100px;">
+     <select class="form-select form-select-sm" id="selectList" name="selectList" onchange="BuscarUsuarios(1)">
+       <option selected disabled>--</option>
+       <option>5</option>
+       <option>10</option>
+       <option>25</option>
+       <option>50</option>
+       <option>100</option>
+       <option>250</option>
+       <option>500</option>
+       <option>1000</option>
+     </select>
+   </div>
+
+   <!-- Campo de búsqueda -->
+   <div class="flex-grow-1">
+     <div class="input-group input-group-sm">
+       <input type="text" class="form-control" id="buscar" name="buscar" placeholder="Buscar..." onkeyup="BuscarUsuarios(1)">
+       <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+     </div>
+   </div>
+
+ </div>
+</div>
+ <br>
       <div id='viewTabla'>
         <?php if ($resul && mysqli_num_rows($resul) > 0) { ?>
           <?php while($fi = mysqli_fetch_array($resul)){ ?>
@@ -96,13 +92,13 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
             </div>
             <div class="d-flex gap-2">
               <!-- Botón para previsualizar -->
-              <a href="javascript:void(0)" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#pdfModal"
+              <a href="javascript:void(0)" class="btn2 btn btn2 btn-success btn2 btn-sm" data-bs-toggle="modal" data-bs-target="#pdfModal"
                 onclick="ejecutar('<?php echo $fi["archivo"]; ?>')">
                 <i class="fas fa-eye me-1"></i> Ver
               </a>
 
               <!-- Botón para descargar -->
-              <a href="<?php echo $fi["archivo"]; ?>" download class="btn btn-outline-secondary btn-sm" title="Descargar PDF">
+              <a href="<?php echo $fi["archivo"]; ?>" download class="btn2 btn btn2 btn-outline-secondary btn2 btn-sm" title="Descargar PDF">
                 <i class="fas fa-download me-1"></i> Descargar
               </a>
             </div>
@@ -213,7 +209,7 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
 
         <div class="card shadow-sm">
           <div class="card-header bg-success text-white">
-            <h5 class="mb-0">📰 NOTAS RECIENTES</h5>
+            <h6 class="mb-0">📰 NOTAS RECIENTES</h6>
           </div>
           <div class="card-body">
           <?php while($fila = mysqli_fetch_array($rnoticia)){ ?>
@@ -233,7 +229,7 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
             <?php echo !empty($fila["contenido"]) ? $fila["contenido"] : "Sin contenido disponible."; ?>
           </p>
 
-          <a href="#" onclick="SeguirLeyendo(<?php echo $fila["id"]; ?>)" class="btn btn-sm btn-outline-success">Leer más</a><p></p>
+          <a href="#" onclick="SeguirLeyendo(<?php echo $fila["id"]; ?>)" class="btn2 btn btn2 btn-sm btn2 btn-outline-success">Leer más</a><p></p>
         <?php } ?>
         </div>
 
@@ -243,7 +239,6 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
     </div>
 
   </div>
-</div>
 
 <script type="text/javascript">
 
@@ -280,7 +275,7 @@ function SeguirLeyendo(id){
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="pdfModalLabel">Visor de PDF</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <button type="button" class="btn2 btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
 
       <div class="modal-body">
@@ -290,19 +285,19 @@ function SeguirLeyendo(id){
     <div class="row align-items-center">
       <!-- Botones -->
       <div class="col-md-8 d-flex flex-wrap align-items-center gap-1 mb-2 mb-md-0">
-        <button class="btn btn-sm btn-outline-primary p-1" id="prev" title="Anterior">
+        <button class="btn2 btn btn2 btn-sm btn2 btn-outline-primary p-1" id="prev" title="Anterior">
           <i class="fas fa-arrow-left"></i>
         </button>
 
-        <button class="btn btn-sm btn-outline-primary p-1" id="next" title="Siguiente">
+        <button class="btn2 btn btn2 btn-sm btn2 btn-outline-primary p-1" id="next" title="Siguiente">
           <i class="fas fa-arrow-right"></i>
         </button>
 
-        <button class="btn btn-sm btn-outline-success p-1" id="download" title="Descargar" data-pdfd="vista/DocumentosPDF/RPC2024.pdf">
+        <button class="btn2 btn btn2 btn-sm btn2 btn-outline-success p-1" id="download" title="Descargar" data-pdfd="vista/DocumentosPDF/RPC2024.pdf">
           <i class="fas fa-download"></i>
         </button>
 
-        <button class="btn btn-sm btn-outline-info p-1 text-white" id="print" title="Imprimir" data-pdf="vista/DocumentosPDF/RPC2024.pdf">
+        <button class="btn2 btn btn2 btn-sm btn2 btn-outline-info p-1 text-white" id="print" title="Imprimir" data-pdf="vista/DocumentosPDF/RPC2024.pdf">
           <i class="fas fa-print"></i>
         </button>
       </div>
@@ -322,7 +317,7 @@ function SeguirLeyendo(id){
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn2 btn btn2 btn-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

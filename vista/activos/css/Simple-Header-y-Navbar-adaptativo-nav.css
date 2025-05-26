@@ -555,7 +555,7 @@ right: 20px;     /* posicionar a la derecha */
   /* Efectos al pasar el mouse */
 
   .banner-button:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f);
+    background: linear-gradient(135deg, RED, BLUE);
     transform: scale(1.1);
     box-shadow: 0 6px 15px rgba(0, 123, 255, 0.7);
   }

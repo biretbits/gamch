@@ -74,9 +74,9 @@ require_once('vista/esquema/header.php');
            <div class="card-body">
              <form>
 
-               <input type="text" name="id" id='id' value="">
-               <input type="text" name="id_nivel" id='id_nivel' value="">
-               <input type="text" name="id_cargo" id='id_cargo' value="">
+               <input type="hidden" name="id" id='id' value="">
+               <input type="hidden" name="id_nivel" id='id_nivel' value="">
+               <input type="hidden" name="id_cargo" id='id_cargo' value="">
 
                <div class="input-group input-group-sm mb-3">
                  <select id="cargo" class="form-select select2" required>
@@ -539,17 +539,30 @@ function BuscarUsuarios(page){
        processData: false, // Deshabilitar la codificación de datos
        success: function(data) {
          data = $.trim(data);
-         console.log(data);
          if(data == "correcto"){
-           alert("accion realizada con exito");
+           alertaValidacion("success","Acción realizada con éxito","Correcto");
+           IRalLink(id);
+        }else if(data == "vacio"){
+          alertaValidacion('info','Campos vacios','Llene los campos');
+        }else if(data == "Tipo_de_archivo_no_permitido"){
+          alertaValidacion('info','Seleccione otro archivo','Formato de archivo no valido');
+        }else if(data == "Error_al_subir_archivo"){
+          alertaValidacion('info','Ocurrio un problema al subir el archivo','Error al subir el archivo');
         }else{
-          console.log(data);
-           alert("ocurio un error al insertar datos");
+            alertaValidacion("error","¡No se pudo realizar la acción!","¡Error!")
         }
-        IRalLink(id);
        }
      });
 
+   }
+   function alertaValidacion(icono,texto,titulo){
+    Swal.fire({
+     icon: icono,
+     title: titulo,
+     text: texto,
+     showConfirmButton: false,
+     timer: 2000
+    });
    }
 
    function IRalLink(id_usuario){

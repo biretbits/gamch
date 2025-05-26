@@ -137,23 +137,40 @@ class NormativaControlador{
       $archivo = $_FILES["archivo"];
       $r="vista/activos/documento/normativas/";//ruta donde se guardara el archivo
         if ($archivo['type'] === 'application/pdf') {//verificamos si es un pdf
-          $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
-          $nombreUnico = bin2hex(random_bytes(16)) . '.' . $extension;
-            $r = $r.$nombreUnico;
-            move_uploaded_file($archivo['tmp_name'], $r);//movemos el archivo a la ruta $r
+          if ($archivo['size'] <= 10485760) {//menor a 10mb
+            $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
+            $nombreUnico = bin2hex(random_bytes(16)) . '.' . $extension;
+              $r = $r.$nombreUnico;
+              move_uploaded_file($archivo['tmp_name'], $r);//movemos el archivo a la ruta $r
+          }else{
+            echo "archivo_pesado";return;
+          }
         } else {
-            echo "Solo se permite PDF.";
+            echo "Solo_se_permite_PDF";
+            return;
         }
     } else {
       if($a["id"] == ""){//si es vacio se quiere registrar
-        echo "No se recibió ningún archivo.";
+        echo "No_se_recibio_ningun_archivo";
+        return;
       }
     }
-    $resul = $us->registrar($a,$usuario_id,$r);
-    if($resul){
-      echo "correcto";
-    }else{
-      echo "error";
+
+    $data = ["categoria", "cod", "descripcion", "fecha_creacion","nombre_documento","publicar","estado"];
+    $vacio = false;
+
+    foreach ($data as $campo) {
+      if (empty($a[$campo])) {
+        $vacio = true;
+        break;
+      }
+    }
+
+    if ($vacio) {
+      echo "vacio";
+    } else {
+      $resul = $us->registrar($a,$usuario_id,$r);
+      echo $resul ? "correcto" : "error";
     }
   }
 
@@ -221,8 +238,16 @@ class NormativaControlador{
                           data-bs-target='#ModalRegistro'
                           onclick='accionBtnEditar(" . json_encode($datos) . ")'>
                           <i class='fas fa-edit'></i>
-                      </button>
-                  </div>";
+                      </button>";
+                  echo "<button type='button'
+                       class='btn btn-danger btn-sm shadow-sm'
+                       title='Eliminar'
+                       onclick='accionBtnActivar(
+                             \"".$fi["id"]."\"
+                           )'>
+                   <i class='fas fa-trash-alt'></i> Eliminar</button>";
+              echo "</div>";
+
 
 
                       echo "</div>";
@@ -327,6 +352,16 @@ class NormativaControlador{
     }
 
   }
+  public static function eliminarDocumentosNor($id){
+    $us = new Normativa();  // Creando una nueva instancia de la clase Usuario
+    $resul = $us->EliminarDocNormativa($id);
+    if($resul){
+      echo "correcto";
+    }else {
+      echo "error";
+    }
+  }
+
 }
 
 

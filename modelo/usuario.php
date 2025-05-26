@@ -767,7 +767,25 @@ public function registrarRolesUsuarios($a){
       $resul = $this->con->query($sql);
       return $resul;
   }
-}
+  }
+
+  public function desactivarUsuarioTodo($id,$estado){
+    $sql= "update usuarios set estado = '$estado' where id = $id";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+  public function EliminarRolesUsuario($id){
+    $sql= "delete from rol_usuario where id = $id";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+
+  public function EliminarRolesNu($id){
+    $sql= "delete from roles where id = $id";
+    $resul = $this->con->query($sql);
+    return $resul;
+  }
+
 
 }
 

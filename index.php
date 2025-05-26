@@ -252,6 +252,26 @@ if (isset($_SESSION["usuario"]) && $_SESSION["usuario"] !='') {
     if($_GET["accion"] == "buscarCultura"){
       CulturaControlador::buscarCultura($_POST["pagina"], $_POST["listarDeCuanto"], $_POST["buscar"]); return;
     }
+
+    if($_GET["accion"] == "desabilitasUsuario"){
+      UsuarioControlador::DesabilitarUsuario($_POST["id"],$_POST["estado"]);return;
+    }
+
+    if($_GET["accion"] == "eliminarRolUsuario"){
+      UsuarioControlador::EliminarRolUsuarioo($_POST["id"]);return;
+    }
+    if($_GET["accion"] == "eliminarRoles"){
+      UsuarioControlador::EliminarRolesNuevos($_POST["id"]);return;
+    }
+    if($_GET["accion"] == "eliminarDocumentos"){
+      DocumentoControlador::eliminarDocumentosGac($_POST["id"]);return;
+    }
+    if($_GET["accion"] == "eliminarDocumentosNormativas"){
+      NormativaControlador::eliminarDocumentosNor($_POST["id"]);return;
+    }
+    if($_GET["accion"] == "eliminarDocumentosTransparente"){
+      TransparenteControlador::eliminarDocumentosTra($_POST["id"]);return;
+    }
 }
 
 
@@ -287,7 +307,7 @@ else if($_GET["accion"] == "buscando"){
 }else
 if ($_GET["accion"] == "salir") {
     sesionControlador::Destroy();
-} else if ($_GET["accion"] == "iniciar") {
+} else if ($_GET["accion"] == "iniciar" && isset($_SESSION["usuario"]) == '') {
     LogeoControlador::visualizarInicioSession();
 } else if ($_GET["accion"] == "vcu") {
     LogeoControlador::verificarLogin($_POST["usuario"], $_POST["contrasena"]);
