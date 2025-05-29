@@ -3,7 +3,7 @@ require_once('vista/esquema/header.php');
 ?>
 <style>
   .carousel-container {
-    width: 100vw;
+    width: 100%;
     height: 90vh;
     overflow: hidden;
   }
@@ -26,13 +26,13 @@ require_once('vista/esquema/header.php');
   <div id="carruselBootstrap" class="carousel slide h-100" data-bs-ride="carousel">
     <div class="carousel-inner h-100">
       <div class="carousel-item active h-100">
-        <img src="imagenes/img-challapata/frontisALEJADO.jpg" class="d-block" alt="Imagen 1">
+        <img src="imagenes/img-challapata/banner1.webp" class="d-block" alt="Imagen 1">
       </div>
       <div class="carousel-item h-100">
-        <img src="imagenes/img-challapata/monumento.jpg" class="d-block" alt="Imagen 2">
+        <img src="imagenes/img-challapata/banner2.jpg" class="d-block" alt="Imagen 2">
       </div>
       <div class="carousel-item h-100">
-        <img src="imagenes/img-challapata/PLAZA1.jpg" class="d-block" alt="Imagen 3">
+        <img src="imagenes/img-challapata/Banner.webp" class="d-block" alt="Imagen 3">
       </div>
     </div>
 
@@ -105,73 +105,266 @@ La visita a las oficinas de la Autoridad Jurisdiccional Administrativa Minera (A
     </script>
 
 
-<section class="bg-white">
-    <div class="container-fluid" data-aos="fade-right" data-aos-duration="1200">
-        <div class="row" >
-            <div class="col-md-12 col-lg-6" style="padding: 0px;background: url(imagenes/gamch/challapata-población.jpg) center / cover no-repeat;">
-                <p><br><br><br><br><br><br><br><br><br><br><br><br><br></p>
+    <style>
+       .news-card {
+         position: relative;
+         overflow: hidden;
+         border-radius: 0px;
+         margin-bottom: 25px;
+         height: 100%;
+       }
+
+       .news-card img {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         filter: brightness(100%);
+         transition: transform 0.3s ease;
+       }
+
+       .news-card:hover img {
+         transform: scale(1.05);
+       }
+
+       .news-overlay {/*codigo del texto de la imagenes el titulo*/
+         position: absolute;
+         bottom: 0;
+         left: 0;
+         color: white;
+         padding: 15px;
+         background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+         width: 100%;
+       }
+
+       .news-title {
+         font-size: 1.25rem;
+         font-weight: bold;
+         margin-bottom: 5px;
+         color:#CAD5E2
+       }
+
+       .news-desc {
+         font-size: 0.9rem;
+         color:#CAD5E2;
+         display: -webkit-box;
+         -webkit-line-clamp: 2;           /* Cambiado a 3 líneas */
+         -webkit-box-orient: vertical;
+         line-clamp: 2;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         word-break: break-word;
+         line-height: 1.3em;
+
+       }
+       .news-desc3 {
+         display: -webkit-box;
+         -webkit-line-clamp: 2;           /* Cambiado a 3 líneas */
+         -webkit-box-orient: vertical;
+         line-clamp: 2;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         word-break: break-word;
+         line-height: 1.3em;
+         font-size: 0.9rem;
+         color: #CAD5E2;
+       }
+
+       .news-desc1{
+          display: -webkit-box;
+         -webkit-line-clamp: 1;       /* Número de líneas que quieres mostrar */
+         -webkit-box-orient: vertical;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         font-size: 0.9rem;
+         color:#CAD5E2
+       }
+       .news-date {
+         font-size: 0.75rem;
+         color:#CAD5E2
+       }
+
+       .big-news {
+         height: 420px;
+       }
+
+       .medium-news {
+         height: 200px;
+       }
+
+       .small-news {
+         height: 150px;
+       }
+
+     </style>
+
+<div class="container-fluid"><br>
+    <h3 style="color:#CAD5E2" align='left'>Noticias.</h3>
+    <hr style="color:blue">
+</div>
+<div class="container-fluid">
+  <div class="row g-4" style="padding:10px">
+    <!-- Columna izquierda -->
+    <div class="col-lg-9">
+      <!-- Contenedor con borde y padding -->
+      <div class="p-3" style=" border-radius:8px;">
+        <?php
+        // Función para imprimir una tarjeta de noticia
+        function mostrarNoticia($fil, $tamanoClase = 'medium-news') {
+            ?>
+            <div class="col-md-6 p-3" style="border:1px solid red;">
+                <div class="news-card <?php echo $tamanoClase; ?>">
+                  <div class="w-100" style="height: 100%;right: 100%;overflow: hidden;">
+                    <img
+                      src="<?php echo ($fil['foto'] != '') ? $fil['foto'] : 'imagenes/img-challapata/banner2.jpg'; ?>"
+                      class="img-fluid h-100 w-100"
+                      style="object-fit: contain;"
+                      alt="Imagen dinámica">
+                  </div>
+                  <div class="news-overlay">
+                    <a href="#" class="news-title"><?php echo $fil['titulo']; ?></a>
+                  </div>
+                </div>
+                <div class="news-desc3"><?php echo $fil['contenido']; ?> no se puede seguir con este doloe de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo
+                de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo
+                de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo</div>
+                <div class="news-date">Fecha: <?php echo $fil['fecha']; ?></div>
+                <div class="text-end">
+                  <a href="noticia.php?id=123" class="text-decoration-none p-0 m-0" style="color:green">
+                    Ver más
+                  </a>
+                </div>
             </div>
-            <div class="col-md-12 col-lg-6">
-              <h1 class="typewriter">Challapata</h1>
+            <?php
+        }
 
-              <style>
-              .typewriter {
-              overflow: hidden;
-              white-space: nowrap;
-              margin: 0 auto;
-              letter-spacing: 2px;
-              animation: typing 24s steps(7, end) infinite;
-              animation-delay: 2s;
-              animation-iteration-count: infinite;
-              animation-direction: normal;
-              animation-timing-function: steps(10, end);
-              font-size: 2rem;
-              color: #212529;
-              padding: 20px 15px 0;
-              width: fit-content;
-              }
+        $j = 0;
+        $abiertaFila = false;
+        while ($fil = mysqli_fetch_assoc($resul)) {
+            if ($j == 0) {
+                // Noticia principal
+                ?>
+                <div class="news-card big-news mb-4 p-3">
+                  <div style="height: 300px; overflow: hidden;">
+                  <img
+                    src="<?php echo ($fil['foto'] != '') ? $fil['foto'] : 'imagenes/img-challapata/banner2.jpg'; ?>"
+                    class="img-fluid"
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: fill;
+                      image-rendering: auto; /* Opciones: auto | crisp-edges | pixelated */
+                    "
+                    alt="Imagen dinámica">
+                </div>
 
-              /* Reinicia el ancho a 0 y lo anima de nuevo */
-              @keyframes typing {
-              0%   { width: 0; }
-              40%  { width: 100%; }
-              60%  { width: 100%; }
-              100% { width: 0; }
-              }
-              </style>
 
-                <hr>
-                <p class="text-black-50" style="padding-left: 15px;padding-right: 15px;text-align: justify;">Challapata, capital de la provincia Eduardo Abaroa en el Departamento de Oruro, Bolivia, es un municipio que encapsula la esencia de la cultura andina, la historia heroica y la autenticidad de un destino aún por descubrir. Fundado en 1896, este enclave de aproximadamente 29,000 habitantes, se erige como un símbolo de resistencia y legado, honrando la memoria de Eduardo Abaroa, prócer boliviano cuyo nombre identifica a la provincia.<br><br><br></p>
-                <div style="text-align:center"><button class="btn btn-light btn-lg" type="button" style="margin-bottom: 21px;">Ver más</button></div>
-            </div>
-        </div>
-    </div>
-</section>
+                  <div class="news-overlay">
+                       <a href="#" class="news-title"><?php echo $fil['titulo']; ?></a>
+                  </div>
+                </div>
+                <div class="news-desc3"><?php echo $fil['contenido']; ?> no se puede seguir con este doloe de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo
+                de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo
+                de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo</div>
+                <div class="news-date"><?php echo $fil['fecha']; ?></div>
+                <div class="text-end">
+                  <a href="noticia.php?id=123" class="text-decoration-none p-0 m-0" style="color:green">
+                    Ver más
+                  </a>
+                </div>
+                <?php
+            } else {
+                // Noticias secundarias en filas de 2
+                if ($j % 2 == 1) {
+                    echo '<div class="row">'; // Abrir fila
+                    $abiertaFila = true;
+                }
+
+                mostrarNoticia($fil); // Mostrar noticia
+
+                if ($j % 2 == 0 && $abiertaFila) {
+                    echo '</div>'; // Cerrar fila
+                    $abiertaFila = false;
+                }
+            }
+            $j++;
+        }
+
+        // Si quedó una fila abierta al final
+        if ($abiertaFila) {
+            echo '</div>';
+        }
+        ?>
+      </div> <!-- Fin del div con borde -->
+    </div> <!-- Fin de col-lg-9 -->
+
+       <!-- Columna derecha -->
+  <div class="col-lg-3">
+    <h6 style="color:green">Noticias Pasadas</h6>
+      <div class="row">
+        <?php for($i = 0; $i < 5; $i++) { ?>
+           <div class="col-12">
+             <div class="news-card small-news">
+               <img src="imagenes/img-challapata/banner2.jpg" alt="Pequeña">
+             </div>
+             <div class="news-desc1">
+               <a href="#" class="news-desc1">Resumen corto de las luchas del psssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssroletariado por un dias mas de vida como es de saber ahora se quiero la renovacion de los candidatos de la madere</a></div>
+             <div class="news-date">Fecha: 26 Mayo 2025</div>
+
+           </div>
+         <?php } ?>
+
+         </div>
+       </div>
+     </div>
+  </div>
+  <div class="container-fluid text-center my-4">
+    <button class="btn btn-primary px-4 py-8 shadow rounded-pill">
+      Ver más Noticias
+    </button>
+  </div>
+
+
+<div class="container-md" style="padding:10px">
+  <div style="border: 1px solid #E7000B;"class="container-fluid" data-aos="fade-right" data-aos-duration="1200">
+      <div class="row" >
+          <div class="col-md-12 col-lg-6" style="padding: 0px;background: url(imagenes/gamch/challapata-población.jpg) center / cover no-repeat;">
+              <p><br><br><br><br><br><br><br><br><br></p>
+          </div>
+          <div class="col-md-12 col-lg-6">
+            <h1 class="typewriter" style="color:white">Challapata</h1>
+              <hr>
+              <p  style="padding-left: 15px;padding-right: 15px;text-align: justify;color:#CAD5E2">Challapata, capital de la provincia Eduardo Abaroa en el Departamento de Oruro, Bolivia, es un municipio que encapsula la esencia de la cultura andina, la historia heroica y la autenticidad de un destino aún por descubrir. Fundado en 1896, este enclave de aproximadamente 29,000 habitantes, se erige como un símbolo de resistencia y legado, honrando la memoria de Eduardo Abaroa, prócer boliviano cuyo nombre identifica a la provincia.<br><br><br></p>
+              <div style="text-align:center"><button class="btn btn-light btn-lg" type="button" style="margin-bottom: 21px;">Ver más</button></div>
+          </div>
+      </div>
+  </div>
+
+</div>
 
 <section class="container-md">
   <div class="row text-center">
-    <div class="col-md-4  card-hover">
-      <div class="counter-box">
+    <div class="col-md-4  card-hover" style="border: 1px solid #E7000B;">
+      <div class="counter-box"style="background-color: transparent;">
         <div>
-          <span class="counter" data-target="35339">0</span>
+          <span class="counter"  style="color:red;font-size:40px"data-target="35339">0</span>
         </div>
-        <p>POBLACIÓN</p>
+        <p style="color:#CAD5E2">POBLACIÓN</p>
       </div>
     </div>
-    <div class="col-md-4  card-hover">
-      <div class="counter-box">
+    <div class="col-md-4  card-hover" style="border: 1px solid #E7000B;">
+      <div class="counter-box"style="background-color: transparent;">
         <div>
-          <span class="counter" data-target="3738">0</span><span class="unit"> Msnm</span>
+          <span class="counter" data-target="3738" style="color:orange;font-size:40px">0</span><span class="unit"> Msnm</span>
         </div>
-        <p>ALTITUD</p>
+        <p style="color:#CAD5E2">ALTITUD</p>
       </div>
     </div>
-    <div class="col-md-4  card-hover">
-      <div class="counter-box">
+    <div class="col-md-4  card-hover" style="border: 1px solid #E7000B;">
+      <div class="counter-box"style="background-color: transparent;">
         <div>
-          <span class="counter" data-target="2815">0</span><span class="unit"> km²</span>
+          <span class="counter" data-target="2815" style="color:green;font-size:40px">0</span><span class="unit"> km²</span>
         </div>
-        <p>SUPERFICIE</p>
+        <p style="color:#CAD5E2">SUPERFICIE</p>
       </div>
     </div>
   </div>
@@ -190,7 +383,7 @@ font-size: 1rem;
 }
 
 </style>
-<div class="container-fluid" style="background-image: url('imagenes/gamch/frontisALEJADO.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<div class="container-md" style="background-size: cover; background-position: center; background-repeat: no-repeat;border: 1px solid #E7000B;">
   <div class="row">
     <!-- Columna del pergamino -->
     <div class="col-12 col-lg-6">
@@ -236,28 +429,25 @@ font-size: 1rem;
 
     <!-- Columna de audios -->
     <div class="col-12 col-lg-6">
-      <div class="features-boxed container-fluid" style="background: rgba(45,45,89,0.5);">
+      <div class="features-boxed">
         <div class="container-md">
           <h3 class="mb-4 text-white text-center" style="border-radius: 10px;">
             Himno A Challapata
           </h3>
-
           <div class="d-flex flex-wrap justify-content-center gap-4">
             <!-- Tarjeta 3 -->
-            <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up">
+            <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up"  style="border: 1px solid green">
               <div class="card-body">
-                <h5 class="card-title">Himno a Challapata</h5>
-                <p class="card-text">Himno a Challapata - BANDA F.F.E.E. 24 RANGER de Challapata</p>
+                <h5 class="card-title" style="color:#6A7282">Himno a Challapata</h5>
+                <p class="card-text" style="color:#6A7282">Himno a Challapata - BANDA F.F.E.E. 24 RANGER de Challapata</p>
               </div>
               <div class="card-footer bg-white border-top-0">
-                <audio controls class="w-100">
+                <audio controls class="w-100" style="background-color: transparent;">
                   <source src="imagenes/audios/himno%20a%20challapata.mp3" type="audio/mpeg">
                   Tu navegador no soporta el elemento de audio.
                 </audio>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -305,7 +495,12 @@ font-size: 1rem;
   </div>
 </div>
 
-<div class="features-boxed container-fluid" style="background: rgb(44,49,52);">
+<div class="container-fluid" style="  background: url('/imagenes/img-challapata/challapata-portadaweb.jpg');
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+   margin: 0;
+   ">
     <div class="">
         <div></div>
         <hr class="mt-0">

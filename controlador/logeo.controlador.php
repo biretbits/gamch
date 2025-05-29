@@ -57,6 +57,7 @@ class LogeoControlador{
 									$_SESSION["creado_en"]=$fi["creado_en"];
 									$_SESSION["actualizado_en"]=$fi["actualizado_en"];
 									$_SESSION["especial"]=$fi["especial"];
+									
 									echo "correcto";
 	            } else {
 	                echo 'error'.$usuario."  ".$contrasena;

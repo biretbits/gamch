@@ -40,7 +40,7 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
 
 <div class="row justify-content-start" style="background:white;padding:5px">
     <!-- Columna Izquierda: Lista de PDFs -->
- <div class="col-lg-6">
+ <div class="col-lg-8">
  <div class="bg-success text-white p-3 rounded">
  <div class="d-flex align-items-end gap-3 w-100">
 
@@ -202,41 +202,39 @@ text-overflow: ellipsis; /* Agregar '...' al final si el texto es largo */
       </div>
     </div>
 
-
     <!-- Columna Derecha: Última Noticia -->
-    <div class="col-lg-6">
+    <div class="col-lg-4" >
       <div class="container-md">
-
-        <div class="card shadow-sm">
-          <div class="card-header bg-success text-white">
-            <h6 class="mb-0">📰 NOTAS RECIENTES</h6>
-          </div>
-          <div class="card-body">
-          <?php while($fila = mysqli_fetch_array($rnoticia)){ ?>
-          <?php if (!empty($fila["foto"])): ?>
-            <img src="<?php echo $fila["foto"]; ?>" class="img-fluid mb-3 rounded" alt="Imagen de la noticia">
-          <?php endif; ?>
-
-          <h4 class="card-title">
-            <?php echo !empty($fila["titulo"]) ? strtoupper($fila["titulo"]) : "Sin título"; ?>
-          </h4>
-
-          <p class="card-text text-muted">
-            Publicado: <?php echo !empty($fila["fecha"]) ? $fila["fecha"] : "Sin fecha"; ?>
-          </p>
-
-          <p class="description">
-            <?php echo !empty($fila["contenido"]) ? $fila["contenido"] : "Sin contenido disponible."; ?>
-          </p>
-
-          <a href="#" onclick="SeguirLeyendo(<?php echo $fila["id"]; ?>)" class="btn2 btn btn2 btn-sm btn2 btn-outline-success">Leer más</a><p></p>
-        <?php } ?>
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h6 class="mb-0">📰 NOTAS RECIENTES</h6>
         </div>
-
-
+        <div class="card-body p-3" style="padding:15px">
+          <?php while($fila = mysqli_fetch_array($rnoticia)): ?>
+            <?php if (!empty($fila["foto"])): ?>
+              <div class="news-item mb-4 border rounded shadow-sm overflow-hidden">
+                <div class="news-img-wrapper" style="height: 200px; overflow: hidden;">
+                  <img src="<?php echo $fila['foto']; ?>" alt="Imagen de la noticia"
+                       class="img-fluid w-100 h-100" style="object-fit: cover;">
+                </div>
+                <div class="p-3">
+                  <h6 class="text-success fw-bold"><?php echo strtoupper($fila["titulo"]); ?></h6>
+                  <small class="text-muted d-block mb-2">Publicado: <?php echo $fila["fecha"]; ?></small>
+                  <p class="small text-muted mb-3" style="
+                      display: -webkit-box;
+                      -webkit-line-clamp: 3;
+                      -webkit-box-orient: vertical;
+                      overflow: hidden;
+                    "><?php echo $fila["contenido"]; ?></p>
+                  <a href="#" onclick="SeguirLeyendo(<?php echo $fila['id']; ?>)" class="btn btn-sm btn-outline-success">Leer más</a>
+                </div>
+              </div>
+            <?php endif; ?>
+          <?php endwhile; ?>
         </div>
       </div>
     </div>
+
 
   </div>
 

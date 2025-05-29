@@ -37,9 +37,6 @@
     <!-- Al final del <body> -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <style>
-        body {
-            background: #222222;
-        }
 
         .mayu {
             text-transform: uppercase;
@@ -60,139 +57,195 @@
     </style>
 </head>
 
-<body>
+<body >
 
   <button type="button" class="btn btn-primary" id="openChatbot">💬</button>
 
+<div id="header">
 
-<header id="header">
+</div>
 
-  <div class="container-fluid p-0">
 
-    <div class="banner d-flex align-items-center position-relative">
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <!-- Logo -->
+      <a class="navbar-brand" id="floating-logo" class="logo-fixed" href="/">
+        <img src="imagenes/gamch/Logo%20Alcaldía_Mesa%20de%20trabajo%201%20copia.webp" alt="Logo" style="width: 155px;">
+      </a>
 
-      <div class="position-absolute top-0 end-0  text-end">
+      <!-- Menú móvil: el icono de hamburguesa estará a la derecha -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="ms-auto">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menú de navegación -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-home"></i> INICIO
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/inicio">HOME</a></li>
+              <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario'] != ''): ?>
+                <li><a class="dropdown-item" href="/salir"><i class="fas fa-power-off"></i> Cerrar sesión</a></li>
+              <?php else: ?>
+                <li><a class="dropdown-item" href="/iniciar"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a></li>
+              <?php endif; ?>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-users"></i> NOSOTROS
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/MIVI">MISIÓN Y VISIÓN</a></li>
+              <li><a class="dropdown-item" href="/ORGANIGRAMA">ORGANIGRAMA</a></li>
+              <li><a class="dropdown-item" href="/SUBALCALDIA">SUB ALCALDIAS</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a class="nav-link" href="/Noticia"><i class="fa fa-newspaper-o"></i> NOTICIAS</a></li>
+          <li class="nav-item"><a class="nav-link" href="/Servicios"><i class="fa fa-cogs"></i> SERVICIOS</a></li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-file-alt"></i> GACETA
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/LEYES-MUNICIPALES">LEYES MUNICIPALES</a></li>
+              <li><a class="dropdown-item" href="/RESOLUCIONES-MUNICIPALES">RESOLUCIONES MUNICIPALES</a></li>
+              <li><a class="dropdown-item" href="/RESOLUCIONES-MUNICIPALES-ADMINISTRATIVOS">RESOLUCIONES MUNICIPALES ADMINISTRATIVOS</a></li>
+              <li><a class="dropdown-item" href="/DECRETOS-EDILES">DECRETOS EDILES</a></li>
+              <li><a class="dropdown-item" href="/DECRETOS-MUNICIPALES">DECRETOS MUNICIPALES</a></li>
+              <li><a class="dropdown-item" href="/TRANSPARENCIA">TRANSPARENCIA</a></li>
+              <li><a class="dropdown-item" href="/AUDITORIA-INTERNA">AUDITORIA INTERNA</a></li>
+              <li><a class="dropdown-item" href="/INFORME-DE-GESTION">INFORME DE GESTION</a></li>
+              <li><a class="dropdown-item" href="/DOCUMENTOS-IMPORTANTES">DOCUMENTOS IMPORTANTES</a></li>
+
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-cogs"></i> NORMATIVA
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/REGLAMENTOS-ESPECIFICOS">REGLAMENTOS</a></li>
+              <li><a class="dropdown-item" href="/GESTION-DE-PERSONAL">GESTIÓN DE PERSONAL</a></li>
+              <li><a class="dropdown-item" href="/GESTION-TECNICA">GESTIÓN TÉCNICA</a></li>
+              <li><a class="dropdown-item" href="/GESTION-NORMATIVA">GESTIÓN NORMATIVA</a></li>
+              <li><a class="dropdown-item" href="/GESTION-ADMINISTRATIVA">GESTIÓN ADMINISTRATIVA</a></li>
+              <li><a class="dropdown-item" href="/MANUALES-ADMINISTRATIVOS">MANUALES ADMINISTRATIVOS</a></li>
+              <li><a class="dropdown-item" href="/MANUAL-DE-ORGANIZACION-FUNCIONES">MANUALES DE ORGANIZACIONES Y FUNCIONES</a></li>
+
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-cogs"></i> GESTIÓN TRANSPARENTE
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/INFORMES-DE-GESTION">INFORMES DE GESTIÓN</a></li>
+              <li><a class="dropdown-item" href="/REPORTES-DE-EJECUCION">REPORTES DE EJECUCIÓN</a></li>
+              <li><a class="dropdown-item" href="/BOLETINES-DE-INFORMACION">BOLETINES DE INFORMACIÓN</a></li>
+              <li><a class="dropdown-item" href="/PLANES-ESTRATEGICOS">PLANES ESTRATEGICOS</a></li>
+              <li><a class="dropdown-item" href="/PRESUPUESTO-POA">PRESUPUESTO - POA</a></li>
+              <li><a class="dropdown-item" href="/UNIDAD-DE-AUDITORIA-INTERNA">UNIDAD DE AUDITORIA INTERNA</a></li>
+
+            </ul>
+          </li>
+
+          <li class="nav-item"><a class="nav-link" href="/contacto"><i class="fa fa-envelope"></i> CONTACTOS</a></li>
+
+          <?php if (isset($_SESSION['id']) && $_SESSION['id'] != '' && isset($_SESSION['especial']) && $_SESSION['especial'] == 'acceso-total' && isset($_SESSION['nombre_role']) && $_SESSION['nombre_role'] == 'Admin'): ?>
+            <li class="nav-item"><a class="nav-link" href="/panel"><i class="fa fa-cogs"></i> PANEL</a></li>
+          <?php endif; ?>
+        </ul>
+      </div>
+    </div>
+
+  </nav>
+  <div id="marquee" style="width: 100%; overflow: hidden; background-color: transparent; position: fixed; top: 67px; left: 0; z-index: 90;">
+    <!-- Fila superior con flexbox -->
+    <div style="display: flex; align-items: center; background-color: #383838;">
+      <!-- Banner Rojo Estático -->
+      <div style="background-color: red; color: white; font-size: 15px; font-weight: bold; margin-right: 10px; padding: 3px">
+        Noticias:
+      </div>
+
+      <style>
+        .marquee-content {
+          display: inline-block;
+          white-space: nowrap;
+          animation: scroll-left 30s linear infinite;
+        }
+        .bullet {
+          color: red;
+          font-size: 16px;
+          margin: 0 10px;
+        }
+        .message {
+          color: white;
+          font-size: 13px;
+          font-weight: bold;
+          margin-right: 110px;
+        }
+
+        @keyframes scroll-left {
+          0% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      </style>
+
       <?php
-      if (isset($_SESSION['usuario']) && $_SESSION['usuario'] != '') {
-      $name = $_SESSION['usuario'];
-      echo "
-        <span class='me-2' style='font-size:11px'>";
-        if($_SESSION['foto'] == "default.jpg" || $_SESSION['foto'] == ""){
-        echo "<td class='d-flex justify-content-center align-items-center' style='width: 3px; height: 3px;'>
-          <img src='imagenes/user.png' alt='foto' class='img-fluid rounded-circle' style='object-fit: cover; width: 3%; height: 3%;'>
-        </td>";
-      }else{
-        echo "<td class='d-flex justify-content-center align-items-center' style='width: 5px; height: 5px;'>
-          <img src='".$_SESSION['foto']."' alt='foto' class='img-fluid rounded-circle' style='object-fit: cover; width: 3%; height: 3%;'>
-        </td>";
-
-      }echo " Hola <strong>$name</strong></span>
-        <a href='/salir' style='font-size:11px' class='btn btn-sm btn-outline-danger'>
-          <i class='fas fa-power-off'></i> Cerrar sesión
-        </a>";
-      } else {
-      echo "
-        <a href='/iniciar' style='font-size:11px' class='btn btn-sm btn-outline-primary'>
-          <i class='fas fa-sign-in-alt'></i> Iniciar sesión
-        </a>";
-      }
+      $titulos = $_SESSION['TITULOS'];
       ?>
-      </div>
-      <img id="escudo" src="/imagenes/gamch/Escudo%20Challapata%202025.webp"
-           width="100" height="135" class="protected-image mb-2" alt="Escudo Challapata 2025">
 
-      <div class="banner-text ms-3">
-        <h1 class="banner-title text-white mb-2">Gobierno Autónomo Municipal de Challapata</h1>
-        <!--<button class="banner-button btn btn-primary">Iniciar sesión</button>-->
+      <!-- Marquesina -->
+      <div style="overflow: hidden; white-space: nowrap; background-color: black; position: relative;">
+        <div class="marquee-content">
+          <?php for ($i = 0; $i < count($titulos); $i++) {
+            $titulo = $titulos[$i]; ?>
+            <span class="bullet">●</span>
+            <span class="message"><?php echo htmlspecialchars($titulo["titulo"]); ?></span>
+          <?php } ?>
+          <?php for ($i = 0; $i < count($titulos); $i++) {
+            $titulo = $titulos[$i]; ?>
+            <span class="bullet">●</span>
+            <span class="message"><?php echo htmlspecialchars($titulo["titulo"]); ?></span>
+          <?php } ?>
+        </div>
       </div>
 
-      <div class="wisp-effect"></div>
-      <div class="gradient-overlay"></div>
+      <!-- Botón de sesión a la derecha -->
+      <div style="margin-left: 5px;">
+        <?php
+          if (isset($_SESSION['usuario']) && $_SESSION['usuario'] != '') {
+            $name = $_SESSION['usuario'];
+            echo "<span style='font-size:10px; color: white; margin-right: 10px;'>";
+            if ($_SESSION['foto'] == "default.jpg" || $_SESSION['foto'] == "") {
+              echo "<img src='imagenes/user.png' alt='foto' class='img-fluid rounded-circle' style='object-fit: cover; width: 20px; height: 20px; margin-right:5px;'>";
+            } else {
+              echo "<img src='" . $_SESSION['foto'] . "' alt='foto' class='img-fluid rounded-circle' style='object-fit: cover; width: 20px; height: 20px; margin-right:5px;'>";
+            }
+          } else {
+            // Si no está logueado, muestra algo aquí
+          }
+        ?>
+      </div>
     </div>
   </div>
-</header>
 
-
-
-
-
-    <nav id="navbar">
-
-      <div id="floating-logo" class="logo-fixed">
-        <img src="imagenes/gamch/Logo%20Alcaldía_Mesa%20de%20trabajo%201%20copia.webp" alt="Logo Pequeño" style="width: 115px;">
-      </div>
-
-        <div class="handle" aria-expanded="false">☰ MENÚ</div>
-        <?php
-        echo "<ul>
-            <li title='INICIO'>
-                <a href='/'><i class='fas fa-home'></i> INICIO</a>
-            </li>
-            <li title='NOSOTROS' class='has-submenu'>
-                <a href='#'><i class='fa fa-users'></i> NOSOTROS &#9661;</a>
-                <ul class='submenu'>
-                    <li title='MISIÓN VISIÓN'><a  href='/MIVI'>MISIÓN Y VISIÓN</a></li>
-                    <li title='ORGANIGRAMA'><a  href='/ORGANIGRAMA'>ORGANIGRAMA</a></li>
-                    <li title='SUB ALCALDIAS'><a  href='/SUBALCALDIA'>SUB ALCALDIAS</a></li>
-                </ul>
-            </li>
-            <li><a href='/Noticia'><i class='fa fa-newspaper-o'></i> NOTICIAS</a></li>
-            <li><a href='/Servicios'><i class='fa fa-cogs'></i> SERVICIOS</a></li>
-
-            <li title='NORMATIVA' class='has-submenu'>
-                <a href='/gac'><i class='fa fa-users'></i> GACETA &#9661;</a>
-                <ul class='submenu'>
-                  <li title='Documento Referente a Leyes Municipales.'><a href='/LEYES-MUNICIPALES'>LEYES MUNICIPALES</a></li>
-                  <li title='Documento Referente a Resoluciones Municipales.'><a href='/RESOLUCIONES-MUNICIPALES'>RESOLUCIONES MUNICIPALES</a></li>
-                  <li title='Documento Referente a R.A.M.'><a href='/RESOLUCIONES-MUNICIPALES-ADMINISTRATIVOS'>RESOLUCIONES MUNICIPALES ADMINISTRATIVOS</a></li>
-                  <li title='Documento Referente a Decretos Ediles.'><a href='/DECRETOS-EDILES'>DECRETOS EDILES</a></li>
-                  <li title='Documento Referente a Decretos Municipales.'><a href='/DECRETOS-MUNICIPALES'>DECRETOS MUNICIPALES</a></li>
-                  <li title='Documento Referente a Transparencia.'><a href='/TRANSPARENCIA'>TRANSPARENCIA</a></li>
-                  <li title='Documento Referente a Auditoria Interna.'><a href='/AUDITORIA-INTERNA'>AUDITORIA INTERNA</a></li>
-                  <li title='Documento Referente a Informes de Gestion.'><a href='/INFORME-DE-GESTION'>INFORME DE GESTION</a></li>
-                  <li title='Documentos importantes del municipio.'><a href='/DOCUMENTOS-IMPORTANTES'>DOCUMENTOS IMPORTANTES</a></li>
-              </ul>
-            </li>
-
-            <li title='NORMATIVA' class='has-submenu'>
-                <a href='#'><i class='fa fa-users'></i> NORMATIVA &#9661;</a>
-                <ul class='submenu'>
-                    <li title='REGLAMENTOS ESPECIFICOS'><a  href='/REGLAMENTOS-ESPECIFICOS'>REGLAMENTOS ESPECIFICOS</a></li>
-                    <li title='GESTION DE PERSONAL'><a  href='/GESTION-DE-PERSONAL'>GESTÓN DE PERSONAL</a></li>
-                    <li title='GESTION TECNICA'><a  href='/GESTION-TECNICA'>GESTIÓN TÉCNICA</a></li>
-                    <li title='GESTION NORMATIVA'><a  href='/GESTION-NORMATIVA'>GESTIÓN NORMATIVA</a></li>
-                    <li title='GESTION ADMINISTRATIVA'><a  href='/GESTION-ADMINISTRATIVA'>GESTIÓN ADMINISTRATIVA</a></li>
-                    <li title='MANUALES ADMINISTRATIVOS'><a  href='/MANUALES-ADMINISTRATIVOS'>MANUALES ADMINISTRATIVOS</a></li>
-                    <li title='MANNUALES DE ORGANIZACION Y FUNCIONES'><a  href='/MANUAL-DE-ORGANIZACION-FUNCIONES'>MANUALES DE ORGANIZACIONES Y FUNCIONES</a></li>
-                </ul>
-            </li>
-            <li title='GESTIÓN TRANSPARENTE' class='has-submenu'>
-                <a href='#'><i class='fa fa-users'></i> GESTIÓN TRANSPARENTE &#9661;</a>
-                <ul class='submenu'>
-                    <li title='INFORMES DE GESTIÓN'><a  href='/INFORMES-DE-GESTION'>INFORMES DE GESTIÓN</a></li>
-                    <li title='REPORTES DE EJECUCIÓN'><a  href='/REPORTES-DE-EJECUCION'>REPORTES DE EJECUCIÓN</a></li>
-                    <li title='BOLETINES DE INFORMACION'><a  href='/BOLETINES-DE-INFORMACION'>BOLETINES DE INFORMACIÓN</a></li>
-                    <li title='PLANES ESTRATEGICOS'><a  href='/PLANES-ESTRATEGICOS'>PLANES ESTRATEGICOS</a></li>
-                    <li title='PRESUPUESTO - POA'><a  href='/PRESUPUESTO-POA'>PRESUPUESTO - POA</a></li>
-                    <li title='UNIDAD DE AUDITORIA INTERNA'><a  href='/UNIDAD-DE-AUDITORIA-INTERNA'>UNIDAD DE AUDITORIA INTERNA</a></li>
-                </ul>
-            </li>";
-
-            //<li><a href='/contacto'><i class='fa fa-envelope'></i> CONTACTOS</a></li>";
-
-        if (isset($_SESSION['id']) && $_SESSION['id'] != '' &&
-            isset($_SESSION['especial']) && $_SESSION['especial'] == 'acceso-total' &&
-            isset($_SESSION['nombre_role']) && $_SESSION['nombre_role'] == 'Admin') {
-            echo "<li><a href='/panel'><i class='fa fa-envelope'></i> PANEL</a></li>";
-        }
-
-        if (isset($_SESSION['id']) && $_SESSION['id'] != '') {
-            $name = $_SESSION['usuario'];
-        }
-        echo "</ul>";
-        ?>
-
-    </nav>
+    <div style="margin-top: 95px;"> <!-- Ajusta este valor para que esté justo debajo del otro div -->
+      <!-- Tu contenido aquí -->
+    </div>
 
     <!-- Menú lateral de administración -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
@@ -260,38 +313,6 @@
 
     <!-- Scripts para menú -->
     <script>
-          // Mostrar u ocultar el menú principal (modo móvil)
-      $('.handle').on('click', function () {
-      $('nav ul').toggleClass('showing');
-      });
-
-      // Manejar clics en los elementos del menú
-      $('nav ul li').on('click', function (e) {
-      const hasSubmenu = $(this).hasClass('has-submenu');
-
-      if (hasSubmenu) {
-          e.preventDefault(); // Evita que se siga el enlace
-
-          // Mostrar u ocultar el submenú solo para el elemento actual
-          if ($(this).hasClass('active')) {
-              $(this).removeClass('active');
-              $(this).children('ul').slideUp(); // Oculta submenú
-          } else {
-              // Oculta otros submenús
-              $('.has-submenu').removeClass('active').children('ul').slideUp();
-
-              // Muestra el submenú actual
-              $(this).addClass('active');
-              $(this).children('ul').slideDown();
-          }
-      } else {
-          const link = $(this).find('a').attr('href');
-          if (link && link !== '#') {
-              window.location.href = link;
-          }
-      }
-      });
-
 
       window.addEventListener('scroll', function () {
           const navbar = document.getElementById('header');

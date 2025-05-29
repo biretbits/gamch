@@ -1,22 +1,13 @@
 body {
-  margin: 0;
-  padding: 0;
   font-family: 'Aldrich', sans-serif;
-  background: #fbfbfb;
+  background-color:#101218;
+  overflow-x: hidden;
 }
 
-header {
-  background: #292929;
-  width: 100%;
-  padding: 5px 0;
-  color: #fff;
-  text-align: center;
-}
-
+/*
 #navbar {
   transition: transform 0.3s ease, opacity 0.3s ease;
   will-change: transform, opacity;
-
 }
 
 #navbar.fixed {
@@ -40,7 +31,6 @@ a {
 }
 
 nav {
-  background: rgba(56, 56, 56, 0.95);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -55,7 +45,11 @@ nav ul {
   flex-wrap: wrap;
   padding: 10px 0;
   margin: 0;
-  background: rgba(56, 56, 56, 0.95);
+  background: #263238;
+ margin: 0;
+/* Negro con 50% de transparencia */
+ /*color del menu*/
+ /*opacity: 0.9;
   color: white;
   text-align: center;
 }
@@ -70,7 +64,7 @@ nav ul li {
 nav ul li a {
   text-decoration: none;
   font-size: 0.85rem;/*tamaño de letras del menu*/
-  padding: 10px;
+  /*padding: 10px;
   display: block;
   color: white;
   transition: color 0.3s ease;
@@ -91,7 +85,7 @@ section {
 }
 
 /* Botón para mostrar menú en móvil */
-.handle {
+/*.handle {
   width: 100%;
   text-align: left;
   box-sizing: border-box;
@@ -102,8 +96,8 @@ section {
   background: grey;
   font-weight: bold;
   font-size: 1rem;
-}
-
+}*/
+/*
 @media (max-width: 768px) {
   .handle {
     display: block;
@@ -112,52 +106,47 @@ section {
 
 i {
   display: none;
-}
-
-/* SUBMENÚ */
+}*/
+/*
 .submenu {
-  display: none;
-  position: absolute;
-  background: #4c4c4c;
-  z-index: 100;
-  top: 100%;
-  left: 0;
-  min-width: 250px;
-  font-size: 12px
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: none;
+    position: absolute;
+    background: #4c4c4c;
+    z-index: 9999; /* Asegúrate de que el z-index sea alto, más alto que la marquesina */
+  /*  top: 100%;
+    left: 0;
+    min-width: 250px;
+    font-size: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
 }
 
-.has-submenu {
-  position: relative;
-}
-
-/* Mostrar submenú al pasar el mouse */
 .has-submenu:hover .submenu {
-  display: block;
+    display: block;
+    opacity: 1; /* Asegúrate de que sea visible cuando se pase el ratón */
 }
 
 /* Estilo de los ítems dentro del submenú */
-.submenu li {
+/*.submenu li {
   display: block;
   width: 100%;
   text-align: left;
 }
 
-/* Estilo de los ítems dentro del submenú */
 .submenu li a {
   color: white;
   padding: 3px 13px;
   transition: background-color 0.3s ease, color 0.3s ease;
-  font-size: 0.75rem; /* Cambia el tamaño del texto aquí */
+  font-size: 0.75rem;
 }
 
-
 .submenu li a:hover {
-  background-color:#f3ebeb;
+  background-color: #f3ebeb;
 }
 
 /* Responsive */
-@media screen and (max-width: 580px) {
+/*@media screen and (max-width: 580px) {
   nav ul {
     max-height: 0;
     overflow: hidden;
@@ -190,8 +179,7 @@ i {
 /*css de conteo de numeros de poblacion altitud*/
 
   .counter {
-    font-size: 3rem;
-    font-weight: bold;
+    font-size: 45px;
     color: #007bff;
   }
   .counter-box {
@@ -488,14 +476,11 @@ right: 20px;     /* posicionar a la derecha */
   .banner {
     position: relative;
     width: 100%;
-    height: 37vh;
-    background: linear-gradient(135deg, #5e0000, #002195);
+    height: 11vh;/*tamaño del banner de arriba*/
+    background: linear-gradient(135deg, red, blue);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     overflow: hidden;
-    border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   }
 
@@ -503,8 +488,8 @@ right: 20px;     /* posicionar a la derecha */
 
   .banner-image {
     width: auto;
-    height: 140px;
-    margin-bottom: 10px;
+    height: 40px;//
+    margin-bottom: 1px;
     animation: float 6s infinite ease-in-out;
     z-index: 2;
   }
@@ -523,7 +508,7 @@ right: 20px;     /* posicionar a la derecha */
   /* Texto estático */
 
   .banner-title {
-    font-size: 1.5rem;
+    font-size: 0.5rem;/*tamaño de la letra de la imagen de arrba*/
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -613,3 +598,48 @@ right: 20px;     /* posicionar a la derecha */
       padding: 8px 16px;
     }
   }
+
+  /* Reducir el tamaño de la fuente en el menú principal */
+   .navbar-nav .nav-link {
+     font-size: 14px; /* Ajusta este valor para hacerlo más pequeño */
+   }
+
+   /* Reducir el tamaño de los íconos en el menú principal */
+   .navbar-nav .nav-link i {
+     font-size: 16px; /* Ajusta el tamaño de los íconos */
+   }
+
+   /* Reducir el tamaño de la fuente en los submenús */
+   .navbar-nav .dropdown-menu .dropdown-item {
+     font-size: 12px; /* Ajusta este valor para los elementos del submenú */
+   }
+
+   /* Reducir el tamaño de los íconos en los submenús */
+   .navbar-nav .dropdown-menu .dropdown-item i {
+     font-size: 14px; /* Ajusta este valor para los íconos en los submenús */
+   }
+
+   /* Reducir el tamaño de la fuente solo en pantallas pequeñas */
+   @media (max-width: 768px) {
+     .navbar-nav .nav-link {
+       font-size: 12px; /* Ajusta este valor según lo que desees */
+     }
+
+     .navbar-nav .nav-link i {
+       font-size: 14px; /* Ajusta el tamaño de los íconos en pantallas pequeñas */
+     }
+
+     /* Reducir el tamaño de la fuente en los submenús solo en pantallas pequeñas */
+     .navbar-nav .dropdown-menu .dropdown-item {
+       font-size: 11px; /* Ajusta este valor para hacerlo más pequeño en móviles */
+     }
+
+     /* Reducir el tamaño de los íconos en los submenús solo en pantallas pequeñas */
+     .navbar-nav .dropdown-menu .dropdown-item i {
+       font-size: 12px; /* Ajusta el tamaño de los íconos en los submenús en pantallas pequeñas */
+     }
+   }
+
+   a {
+     text-decoration: none !important;
+   }
