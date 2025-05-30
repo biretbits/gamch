@@ -368,7 +368,6 @@
 
           var datos = new FormData();
           datos.append("mensaje", va);
-
           $.ajax({
             cache: false,
             url: '/msu',
@@ -379,7 +378,8 @@
             processData: false,
             success: function(result) {
               result=$.trim(result);
-              pedirRespuesta(result);
+              //pedirRespuesta(result);
+              mostrarResultado(result);
             }
           });
         }
@@ -442,7 +442,6 @@
       }
 
             function mostrarResultado(texto) {
-
                   $(".form").append('<span class="mensaje-espere">....</span>');
                   $(".form").scrollTop($(".form")[0].scrollHeight);
                   setTimeout(function() {
