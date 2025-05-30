@@ -9,7 +9,7 @@ class Conexion{
 
 	public function __construct(){
     $this->database="gamch";
-		$this->pass="1234";
+		$this->pass="";
 		$this->user="root";
 		$this->host="localhost";
 		$this->cnmysql=null;
