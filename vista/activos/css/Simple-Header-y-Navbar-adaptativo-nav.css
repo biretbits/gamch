@@ -1,8 +1,23 @@
 body {
-  font-family: 'Aldrich', sans-serif;
   background-color:#101218;
-  overflow-x: hidden;
 }
+html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+  }
+
+  body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+  }
+  .content {
+    flex: 1 0 auto;
+  }
+  .main-content {
+      padding-top: 0px; /* Ajusta este valor según la altura de tu navbar */
+  }
 
 /*
 #navbar {
@@ -199,48 +214,19 @@ i {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   }
-  /*end*/
 
-  /*codigo del pergamino del himno a challapata*/
-  .pergamino {
-    background: #fff8dc;
-    border: 10px solid #deb887;
-    border-radius: 30px;
-    padding: 2rem;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
-    margin-top: 50px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    max-height: 500px; /* Altura máxima para mostrar el scroll */
-    overflow: hidden;
+
+
+  .container-md {
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  .scroll-contenido {
-    max-height: 100%;
-    overflow-y: auto;
-    padding-right: 1rem; /* espacio para el scroll */
+  .features-boxed {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 
-  .pergamino::before,
-  .pergamino::after {
-    content: '';
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background-color: #deb887;
-    border-radius: 50%;
-    top: -30px;
-  }
-
-  .pergamino::after {
-    right: -30px;
-  }
-
-  .pergamino::before {
-    left: -30px;
-  }
 
   h2 {
     text-align: center;
@@ -273,13 +259,7 @@ i {
   }
   /*fin*/
 
-  /*fondo imagen*/
-  .fondoPergamino {
-    background-image: url('imagenes/img-challapata/frontisALEJADO.jpg'); /* Ruta de tu imagen */
-    background-size: cover;      /* Hace que la imagen cubra toda la sección */
-    background-position: center; /* Centra la imagen */
-    background-repeat: no-repeat; /* No se repite la imagen */
-  }
+
   .logo-fixed {
 position: fixed;
 top: 10px;
@@ -643,3 +623,129 @@ right: 20px;     /* posicionar a la derecha */
    a {
      text-decoration: none !important;
    }
+
+
+/*codigo del pergamino*/
+/* Diseño del pergamino */
+.pergamino {
+  background: #f5d44e; /* Color dorado claro de fondo */
+  border: 10px solid #d4af37; /* Bordes dorados */
+  border-radius: 30px; /* Bordes redondeados */
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Sombra para darle profundidad */
+  margin-top: 50px;
+  max-width: 700px;  /* Hacemos el pergamino más delgado */
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  height: 400px;  /* Ajustamos la altura para hacerlo más compacto */
+  overflow: hidden;
+}
+
+/* Estilo para el contenido que tiene el scroll */
+.scroll-contenido {
+  overflow-y: auto;
+  max-height: 350px;  /* Limita el alto del contenido */
+  padding-right: 1rem;
+}
+
+/* Efectos de antes y después para el pergamino */
+.pergamino::before,
+.pergamino::after {
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-color: #d4af37; /* Bordes laterales dorados */
+  border-radius: 50%;
+  top: -30px;
+}
+
+.pergamino::after {
+  right: -30px;
+}
+
+.pergamino::before {
+  left: -30px;
+}
+
+/* Título principal del himno */
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  font-family: 'Georgia', serif; /* Fuente elegante */
+  font-size: 2rem;
+}
+
+/* Estilo de la autoría */
+.autor {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-style: italic;
+  font-family: 'Times New Roman', serif;
+}
+
+/* Estilo para cada estrofa */
+.estrofa {
+  max-width: 500px;
+  margin-bottom: 2rem;
+  line-height: 1.8;
+  white-space: pre-line;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Alineación de las estrofas */
+.izquierda {
+  text-align: left;
+  margin-right: auto;
+}
+
+.derecha {
+  text-align: right;
+  margin-left: auto;
+}
+
+/* Estilo de las tarjetas con el audio */
+.features-boxed {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para las tarjetas */
+  border-radius: 15px; /* Bordes redondeados para las tarjetas */
+  border: none;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px); /* Efecto de elevación al pasar el ratón */
+}
+
+.card-body {
+  background-color: #f8f9fa; /* Fondo claro para la tarjeta */
+  padding: 1.5rem;
+}
+
+.card-footer {
+  background-color: #ffffff;
+  border-top: 1px solid #deb887;
+}
+
+/* Estilo del audio */
+audio {
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+/* Ajuste para la imagen de fondo del pergamino si decides usarla */
+.fondoPergamino {
+  background-image: url('imagenes/img-challapata/frontisALEJADO.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/*finalizacion del pergamino*/

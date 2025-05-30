@@ -54,12 +54,10 @@
             -moz-appearance: textfield;
         }
 
-
     </style>
 </head>
 
 <body >
-
   <button type="button" class="btn btn-primary" id="openChatbot">💬</button>
 
 <div id="header">
@@ -429,8 +427,10 @@
           const resultado = await respuesta.json();
           console.log("Respuesta completa de la API:", resultado);
 
-          const contenido = resultado?.choices?.[0]?.message?.content?.trim() || "No hay respuesta disponible";
-          if(contenido == "No hay respuesta disponible"){
+          const contenido = (resultado && resultado.choices && resultado.choices[0] && resultado.choices[0].message && resultado.choices[0].message.content)
+                  ? resultado.choices[0].message.content.trim()
+                  : "No hay respuesta disponible";
+            if(contenido == "No hay respuesta disponible"){
             mostrarResultado(textoBase);
           }else{
             mostrarResultado(contenido);
@@ -526,55 +526,21 @@
   }
   </style>
     <!--
-    <div id="loader">
+  <div id="loader">
     <div class="spinner">
       <i class="fas fa-spinner fa-spin"></i>
     </div>
     <div style="
-  font-size: 10px;
-  background: linear-gradient(to right, red 50%, blue 50%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: bold;
-">
-  CHALLAPATA
-</div>
+      font-size: 10px;
+      background: linear-gradient(to right, red 50%, blue 50%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+      ">
+      CHALLAPATA
+    </div>
 
   </div>
-  <style>
-  #loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  font-size: 24px;
-  display: none; /* Oculto inicialmente */
-}
-
-#loader .spinner {
-  font-size: 40px;
-  animation: spin 3s linear infinite, colorChange 3s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes colorChange {
-  0% { color: red; }
-  50% { color: blue; }
-  100% { color: red; }
-}
-
-
-  </style>
   <script>
       window.onload = function() {
         // Mostrar el loader al inicio
@@ -587,3 +553,6 @@
         }, 500); // Puedes cambiar el tiempo según el tiempo que desees mostrar el "Cargando"
       };
     </script>-->
+
+      <div class="content">
+        <div class="main-content">

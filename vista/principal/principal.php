@@ -32,7 +32,7 @@ require_once('vista/esquema/header.php');
         <img src="imagenes/img-challapata/banner2.jpg" class="d-block" alt="Imagen 2">
       </div>
       <div class="carousel-item h-100">
-        <img src="imagenes/img-challapata/Banner.webp" class="d-block" alt="Imagen 3">
+        <img src="imagenes/img-challapata/BannerWeb2025.jpg" class="d-block" alt="Imagen 3">
       </div>
     </div>
 
@@ -310,71 +310,60 @@ font-size: 1rem;
 }
 
 </style>
-<div class="container-md" style="background-size: cover; background-position: center; background-repeat: no-repeat;border: 1px solid #E7000B;">
-  <div class="row">
-    <!-- Columna del pergamino -->
-    <div class="col-12 col-lg-6">
-      <div class="features-boxed container-fluid">
-        <div class="container" data-aos="fade-up">
-          <div class="pergamino">
-            <div class="scroll-contenido">
-              <h2>Himno a Challapata</h2>
-              <div class="autor">Letra: Saturnino Barre &nbsp;&nbsp;&nbsp; Música: Enrique Pérez</div>
+<!-- Columna del pergamino -->
+<div class="col-12 col-lg-12">
+  <div class="container-md"  data-aos="fade-up">
+    <!-- Contenedor del Pergamino -->
+    <div class="pergamino">
+      <div class="scroll-contenido">
+        <h2>Himno a Challapata</h2>
+        <div class="autor">Letra: Saturnino Barre &nbsp;&nbsp;&nbsp; Música: Enrique Pérez</div>
 
-              <div class="estrofa izquierda" class="estrofa">
-                Somos hijos de Eduardo Abaroa
-                que desde el Topater nos llegó
-                bello ejemplo de hombría y coraje
-                al morir sin rendirse jamás.
-              </div>
+        <div class="estrofa izquierda">
+          Somos hijos de Eduardo Abaroa
+          que desde el Topater nos llegó
+          bello ejemplo de hombría y coraje
+          al morir sin rendirse jamás.
+        </div>
 
-              <div class="estrofa derecha" class="estrofa">
-                En la inmensidad del altiplano
-                muy celoso guardamos su mensaje
-                trabajando ahínco por su gloria
-                por la patria, la pobreza y la unión.
-              </div>
+        <div class="estrofa derecha">
+          En la inmensidad del altiplano
+          muy celoso guardamos su mensaje
+          trabajando ahínco por su gloria
+          por la patria, la pobreza y la unión.
+        </div>
 
-              <div class="estrofa izquierda" class='estrofa'>
-                Con cerebro y corazón
-                centinelas son tus hijos
-                con el cóndor de nuestro escudo
-                vigilando el Mapocho y al ladrón.
-              </div>
+        <div class="estrofa izquierda">
+          Con cerebro y corazón
+          centinelas son tus hijos
+          con el cóndor de nuestro escudo
+          vigilando el Mapocho y al ladrón.
+        </div>
 
-              <div class="estrofa derecha" class='estrofa'>
-                Noble pueblo de Challapata
-                la vanguardia vengadora
-                de su sangre aún caliente
-                llama al mar a nuestro bello litoral.
-              </div>
-            </div>
-          </div>
+        <div class="estrofa derecha">
+          Noble pueblo de Challapata
+          la vanguardia vengadora
+          de su sangre aún caliente
+          llama al mar a nuestro bello litoral.
         </div>
       </div>
     </div>
 
-    <!-- Columna de audios -->
-    <div class="col-12 col-lg-6">
-      <div class="features-boxed">
-        <div class="container-md">
-          <h3 class="mb-4 text-white text-center" style="border-radius: 10px;">
-            Himno A Challapata
-          </h3>
-          <div class="d-flex flex-wrap justify-content-center gap-4">
-            <!-- Tarjeta 3 -->
-            <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up"  style="border: 1px solid green">
-              <div class="card-body">
-                <h5 class="card-title" style="color:#6A7282">Himno a Challapata</h5>
-                <p class="card-text" style="color:#6A7282">Himno a Challapata - BANDA F.F.E.E. 24 RANGER de Challapata</p>
-              </div>
-              <div class="card-footer bg-white border-top-0">
-                <audio controls class="w-100" style="background-color: transparent;">
-                  <source src="imagenes/audios/himno%20a%20challapata.mp3" type="audio/mpeg">
-                  Tu navegador no soporta el elemento de audio.
-                </audio>
-              </div>
-            </div>
+    <div class="features-boxed">
+      <h3 class="mb-4 text-white text-center" style="border-radius: 10px;">
+        Himno A Challapata
+      </h3>
+      <div class="d-flex flex-wrap justify-content-center gap-4">
+        <div class="card shadow-sm card-hover" style="width: 18rem;" data-aos="fade-up">
+          <div class="card-body">
+            <h5 class="card-title" style="color:#6A7282">Himno a Challapata</h5>
+            <p class="card-text" style="color:#6A7282">Himno a Challapata - BANDA F.F.E.E. 24 RANGER de Challapata</p>
+          </div>
+          <div class="card-footer bg-white border-top-0">
+            <audio controls class="w-100" style="background-color: transparent;">
+              <source src="imagenes/audios/himno%20a%20challapata.mp3" type="audio/mpeg">
+              Tu navegador no soporta el elemento de audio.
+            </audio>
           </div>
         </div>
       </div>
