@@ -38,6 +38,8 @@
               <p style="margin-bottom:0px;">Don't you have an account?<a id="register-link" href="#">Sign Up!</a></p>
           </div>
       </div>
+    </div>
+  </div>
 
 
 <script type="text/javascript">
