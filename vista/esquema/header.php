@@ -160,7 +160,7 @@
 
           <li class="nav-item"><a class="nav-link" href="/contacto"><i class="fa fa-envelope"></i> CONTACTOS</a></li>
 
-          <?php if (isset($_SESSION['id']) && $_SESSION['id'] != '' && isset($_SESSION['especial']) && $_SESSION['especial'] == 'acceso-total' && isset($_SESSION['nombre_role']) && $_SESSION['nombre_role'] == 'Admin'): ?>
+          <?php if (isset($_SESSION['id']) && $_SESSION['id'] != '' && isset($_SESSION['nombre_role']) && $_SESSION['nombre_role'] == 'Admin'): ?>
             <li class="nav-item"><a class="nav-link" href="/panel"><i class="fa fa-cogs"></i> PANEL</a></li>
           <?php endif; ?>
         </ul>

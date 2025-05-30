@@ -127,7 +127,6 @@
          </div>
        </div>
      </div>
-  </div>
 
 <!-- Contenido -->
 
@@ -290,6 +289,8 @@
   </div>
 
 </div>
+</div>
+
 <script type="text/javascript">
 
 function verificarList(valor){
