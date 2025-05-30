@@ -1,12 +1,12 @@
 <?php require("vista/esquema/header.php"); ?>
 
 
-<section class="py-5 bg-light" id="qaqachaca">
-  <div class="container-fluid">
+<div class="py-2 bg-light" id="qaqachaca">
+  <div class="container-md">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="600">
-        <h1 class="display-6 fw-bold text-uppercase">SUB ALCALDIA DE CHALLAPATA</h1>
+        <h1 class="display-8 fw-bold text-uppercase">SUB ALCALDIA DE CHALLAPATA</h1>
         <h2 class="h5 mb-3 text-muted">Información</h2>
         <ul class="list-unstyled fs-6">
           <li><i class="fa fa-check-circle text-success me-2"></i><strong>Dirección:</strong> Plaza Potosi</li>
@@ -15,19 +15,20 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/subalcaldias/challapata.jpg" alt="CHALLAPATA" class="img-fluid rounded shadow-sm w-100">
-
+        <div style="width: 100%; height: 300px; overflow: hidden;">
+            <img src="imagenes/subalcaldias/challapata.jpg" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section class="py-5 bg-light" id="qaqachaca">
-  <div class="container-fluid">
+<div class="py-2 bg-light" id="qaqachaca">
+  <div class="container-md">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="600">
-        <h1 class="display-6 fw-bold text-uppercase">SUB ALCALDIA DE QAQACHACA</h1>
+        <h1 class="display-8 fw-bold text-uppercase">SUB ALCALDIA DE QAQACHACA</h1>
         <h2 class="h5 mb-3 text-muted">Información</h2>
         <ul class="list-unstyled fs-6">
           <li><i class="fa fa-check-circle text-success me-2"></i><strong>Dirección:</strong> Ex mercado Central</li>
@@ -36,14 +37,15 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/subalcaldias/qaqachaca.jpeg" alt="CHALLAPATA" class="img-fluid rounded">
-
+        <div style="width: 100%; height: 300px; overflow: hidden;">
+            <img src="imagenes/subalcaldias/qaqachaca.jpeg" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section class="py-5 bg-light" id="qaqachaca">
+<div class="py-2 bg-light" id="qaqachaca">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
@@ -59,14 +61,15 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/subalcaldias/huancane.jpg" alt="CHALLAPATA" class="img-fluid rounded shadow-sm w-100">
-
+        <div style="width: 100%; height: 300px; overflow: hidden;">
+            <img src="imagenes/subalcaldias/huancane.jpg" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section class="py-5 bg-light" id="NORTE CONDO ABAJO">
+<div class="py-2 bg-light" id="NORTE CONDO ABAJO">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
@@ -82,14 +85,15 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/img-challapata/nortecondoAbajo.jpeg" alt="CHALLAPATA" class="img-fluid rounded shadow-sm w-100">
-
+        <div style="width: 100%; height: 300px; overflow: hidden;">
+            <img src="imagenes/img-challapata/nortecondoAbajo.jpeg" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section class="py-5 bg-light" id="NORTE CONDO ABAJO">
+<div class="py-2 bg-light" id="NORTE CONDO ABAJO">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
@@ -105,15 +109,16 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/subalcaldias/norten3.JPG" alt="CHALLAPATA" class="img-fluid rounded shadow-sm w-100">
-
+        <div style="width: 100%; height: 300px; overflow: hidden;">
+            <img src="imagenes/subalcaldias/norten3.JPG" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-</section>
-<section class="py-5 bg-light" id="CULTA">
+</div>
+<div class="py-2 bg-light" id="CULTA">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
@@ -127,14 +132,15 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/subalcaldias/culta.jpeg" alt="CHALLAPATA" class="img-fluid rounded shadow-sm w-100">
-
+          <div style="width: 100%; height: 300px; overflow: hidden;">
+              <img src="imagenes/subalcaldias/culta.jpeg" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section class="py-5 bg-light" id="NORTE CONDO ABAJO">
+<div class="py-2 bg-light" id="NORTE CONDO ABAJO">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
@@ -150,14 +156,15 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/subalcaldias/ancacato.jpeg" alt="CHALLAPATA" class="img-fluid rounded shadow-sm w-100">
-
+        <div style="width: 100%; height: 300px; overflow: hidden;">
+            <img src="imagenes/subalcaldias/ancacato.jpeg" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section class="py-5 bg-light" id="NORTE CONDO ABAJO">
+<div class="py-2 bg-light" id="NORTE CONDO ABAJO">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
@@ -173,19 +180,20 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/subalcaldias/tolapalca.png" alt="CHALLAPATA" class="img-fluid rounded shadow-sm w-100">
-
+        <div style="width: 100%; height: 300px; overflow: hidden;">
+            <img src="imagenes/subalcaldias/tolapalca.png" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<section class="py-5 bg-light" id="NORTE CONDO ABAJO">
+<div class="py-2 bg-light" id="NORTE CONDO ABAJO">
   <div class="container-fluid">
     <div class="row align-items-center">
       <!-- Texto a la izquierda -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="600">
-        <h1 class="display-6 fw-bold text-uppercase">SUB ALCALDIA DE AGUAS CALIENTES</h1>
+        <h1 class="display-8 fw-bold text-uppercase">SUB ALCALDIA DE AGUAS CALIENTES</h1>
         <h2 class="h5 mb-3 text-muted">Información</h2>
         <ul class="list-unstyled fs-6">
           <li><i class="fa fa-check-circle text-success me-2"></i><strong>Dirección:</strong> Alcaldía de Challapata
@@ -196,11 +204,13 @@
       </div>
       <!-- Imagen a la derecha -->
       <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="800">
-        <img src="imagenes/subalcaldias/aguasCalientes.jpeg" alt="CHALLAPATA" class="img-fluid rounded shadow-sm w-100">
+        <div style="width: 100%; height: 300px; overflow: hidden;">
+          <img src="imagenes/subalcaldias/aguasCalientes.jpeg" alt="Sub Alcaldia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">
+      </div>
 
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <?php require("vista/esquema/footeruni.php"); ?>

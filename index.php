@@ -1,5 +1,6 @@
 
 <?php
+require ("vista/esquema/globales.php");
 require_once("config.php");
 require_once "controlador/sesion.controlador.php";
 $ins=new sesionControlador();
@@ -373,6 +374,9 @@ if (
   SecretariaControlador::visualizarSF();
 }else if($_GET["accion"] == "msu"){
   ChatControlador::MensajeUsuario($_POST["mensaje"]);
+}
+else if($_GET["accion"] == "ALCALDE"){
+  NosotrosControlador::VisualizaRAlcalde();
 }
 else {
     IndexControlador::visualizarPrincipal();

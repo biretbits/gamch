@@ -1,0 +1,88 @@
+.news-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0px;
+  margin-bottom: 25px;
+  height: 100%;
+}
+
+.news-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(100%);
+  transition: transform 0.3s ease;
+}
+
+.news-card:hover img {
+  transform: scale(1.05);
+}
+
+.news-overlay {/*codigo del texto de la imagenes el titulo*/
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  color: white;
+  padding: 15px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  width: 100%;
+}
+
+.news-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color:#CAD5E2
+}
+
+.news-desc {
+  font-size: 0.9rem;
+  color:#CAD5E2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* Cambiado a 3 líneas */
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  line-height: 1.3em;
+
+}
+.news-desc3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;           /* Cambiado a 3 líneas */
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  line-height: 1.3em;
+  font-size: 0.9rem;
+  color: #CAD5E2;
+}
+
+.news-desc1{
+   display: -webkit-box;
+  -webkit-line-clamp: 1;       /* Número de líneas que quieres mostrar */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  color:#CAD5E2
+}
+.news-date {
+  font-size: 0.75rem;
+  color:#CAD5E2
+}
+
+.big-news {
+  height: 420px;
+}
+
+.medium-news {
+  height: 200px;
+}
+
+.small-news {
+  height: 150px;
+}

@@ -5,8 +5,7 @@ footer {
   width: 100%;
   text-align: left;
   font: bold 16px sans-serif;
-  padding: 55px 50px;
-  margin-top: 80px;
+  margin-top: 0px;
   bottom: 0;
   color: #fff;
 }
@@ -112,4 +111,3 @@ div.social-links {
   margin-right: 5px;
   margin-bottom: 5px;
 }
-

@@ -35,6 +35,19 @@ class Index
           return $this->con->query($sql);
       }
   }
+  public function SeleccionarNoticiasDeDosDias($limite) {
+      // Calcular la fecha de hace 5 días (el rango inferior)
+      $fechaLimite5Dias = date('Y-m-d H:i:s', strtotime('-5 days'));
+
+      // Calcular la fecha de hace 1 día (el rango superior)
+      $fechaLimite1Dia = date('Y-m-d H:i:s', strtotime('-1 days'));
+
+      // Consulta SQL para obtener noticias entre hace 5 días y hace 1 día
+      $consulta = "SELECT * FROM nuevas_paginas WHERE creado_en BETWEEN '$fechaLimite5Dias' AND '$fechaLimite1Dia' ORDER BY id DESC LIMIT $limite";
+
+      // Ejecutar la consulta y devolver el resultado
+      return $this->con->query($consulta);
+  }
 
 }
 

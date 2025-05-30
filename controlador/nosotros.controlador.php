@@ -22,6 +22,10 @@ class NosotrosControlador{
     require("vista/nosotros/subalcaldia.php");
   }
 
+  public static function VisualizaRAlcalde(){
+    require("vista/nosotros/NuestroAlcalde.php");
+  }
+
 }
 
 

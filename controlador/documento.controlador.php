@@ -507,10 +507,12 @@ echo "</div>
     $listarDeCuanto = 5;$pagina = 1;
     $resultodoUsuarios = $us->SeleccionarNoticiasNuevas(false,false);
     $num_filas_total = mysqli_num_rows($resultodoUsuarios);
-    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+    $TotalPaginas = ceil(($num_filas_total-5) / $listarDeCuanto);//obtenenemos el total de paginas a mostrar pero le restamos 5 paginas menos
             //calculamos el registro inicial
     $inicioList = ($pagina - 1) * $listarDeCuanto;
-    $resul = $us->SeleccionarNoticiasNuevas($inicioList,$listarDeCuanto);
+    $resul = $us->SeleccionarNoticiasNuevas(0,5);
+    $resul2 = $us->SeleccionarNoticiasNuevas(5,$listarDeCuanto);
+    $resulNo = $us->SeleccionarNoticiasDeDosDias(5);
     require("vista/noticia/cliente/noticias.php");
   }
 
@@ -525,143 +527,143 @@ echo "</div>
     $us = new Documento();
     $resultodoUsuarios = $us->SeleccionarNoticiasNuevas(false,false);
     $num_filas_total = mysqli_num_rows($resultodoUsuarios);
-    $TotalPaginas = ceil($num_filas_total / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
+    $TotalPaginas = ceil(($num_filas_total-5) / $listarDeCuanto);//obtenenemos el total de paginas a mostrar
             //calculamos el registro inicial
-    $inicioList = ($pagina - 1) * $listarDeCuanto;
-    $resul = $us->SeleccionarNoticiasNuevas($inicioList,$listarDeCuanto);
-    echo '<div class="container-sm">';
-    echo '<br>';
 
-    if ($resul && $resul->num_rows > 0) {
-        while ($newpage = $resul->fetch_object()) {
-            echo '<div class="row justify-content-center mb-5">';
+    $inicioList = ($pagina - 1) * 5 + 5;
+    $resul2 = $us->SeleccionarNoticiasNuevas($inicioList,$listarDeCuanto);
 
-            // Imagen
-            echo '<div class="col-md-5">';
-            echo '<div class="mb-4">';
-            echo '<a href="#">';
-            echo '<div style="width: 100%; height: 250px; overflow: hidden;">';
-            echo '<img src="' . htmlspecialchars($newpage->foto) . '" alt="noticia" class="img-fluid" style="width: 100%; height: 100%; object-fit: contain;">';
-            echo '</div>';
-            echo '</a>';
-            echo '</div>';
-            echo '</div>';
+      echo '<div class="container-sm">
+          <br>
+          <style media="screen">
+              .card1:hover {
+                  border-color: #0097a7; /* Cambia el color del borde al pasar el ratón */
+                  box-shadow: 0 8px 16px rgba(0, 158, 171, 0.4); /* Sombra más fuerte al hacer hover */
+              }
+          </style>';
 
-            // Texto
-            echo '<div class="col-md-5">';
-            echo '<ul class="list-inline text-uppercase text-muted small mb-2">';
-            echo '<li class="list-inline-item"><a href="#">Publicado</a></li>';
-            echo '<li class="list-inline-item"><a href="#">' . htmlspecialchars($newpage->fecha) . '</a></li>';
-            echo '</ul>';
+      echo '<div class="row row-cols-1 row-cols-md-4 g-4">';
+      if ($resul2 && $resul2->num_rows > 0):
+          while ($newpage = $resul2->fetch_object()):
+              echo '<div class="col mb-4">
+                      <div class="card card1" style="border: 2px solid #00bcd4; /* Celeste claro */
+                            border-radius: 8px; /* Esquinas redondeadas */
+                            box-shadow: 0 4px 8px rgba(0, 188, 212, 0.3); /* Sombra suave de color celeste */
+                            transition: all 0.3s ease; /* Efecto de transición */">
+                          <div class="card-body">
+                              <div style="width: 100%; height: 200px; overflow: hidden;">
+                                  <img src="' . htmlspecialchars($newpage->foto) . '" alt="noticia" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                              </div>
+                          </div>';
 
-            echo '<h3 class="fw-light">';
-            echo '<a href="#" onclick="SeguirLeyendo(' . $newpage->id . ')" class="text-decoration-none">';
-            echo htmlspecialchars($newpage->titulo);
-            echo '</a>';
-            echo '</h3>';
+              echo '<div class="card-body" style="font-size:11px">
+                      <ul class="list-inline text-uppercase text-muted small mb-2">
+                          <li class="list-inline-item"><a href="#" style="color:black">Publicado</a></li>
+                          <li class="list-inline-item"><a href="#" style="color:black">' . htmlspecialchars(fechaAnoMesDia($newpage->fecha)) . '</a></li>
+                      </ul>
+                      <h5 class="card-title" style="font-size:14px">
+                          <a href="#" style="color:black" onclick="SeguirLeyendo(' . $newpage->id . ')" class="text-decoration-none">
+                              ' . htmlspecialchars($newpage->titulo) . '
+                          </a>
+                      </h5>
+                      <p class="card-text" style="color:grey">
+                          ' . substr(strip_tags($newpage->contenido), 0, 200) . '...' . '
+                      </p>
+                      <a href="#" onclick="SeguirLeyendo(' . $newpage->id . ')" class="text-primary small text-decoration-none">Seguir Leyendo Más</a>
+                  </div>
+              </div>
+          </div>';
+          endwhile;
+      else:
+          echo '<div class="text-center">
+                  <p class="text-white">No se encontraron noticias.</p>
+              </div>';
+      endif;
+      echo '</div>';
+      if ($TotalPaginas != 0):
+          $adjacents = 1;
+          $anterior = "&lsaquo; Anterior";
+          $siguiente = "Siguiente &rsaquo;";
 
-            echo '<p class="my-3">';
-            echo substr(strip_tags($newpage->contenido), 0, 200) . '...';
-            echo '</p>';
+          echo '<div class="row">';
+          echo '    <div class="col">';
+          echo '        <nav>';
+          echo '            <ul class="pagination justify-content-center flex-wrap" style="background:white">';
 
-            echo '<a href="#" onclick="SeguirLeyendo(' . $newpage->id . ')" class="text-primary small text-decoration-none">Seguir Leyendo Más</a>';
-            echo '</div>';
+          // Primera página
+          if ($pagina > 1) {
+              echo '            <li class="page-item">';
+              echo '                <a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(1)" aria-label="Primera">';
+              echo '                    <span aria-hidden="true">&laquo;</span>';
+              echo '                </a>';
+              echo '            </li>';
+          }
 
-            echo '</div>'; // row
-            echo '<hr>';
-        }
-    } else {
-        echo '<div class="text-center">';
-        echo '<p class="text-white">No se encontraron noticias.</p>';
-        echo '</div>';
-    }
+          // Anterior
+          if ($pagina == 1) {
+              echo '            <li class="page-item disabled">';
+              echo '                <span class="page-link rounded-0">' . $anterior . '</span>';
+              echo '            </li>';
+          } else {
+              echo '            <li class="page-item">';
+              echo '                <a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . ($pagina - 1) . ')">' . $anterior . '</a>';
+              echo '            </li>';
+          }
 
-    if ($TotalPaginas != 0) {
-        $adjacents = 1;
-        $anterior = "&lsaquo; Anterior";
-        $siguiente = "Siguiente &rsaquo;";
+          // Páginas
+          if ($pagina > ($adjacents + 1)) {
+              echo '            <li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(1)">1</a></li>';
+          }
 
-        echo '<div class="row mt-3">';
-        echo '<div class="col">';
-        echo '<nav>';
-        echo '<ul class="pagination justify-content-center flex-wrap" style="background:white">';
+          if ($pagina > ($adjacents + 2)) {
+              echo '            <li class="page-item disabled"><span class="page-link rounded-0">...</span></li>';
+          }
 
-        // Primera página
-        if ($pagina > 1) {
-            echo '<li class="page-item">';
-            echo '<a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(1)" aria-label="Primera">';
-            echo '<span aria-hidden="true">&laquo;</span>';
-            echo '</a>';
-            echo '</li>';
-        }
+          $pmin = ($pagina > $adjacents) ? ($pagina - $adjacents) : 1;
+          $pmax = ($pagina < ($TotalPaginas - $adjacents)) ? ($pagina + $adjacents) : $TotalPaginas;
 
-        // Anterior
-        if ($pagina == 1) {
-            echo '<li class="page-item disabled">';
-            echo '<span class="page-link rounded-0">' . $anterior . '</span>';
-            echo '</li>';
-        } else {
-            echo '<li class="page-item">';
-            echo '<a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . ($pagina - 1) . ')">' . $anterior . '</a>';
-            echo '</li>';
-        }
+          for ($i = $pmin; $i <= $pmax; $i++) {
+              if ($i == $pagina) {
+                  echo '            <li class="page-item active"><span class="page-link rounded-0 bg-success border-success">' . $i . '</span></li>';
+              } else {
+                  echo '            <li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $i . ')">' . $i . '</a></li>';
+              }
+          }
 
-        // Páginas
-        if ($pagina > ($adjacents + 1)) {
-            echo '<li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(1)">1</a></li>';
-        }
+          if ($pagina < ($TotalPaginas - $adjacents - 1)) {
+              echo '            <li class="page-item disabled"><span class="page-link rounded-0">...</span></li>';
+          }
 
-        if ($pagina > ($adjacents + 2)) {
-            echo '<li class="page-item disabled"><span class="page-link rounded-0">...</span></li>';
-        }
+          if ($pagina < ($TotalPaginas - $adjacents)) {
+              echo '            <li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $TotalPaginas . ')">' . $TotalPaginas . '</a></li>';
+          }
 
-        $pmin = ($pagina > $adjacents) ? ($pagina - $adjacents) : 1;
-        $pmax = ($pagina < ($TotalPaginas - $adjacents)) ? ($pagina + $adjacents) : $TotalPaginas;
+          // Siguiente
+          if ($pagina < $TotalPaginas) {
+              echo '            <li class="page-item">';
+              echo '                <a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . ($pagina + 1) . ')">' . $siguiente . '</a>';
+              echo '            </li>';
+          } else {
+              echo '            <li class="page-item disabled">';
+              echo '                <span class="page-link rounded-0">' . $siguiente . '</span>';
+              echo '            </li>';
+          }
 
-        for ($i = $pmin; $i <= $pmax; $i++) {
-            if ($i == $pagina) {
-                echo '<li class="page-item active"><span class="page-link rounded-0 bg-success border-success">' . $i . '</span></li>';
-            } else {
-                echo '<li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $i . ')">' . $i . '</a></li>';
-            }
-        }
+          // Última página
+          if ($pagina != $TotalPaginas) {
+              echo '            <li class="page-item">';
+              echo '                <a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $TotalPaginas . ')" aria-label="Última">';
+              echo '                    <span aria-hidden="true">&raquo;</span>';
+              echo '                </a>';
+              echo '            </li>';
+          }
 
-        if ($pagina < ($TotalPaginas - $adjacents - 1)) {
-            echo '<li class="page-item disabled"><span class="page-link rounded-0">...</span></li>';
-        }
+          echo '            </ul>';
+          echo '        </nav>';
+          echo '    </div>';
+          echo '</div>';
 
-        if ($pagina < ($TotalPaginas - $adjacents)) {
-            echo '<li class="page-item"><a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $TotalPaginas . ')">' . $TotalPaginas . '</a></li>';
-        }
-
-        // Siguiente
-        if ($pagina < $TotalPaginas) {
-            echo '<li class="page-item">';
-            echo '<a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . ($pagina + 1) . ')">' . $siguiente . '</a>';
-            echo '</li>';
-        } else {
-            echo '<li class="page-item disabled">';
-            echo '<span class="page-link rounded-0">' . $siguiente . '</span>';
-            echo '</li>';
-        }
-
-        // Última página
-        if ($pagina != $TotalPaginas) {
-            echo '<li class="page-item">';
-            echo '<a class="page-link rounded-0" href="javascript:void(0);" onclick="BuscarUsuarios(' . $TotalPaginas . ')" aria-label="Última">';
-            echo '<span aria-hidden="true">&raquo;</span>';
-            echo '</a>';
-            echo '</li>';
-        }
-
-        echo '</ul>';
-        echo '</nav>';
-        echo '</div>';
-        echo '</div>';
-    }
-
-    echo '</div>';
-
+      endif;
   }
 
   public static function eliminarDocumentosGac($id){

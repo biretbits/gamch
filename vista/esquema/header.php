@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="/vista/activos/css/Login-Form-Basic-icons.css">
     <link rel="stylesheet" href="/vista/activos/css/Pretty-Footer-.css">
     <link rel="stylesheet" href="/vista/activos/css/Simple-Header-y-Navbar-adaptativo-nav.css">
+    <link rel="stylesheet" href="/vista/activos/css/cssNoticia.css">
 
     <!-- jQuery -->
     <script src="/vista/activos/pdf-js/pdf.min.js"></script>
@@ -104,6 +105,7 @@
               <li><a class="dropdown-item" href="/MIVI">MISIÓN Y VISIÓN</a></li>
               <li><a class="dropdown-item" href="/ORGANIGRAMA">ORGANIGRAMA</a></li>
               <li><a class="dropdown-item" href="/SUBALCALDIA">SUB ALCALDIAS</a></li>
+              <li><a class="dropdown-item" href="/ALCALDE">ALCALDE MUNICIPAL</a></li>
             </ul>
           </li>
 
@@ -355,9 +357,6 @@
             });
         });
 
-</script>
-<script>
-
         function enviar() {
           var va = document.getElementById("data").value;
           if (va == '') {
@@ -453,13 +452,30 @@
                     $(".form").scrollTop($(".form")[0].scrollHeight);
                   }, 1500);
             }
-      /*
-            document.addEventListener("DOMContentLoaded", () => {
-              pedirRespuesta();
-            });*/
-    </script>
 
-    <script>
+            function SeguirLeyendo(id){
+              var form = document.createElement('form');
+               form.method = 'post';
+               form.action = '/seguirLey'; // Coloca la URL de destino correcta
+               // Agregar campos ocultos para cada dato
+               var datos = {
+                   id: id
+               };
+               for (var key in datos) {
+                   if (datos.hasOwnProperty(key)) {
+                       var input = document.createElement('input');
+                       input.type = 'hidden';
+                       input.name = key;
+                       input.value = datos[key];
+                       form.appendChild(input);
+                   }
+               }
+             // Agregar el formulario al cuerpo del documento y enviarlo
+             document.body.appendChild(form);
+             form.submit();
+            }
+
+
       AOS.init();
     </script>
 

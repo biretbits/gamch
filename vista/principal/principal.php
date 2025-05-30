@@ -64,138 +64,68 @@ require_once('vista/esquema/header.php');
 
     // Generar el HTML/JS
     ?>
-    <script>
-    window.onload = function() {
-      const dateTimeText = `Fecha y Hora: 12/01/2025 00:00 `;
+    <?php
+      if(mysqli_num_rows($resulAlert)>0){
+        $fila = mysqli_fetch_assoc($resulAlert);
 
-      // Botones que solo se muestran si es admin
-      let botonesHtml = '';
-      <?php if (isset($_SESSION['nombre_role']) && $_SESSION['nombre_role'] == 'Admin'): ?>
-        botonesHtml = `<button type="button" class="btn btn-primary btn-sm me-2" title="Editar">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button type="button" class="btn btn-secondary btn-sm" title="Eliminar">
-          <i class="fas fa-trash-alt"></i>
-        </button>
-        `;
-      <?php endif; ?>
+        // Limitar el contenido a las primeras 4 líneas
+        $contenido = $fila["contenido"];
+        $lineas = explode("\n", $contenido);  // Dividir el contenido en líneas
+        $contenidoLimitado = implode("\n", array_slice($lineas, 0, 4));  // Tomar las primeras 4 líneas
 
-      Swal.fire({
-        html: `
-          <div class="swal2-date-time" style="text-align: left;font-size:12px">${dateTimeText}</div>
-          <div style='text-align:center'>El pasado año, el Comité Interinstitucional de Defensa del Medio Ambiente de Challapata celebró un importante triunfo: entregaron la Ley Municipal 403/2024, que declara al distrito de Challapata como una zona libre de actividad y contaminación minera.
+        echo '<script>
+        window.onload = function() {
+          const dateTimeText = "Fecha y Hora: 12/01/2025 00:00";
+          Swal.fire({
+            html: `
+              <div class="swal2-date-time" style="text-align: left; font-size: 12px;">' . fechaAnoMesDia($fila["fecha"]) . '</div>
+              <div class="swal2-title" style="text-align:center; font-size: 16px; font-weight: bold; margin-top: 10px;">' . $fila["titulo"] . '</div>
+              <div style="text-align:center; margin-top: 10px;">' . nl2br(htmlspecialchars($contenidoLimitado)) . '</div>  <!-- Mostrar solo las primeras 4 líneas -->
+            `,
+            imageUrl: "' . $fila["foto"] . '",
+            imageWidth: "100%",
+            imageHeight: "auto",
+            imageAlt: "Imagen de alerta",
+            confirmButtonText: "Cerrar",
+            showConfirmButton: true,
+            heightAuto: false,
+            customClass: {
+              htmlContainer: "swal2-html-container"
+            },
+            timer: 9000,
+            timerProgressBar: true,
+          });
+        };
+        </script>';
+      }else{
+        echo '<script>
+        window.onload = function() {
+          const dateTimeText = "Fecha y Hora: 12/01/2025 00:00";
+          Swal.fire({
+            html: `
+              <div class="swal2-date-time" style="text-align: left; font-size: 12px;">' . fechaAnoMesDia(date("Y-m-d")) . '</div>
+              <div class="swal2-title" style="text-align:center; font-size: 16px; font-weight: bold; margin-top: 10px;">Gobierno Aútonomo Municipal de Challapata</div>
+              <div style="text-align:center; margin-top: 10px;">Por un municipio saludable, fuerte y con mente productiva</div>  <!-- Mostrar solo las primeras 4 líneas -->
+            `,
+            imageUrl: "/imagenes/gamch/EscudoChallapata2024mediano2.png",
+            imageWidth: "100%",
+            imageHeight: "auto",
+            imageAlt: "Imagen de alerta",
+            confirmButtonText: "Cerrar",
+            showConfirmButton: true,
+            heightAuto: false,
+            customClass: {
+              htmlContainer: "swal2-html-container"
+            },
+            timer: 9000,
+            timerProgressBar: true,
+          });
+        };
+        </script>';
 
-La visita a las oficinas de la Autoridad Jurisdiccional Administrativa Minera (AJAM) casi coincidió con el 63 aniversario de la Represa de Tacagua, pilar de la actividad agroganadera del municipio de Challapata, la Capital Agrícola, Ganadera e Industrial Lechera del Occidente Boliviano.</div>
-          <div style="margin-top: 15px; text-align:center;">${botonesHtml}</div>
-        `,
-        imageUrl: 'https://www.opinion.com.bo/asset/thumbnail,992,558,center,center/media/opinion/images/2025/01/09/2025010922313656652.jpg',
-        imageWidth: '100%',
-        imageHeight: 'auto',
-        imageAlt: 'Imagen de alerta',
-        confirmButtonText: 'Cerrar',
-        showConfirmButton: true,
-        heightAuto: false,
-        customClass: {
-          htmlContainer: 'swal2-html-container'
-        },
-        timer: 9000,
-        timerProgressBar: true,
-      });
-    };
-    </script>
+      }
 
-
-    <style>
-       .news-card {
-         position: relative;
-         overflow: hidden;
-         border-radius: 0px;
-         margin-bottom: 25px;
-         height: 100%;
-       }
-
-       .news-card img {
-         width: 100%;
-         height: 100%;
-         object-fit: cover;
-         filter: brightness(100%);
-         transition: transform 0.3s ease;
-       }
-
-       .news-card:hover img {
-         transform: scale(1.05);
-       }
-
-       .news-overlay {/*codigo del texto de la imagenes el titulo*/
-         position: absolute;
-         bottom: 0;
-         left: 0;
-         color: white;
-         padding: 15px;
-         background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-         width: 100%;
-       }
-
-       .news-title {
-         font-size: 1.25rem;
-         font-weight: bold;
-         margin-bottom: 5px;
-         color:#CAD5E2
-       }
-
-       .news-desc {
-         font-size: 0.9rem;
-         color:#CAD5E2;
-         display: -webkit-box;
-         -webkit-line-clamp: 2;           /* Cambiado a 3 líneas */
-         -webkit-box-orient: vertical;
-         line-clamp: 2;
-         overflow: hidden;
-         text-overflow: ellipsis;
-         word-break: break-word;
-         line-height: 1.3em;
-
-       }
-       .news-desc3 {
-         display: -webkit-box;
-         -webkit-line-clamp: 2;           /* Cambiado a 3 líneas */
-         -webkit-box-orient: vertical;
-         line-clamp: 2;
-         overflow: hidden;
-         text-overflow: ellipsis;
-         word-break: break-word;
-         line-height: 1.3em;
-         font-size: 0.9rem;
-         color: #CAD5E2;
-       }
-
-       .news-desc1{
-          display: -webkit-box;
-         -webkit-line-clamp: 1;       /* Número de líneas que quieres mostrar */
-         -webkit-box-orient: vertical;
-         overflow: hidden;
-         text-overflow: ellipsis;
-         font-size: 0.9rem;
-         color:#CAD5E2
-       }
-       .news-date {
-         font-size: 0.75rem;
-         color:#CAD5E2
-       }
-
-       .big-news {
-         height: 420px;
-       }
-
-       .medium-news {
-         height: 200px;
-       }
-
-       .small-news {
-         height: 150px;
-       }
-
-     </style>
+     ?>
 
 <div class="container-fluid"><br>
     <h3 style="color:#CAD5E2" align='left'>Noticias.</h3>
@@ -221,15 +151,14 @@ La visita a las oficinas de la Autoridad Jurisdiccional Administrativa Minera (A
                       alt="Imagen dinámica">
                   </div>
                   <div class="news-overlay">
-                    <a href="#" class="news-title"><?php echo $fil['titulo']; ?></a>
+                    <a href="#" class="news-title" onclick="SeguirLeyendo(<?php echo $fil["id"]; ?>)"><?php echo $fil['titulo']; ?></a>
                   </div>
                 </div>
-                <div class="news-desc3"><?php echo $fil['contenido']; ?> no se puede seguir con este doloe de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo
-                de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo
-                de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo</div>
-                <div class="news-date">Fecha: <?php echo $fil['fecha']; ?></div>
+                <div class="news-desc3"><?php echo $fil['contenido']; ?></div>
+                <div class="news-date">Fecha:
+                  <?php echo fechaAnoMesDia($fil["fecha"]); ?></div>
                 <div class="text-end">
-                  <a href="noticia.php?id=123" class="text-decoration-none p-0 m-0" style="color:green">
+                  <a href="#" onclick="SeguirLeyendo(<?php echo $fil["id"]; ?>)" class="text-decoration-none p-0 m-0" style="color:green">
                     Ver más
                   </a>
                 </div>
@@ -259,15 +188,12 @@ La visita a las oficinas de la Autoridad Jurisdiccional Administrativa Minera (A
 
 
                   <div class="news-overlay">
-                       <a href="#" class="news-title"><?php echo $fil['titulo']; ?></a>
+                       <a href="#"  onclick="SeguirLeyendo(<?php echo $fil["id"]; ?>)"class="news-title"><?php echo $fil['titulo']; ?></a>
                   </div>
                 </div>
-                <div class="news-desc3"><?php echo $fil['contenido']; ?> no se puede seguir con este doloe de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo
-                de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo
-                de los estudiante pero se debe seguir en grande para toda lasemana de los dias por los dias de los meses siempre se tiene que tener mucho orgullo</div>
-                <div class="news-date"><?php echo $fil['fecha']; ?></div>
+                <div class="news-desc3"><?php echo $fil['contenido']; ?> </div><div class="news-date"><?php echo fechaAnoMesDia($fil["fecha"]);?></div>
                 <div class="text-end">
-                  <a href="noticia.php?id=123" class="text-decoration-none p-0 m-0" style="color:green">
+                  <a href="#"  onclick="SeguirLeyendo(<?php echo $fil["id"]; ?>)" class="text-decoration-none p-0 m-0" style="color:green">
                     Ver más
                   </a>
                 </div>
@@ -301,24 +227,25 @@ La visita a las oficinas de la Autoridad Jurisdiccional Administrativa Minera (A
   <div class="col-lg-3">
     <h6 style="color:green">Noticias Pasadas</h6>
       <div class="row">
-        <?php for($i = 0; $i < 5; $i++) { ?>
-           <div class="col-12">
-             <div class="news-card small-news">
-               <img src="imagenes/img-challapata/banner2.jpg" alt="Pequeña">
-             </div>
-             <div class="news-desc1">
-               <a href="#" class="news-desc1">Resumen corto de las luchas del psssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssroletariado por un dias mas de vida como es de saber ahora se quiero la renovacion de los candidatos de la madere</a></div>
-             <div class="news-date">Fecha: 26 Mayo 2025</div>
-
-           </div>
-         <?php } ?>
-
+        <?php if(mysqli_num_rows($resulNo) > 0){?>
+          <?php while($fi = mysqli_fetch_assoc($resulNo)){?>
+            <div class="col-12">
+              <div class="news-card small-news">
+                <img src="<?php echo $fi["foto"]; ?>" alt="Pequeña">
+              </div>
+              <div class="news-desc1">
+                <a href="#"  onclick="SeguirLeyendo(<?php echo $fi["id"]; ?>)" class="news-desc1"><?php echo $fi["titulo"]; ?></a></div>
+              <div class="news-date">Fecha: <?php
+              echo fechaAnoMesDia($fi["fecha"]); ?></div>
+            </div>
+          <?php } ?>
+        <?php } ?>
          </div>
        </div>
      </div>
   </div>
   <div class="container-fluid text-center my-4">
-    <button class="btn btn-primary px-4 py-8 shadow rounded-pill">
+    <button class="btn btn-primary px-4 py-8 shadow rounded-pill" onclick="abriMasNoticias()">
       Ver más Noticias
     </button>
   </div>
@@ -594,6 +521,10 @@ font-size: 1rem;
           countersStarted = true;
         }
       });
+
+    function abriMasNoticias(){
+      window.location.href = "/Noticia";
+    }
     </script>
 
 <?php
