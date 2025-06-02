@@ -126,7 +126,6 @@ require_once('vista/esquema/header.php');
       }
 
      ?>
-
 <div class="container-fluid"><br>
     <h3 style="color:#CAD5E2" align='left'>Noticias.</h3>
     <hr style="color:blue">
@@ -411,64 +410,6 @@ font-size: 1rem;
   </div>
 </div>
 
-<div class="container-fluid" style="  background: url('/imagenes/img-challapata/challapata-portadaweb.jpg');
-   background-size: cover;
-   background-position: center;
-   background-repeat: no-repeat;
-   margin: 0;
-   ">
-    <div class="">
-        <div></div>
-        <hr class="mt-0">
-        <h3 style="border-bottom-style: none;margin: -35px;margin-top: 45px;height: 35.0938px;color: rgb(255,255,255);font-family: Aldrich, sans-serif;text-align: center;">Destacados</h3>
-        <br><br>
-    </div>
-
-    <div style="color: rgb(255,255,255);font-family: Aldrich, sans-serif;">
-  <div class="row justify-content-center features">
-    <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
-      <div class="box text-center">
-        <i class="fas fa-users icon" style="color: var(--bs-orange); font-size: 50px;"></i>
-        <h3 class="name">Desarrollo Humano y Social</h3>
-        <p class="description"></p>
-        <a class="learn-more" href="/SDHS" style="color: var(--bs-orange);">Ver más »</a>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
-      <div class="box text-center">
-        <i class="la la-cloud-upload icon" style="color: var(--bs-orange); font-size: 50px;"></i>
-        <h3 class="name">Desarrollo Productivo</h3>
-        <p class="description"></p>
-        <a class="learn-more" href="/SDP" style="color: var(--bs-orange);">Ver más »</a>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
-      <div class="box text-center">
-        <i class="fa fa-leaf icon" style="color: var(--bs-orange); font-size: 50px;"></i>
-        <h3 class="name">Obras Públicas</h3>
-        <p class="description"></p>
-        <a class="learn-more" href="SOP" style="color: var(--bs-orange);">Ver más »</a>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
-      <div class="box text-center">
-        <i class="fa fa-plane icon" style="color: var(--bs-orange); font-size: 50px;"></i>
-        <h3 class="name">Turismo</h3>
-        <p class="description"></p>
-        <a class="learn-more" href="/turismo" style="color: var(--bs-orange);">Ver más »</a>
-      </div>
-    </div>
-    <div class="col-sm-6 col-md-5 col-lg-4 item mb-4">
-      <div class="box text-center">
-        <i class="fa fa-theater-masks icon" style="color: var(--bs-orange); font-size: 50px;"></i>
-        <h3 class="name">Cultura</h3>
-        <p class="description"></p>
-        <a class="learn-more" href="/cultura" style="color: var(--bs-orange);">Ver más »</a>
-      </div>
-    </div>
-  </div>
-</div>
-  </div>
 
 
 
